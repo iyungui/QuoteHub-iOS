@@ -96,12 +96,19 @@ struct StoryView: View {
                 .foregroundColor(.secondary)
 
             HStack {
-                
-                WebImage(url: URL(string: story.userId.profileImage))
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 35, height: 35)
-                    .clipShape(Circle())
+                if let url = URL(string: story.userId.profileImage), !story.userId.profileImage.isEmpty {
+                    WebImage(url: url)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 35, height: 35)
+                        .clipShape(Circle())
+                } else {
+                    Image(systemName: "person.crop.circle.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 35, height: 35)
+                }
+
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(story.userId.nickname)

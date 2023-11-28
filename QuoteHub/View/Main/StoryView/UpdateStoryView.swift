@@ -98,7 +98,7 @@ struct UpdateStoryView: View {
                         SDWebImageDownloader.shared.downloadImage(with: imageURL) { image, _, _, _ in
                             DispatchQueue.main.async {
                                 if let image = image {
-                                    selectedImages.insert(image, at: 0)
+                                    selectedImages.append(image)
                                 }
                             }
                         }
@@ -299,8 +299,8 @@ struct UpdateStoryView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHGrid(rows: [GridItem(.fixed(100))], spacing: 10) {
                     addButton
-                    ForEach(selectedImages.indices, id: \.self) { index in
-                        imageCell(for: selectedImages[index], at: index)
+                    ForEach(Array(selectedImages.enumerated()), id: \.element) { index, image in
+                        imageCell(for: image, at: index)
                     }
                 }
                 .padding(.horizontal)
@@ -314,7 +314,7 @@ struct UpdateStoryView: View {
                 showingImagePicker = true
             }
         }) {
-            VStack() {
+            VStack {
                 Image(systemName: "plus.circle").foregroundColor(.gray)
                 Text("사진추가\n\(selectedImages.count)/10")
                     .font(.caption)
@@ -340,9 +340,7 @@ struct UpdateStoryView: View {
                 .clipped()
             
             Button(action: {
-                DispatchQueue.main.async {
-                    selectedImages.remove(at: index)
-                }
+                selectedImages.remove(at: index)
             }) {
                 Image(systemName: "xmark.circle.fill")
                     .foregroundColor(.gray)

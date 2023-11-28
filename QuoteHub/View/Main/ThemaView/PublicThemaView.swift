@@ -241,11 +241,19 @@ struct PublicThemaImageView: View {
                         
                         NavigationLink(destination: FriendLibraryView(friendId: folder.userId)) {
                             VStack(alignment: .trailing, spacing: 10) {
-                                WebImage(url: URL(string: folder.userId.profileImage))
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 50, height: 50)
-                                    .clipShape(Circle())
+                                if let url = URL(string: folder.userId.profileImage), !folder.userId.profileImage.isEmpty {
+                                    WebImage(url: url)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 50, height: 50)
+                                        .clipShape(Circle())
+                                } else {
+                                    Image(systemName: "person.crop.circle.fill")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 50, height: 50)
+                                }
+
                                 Text(folder.userId.nickname)
                                     .font(.body)
                                     .foregroundColor(.white)

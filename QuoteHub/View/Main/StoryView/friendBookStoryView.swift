@@ -260,12 +260,20 @@ struct friendBookStoryView: View {
     
     private var profileView: some View {
         HStack {
-            WebImage(url: URL(string: story.userId.profileImage))
-                .resizable()
-                .scaledToFill()
-                .frame(width: 80, height: 80)
-                .clipShape(Circle())
-                .overlay(Circle().stroke(Color.gray, lineWidth: 1))
+            if let url = URL(string: story.userId.profileImage), !story.userId.profileImage.isEmpty {
+                WebImage(url: url)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 80, height: 80)
+                    .clipShape(Circle())
+                    .overlay(Circle().stroke(Color.gray, lineWidth: 1))
+            } else {
+                Image(systemName: "person.crop.circle.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 80, height: 80)
+            }
+
             VStack(alignment: .leading, spacing: 15) {
                 Text(story.userId.nickname)
                     .font(.headline)

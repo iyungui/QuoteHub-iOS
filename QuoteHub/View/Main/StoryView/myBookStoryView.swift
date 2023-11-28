@@ -102,12 +102,20 @@ struct myBookStoryView: View {
                     
                     // profileView
                     HStack {
-                        WebImage(url: URL(string: userViewModel.user?.profileImage ?? ""))
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 80, height: 80)
-                            .clipShape(Circle())
-                            .overlay(Circle().stroke(Color.gray, lineWidth: 1))
+                        if let url = URL(string: userViewModel.user?.profileImage ?? ""), !(userViewModel.user?.profileImage ?? "").isEmpty {
+                            WebImage(url: url)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 80, height: 80)
+                                .clipShape(Circle())
+                                .overlay(Circle().stroke(Color.gray, lineWidth: 1))
+                        } else {
+                            Image(systemName: "person.crop.circle.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 80, height: 80)
+                        }
+
                         VStack(alignment: .leading, spacing: 5) {
                             Text(userViewModel.user?.nickname ?? "닉네임 없음")
                                 .font(.headline)

@@ -119,13 +119,20 @@ struct commentRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
             HStack {
-                WebImage(url: URL(string: comment.userId.profileImage))
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 40, height: 40)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.gray.opacity(0.5), lineWidth: 1))
-                
+                if let url = URL(string: comment.userId.profileImage), !comment.userId.profileImage.isEmpty {
+                    WebImage(url: url)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 40, height: 40)
+                        .clipShape(Circle())
+                        .overlay(Circle().stroke(Color.gray.opacity(0.5), lineWidth: 1))
+                } else {
+                    Image(systemName: "person.crop.circle.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 40, height: 40)
+                }
+
                 VStack(alignment: .leading, spacing: 3) {
                     Text(comment.userId.nickname)
                         .font(.system(size: 14, weight: .semibold))

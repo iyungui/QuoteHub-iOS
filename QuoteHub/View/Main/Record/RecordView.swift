@@ -417,8 +417,6 @@ extension View {
 #endif
 
 
-
-
 struct StoryImagesView: View {
     @Binding var selectedImages: [UIImage]
     @Binding var showingImagePicker: Bool
@@ -428,8 +426,8 @@ struct StoryImagesView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 LazyHGrid(rows: [GridItem(.fixed(100))], spacing: 10) {
                     addButton
-                    ForEach(selectedImages.indices, id: \.self) { index in
-                        imageCell(for: selectedImages[index], at: index)
+                    ForEach(Array(selectedImages.enumerated()), id: \.element) { index, image in
+                        imageCell(for: image, at: index)
                     }
                 }
                 .padding(.horizontal)
@@ -469,9 +467,7 @@ struct StoryImagesView: View {
                 .clipped()
             
             Button(action: {
-                DispatchQueue.main.async {
-                    selectedImages.remove(at: index)
-                }
+                selectedImages.remove(at: index)
             }) {
                 Image(systemName: "xmark.circle.fill")
                     .foregroundColor(.gray)
@@ -483,3 +479,4 @@ struct StoryImagesView: View {
         .accessibilityLabel("Photo \(index + 1)")
     }
 }
+

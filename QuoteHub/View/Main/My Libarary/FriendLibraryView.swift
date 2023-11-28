@@ -234,14 +234,23 @@ struct FriendLibraryView: View {
     
     private var profileView: some View {
         VStack(alignment: .center, spacing: 10) {
-            WebImage(url: URL(string: userViewModel.user?.profileImage ?? ""))
-                .resizable()
-                .scaledToFill()
-                .frame(width: 100, height: 100)
-                .clipShape(Circle())
-                .overlay(Circle().stroke(Color.gray.opacity(0.5), lineWidth: 1))
-                .shadow(radius: 4)
-                .padding(.bottom)
+            if let url = URL(string: userViewModel.user?.profileImage ?? ""), !(userViewModel.user?.profileImage ?? "").isEmpty {
+                WebImage(url: url)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 100, height: 100)
+                    .clipShape(Circle())
+                    .overlay(Circle().stroke(Color.gray.opacity(0.5), lineWidth: 1))
+                    .shadow(radius: 4)
+                    .padding(.bottom)
+            } else {
+                Image(systemName: "person.crop.circle.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
+                    .padding(.bottom)
+            }
+
             
             Text(userViewModel.user?.nickname ?? "")
                 .font(.title2)
