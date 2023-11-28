@@ -1,0 +1,28 @@
+/* 
+  Localizable.strings
+  QuoteHub
+
+  Created by 이융의 on 2023/09/06.
+  
+*/
+"next" = "Next";
+"finish" = "Finish";
+
+
+"login" = "Login";
+
+"email" = "Email";
+"password" = "Password";
+
+"Continue with Email"  = "Continue with Email";
+
+"Find password" = "Find password";
+"Sign up" = "Sign up";
+
+"Please enter your nickname." = "Please enter your nickname.";
+"Please enter your email." = "Please enter your email.";
+"Please enter your password." = "Please enter your password.";
+"Please enter your password again." = "Please enter your password again.";
+
+"Continue with Email" = "Continue with Email";
+
