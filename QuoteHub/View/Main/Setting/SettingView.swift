@@ -16,7 +16,16 @@ struct SettingView: View {
 
     @State private var isLoading = false
     @State private var navigateToUserProfile = false
-        
+    
+    private let introURL: String = "https://obtainable-postage-df4.notion.site/c4e2df8b16e643bfa05d61cadd238ba2?pvs=4"
+    private let termsURL: String = "https://obtainable-postage-df4.notion.site/31236e89fe8942858a7b5a06f458e2ba?pvs=4"
+    private let privacyURL: String = "https://obtainable-postage-df4.notion.site/6f8d432d3e5e417b9fa72d1121ec4011?pvs=4"
+    private let supportURL: String = "https://docs.google.com/forms/d/e/1FAIpQLSd8Ljo-F7h92bBBy1z_gqHkWQaLWd3yqKogf60mnev7CnrIuw/viewform"
+    @State private var isPresentIntroWebView = false
+    @State private var isPresentTermsWebView = false
+    @State private var isPresentPrivacyWebView = false
+    @State private var isPresentSupportWebView = false
+
     var body: some View {
         
         if isLoading {
@@ -46,15 +55,6 @@ struct SettingView: View {
                         Text("내 프로필 수정")
                     }
                 }
-            }
-            
-            Section(header: Text("지원")) {
-//                NavigationLink(destination: ReportListView()) {
-//                    HStack {
-//                        Image(systemName: "exclamationmark.bubble")
-//                        Text("신고 목록")
-//                    }
-//                }
                 
                 NavigationLink(destination: BlockedListView()) {
                     HStack {
@@ -62,10 +62,90 @@ struct SettingView: View {
                         Text("차단 목록")
                     }
                 }
+                NavigationLink(destination: ReportListView()) {
+                    HStack {
+                        Image(systemName: "exclamationmark.bubble")
+                        Text("신고 목록")
+                    }
+                }
+            }
+            
+            Section(header: Text("지원")) {
+                
+                Button(action: {
+                    isPresentIntroWebView = true
+                }) {
+                    HStack {
+                        Image(systemName: "info.circle")
+                        Text("서비스 소개 및 이용방법")
+                    }
+                }
+                .fullScreenCover(isPresented: $isPresentIntroWebView) {
+                    if let url = URL(string: introURL) {
+                        WebView(url: url)
+                            .ignoresSafeArea()
+                    } else {
+                        Text("Invalid URL")
+                    }
+                }
+                
+                Button(action: {
+                    isPresentTermsWebView = true
+                }) {
+                    HStack {
+                        Image(systemName: "doc.text")
+                        Text("서비스 이용약관")
+                    }
+                }
+                .fullScreenCover(isPresented: $isPresentTermsWebView) {
+                    if let url = URL(string: termsURL) {
+                        WebView(url: url)
+                            .ignoresSafeArea()
+                    } else {
+                        Text("Invalid URL")
+                    }
+                }
+
+                Button(action: {
+                    isPresentPrivacyWebView = true
+                }) {
+                    HStack {
+                        Image(systemName: "shield.lefthalf.filled")
+                        Text("개인정보 처리방침")
+                            .fontWeight(.semibold)
+                    }
+                }
+                .fullScreenCover(isPresented: $isPresentPrivacyWebView) {
+                    if let url = URL(string: privacyURL) {
+                        WebView(url: url)
+                            .ignoresSafeArea()
+                    } else {
+                        Text("Invalid URL")
+                    }
+                }
+                
+                Button(action: {
+                    isPresentSupportWebView = true
+                }) {
+                    HStack {
+                        Image(systemName: "message")
+                        Text("문의하기")
+                    }
+                }
+                .fullScreenCover(isPresented: $isPresentSupportWebView) {
+                    if let url = URL(string: supportURL) {
+                        WebView(url: url)
+                            .ignoresSafeArea()
+                    } else {
+                        Text("Invalid URL")
+                    }
+                }
+                
+                
                 
                 NavigationLink(destination: DeveloperInfoView()) {
                     HStack {
-                        Image(systemName: "info.circle")
+                        Image(systemName: "hammer.circle")
                         Text("개발자 정보")
                     }
                 }

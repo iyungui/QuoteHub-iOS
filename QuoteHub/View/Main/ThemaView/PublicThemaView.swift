@@ -14,7 +14,6 @@ enum BlockedAlertType {
 }
 
 struct PublicThemaView: View {
-
     let folder: Folder
     
     @StateObject private var bookStoriesViewModel: BookStoriesViewModel
@@ -34,7 +33,7 @@ struct PublicThemaView: View {
     @State private var alertType: BlockedAlertType = .loginRequired
     @State private var alertMessage = ""
     @State private var showActionSheet = false
-    @ObservedObject var userAuthManager = UserAuthenticationManager.shared
+    @EnvironmentObject var userAuthManager: UserAuthenticationManager
 
     @StateObject var reportViewModel = ReportViewModel()
     @State private var reportReason = ""
@@ -59,6 +58,7 @@ struct PublicThemaView: View {
                         
                         PublicThemaImageView(folderId: folder.id, selectedThema: $FriendselectedThema)
                             .environmentObject(viewModel)
+                            .environmentObject(userAuthManager)
                             .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
                             .clipped()
                         
@@ -68,9 +68,11 @@ struct PublicThemaView: View {
                             if FriendselectedThema == 0 {
                                 PublicGalleryGridView()
                                     .environmentObject(bookStoriesViewModel)
+                                    .environmentObject(userAuthManager)
                             } else {
                                 PublicGalleryListView()
                                     .environmentObject(bookStoriesViewModel)
+                                    .environmentObject(userAuthManager)
                             }
                         }
                         .gesture(
@@ -174,6 +176,8 @@ struct PublicThemaImageView: View {
     let folderId: String
     @EnvironmentObject var viewModel: FolderViewModel
     @Binding var selectedThema: Int
+    @EnvironmentObject var userAuthManager: UserAuthenticationManager
+
 
     var body: some View {
         if let folder = viewModel.folder.first(where: { $0.id == folderId
@@ -239,7 +243,7 @@ struct PublicThemaImageView: View {
                         }
                         Spacer()
                         
-                        NavigationLink(destination: FriendLibraryView(friendId: folder.userId)) {
+                        NavigationLink(destination: FriendLibraryView(friendId: folder.userId).environmentObject(userAuthManager)) {
                             VStack(alignment: .trailing, spacing: 10) {
                                 if let url = URL(string: folder.userId.profileImage), !folder.userId.profileImage.isEmpty {
                                     WebImage(url: url)
@@ -272,11 +276,13 @@ struct PublicThemaImageView: View {
 
 struct PublicGalleryGridView: View {
     @EnvironmentObject var bookStoriesViewModel: BookStoriesViewModel
+    @EnvironmentObject var userAuthManager: UserAuthenticationManager
+
     
     var body: some View {
         LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 3), spacing: 3) {
             ForEach(bookStoriesViewModel.bookStories, id: \.id) { story in
-                NavigationLink(destination: friendBookStoryView(story: story)) {
+                NavigationLink(destination: friendBookStoryView(story: story).environmentObject(userAuthManager)) {
                     WebImage(url: URL(string: story.storyImageURLs?.first ?? ""))
                         .resizable()
                         .scaledToFill()
@@ -295,11 +301,13 @@ struct PublicGalleryGridView: View {
 
 struct PublicGalleryListView: View {
     @EnvironmentObject var bookStoriesViewModel: BookStoriesViewModel
+    @EnvironmentObject var userAuthManager: UserAuthenticationManager
+
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             ForEach(bookStoriesViewModel.bookStories, id: \.id) { story in
-                NavigationLink(destination: friendBookStoryView(story: story).environmentObject(bookStoriesViewModel)) {
+                NavigationLink(destination: friendBookStoryView(story: story).environmentObject(bookStoriesViewModel).environmentObject(userAuthManager)) {
                     HStack {
                         Text(story.quote ?? "")
                             .font(.callout)

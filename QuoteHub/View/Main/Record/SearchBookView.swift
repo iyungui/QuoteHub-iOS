@@ -13,6 +13,7 @@ struct SearchBookView: View {
     @Environment(\.presentationMode) var presentationMode
     @StateObject var viewModel = BooksViewModel()
     @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
+    @EnvironmentObject var userAuthManager: UserAuthenticationManager
 
     
     @State private var searchText: String = ""
@@ -93,7 +94,7 @@ struct SearchBookView: View {
                         .padding(.top)
                 } else {
                     ForEach(Array(viewModel.books.enumerated()), id: \.element.id) { index, book in
-                        bookItemView(book: book).environmentObject(viewModel).environmentObject(myStoriesViewModel)
+                        bookItemView(book: book).environmentObject(viewModel).environmentObject(myStoriesViewModel).environmentObject(userAuthManager)
                             .onAppear {
                                 // 마지막 책이 화면에 나타날 때
                                 if index == viewModel.books.count - 1 && !viewModel.isEnd {
@@ -112,10 +113,10 @@ struct bookItemView: View {
     var book: Book
     @EnvironmentObject var viewModel: BooksViewModel
     @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
-
+    @EnvironmentObject var userAuthManager: UserAuthenticationManager
 
     var body: some View {
-        NavigationLink(destination: (BookDetailView(book: book)).environmentObject(myStoriesViewModel)) {
+        NavigationLink(destination: (BookDetailView(book: book)).environmentObject(myStoriesViewModel).environmentObject(userAuthManager)) {
             HStack {
                 if let imageUrl = book.bookImageURL, !imageUrl.isEmpty {
                     WebImage(url: URL(string: imageUrl))

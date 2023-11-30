@@ -31,7 +31,7 @@ struct ReportSheetView: View {
                 .foregroundColor(.gray)
                 .padding()
 
-            Button("신고하기") {
+            Button(action: {
                 reportViewModel.reportBookStory(targetId: story.id, reason: reportReason) { result in
                     switch result {
                     case .success:
@@ -45,13 +45,17 @@ struct ReportSheetView: View {
                         showAlert = true
                     }
                 }
+            }) {
+                Text("신고하기")
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(reportReason.isEmpty ? Color.gray : Color.appAccent)
+                    .cornerRadius(8)
             }
             .disabled(reportReason.isEmpty)
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(reportReason.isEmpty ? Color.gray : Color.appAccent)
-            .foregroundColor(.white)
-            .cornerRadius(8)
+
+
         }
         .padding()
         .alert(isPresented: $showAlert) {
@@ -94,7 +98,7 @@ struct UserReportSheetView: View {
                 .foregroundColor(.gray)
                 .padding()
 
-            Button("신고하기") {
+            Button(action: {
                 reportViewModel.reportUser(targetId: userId, reason: reportReason) { result in
                     switch result {
                     case .success:
@@ -108,13 +112,16 @@ struct UserReportSheetView: View {
                         showAlert = true
                     }
                 }
+            }) {
+                Text("신고하기")
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(reportReason.isEmpty ? Color.gray : Color.appAccent)
+                    .cornerRadius(8)
             }
             .disabled(reportReason.isEmpty)
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(reportReason.isEmpty ? Color.gray : Color.appAccent)
-            .foregroundColor(.white)
-            .cornerRadius(8)
+
         }
         .padding()
         .alert(isPresented: $showAlert) {

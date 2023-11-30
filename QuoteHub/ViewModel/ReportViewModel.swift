@@ -9,7 +9,7 @@ import Foundation
 
 class ReportViewModel: ObservableObject {
     @Published var reportedUsers: [ReportDataModel] = []
-    @Published var reportedStories: [ReportDataModel] = []
+    @Published var reportedStories: [StoryReportDataModel] = []
 
     private var reportService = ReportService()
 

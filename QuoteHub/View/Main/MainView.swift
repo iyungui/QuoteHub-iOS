@@ -90,7 +90,7 @@ struct MainView: View {
             .fullScreenCover(item: $activeSheet) { item in
                 switch item {
                 case .search:
-                    SearchBookView().environmentObject(myStoriesViewModel)
+                    SearchBookView().environmentObject(myStoriesViewModel).environmentObject(userAuthManager)
                 case .thema:
                     MakeThemaView()
                         .environmentObject(myFolderViewModel)
@@ -104,7 +104,7 @@ struct MainView: View {
         if (userAuthManager.isUserAuthenticated) {
             userViewModel.getProfile(userId: nil)
         } else {
-            print("토큰 만료 표시")
+            print("No Authorization Token Found for Login")
         }
     }
 }

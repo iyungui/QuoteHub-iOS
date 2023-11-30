@@ -25,13 +25,15 @@ struct FriendThemaView: View {
     
     @EnvironmentObject var FolderViewModel: FriendFolderViewModel
     @EnvironmentObject var userViewModel: UserViewModel
-        
+    @EnvironmentObject var userAuthManager: UserAuthenticationManager
+
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 0) {
                 
                 FriendThemaImageView(folderId: folderId, selectedThema: $FriendselectedThema)
                     .environmentObject(FolderViewModel)
+                    .environmentObject(userAuthManager)
                     .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
                     .clipped()
                 
@@ -41,9 +43,11 @@ struct FriendThemaView: View {
                     if FriendselectedThema == 0 {
                         FriendGalleryGridView()
                             .environmentObject(viewModel)
+                            .environmentObject(userAuthManager)
                     } else {
                         FriendGalleryListView()
                             .environmentObject(viewModel)
+                            .environmentObject(userAuthManager)
                     }
                 }
                 .gesture(
@@ -80,6 +84,7 @@ struct FriendThemaImageView: View {
     @Binding var selectedThema: Int
 
     @EnvironmentObject var viewModel: FriendFolderViewModel
+    @EnvironmentObject var userAuthManager: UserAuthenticationManager
 
     var body: some View {
         if let folder = viewModel.folder.first(where: { $0.id == folderId
@@ -145,7 +150,7 @@ struct FriendThemaImageView: View {
                         }
                         Spacer()
                         
-                        NavigationLink(destination: FriendLibraryView(friendId: folder.userId)) {
+                        NavigationLink(destination: FriendLibraryView(friendId: folder.userId).environmentObject(userAuthManager)) {
                             VStack(alignment: .trailing, spacing: 10) {
                                 if let url = URL(string: folder.userId.profileImage), !folder.userId.profileImage.isEmpty {
                                     WebImage(url: url)
@@ -178,11 +183,12 @@ struct FriendThemaImageView: View {
 
 struct FriendGalleryGridView: View {
     @EnvironmentObject var viewModel: BookStoriesViewModel
-    
+    @EnvironmentObject var userAuthManager: UserAuthenticationManager
+
     var body: some View {
         LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 3), spacing: 3) {
             ForEach(viewModel.bookStories, id: \.id) { story in
-                NavigationLink(destination: friendBookStoryView(story: story).environmentObject(viewModel)) {
+                NavigationLink(destination: friendBookStoryView(story: story).environmentObject(viewModel).environmentObject(userAuthManager)) {
                     WebImage(url: URL(string: story.storyImageURLs?.first ?? ""))
                         .resizable()
                         .scaledToFill()
@@ -202,11 +208,12 @@ struct FriendGalleryGridView: View {
 
 struct FriendGalleryListView: View {
     @EnvironmentObject var viewModel: BookStoriesViewModel
+    @EnvironmentObject var userAuthManager: UserAuthenticationManager
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             ForEach(viewModel.bookStories, id: \.id) { story in
-                NavigationLink(destination: friendBookStoryView(story: story).environmentObject(viewModel)) {
+                NavigationLink(destination: friendBookStoryView(story: story).environmentObject(viewModel).environmentObject(userAuthManager)) {
                     HStack {
                         Text(story.quote ?? "")
                             .font(.callout)

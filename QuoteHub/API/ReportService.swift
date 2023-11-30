@@ -79,7 +79,7 @@ class ReportService {
         }
     }
 
-    func getReportStories(completion: @escaping (Result<[ReportDataModel], Error>) -> Void) {
+    func getReportStories(completion: @escaping (Result<[StoryReportDataModel], Error>) -> Void) {
         let url = APIEndpoint.reportStoryURL
 
         guard let token = KeyChain.read(key: "JWTAccessToken") else {
@@ -89,7 +89,7 @@ class ReportService {
 
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
 
-        AF.request(url, method: .get, headers: headers).responseDecodable(of: [ReportDataModel].self) { response in
+        AF.request(url, method: .get, headers: headers).responseDecodable(of: [StoryReportDataModel].self) { response in
             switch response.result {
             case .success(let reports):
                 completion(.success(reports))

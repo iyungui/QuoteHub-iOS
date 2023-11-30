@@ -32,12 +32,13 @@ struct HomeView: View {
                                 
                 sectionHeader(title: "최신 북스토리 모아보기")
                 ListPublicStoriesView(storiesViewModel: storiesViewModel).environmentObject(userViewModel)
-                    .environmentObject(myStoriesViewModel)
+                    .environmentObject(myStoriesViewModel).environmentObject(userAuthManager)
                     .frame(height: 350)
                 spacer(height: 50)
                 
                 sectionHeader(title: "테마별 모아보기")
                 ListThemaView(viewModel: folderViewModel)
+                    .environmentObject(userAuthManager)
                     .environmentObject(myFolderViewModel)
                     .environmentObject(userViewModel)
                     .environmentObject(myStoriesViewModel)
@@ -64,12 +65,14 @@ struct HomeView: View {
             leading: navBarLogo()
             ,trailing:
                 HStack(spacing: 15) {
-                    NavigationLink(destination: UserSearchView().environmentObject(storiesViewModel)) {
-                        Image(systemName: "person.2").foregroundColor(Color(.systemGray)).frame(width: 25, height: 25)
+                    if userAuthManager.isUserAuthenticated {
+                        NavigationLink(destination: UserSearchView().environmentObject(storiesViewModel).environmentObject(userAuthManager)) {
+                            Image(systemName: "person.2").foregroundColor(Color(.systemGray)).frame(width: 25, height: 25)
+                        }
                     }
                     
                     NavigationLink(destination: SearchKeywordView(
-                    ).environmentObject(userViewModel).environmentObject(myStoriesViewModel)) {
+                    ).environmentObject(userViewModel).environmentObject(myStoriesViewModel).environmentObject(userAuthManager)) {
                         Image(systemName: "magnifyingglass").foregroundColor(Color(.systemGray)).frame(width: 25, height: 25)
                     }
                 }

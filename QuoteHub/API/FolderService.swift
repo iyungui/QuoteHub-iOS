@@ -107,7 +107,7 @@ class FolderService {
         }
         
         guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            completion(.failure(NSError(domain: "FolderService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])))
+            print("No Authorization Token Found for Folder")
             return
         }
         

@@ -9,12 +9,24 @@ import Foundation
 import Alamofire
 
 class UserAuthenticationManager: ObservableObject {
-    @Published var isUserAuthenticated: Bool = KeyChain.read(key: "JWTAccessToken") != nil
-    @Published var isOnboardingComplete: Bool = false
-    @Published var showingLoginView: Bool = false
+    @Published var isUserAuthenticated: Bool = KeyChain.read(key: "JWTAccessToken") != nil {
+        didSet {
+            print("UserAuthenticationManager: isUserAuthenticated updated to \(isUserAuthenticated)")
+        }
+    }
+    @Published var isOnboardingComplete: Bool = false {
+        didSet {
+            print("UserAuthenticationManager: isOnboardingComplete updated to \(isOnboardingComplete)")
+        }
+    }
+    @Published var showingLoginView: Bool = false {
+        didSet {
+            print("UserAuthenticationManager: showingLoginView updated to \(showingLoginView)")
+        }
+    }
     
     // MARK: -  로그아웃 함수
-    static let shared = UserAuthenticationManager()
+//    static let shared = UserAuthenticationManager()
 
     func logout(completion: @escaping (Result<Bool, Error>) -> Void) {
         if KeyChain.read(key: "JWTAccessToken") != nil {
@@ -22,6 +34,7 @@ class UserAuthenticationManager: ObservableObject {
                 KeyChain.delete(key: "JWTAccessToken")
                 KeyChain.delete(key: "JWTRefreshToken")
                 self.isUserAuthenticated = false
+                print("UserAuthenticationManager: logout called, tokens deleted")
             }
 
             completion(.success(true))
@@ -88,21 +101,27 @@ class UserAuthenticationManager: ObservableObject {
                 if let json = value as? [String: Any], let valid = json["valid"] as? Bool {
                     if valid {
                         self.isUserAuthenticated = true
-                    } else if let newAccessToken = json["newAccessToken"] as? String {
+                    } else if let newAccessToken = json["newAccessToken"] as? String,
+                              let newRefreshToken = json["newRefreshToken"] as? String {
                         KeyChain.create(key: "JWTAccessToken", token: newAccessToken)
+                        KeyChain.create(key: "JWTRefreshToken", token: newRefreshToken)
                         self.isUserAuthenticated = true
                     } else {
                         self.isUserAuthenticated = false
+                        self.showingLoginView = true
                     }
                 }
             case .failure:
                 self.isUserAuthenticated = false
+                self.showingLoginView = true
             }
         }
     }
     
+    // retry
     func renewAccessToken(completion: @escaping (Bool) -> Void) {
         guard let token = KeyChain.read(key: "JWTRefreshToken") else {
+            self.handleTokenExpiry()
             completion(false)
             return
         }
@@ -118,10 +137,20 @@ class UserAuthenticationManager: ObservableObject {
                     KeyChain.create(key: "JWTAccessToken", token: tokenResponse.accessToken)
                     completion(true)
                 case .failure:
-                    print("refresh token 만료, 로그인 필요")
+                    print("리프레시 토큰 만료, 로그인 필요")
+                    self.handleTokenExpiry()
                     completion(false)
                 }
             }
+    }
+    
+    private func handleTokenExpiry() {
+        DispatchQueue.main.async {
+            KeyChain.delete(key: "JWTAccessToken")
+            KeyChain.delete(key: "JWTRefreshToken")
+            self.isUserAuthenticated = false
+            self.showingLoginView = true
+        }
     }
 
     struct AccessTokenResponse: Codable {

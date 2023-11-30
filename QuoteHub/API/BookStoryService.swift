@@ -153,11 +153,12 @@ class BookStoryService {
         }
         
         guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            completion(.failure(NSError(domain: "BookStoryService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])))
+            print("No Authorization Token Found for Bookstories")
             return
         }
-        
+
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
+
 
 
         AF.request(urlString, method: .get, headers: headers).responseDecodable(of: BookStoriesResponse.self) { response in

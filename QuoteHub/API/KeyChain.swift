@@ -44,7 +44,6 @@ class KeyChain {
         if status == errSecSuccess {
             if let retrievedData: Data = dataTypeRef as? Data {
                 let value = String(data: retrievedData, encoding: String.Encoding.utf8)
-                
                 return value
             } else { return nil }
         } else {

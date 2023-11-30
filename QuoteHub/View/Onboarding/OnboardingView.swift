@@ -53,12 +53,6 @@ struct OnboardingView: View {
                             }
                             .padding(.leading, 50)
 
-//                            Image(onboardingPages[index].image)
-//                                .resizable()
-//                                .scaledToFit()
-//                                .frame(width: 200, height: 200)
-//                                .padding(10)
-                            
                             Spacer()
                             
                             if currentPage < 3 {

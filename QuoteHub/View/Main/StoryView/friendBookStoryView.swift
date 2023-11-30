@@ -37,7 +37,7 @@ struct friendBookStoryView: View {
     
     @State private var showActionSheet = false
 
-    @ObservedObject var userAuthManager = UserAuthenticationManager.shared
+    @EnvironmentObject var userAuthManager: UserAuthenticationManager
     
     @StateObject var reportViewModel = ReportViewModel()
     @State private var reportReason = ""
@@ -65,7 +65,7 @@ struct friendBookStoryView: View {
                         keywordView
                         quoteView
                         storyImagesView
-                        NavigationLink(destination: FriendLibraryView(friendId: story.userId)) {
+                        NavigationLink(destination: FriendLibraryView(friendId: story.userId).environmentObject(userAuthManager)) {
                             profileView
                         }
                         .buttonStyle(PlainButtonStyle())
@@ -176,7 +176,11 @@ struct friendBookStoryView: View {
             }
         }
         .onAppear {
-            followViewModel.updateFollowStatus(userId: story.userId.id)
+            if userAuthManager.isUserAuthenticated {
+                followViewModel.updateFollowStatus(userId: story.userId.id)
+            } else {
+                print("No Authorization Token Found for Friend Book Story")
+            }
         }
     }
     

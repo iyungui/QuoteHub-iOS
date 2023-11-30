@@ -15,6 +15,8 @@ struct UserSearchView: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.presentationMode) var presentationMode
     @State private var isActioned: Bool = false
+    @EnvironmentObject var userAuthManager: UserAuthenticationManager
+
 
 
     enum Field: Hashable {
@@ -81,7 +83,7 @@ struct UserSearchView: View {
                     .padding(.top)
             } else {
                 ForEach(viewModel.users, id: \.id) { user in
-                    NavigationLink(destination: FriendLibraryView(friendId: user)) {
+                    NavigationLink(destination: FriendLibraryView(friendId: user).environmentObject(userAuthManager)) {
                         ProfileView(user: user)
                     }
                 }

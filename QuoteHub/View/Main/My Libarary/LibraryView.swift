@@ -110,6 +110,7 @@ struct LibraryView: View {
             }
             .padding(.top, 10)
         }
+        .onAppear(perform: onAppear)
         .refreshable {
             await refreshContent()
         }
@@ -121,7 +122,6 @@ struct LibraryView: View {
                 }
         )
         .navigationBarTitleDisplayMode(.inline)
-        .onAppear(perform: onAppear)
     }
     
     private var tabIndicator: some View {
@@ -170,7 +170,7 @@ struct LibraryView: View {
             HStack {
                 // 팔로워 & 독서목표
                 VStack {
-                    NavigationLink(destination: FollowersListView(userId: userViewModel.user?.id).environmentObject(followViewModel)) {
+                    NavigationLink(destination: FollowersListView(userId: userViewModel.user?.id).environmentObject(followViewModel).environmentObject(userAuthManager)) {
                         VStack {
                             Text("팔로워")
                                 .font(.subheadline)
@@ -193,7 +193,7 @@ struct LibraryView: View {
                 
                 // 팔로잉 & 기록 수
                 VStack {
-                    NavigationLink(destination: FollowingListView(userId: userViewModel.user?.id).environmentObject(followViewModel)) {
+                    NavigationLink(destination: FollowingListView(userId: userViewModel.user?.id).environmentObject(followViewModel).environmentObject(userAuthManager)) {
                         VStack {
                             Text("팔로잉")
                                 .font(.subheadline)
@@ -226,6 +226,12 @@ struct LibraryView: View {
         followViewModel.loadFollowCounts()
 
     }
+    private func onAppear() {
+        userViewModel.getProfile(userId: nil)
+        userViewModel.loadStoryCount(userId: nil)
+        followViewModel.setUserId(userViewModel.user?.id)
+        followViewModel.loadFollowCounts()
+    }
 
     private var leadingNavigationItem: some View {
         NavigationLink(destination: MySearchKeywordView().environmentObject(myStoriesViewModel).environmentObject(userViewModel)) {
@@ -242,19 +248,6 @@ struct LibraryView: View {
             Image(systemName: "gearshape.fill")
                 .foregroundColor(Color(.systemGray))
                 .frame(width: 25, height: 25)
-        }
-    }
-
-    private func onAppear() {
-        if (userAuthManager.isUserAuthenticated) {
-            userViewModel.getProfile(userId: nil)
-            userViewModel.loadStoryCount(userId: nil)
-            myStoriesViewModel.loadBookStories()
-            myFolderViewModel.loadFolders()
-            followViewModel.setUserId(userViewModel.user?.id)
-            followViewModel.loadFollowCounts()
-        } else {
-            print("토큰 만료 표시")
         }
     }
 }
@@ -311,6 +304,9 @@ struct LibraryThemaView: View {
                 }
             }
         }
+//        .onAppear {
+//            myFolderViewModel.loadFolders()
+//        }
         .padding(.all, spacing)
     }
 }
@@ -365,6 +361,9 @@ struct LibraryStoryView: View {
                 }
             }
         }
+//        .onAppear {
+//            myStoriesViewModel.loadBookStories()
+//        }
         .padding(.all, 20)
     }
 }

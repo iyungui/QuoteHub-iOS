@@ -14,6 +14,8 @@ struct ListThemaView: View {
     @EnvironmentObject var myFolderViewModel: MyFolderViewModel
     @EnvironmentObject var userViewModel: UserViewModel
     @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
+    @EnvironmentObject var userAuthManager: UserAuthenticationManager
+
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -24,6 +26,7 @@ struct ListThemaView: View {
                         .environmentObject(myFolderViewModel)
                         .environmentObject(userViewModel)
                         .environmentObject(myStoriesViewModel)
+                        .environmentObject(userAuthManager)
                 }
                 if !viewModel.isLastPage {
                     ProgressView()
@@ -45,6 +48,7 @@ struct FolderView: View {
     @EnvironmentObject var myFolderViewModel: MyFolderViewModel
     @EnvironmentObject var userViewModel: UserViewModel
     @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
+    @EnvironmentObject var userAuthManager: UserAuthenticationManager
 
     var body: some View {
         NavigationLink(destination: destinationView) {
@@ -82,7 +86,7 @@ struct FolderView: View {
                 .environmentObject(myStoriesViewModel)
             )
         } else {
-            return AnyView(PublicThemaView(folder: folder).environmentObject(viewModel))
+            return AnyView(PublicThemaView(folder: folder).environmentObject(viewModel).environmentObject(userAuthManager))
         }
     }
 }

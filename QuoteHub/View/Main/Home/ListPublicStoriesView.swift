@@ -12,6 +12,8 @@ struct ListPublicStoriesView: View {
     @ObservedObject var storiesViewModel: BookStoriesViewModel
     @EnvironmentObject var userViewModel: UserViewModel
     @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
+    @EnvironmentObject var userAuthManager: UserAuthenticationManager
+
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -19,6 +21,7 @@ struct ListPublicStoriesView: View {
                 ForEach(storiesViewModel.bookStories, id: \.id) { story in
                     StoryView(story: story).environmentObject(userViewModel)
                         .environmentObject(myStoriesViewModel)
+                        .environmentObject(userAuthManager)
                 }
                 if !storiesViewModel.isLastPage {
                     ProgressView()
@@ -39,6 +42,8 @@ struct StoryView: View {
     private let infoContentHeight: CGFloat = 100 // Adjust this value as needed
     @EnvironmentObject var userViewModel: UserViewModel
     @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
+    @EnvironmentObject var userAuthManager: UserAuthenticationManager
+
     
     var body: some View {
         NavigationLink(destination: destinationView) {
@@ -68,7 +73,7 @@ struct StoryView: View {
         if story.userId.id == userViewModel.user?.id {
             return AnyView(myBookStoryView(storyId: story.id).environmentObject(userViewModel).environmentObject(myStoriesViewModel))
         } else {
-            return AnyView(friendBookStoryView(story: story))
+            return AnyView(friendBookStoryView(story: story).environmentObject(userAuthManager))
         }
     }
 

@@ -144,12 +144,20 @@ class UserService {
         }
     }
     
-    func searchUser(nickname: String, completion: @escaping (Result<SearchUserResponse, Error>) -> Void)
-    {
+    func searchUser(nickname: String, completion: @escaping (Result<SearchUserResponse, Error>) -> Void) {
+        
         let url = APIEndpoint.searchUserURL
+        
         let parameters = ["nickname": nickname]
+        
+        guard let token = KeyChain.read(key: "JWTAccessToken") else {
+            completion(.failure(NSError(domain: "UserService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])))
+            return
+        }
+        
+        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
 
-        AF.request(url, method: .get, parameters: parameters).responseDecodable(of: SearchUserResponse.self) { response in
+        AF.request(url, method: .get, parameters: parameters, headers: headers).responseDecodable(of: SearchUserResponse.self) { response in
             switch response.result {
             case .success(let searchUserResponse):
                 if searchUserResponse.success {

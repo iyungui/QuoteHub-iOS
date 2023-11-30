@@ -69,7 +69,7 @@ class BookStoriesViewModel: ObservableObject {
                     self?.currentPage += 1
                     self?.isLoading = false
                 case .failure(let error):
-                    print("Error loading book stories: \(error)")
+                    print("Error loading book stories\(String(describing: self?.mode)): \(error)")
                 }
             }
         }

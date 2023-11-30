@@ -11,7 +11,8 @@ import SDWebImageSwiftUI
 // MARK: - PUBLIC
 
 struct SearchKeywordView: View {
-    
+    @EnvironmentObject var userAuthManager: UserAuthenticationManager
+
     @State private var searchKeyword: String
     @StateObject private var viewModel: BookStoriesViewModel
     @EnvironmentObject var userViewModel: UserViewModel
@@ -82,7 +83,7 @@ struct SearchKeywordView: View {
                 } else {
                     ForEach(viewModel.bookStories, id: \.id) { story in
                         StoryItemView(story: story).environmentObject(userViewModel)
-                            .environmentObject(myStoriesViewModel)
+                            .environmentObject(myStoriesViewModel).environmentObject(userAuthManager)
                     }
                     if !viewModel.isLastPage && isActioned {
                         ProgressView()
@@ -100,6 +101,8 @@ struct StoryItemView: View {
     let story: BookStory
     @EnvironmentObject var userViewModel: UserViewModel
     @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
+    @EnvironmentObject var userAuthManager: UserAuthenticationManager
+
 
     var body: some View {
         NavigationLink(destination: destinationView) {
@@ -120,7 +123,7 @@ struct StoryItemView: View {
         if story.userId.id == userViewModel.user?.id {
             return AnyView(myBookStoryView(storyId: story.id).environmentObject(userViewModel).environmentObject(myStoriesViewModel))
         } else {
-            return AnyView(friendBookStoryView(story: story))
+            return AnyView(friendBookStoryView(story: story).environmentObject(userAuthManager))
         }
     }
     

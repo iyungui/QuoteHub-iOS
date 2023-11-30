@@ -33,12 +33,12 @@ struct FriendLibraryView: View {
     @StateObject private var viewModel:  BookStoriesViewModel
     @StateObject private var FolderViewModel: FriendFolderViewModel
     @StateObject var followViewModel: FollowViewModel
-    @ObservedObject var userAuthManager = UserAuthenticationManager.shared
+    
+    @EnvironmentObject var userAuthManager: UserAuthenticationManager
 
     @State private var showAlert: Bool = false
     @State private var alertType: AlertType = .loginRequired
     @State private var alertMessage = ""
-
     
     @StateObject var reportViewModel = ReportViewModel()
     @State private var reportReason = ""
@@ -74,6 +74,7 @@ struct FriendLibraryView: View {
                                         .environmentObject(viewModel)
                                         .environmentObject(FolderViewModel)
                                         .environmentObject(userViewModel)
+                                        .environmentObject(userAuthManager)
                                 }
                             } else {
                                 if viewModel.bookStories.isEmpty {
@@ -81,6 +82,7 @@ struct FriendLibraryView: View {
                                 } else {
                                     FriendLibraryStoryView()
                                         .environmentObject(viewModel)
+                                        .environmentObject(userAuthManager)
                                 }
                             }
                         }
@@ -127,6 +129,7 @@ struct FriendLibraryView: View {
                             }
                         }),
                         .destructive(Text("신고하기"), action: {
+                            print(userAuthManager.isUserAuthenticated)
                             if userAuthManager.isUserAuthenticated {
                                 showReportSheet = true
                             } else {
@@ -209,12 +212,6 @@ struct FriendLibraryView: View {
         .frame(width: totalWidth, height: 3, alignment: .leading)
     }
     
-    private var trailingNavigationItem: some View {
-        NavigationLink(destination: FriendSearchKeywordView(friendId: friendId)) {
-            Image(systemName: "number").foregroundColor(Color(.systemGray)).frame(width: 25, height: 25)
-        }
-    }
-    
     private func refreshContent() async {
         userViewModel.getProfile(userId: friendId._id)
         userViewModel.loadStoryCount(userId: friendId._id)
@@ -228,7 +225,6 @@ struct FriendLibraryView: View {
         userViewModel.getProfile(userId: friendId._id)
         userViewModel.loadStoryCount(userId: friendId._id)
         followViewModel.updateFollowStatus(userId: friendId.id)
-        viewModel.refreshBookStories()
         followViewModel.loadFollowCounts()
     }
     
@@ -300,7 +296,7 @@ struct FriendLibraryView: View {
             HStack {
                 // 팔로워 & 독서목표
                 VStack {
-                    NavigationLink(destination: FollowersListView(userId: friendId.id).environmentObject(followViewModel)) {
+                    NavigationLink(destination: FollowersListView(userId: friendId.id).environmentObject(followViewModel).environmentObject(userAuthManager)) {
                         VStack {
                             Text("팔로워")
                                 .font(.subheadline)
@@ -323,7 +319,7 @@ struct FriendLibraryView: View {
                 
                 // 팔로잉 & 기록 수
                 VStack {
-                    NavigationLink(destination: FollowingListView(userId: friendId.id).environmentObject(followViewModel)) {
+                    NavigationLink(destination: FollowingListView(userId: friendId.id).environmentObject(followViewModel).environmentObject(userAuthManager)) {
                         VStack {
                             Text("팔로잉")
                                 .font(.subheadline)
@@ -358,6 +354,7 @@ struct FriendLibraryThemaView: View {
     @EnvironmentObject var FolderViewModel: FriendFolderViewModel
     @EnvironmentObject var userViewModel: UserViewModel
     @EnvironmentObject var viewModel: BookStoriesViewModel
+    @EnvironmentObject var userAuthManager: UserAuthenticationManager
 
     var body: some View {
         LazyVGrid(columns: columns, spacing: spacing) {
@@ -366,6 +363,7 @@ struct FriendLibraryThemaView: View {
                     .environmentObject(FolderViewModel)
                     .environmentObject(viewModel)
                     .environmentObject(userViewModel)
+                    .environmentObject(userAuthManager)
                 )
                 {
                     VStack(alignment: .leading) {
@@ -402,12 +400,16 @@ struct FriendLibraryThemaView: View {
                 }
             }
         }
+//        .onAppear {
+//            FolderViewModel.loadFolders()
+//        }
         .padding(.all, spacing)
     }
 }
 
 struct FriendLibraryStoryView: View {
     @EnvironmentObject var viewModel: BookStoriesViewModel
+    @EnvironmentObject var userAuthManager: UserAuthenticationManager
 
     private let columns: [GridItem] = [
         GridItem(.flexible()),
@@ -418,33 +420,10 @@ struct FriendLibraryStoryView: View {
     var body: some View {
         LazyVGrid(columns: columns, spacing: spacing) {
             ForEach(viewModel.bookStories, id: \.id) { story in
-                NavigationLink(destination: friendBookStoryView(story: story).environmentObject(viewModel)) {
-                    VStack(alignment: .leading, spacing: 10) {
-                        WebImage(url: URL(string: story.storyImageURLs?.first ?? ""))
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: (UIScreen.main.bounds.width / 2) - 60, height: (UIScreen.main.bounds.width / 2) - 20)
-                            .cornerRadius(4)
-                            .clipped()
-                            .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.gray.opacity(0.25), lineWidth: 1))
-                        
-                        Text(story.quote ?? "")
-                            .font(.headline)
-                            .fontWeight(.bold)
-                        
-                        Text(story.content ?? "")
-                            .font(.subheadline)
-                        
-                        Text(story.keywords?.prefix(2).map { "#\($0)" }.joined(separator: " ") ?? "")
-                            .font(.caption)
-                            .foregroundColor(.blue)
-                            .lineLimit(2) // 텍스트 줄 수 제한
-                    }
-                    .frame(width: (UIScreen.main.bounds.width / 2) - 60, height: 250)
-                    .padding(.all, 15)
-                    .background(Color(.systemBackground))
-                    .cornerRadius(4)
-                    .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.gray.opacity(0.3), lineWidth: 1))
+                NavigationLink(destination: friendBookStoryView(story: story)
+                                .environmentObject(viewModel)
+                                .environmentObject(userAuthManager)) {
+                    bookStoryCell(story: story)
                 }
                 .buttonStyle(PlainButtonStyle())
             }
@@ -455,6 +434,39 @@ struct FriendLibraryStoryView: View {
                 }
             }
         }
+//        .onAppear {
+//            viewModel.loadBookStories()
+//        }
         .padding(.all, 20)
+    }
+
+    @ViewBuilder
+    private func bookStoryCell(story: BookStory) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            WebImage(url: URL(string: story.storyImageURLs?.first ?? ""))
+                .resizable()
+                .scaledToFill()
+                .frame(width: (UIScreen.main.bounds.width / 2) - 60, height: (UIScreen.main.bounds.width / 2) - 20)
+                .cornerRadius(4)
+                .clipped()
+                .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.gray.opacity(0.25), lineWidth: 1))
+            
+            Text(story.quote ?? "")
+                .font(.headline)
+                .fontWeight(.bold)
+            
+            Text(story.content ?? "")
+                .font(.subheadline)
+            
+            Text(story.keywords?.prefix(2).map { "#\($0)" }.joined(separator: " ") ?? "")
+                .font(.caption)
+                .foregroundColor(.blue)
+                .lineLimit(2) // Limit text lines
+        }
+        .frame(width: (UIScreen.main.bounds.width / 2) - 60, height: 250)
+        .padding(.all, 15)
+        .background(Color(.systemBackground))
+        .cornerRadius(4)
+        .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.gray.opacity(0.3), lineWidth: 1))
     }
 }
