@@ -9,7 +9,7 @@ import Foundation
 
 struct APIEndpoint {
     
-    static private let baseURL = "https://quote-hub.com/"
+    static private let baseURL = "https://port-0-quotehub-server-m015aiy374b6cd11.sel4.cloudtype.app"
     
     // MARK: - USER
     
