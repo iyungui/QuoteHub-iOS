@@ -16,15 +16,23 @@ struct SignInWithAppleView: View {
     var body: some View {
         VStack {
             SignInWithAppleButton(.signIn, onRequest: { request in
-                request.requestedScopes = [.email]
+                request.requestedScopes = [.email, .fullName]
             }, onCompletion: { result in
                 switch result {
                 case .success(let authResults):
                     guard let appleIDCredential = authResults.credential as? ASAuthorizationAppleIDCredential,
-                          let authorizationCode = appleIDCredential.authorizationCode,
-                          let authCodeString = String(data: authorizationCode, encoding: .utf8) else { return }
+                          let authorizationCode = appleIDCredential.authorizationCode else {
+                        return
+                    }
+                    if let authCodeString = String(data: authorizationCode, encoding: .utf8) {
+                        print("Authorization Code String: \(authCodeString)")
+                        self.handleAuthorization(appleIDCredential: appleIDCredential, authCodeString: authCodeString)
+                    } else {
+                        print("Failed to decode authorization code to string.")
+                    }
+
                     
-                    self.handleAuthorization(appleIDCredential: appleIDCredential, authCodeString: authCodeString)
+
                     
                 case .failure(let error):
                     print("Authorization failed: \(error.localizedDescription)")
@@ -55,7 +63,7 @@ struct SignInWithAppleView: View {
                     self.shouldNavigateToMain = true
                 }
             case .failure(let error):
-                print("Error: \(error)")
+                print("Apple login Error: \(error.localizedDescription)")
             }
         }
     }
