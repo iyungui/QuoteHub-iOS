@@ -28,7 +28,7 @@ struct OnboardingView: View {
             TabView(selection: $currentPage) {
                 ForEach(0..<4, id: \.self) { index in
                     if index < 3 {
-                        OnboardingContent(currentPage: $currentPage, index: index)
+                        OnboardingContentView(currentPage: $currentPage, index: index)
                         .tag(index)
                     } else {
                         LoginView(isOnboarding: true)
@@ -41,7 +41,7 @@ struct OnboardingView: View {
     }
 }
 
-struct OnboardingContent: View {
+struct OnboardingContentView: View {
     @Binding var currentPage: Int
     let index: Int
     var body: some View {
@@ -100,9 +100,6 @@ struct OnboardingContent: View {
     }
 
 }
-
-
-
 
 #Preview {
     Group {

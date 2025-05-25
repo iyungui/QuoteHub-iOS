@@ -19,13 +19,10 @@ struct CustomTabBar: View {
             TabBarButton(icon: "house.fill", label: "홈", isSelected: selectedTab == 0) {
                 selectedTab = 0
             }
-
             
             TabBarButton(icon: "plus.app.fill", label: "기록하기", isSelected: false) {
                 shouldShowOverlay = true
             }
-            
-
             
             // 내 서재 탭 아이템
             TabBarButton(icon: "books.vertical.fill", label: "내 서재", isSelected: selectedTab == 2) {

@@ -23,7 +23,6 @@ struct MainView: View {
     @EnvironmentObject var userAuthManager: UserAuthenticationManager
     @StateObject var userViewModel = UserViewModel()
     @StateObject var myStoriesViewModel = BookStoriesViewModel(mode: .myStories)
-
     @StateObject var myFolderViewModel = MyFolderViewModel()
 
     var body: some View {
