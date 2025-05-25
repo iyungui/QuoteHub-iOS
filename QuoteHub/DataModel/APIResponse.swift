@@ -90,3 +90,9 @@ struct BookStoryResponse: Codable {
         case message
     }
 }
+
+struct UserResponse: Codable {
+    let success: Bool
+    let data: User
+    let error: String?
+}

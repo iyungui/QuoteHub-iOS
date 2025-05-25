@@ -22,6 +22,7 @@ class UserService {
             completion(.failure(NSError(domain: "UserService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
             return
         }
+        
         AF.request(url, encoding: JSONEncoding.default)
             .responseDecodable(of: [User].self) { response in
                 switch response.result {
@@ -54,10 +55,14 @@ class UserService {
         }
         
         AF.request(url, method: .get, encoding: JSONEncoding.default, headers: headers)
-            .responseDecodable(of: User.self) { response in
+            .responseDecodable(of: UserResponse.self) { response in // User.self -> UserResponse.self로 변경
                 switch response.result {
-                case .success(let user):
-                    completion(.success(user))
+                case .success(let userResponse):
+                    if userResponse.success {
+                        completion(.success(userResponse.data)) // userResponse.data를 반환
+                    } else {
+                        completion(.failure(NSError(domain: "UserService", code: -5, userInfo: [NSLocalizedDescriptionKey: userResponse.error ?? "Unknown error"])))
+                    }
                 case .failure:
                     if response.response?.statusCode == 401 {
                         UserAuthenticationManager().renewAccessToken { success in
@@ -69,14 +74,17 @@ class UserService {
                             }
                         }
                     } else {
-                        completion(.failure(NSError(domain: "UserService", code: -4, userInfo: [NSLocalizedDescriptionKey: "API Request Failed"])))
+                        // 디버깅을 위한 추가 정보
+                        let statusCode = response.response?.statusCode ?? -1
+                        let errorDescription = response.error?.localizedDescription ?? "Unknown error"
+                        print("Profile API Error - Status Code: \(statusCode), Error: \(errorDescription)")
+                        
+                        completion(.failure(NSError(domain: "UserService", code: -4, userInfo: [NSLocalizedDescriptionKey: "API Request Failed with status \(statusCode): \(errorDescription)"])))
                     }
                 }
             }
     }
-    
-    // MARK: -  프로필 수정 함수
-    
+
     func updateProfile(nickname: String, profileImage: UIImage?, statusMessage: String, monthlyReadingGoal: Int, completion: @escaping (Result<User, Error>) -> Void) {
 
         guard let url = URL(string: APIEndpoint.updateProfileURL) else {
@@ -111,10 +119,14 @@ class UserService {
                     multipartFormData.append("\(val)".data(using: .utf8)!, withName: key)
                 }
             }
-        }, to: url, method: .put, headers: headers).responseDecodable(of: User.self) { response in
+        }, to: url, method: .put, headers: headers).responseDecodable(of: UserResponse.self) { response in // User.self -> UserResponse.self로 변경
             switch response.result {
-            case .success(let user):
-                completion(.success(user))
+            case .success(let userResponse):
+                if userResponse.success {
+                    completion(.success(userResponse.data)) // userResponse.data를 반환
+                } else {
+                    completion(.failure(NSError(domain: "UserService", code: -5, userInfo: [NSLocalizedDescriptionKey: userResponse.error ?? "Update failed"])))
+                }
             case .failure:
                 if let statusCode = response.response?.statusCode {
                     switch statusCode {
