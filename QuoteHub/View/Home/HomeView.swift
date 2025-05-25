@@ -175,10 +175,10 @@ struct HomeView: View {
     }
     
     func navBarLogo() -> some View {
-        Image("logo3")
+        Image("logo")
             .resizable()
             .aspectRatio(contentMode: .fit)
-            .frame(width: 60, height: 60)
+            .frame(width: 24, height: 24)
             .padding(.vertical)
             .foregroundColor(.accentColor)
     }
