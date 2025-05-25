@@ -8,8 +8,6 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
-
-
 struct ThemaView: View {
     
     let folderId: String

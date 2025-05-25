@@ -1,5 +1,5 @@
 //
-//  UserDataModel.swift
+//  User.swift
 //  QuoteHub
 //
 //  Created by 이융의 on 2023/09/28.
@@ -9,7 +9,6 @@ import Foundation
 
 struct SignInWithAppleResponse: Codable {
     let user: User
-    let isFirstLogin: Bool
     let JWTAccessToken: String
     let JWTRefreshToken: String
 }
@@ -25,7 +24,8 @@ struct User: Codable, Identifiable, Equatable {
     var refreshToken: String?
     var followers: [String]?
     var following: [String]?
-    
+    var createdAt: String?
+    var updatedAt: String?
     static func ==(lhs: User, rhs: User) -> Bool {
         return lhs.id == rhs.id
     }

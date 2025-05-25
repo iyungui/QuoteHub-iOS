@@ -1,21 +1,11 @@
 //
-//  BookDataModel.swift
+//  Book.swift
 //  QuoteHub
 // 
 //  Created by 이융의 on 2023/09/09. 
 //
 
 import Foundation
-
-struct RandomBooksResponse: Codable {
-    let success: Bool
-    let data: [Book]
-}
-
-struct BooksResponse: Codable {
-    let documents: [Book]
-    let meta: Meta
-}
 
 struct Book: Codable, Identifiable {
     var id: String { _id }

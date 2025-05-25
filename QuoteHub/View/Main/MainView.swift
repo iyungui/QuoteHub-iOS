@@ -127,96 +127,18 @@ struct OverlayView: View {
             .animation(.easeInOut, value: shouldShowOverlay)
             .transition(.opacity) // Fade transition for background
 
-        // Overlay content that will slide up from the bottom
         GeometryReader { geometry in
             VStack {
                 Spacer()
                 VStack(spacing: 0) {
-                    Button(action: {
-                        if userAuthManager.isUserAuthenticated {
-                            withAnimation {
-                                shouldShowOverlay = false
-                                activeSheet = .search
-                            }
-                        } else {
-                            showAlert()
-                        }
-                    }) {
-                        HStack {
-                            Image(systemName: "square.and.pencil")
-                                .font(.title)
-                                .padding(.trailing, 10)
-                            VStack(alignment: .leading) {
-                                Text("문장 기록")
-                                    .font(.headline)
-                                    .fontWeight(.semibold)
-                                Text("책을 읽고 기억하고 싶은 문장을 기록")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                            Spacer()
-                        }
-                        .padding()
-                    }
-                    .frame(maxWidth: .infinity)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        if userAuthManager.isUserAuthenticated {
-                            withAnimation {
-                                shouldShowOverlay = false
-                                activeSheet = .search
-                            }
-                        } else {
-                            showAlert()
-                        }
-                    }
-                    .buttonStyle(PlainButtonStyle())
+                    searchBookButton
                     
                     Divider().padding(.horizontal)
                     
-                    Button(action: {
-                        if userAuthManager.isUserAuthenticated {
-                            withAnimation {
-                                shouldShowOverlay = false
-                                activeSheet = .thema
-                            }
-                        } else {
-                            showAlert()
-                        }
-                    }) {
-                        HStack {
-
-                            Image(systemName: "folder.badge.plus")
-                                .font(.title)
-                                .padding(.trailing, 10)
-                            VStack(alignment: .leading) {
-                                Text("테마 만들기")
-                                    .font(.headline)
-                                    .fontWeight(.semibold)
-                                Text("테마를 만들어 나의 기록을 분류")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                            Spacer()
-                        }
-                        .padding()
-                    }
-                    .frame(maxWidth: .infinity)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        if userAuthManager.isUserAuthenticated {
-                            withAnimation {
-                                shouldShowOverlay = false
-                                activeSheet = .thema
-                            }
-                        } else {
-                            showAlert()
-                        }
-                    }
-                    .buttonStyle(PlainButtonStyle())
+                    makeThemeButton
                 }
                 .padding(.bottom, 40)
-                .background(Color(.systemBackground).edgesIgnoringSafeArea(.all)) // Ensuring background compatibility with light/dark mode
+                .background(Color(.systemBackground).edgesIgnoringSafeArea(.all))
                 .padding(.bottom, geometry.safeAreaInsets.bottom) // Add padding for the bottom safe area
                 .background(Color.white)
                 .cornerRadius(20)
@@ -235,5 +157,90 @@ struct OverlayView: View {
                 shouldShowOverlay = false
             }
         }
+    }
+    
+    private var searchBookButton: some View {
+        Button(action: {
+            if userAuthManager.isUserAuthenticated {
+                withAnimation {
+                    shouldShowOverlay = false
+                    activeSheet = .search
+                }
+            } else {
+                showAlert()
+            }
+        }) {
+            HStack {
+                Image(systemName: "square.and.pencil")
+                    .font(.title)
+                    .padding(.trailing, 10)
+                VStack(alignment: .leading) {
+                    Text("문장 기록")
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                    Text("책을 읽고 기억하고 싶은 문장을 기록")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                Spacer()
+            }
+            .padding()
+        }
+        .frame(maxWidth: .infinity)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            if userAuthManager.isUserAuthenticated {
+                withAnimation {
+                    shouldShowOverlay = false
+                    activeSheet = .search
+                }
+            } else {
+                showAlert()
+            }
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+    
+    private var makeThemeButton: some View {
+        Button(action: {
+            if userAuthManager.isUserAuthenticated {
+                withAnimation {
+                    shouldShowOverlay = false
+                    activeSheet = .thema
+                }
+            } else {
+                showAlert()
+            }
+        }) {
+            HStack {
+
+                Image(systemName: "folder.badge.plus")
+                    .font(.title)
+                    .padding(.trailing, 10)
+                VStack(alignment: .leading) {
+                    Text("테마 만들기")
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                    Text("테마를 만들어 나의 기록을 분류")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                Spacer()
+            }
+            .padding()
+        }
+        .frame(maxWidth: .infinity)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            if userAuthManager.isUserAuthenticated {
+                withAnimation {
+                    shouldShowOverlay = false
+                    activeSheet = .thema
+                }
+            } else {
+                showAlert()
+            }
+        }
+        .buttonStyle(PlainButtonStyle())
     }
 }

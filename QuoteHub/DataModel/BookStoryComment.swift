@@ -1,5 +1,5 @@
 //
-//  BookStoryCommentDataModel.swift
+//  BookStoryComment.swift
 //  QuoteHub
 //
 //  Created by 이융의 on 10/15/23.
@@ -23,35 +23,9 @@ struct BookStoryComment: Codable, Identifiable, Equatable {
     var updatedAtDate: String {
         return String(updatedAt.prefix(10))
     }
-//    struct User: Codable {
-//        var _id: String
-//        var nickname: String
-//        var profileImage: String
-//    }
     var replies: [BookStoryComment]?
     
     static func ==(lhs: BookStoryComment, rhs: BookStoryComment) -> Bool {
         return lhs.id == rhs.id
     }
-}
-
-struct BookStoryCommentResponse: Codable {
-    var success: Bool
-    var data: [BookStoryComment]
-    var page: Int
-    var pageSize: Int
-    var totalRootComments: Int
-    var totalPages: Int
-    var message: String?
-}
-
-struct postCommentResponse: Codable {
-    var success: Bool
-    var data: BookStoryComment
-    var message: String?
-}
-
-struct CommentCountResponse: Codable {
-    var commentCount: Int
-    var message: String?
 }

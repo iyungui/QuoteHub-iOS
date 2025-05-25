@@ -1,5 +1,5 @@
 //
-//  BookStoryDataModel.swift
+//  BookStory.swift
 //  QuoteHub
 //
 //  Created by 이융의 on 10/15/23.
@@ -7,18 +7,6 @@
 
 import Foundation
 import SwiftUI
-
-struct BookStoryResponse: Codable {
-    let success: Bool
-    let data: BookStory
-    let message: String?
-    
-    enum CodingKeys: String, CodingKey {
-        case success
-        case data
-        case message
-    }
-}
 
 struct BookStory: Codable, Identifiable, Equatable {
     var id: String { _id }
@@ -59,13 +47,3 @@ struct BookStory: Codable, Identifiable, Equatable {
     }
 }
 
-
-struct BookStoriesResponse: Codable {
-    var success: Bool
-    var data: [BookStory]
-    var currentPage: Int
-    var totalPages: Int
-    var pageSize: Int
-    var totalItems: Int
-    let message: String?
-}

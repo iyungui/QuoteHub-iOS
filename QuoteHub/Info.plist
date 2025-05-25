@@ -8,9 +8,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>com.googleusercontent.apps.1046144334830-rlu2lau9m8mlp58hfst7ujar6no47qrt</string>
-			</array>
+			<array/>
 		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
@@ -18,10 +16,6 @@
 		</dict>
 		<dict/>
 	</array>
-	<key>GIDClientID</key>
-	<string>1046144334830-rlu2lau9m8mlp58hfst7ujar6no47qrt.apps.googleusercontent.com</string>
-	<key>GIDServerClientID</key>
-	<string>1046144334830-isipvpj6vt5fn9hr8vlirkcbr22qum9k.apps.googleusercontent.com</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>

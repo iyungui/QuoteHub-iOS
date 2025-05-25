@@ -31,21 +31,3 @@ struct Folder: Codable, Identifiable, Equatable {
         return lhs.id == rhs.id
     }
 }
-
-
-struct FolderResponse: Codable {
-    var success: Bool
-    var data: Folder
-    var message: String?
-}
-
-
-struct FolderListResponse: Codable {
-    var success: Bool
-    var data: [Folder]
-    var currentPage: Int
-    var totalPages: Int
-    var pageSize: Int
-    var totalItems: Int
-    let message: String?
-}

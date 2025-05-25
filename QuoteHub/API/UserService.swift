@@ -121,7 +121,6 @@ class UserService {
                     case 400:  // Bad Request, 백엔드에서 정의한 오류 코드
                         if let data = response.data,
                            let backendError = try? JSONDecoder().decode(BackendErrorResponse.self, from: data) {
-                            // 'BackendErrorResponse'는 백엔드에서 보내는 오류 형식에 맞게 정의된 모델입니다.
                             completion(.failure(NSError(domain: "UserService", code: statusCode, userInfo: [NSLocalizedDescriptionKey: backendError.error])))
                         } else {
                             completion(.failure(NSError(domain: "UserService", code: statusCode, userInfo: [NSLocalizedDescriptionKey: "An error occurred"])))

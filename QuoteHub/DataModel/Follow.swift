@@ -1,5 +1,5 @@
 //
-//  FollowDataModel.swift
+//  Follow.swift
 //  QuoteHub
 //
 //  Created by 이융의 on 11/5/23.
