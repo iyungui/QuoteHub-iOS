@@ -344,6 +344,7 @@
 		C6B570022AAA1287003905C3 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				C6B56FDE2AA8B60B003905C3 /* ContentView.swift */,
 				C670C23F2AE67E35003B65D7 /* UserAuthenticationManager.swift */,
 				C63DB3B12B11978A0026B668 /* ReportSheetView.swift */,
 				C66B95C22B186CDB00E92CA0 /* WebView.swift */,
@@ -403,7 +404,6 @@
 			isa = PBXGroup;
 			children = (
 				C6FC9FDB2AE779A1003420EB /* OnboardingView.swift */,
-				C6B56FDE2AA8B60B003905C3 /* ContentView.swift */,
 				C6DE7F522AF76D9F0020F5CB /* LoginView.swift */,
 			);
 			path = Onboarding;

@@ -31,7 +31,7 @@ struct OnboardingView: View {
                     if index < 3 {
                         // 첫 4개 페이지
                         VStack(alignment: .center, spacing: 15) {
-
+                            
                             Spacer()
                             
                             HStack {
@@ -43,7 +43,6 @@ struct OnboardingView: View {
                             }
                             .padding(.leading, 50)
 
-                            
                             HStack {
                                 Text(onboardingPages[index].description)
                                     .font(.headline)
@@ -81,7 +80,6 @@ struct OnboardingView: View {
                                     .foregroundColor(.gray)
                             }
                             Spacer()
-
                         }
                         .tag(index)
                     } else {
