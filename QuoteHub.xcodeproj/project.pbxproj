@@ -348,7 +348,6 @@
 				C670C23F2AE67E35003B65D7 /* UserAuthenticationManager.swift */,
 				C63DB3B12B11978A0026B668 /* ReportSheetView.swift */,
 				C66B95C22B186CDB00E92CA0 /* WebView.swift */,
-				C6FC9FDD2AE77A8D003420EB /* Onboarding */,
 				C6B570032AAA1295003905C3 /* Login */,
 				C6B570042AAA12AF003905C3 /* Main */,
 			);
@@ -359,6 +358,8 @@
 			isa = PBXGroup;
 			children = (
 				C670C2332AE4D232003B65D7 /* SignInWithAppleView.swift */,
+				C6FC9FDB2AE779A1003420EB /* OnboardingView.swift */,
+				C6DE7F522AF76D9F0020F5CB /* LoginView.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -398,15 +399,6 @@
 				C653302B2B014BD500E6B283 /* UpdateThemaView.swift */,
 			);
 			path = ThemaView;
-			sourceTree = "<group>";
-		};
-		C6FC9FDD2AE77A8D003420EB /* Onboarding */ = {
-			isa = PBXGroup;
-			children = (
-				C6FC9FDB2AE779A1003420EB /* OnboardingView.swift */,
-				C6DE7F522AF76D9F0020F5CB /* LoginView.swift */,
-			);
-			path = Onboarding;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
