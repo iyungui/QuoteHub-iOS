@@ -8,15 +8,14 @@
 import SwiftUI
 
 struct OnboardingData {
-    var image: String
     var title: String
     var description: String
 }
 
 let onboardingPages: [OnboardingData] = [
-    OnboardingData(image: "preview_1", title: "기록하기", description: "책을 읽으며 간직하고 싶은\n나만의 문장을 기록해보세요."),
-    OnboardingData(image: "preview_2", title: "키워드 설정", description: "키워드를 통해 나의 기록은 물론\n친구의 기록을 검색할 수 있어요."),
-    OnboardingData(image: "preview_3", title: "테마 설정", description: "테마를 통해 나의 문장들을 분류하고\n한 눈에 모아볼 수 있어요.")
+    OnboardingData(title: "기록하기", description: "책을 읽으며 간직하고 싶은\n나만의 문장을 기록해보세요."),
+    OnboardingData(title: "키워드 설정", description: "키워드를 통해 나의 기록은 물론\n친구의 기록을 검색할 수 있어요."),
+    OnboardingData(title: "테마 설정", description: "테마를 통해 나의 문장들을 분류하고\n한 눈에 모아볼 수 있어요.")
 ]
 
 struct OnboardingView: View {
@@ -31,9 +30,8 @@ struct OnboardingView: View {
                     if index < 3 {
                         // 첫 4개 페이지
                         VStack(alignment: .center, spacing: 15) {
-                            
                             Spacer()
-                            
+
                             HStack {
                                 Text(onboardingPages[index].title)
                                     .font(.largeTitle)
@@ -43,6 +41,7 @@ struct OnboardingView: View {
                             }
                             .padding(.leading, 50)
 
+                            
                             HStack {
                                 Text(onboardingPages[index].description)
                                     .font(.headline)
@@ -80,6 +79,7 @@ struct OnboardingView: View {
                                     .foregroundColor(.gray)
                             }
                             Spacer()
+
                         }
                         .tag(index)
                     } else {
