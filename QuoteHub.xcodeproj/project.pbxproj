@@ -350,6 +350,13 @@
 				C66B95C22B186CDB00E92CA0 /* WebView.swift */,
 				C6B570032AAA1295003905C3 /* Login */,
 				C6B570042AAA12AF003905C3 /* Main */,
+				C6DA790C2AFA9F0E00963017 /* ThemaView */,
+				C6DA790B2AFA9EF300963017 /* StoryView */,
+				C653302D2B01611500E6B283 /* Keyword */,
+				C676F5282AAC1A1800EC7241 /* Home */,
+				C676F5242AAC02B500EC7241 /* Record */,
+				C69350262AB05DEA00597194 /* Setting */,
+				C676F52A2AAC1AED00EC7241 /* My Libarary */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -368,13 +375,6 @@
 			isa = PBXGroup;
 			children = (
 				C6B56FFB2AA8C3DD003905C3 /* MainView.swift */,
-				C6DA790C2AFA9F0E00963017 /* ThemaView */,
-				C6DA790B2AFA9EF300963017 /* StoryView */,
-				C653302D2B01611500E6B283 /* Keyword */,
-				C676F5282AAC1A1800EC7241 /* Home */,
-				C676F5242AAC02B500EC7241 /* Record */,
-				C69350262AB05DEA00597194 /* Setting */,
-				C676F52A2AAC1AED00EC7241 /* My Libarary */,
 			);
 			path = Main;
 			sourceTree = "<group>";

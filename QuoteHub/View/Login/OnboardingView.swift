@@ -28,92 +28,10 @@ struct OnboardingView: View {
             TabView(selection: $currentPage) {
                 ForEach(0..<4, id: \.self) { index in
                     if index < 3 {
-                        // 첫 4개 페이지
-                        VStack(alignment: .center, spacing: 15) {
-                            Spacer()
-
-                            HStack {
-                                Text(onboardingPages[index].title)
-                                    .font(.largeTitle)
-                                    .fontWeight(.black)
-                                    .padding(.top)
-                                Spacer()
-                            }
-                            .padding(.leading, 50)
-
-                            
-                            HStack {
-                                Text(onboardingPages[index].description)
-                                    .font(.headline)
-                                    .fontWeight(.semibold)
-                                    .multilineTextAlignment(.leading)
-                                Spacer()
-                            }
-                            .padding(.leading, 50)
-
-                            Spacer()
-                            
-                            if currentPage < 3 {
-                                Button(action: {
-                                    withAnimation {
-                                        currentPage += 1
-                                    }
-                                }) {
-                                    Text("다음")
-                                        .font(.title3)
-                                        .fontWeight(.bold)
-                                        .foregroundColor(.white)
-                                        .frame(width: 280, height: 60, alignment: .center)
-                                        .background(Color.black)
-                                        .cornerRadius(8)
-                                }
-                                .buttonStyle(PlainButtonStyle())
-                            }
-                            
-                            Button(action: {
-                                currentPage = 3 // 마지막 페이지로 이동
-                            }) {
-                                Text("건너뛰기")
-                                    .font(.callout)
-                                    .fontWeight(.medium)
-                                    .foregroundColor(.gray)
-                            }
-                            Spacer()
-
-                        }
+                        OnboardingContent(currentPage: $currentPage, index: index)
                         .tag(index)
                     } else {
-                        VStack(alignment: .center, spacing: 15) {
-                            Spacer()
-
-                            Text("지금 바로 나만의 문장을 기록해보세요.")
-                                .font(.largeTitle)
-                                .multilineTextAlignment(.center)
-                                .fontWeight(.black)
-                                .padding(.horizontal, 20)
-
-                            Text("문장을 모아 지혜를 담다, 문장모아")
-                                .fontWeight(.semibold)
-                                .font(.headline)
-                                .padding(.horizontal, 20)
-
-                            Spacer()
-                                .frame(height: 35)
-                            
-                            SignInWithAppleView()
-                              .frame(width: 280, height: 60, alignment: .center)
-                              .signInWithAppleButtonStyle(colorScheme == .light ? .black : .whiteOutline)
-                              .environmentObject(userAuthManager)
-                            
-                            Button("나중에 하기") {
-                                userAuthManager.isOnboardingComplete = true
-                            }
-                            .font(.callout)
-                            .fontWeight(.medium)
-                            .foregroundColor(.gray)
-                            
-                            Spacer()
-                        }
+                        LoginView(isOnboarding: true)
                     }
                 }
             }
@@ -123,4 +41,72 @@ struct OnboardingView: View {
     }
 }
 
+struct OnboardingContent: View {
+    @Binding var currentPage: Int
+    let index: Int
+    var body: some View {
+        
+        VStack(alignment: .center, spacing: 15) {
+            Spacer()
+            
+            HStack {
+                Text(onboardingPages[index].title)
+                    .font(.largeTitle)
+                    .fontWeight(.black)
+                    .padding(.top)
+                Spacer()
+            }
+            .padding(.leading, 50)
+            
+            
+            HStack {
+                Text(onboardingPages[index].description)
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                    .multilineTextAlignment(.leading)
+                Spacer()
+            }
+            .padding(.leading, 50)
+            
+            Spacer()
+            
+            if currentPage < 3 {
+                Button(action: {
+                    withAnimation {
+                        currentPage += 1
+                    }
+                }) {
+                    Text("다음")
+                        .font(.title3)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .frame(width: 280, height: 60, alignment: .center)
+                        .background(Color.black)
+                        .cornerRadius(8)
+                }
+                .buttonStyle(PlainButtonStyle())
+            }
+            
+            Button(action: {
+                currentPage = 3 // 마지막 페이지로 이동
+            }) {
+                Text("건너뛰기")
+                    .font(.callout)
+                    .fontWeight(.medium)
+                    .foregroundColor(.gray)
+            }
+            Spacer()
+        }
+    }
 
+}
+
+
+
+
+#Preview {
+    Group {
+        OnboardingView()
+    }
+    .environmentObject(UserAuthenticationManager())
+}

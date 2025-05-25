@@ -10,7 +10,7 @@ import SwiftUI
 struct LoginView: View {
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var userAuthManager: UserAuthenticationManager
-    
+    let isOnboarding: Bool
     var body: some View {
         VStack(alignment: .center, spacing: 15) {
             Spacer()
@@ -32,8 +32,18 @@ struct LoginView: View {
               .frame(width: 280, height: 60, alignment: .center)
               .signInWithAppleButtonStyle(colorScheme == .light ? .black : .whiteOutline)
               .environmentObject(userAuthManager)
+            
+            if isOnboarding {
+                Button("나중에 하기") {
+                    userAuthManager.isOnboardingComplete = true
+                }
+                .font(.callout)
+                .fontWeight(.medium)
+                .foregroundColor(.gray)
+            }
+            
             Spacer()
         }
-        .navigationBarBackButtonHidden()
+        .navigationBarBackButtonHidden(!isOnboarding)
     }
 }

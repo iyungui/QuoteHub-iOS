@@ -60,7 +60,7 @@ struct MainView: View {
                     .background(Color(UIColor.secondarySystemBackground).opacity(0.98))
                 }
                 
-                NavigationLink(destination: LoginView().environmentObject(userAuthManager), isActive: $userAuthManager.showingLoginView) {
+                NavigationLink(destination: LoginView(isOnboarding: false).environmentObject(userAuthManager), isActive: $userAuthManager.showingLoginView) {
                     EmptyView()
                 }
                 

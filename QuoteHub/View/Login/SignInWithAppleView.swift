@@ -30,10 +30,6 @@ struct SignInWithAppleView: View {
                     } else {
                         print("Failed to decode authorization code to string.")
                     }
-
-                    
-
-                    
                 case .failure(let error):
                     print("Authorization failed: \(error.localizedDescription)")
                 }
