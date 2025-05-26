@@ -166,6 +166,7 @@ struct UserProfileView: View {
     
     
     func updateProfile() {
+        print(#fileID, #function, #line, "- ")
         userViewModel.updateProfile(nickname: nickname, profileImage: inputImage, statusMessage: statusMessage, monthlyReadingGoal: monthlyReadingGoal) { result in
             switch result {
             case .success:

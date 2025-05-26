@@ -23,7 +23,7 @@ struct VersionInfoView: View {
 
             Spacer().frame(height: 50)
 
-            Text("앱 버전 1.0")
+            Text("\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
             
