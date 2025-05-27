@@ -31,12 +31,12 @@ class BooksViewModel: ObservableObject {
                 case .success(let booksResponse):
                     self?.hasSearched = true
                     if self?.currentPage == 1 {
-                        self?.books = booksResponse.documents
+                        self?.books = booksResponse.data!.documents
                     } else {
-                        self?.books.append(contentsOf: booksResponse.documents)
+                        self?.books.append(contentsOf: booksResponse.data!.documents)
                     }
-                    self?.isEnd = booksResponse.meta.is_end
-                    if !booksResponse.meta.is_end {
+                    self?.isEnd = booksResponse.data!.meta.is_end
+                    if !booksResponse.data!.meta.is_end {
                         self?.currentPage += 1
                     }
                 case .failure(let error):
@@ -69,7 +69,7 @@ class RandomBooksViewModel: ObservableObject {
                 self?.isLoading = false
                 switch result {
                 case .success(let response):
-                    self?.books = response.data
+                    self?.books = response.data!
                 case .failure(let error):
                     self?.errorMessage = error.localizedDescription
                 }

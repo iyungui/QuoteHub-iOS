@@ -49,7 +49,7 @@ class CommentViewModel: ObservableObject {
                 switch result {
                 case .success(let response):
                     self?.bookStoryComments.append(contentsOf: response.data)
-                    self?.isLastPage = response.page >= response.totalPages
+                    self?.isLastPage = response.pagination.currentPage >= response.pagination.totalPages
                     self?.page += 1
                     self?.isLoading = false
                 case .failure(let error):
@@ -73,13 +73,13 @@ class CommentViewModel: ObservableObject {
                 switch result {
                 case .success(let postCommentResponse):
                     let newComment = BookStoryComment( 
-                        _id: postCommentResponse.data._id,
-                        userId: postCommentResponse.data.userId,
+                        _id: postCommentResponse.data!._id,
+                        userId: postCommentResponse.data!.userId,
                         bookStoryId: self?.bookStoryId ?? "",
-                        content: postCommentResponse.data.content,
-                        parentCommentId: postCommentResponse.data.parentCommentId,
-                        createdAt: postCommentResponse.data.createdAt,
-                        updatedAt: postCommentResponse.data.updatedAt
+                        content: postCommentResponse.data!.content,
+                        parentCommentId: postCommentResponse.data!.parentCommentId,
+                        createdAt: postCommentResponse.data!.createdAt,
+                        updatedAt: postCommentResponse.data!.updatedAt
                     )
                     self?.bookStoryComments.insert(newComment, at: 0)
                     self?.totalCommentCount += 1
@@ -116,7 +116,7 @@ class CommentViewModel: ObservableObject {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let response):
-                    self?.totalCommentCount = response.commentCount
+                    self?.totalCommentCount = response.data!
                 case .failure(let error):
                     print("Error fetching comment count: \(error)")
                 }

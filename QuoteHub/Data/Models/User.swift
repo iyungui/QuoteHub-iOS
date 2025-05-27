@@ -30,17 +30,3 @@ struct User: Codable, Identifiable, Equatable {
         return lhs.id == rhs.id
     }
 }
-
-struct StoryCountResponse: Codable {
-    let success: Bool
-    let count: Int
-}
-
-
-// MARK: - 사용자 검색
-
-struct SearchUserResponse: Codable {
-    var success: Bool
-    var users: [User]
-    var message: String?
-}

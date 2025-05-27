@@ -12,7 +12,7 @@ class StoryCommentService {
     
     // MARK: - add BookStory Comment
 
-    func addCommentToStory(bookStoryId: String, content: String, parentCommentId: String?, completion: @escaping (Result<postCommentResponse, Error>) -> Void) {
+    func addCommentToStory(bookStoryId: String, content: String, parentCommentId: String?, completion: @escaping (Result<BookStoryCommentResponse, Error>) -> Void) {
         guard let url = URL(string: APIEndpoint.addCommentToStoryURL) else {
             completion(.failure(NSError(domain: "StoryCommentService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
             return
@@ -31,7 +31,7 @@ class StoryCommentService {
         
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
         
-        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseDecodable(of: postCommentResponse.self) { response in
+        AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseDecodable(of: BookStoryCommentResponse.self) { response in
             switch response.result {
             case .success(let postCommentResponse):
                 completion(.success(postCommentResponse))
@@ -54,7 +54,7 @@ class StoryCommentService {
 
     // MARK: - get BookStory Comment
 
-    func getCommentforStory(bookStoryId: String, page: Int, pageSize: Int, completion: @escaping (Result<BookStoryCommentResponse, Error>) -> Void) {
+    func getCommentforStory(bookStoryId: String, page: Int, pageSize: Int, completion: @escaping (Result<BookStoryCommentsResponse, Error>) -> Void) {
         
         var urlString = APIEndpoint.getCommentForStoryURL
 
@@ -65,7 +65,7 @@ class StoryCommentService {
             return
         }
         
-        AF.request(url, method: .get).responseDecodable(of: BookStoryCommentResponse.self) { response in
+        AF.request(url, method: .get).responseDecodable(of: BookStoryCommentsResponse.self) { response in
             switch response.result {
             case .success(let bookStoryCommentResponse):
                 completion(.success(bookStoryCommentResponse))
@@ -97,7 +97,7 @@ class StoryCommentService {
 
     // MARK: - delete BookStory Comment
 
-    func deleteCommentStory(commentId: String, completion: @escaping (Result<DeleteResponse, Error>) -> Void) {
+    func deleteCommentStory(commentId: String, completion: @escaping (Result<APIResponse<EmptyData>, Error>) -> Void) {
         
         guard let token = KeyChain.read(key: "JWTAccessToken") else {
             completion(.failure(NSError(domain: "StoryCommentService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])))
@@ -114,7 +114,7 @@ class StoryCommentService {
             return
         }
         
-        AF.request(url, method: .delete, encoding: JSONEncoding.default, headers: headers).responseDecodable(of: DeleteResponse.self) { response in
+        AF.request(url, method: .delete, encoding: JSONEncoding.default, headers: headers).responseDecodable(of: APIResponse<EmptyData>.self) { response in
             switch response.result {
             case .success(let deleteResponse):
                 completion(.success(deleteResponse))

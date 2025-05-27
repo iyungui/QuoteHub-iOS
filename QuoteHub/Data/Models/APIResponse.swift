@@ -7,92 +7,68 @@
 
 import Foundation
 
+// MARK: - Base Response Models
 
-struct BackendErrorResponse: Codable {
-    let error: String
-}
-
-struct DeleteResponse: Codable {
+struct APIResponse<T: Codable>: Codable {
     let success: Bool
     let message: String
+    let data: T?
 }
 
-
-struct BookStoryCommentResponse: Codable {
-    var success: Bool
-    var data: [BookStoryComment]
-    var page: Int
-    var pageSize: Int
-    var totalRootComments: Int
-    var totalPages: Int
-    var message: String?
+struct Pagination: Codable {
+    let currentPage: Int
+    let totalPages: Int
+    let pageSize: Int
+    let totalItems: Int
 }
 
-struct postCommentResponse: Codable {
-    var success: Bool
-    var data: BookStoryComment
-    var message: String?
-}
-
-struct CommentCountResponse: Codable {
-    var commentCount: Int
-    var message: String?
-}
-
-
-struct RandomBooksResponse: Codable {
+struct PaginatedAPIResponse<T: Codable>: Codable {
     let success: Bool
-    let data: [Book]
+    let message: String
+    let data: [T]
+    let pagination: Pagination
 }
 
+struct ErrorResponse: Codable {
+    let success: Bool
+    let message: String
+    let errors: [String: String]?
+}
+
+struct CountResponse: Codable {
+    let success: Bool
+    let message: String
+    let count: Int
+}
+
+// Kakao API Response
 struct BooksResponse: Codable {
     let documents: [Book]
     let meta: Meta
 }
-
-
-struct FolderResponse: Codable {
-    var success: Bool
-    var data: Folder
-    var message: String?
+struct Meta: Codable {
+    let is_end: Bool
+    let pageable_count: Int
+    let total_count: Int
 }
 
+// data를 전달하지 않는 api 위한 모델
+struct EmptyData: Codable {}
 
-struct FolderListResponse: Codable {
-    var success: Bool
-    var data: [Folder]
-    var currentPage: Int
-    var totalPages: Int
-    var pageSize: Int
-    var totalItems: Int
-    let message: String?
-}
+// MARK: - Specific Response Type Aliases
 
+typealias UserResponse = APIResponse<User>
+typealias SearchUserResponse = APIResponse<[User]>
 
-struct BookStoriesResponse: Codable {
-    var success: Bool
-    var data: [BookStory]
-    var currentPage: Int
-    var totalPages: Int
-    var pageSize: Int
-    var totalItems: Int
-    let message: String?
-}
+typealias BookStoryCommentsResponse = PaginatedAPIResponse<BookStoryComment>
+typealias BookStoryCommentResponse = APIResponse<BookStoryComment>
 
-struct BookStoryResponse: Codable {
-    let success: Bool
-    let data: BookStory
-    let message: String?
-    
-    enum CodingKeys: String, CodingKey {
-        case success
-        case data
-        case message
-    }
-}
+typealias CommentCountResponse = APIResponse<Int>
 
-struct UserResponse: Codable {
-    let success: Bool
-    let data: User
-    let error: String?
-}
+typealias FolderResponse = APIResponse<Folder>
+typealias FolderListResponse = PaginatedAPIResponse<Folder>
+
+typealias RandomBooksResponse = APIResponse<[Book]>
+
+typealias BookStoryResponse = APIResponse<BookStory>
+typealias BookStoriesResponse = PaginatedAPIResponse<BookStory>

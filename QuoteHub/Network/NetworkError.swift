@@ -6,3 +6,14 @@
 //
 
 import Foundation
+import Alamofire
+
+enum NetworkError: Error, LocalizedError {
+    case unauthorized
+    case conflict(String?)
+    case validationError(String?)
+    case noInternetConnection
+    case serverError
+    case decodingError
+    case unknown(String?)
+}

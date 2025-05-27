@@ -31,8 +31,8 @@ class UserSearchViewModel: ObservableObject {
                 print("검색 완료")
                 switch result {
                 case .success(let searchUserResponse):
-                    print("검색 성공: \(searchUserResponse.users.count) 명의 사용자 찾음")
-                    self?.users = searchUserResponse.users
+                    print("검색 성공: \(String(describing: searchUserResponse.data?.count)) 명의 사용자 찾음")
+                    self?.users = searchUserResponse.data ?? []
                 case .failure(let error):
                     print("검색 실패: \(error.localizedDescription)")
                     self?.errorMessage = error.localizedDescription

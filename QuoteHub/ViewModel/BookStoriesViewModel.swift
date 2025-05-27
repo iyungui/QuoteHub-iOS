@@ -65,7 +65,7 @@ class BookStoriesViewModel: ObservableObject {
                 switch result {
                 case .success(let response):
                     self?.bookStories.append(contentsOf: response.data)
-                    self?.isLastPage = response.currentPage >= response.totalPages
+                    self?.isLastPage = response.pagination.currentPage >= response.pagination.totalPages
                     self?.currentPage += 1
                     self?.isLoading = false
                 case .failure(let error):
@@ -119,7 +119,7 @@ class BookStoriesViewModel: ObservableObject {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let bookStoryResponse):
-                    self?.bookStories.insert(bookStoryResponse.data, at: 0)
+                    self?.bookStories.insert(bookStoryResponse.data!, at: 0)
                     self?.isLoading = false
                     completion(true)
                 case .failure:
@@ -159,7 +159,7 @@ class BookStoriesViewModel: ObservableObject {
                 case .success(let updatedStoryResponse):
                     if let index = self?.bookStories.firstIndex(where: { $0.id == storyID }) {
                         // Update the story in the array
-                        self?.bookStories[index] = updatedStoryResponse.data
+                        self?.bookStories[index] = updatedStoryResponse.data!
                     }
                     completion(true)
                 case .failure(let error):

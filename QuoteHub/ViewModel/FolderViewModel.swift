@@ -41,7 +41,7 @@ class FolderViewModel: ObservableObject {
                 switch result {
                 case .success(let response):
                     self?.folder.append(contentsOf: response.data)
-                    self?.isLastPage = response.currentPage >= response.totalPages
+                    self?.isLastPage = response.pagination.currentPage >= response.pagination.totalPages
 
                     self?.currentPage += 1
                     self?.isLoading = false
@@ -96,7 +96,7 @@ class MyFolderViewModel: ObservableObject {
                 switch result {
                 case .success(let response):
                     self?.folder.append(contentsOf: response.data)
-                    self?.isLastPage = response.currentPage >= response.totalPages
+                    self?.isLastPage = response.pagination.currentPage >= response.pagination.totalPages
 
                     self?.currentPage += 1
                     self?.isLoading = false
@@ -125,7 +125,7 @@ class MyFolderViewModel: ObservableObject {
                 switch result {
                 case .success(let folderResponse):
                     // 새 폴더를 folders 배열에 추가
-                    self?.folder.insert(folderResponse.data, at: 0)
+                    self?.folder.insert(folderResponse.data!, at: 0)
                     self?.isLoading = false
                     completion(true)
                 case .failure(let error as NSError):
@@ -156,7 +156,7 @@ class MyFolderViewModel: ObservableObject {
                 switch result {
                 case .success(let updatedFolderResponse):
                     if let index = self?.folder.firstIndex(where: { $0.id == folderId}) {
-                        self?.folder[index] = updatedFolderResponse.data
+                        self?.folder[index] = updatedFolderResponse.data!
                     }
                     self?.isLoading = false
                     completion(true)
@@ -232,7 +232,7 @@ class FriendFolderViewModel: ObservableObject {
                 switch result {
                 case .success(let response):
                     self?.folder.append(contentsOf: response.data)
-                    self?.isLastPage = response.currentPage >= response.totalPages
+                    self?.isLastPage = response.pagination.currentPage >= response.pagination.totalPages
 
                     self?.currentPage += 1
                     self?.isLoading = false

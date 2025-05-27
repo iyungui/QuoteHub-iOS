@@ -59,9 +59,7 @@ class UserService {
                 switch response.result {
                 case .success(let userResponse):
                     if userResponse.success {
-                        completion(.success(userResponse.data)) // userResponse.data를 반환
-                    } else {
-                        completion(.failure(NSError(domain: "UserService", code: -5, userInfo: [NSLocalizedDescriptionKey: userResponse.error ?? "Unknown error"])))
+                        completion(.success(userResponse.data!)) // userResponse.data를 반환
                     }
                 case .failure:
                     if response.response?.statusCode == 401 {
@@ -123,17 +121,15 @@ class UserService {
             switch response.result {
             case .success(let userResponse):
                 if userResponse.success {
-                    completion(.success(userResponse.data)) // userResponse.data를 반환
-                } else {
-                    completion(.failure(NSError(domain: "UserService", code: -5, userInfo: [NSLocalizedDescriptionKey: userResponse.error ?? "Update failed"])))
+                    completion(.success(userResponse.data!)) // userResponse.data를 반환
                 }
             case .failure:
                 if let statusCode = response.response?.statusCode {
                     switch statusCode {
                     case 400:  // Bad Request, 백엔드에서 정의한 오류 코드
                         if let data = response.data,
-                           let backendError = try? JSONDecoder().decode(BackendErrorResponse.self, from: data) {
-                            completion(.failure(NSError(domain: "UserService", code: statusCode, userInfo: [NSLocalizedDescriptionKey: backendError.error])))
+                           let backendError = try? JSONDecoder().decode(ErrorResponse.self, from: data) {
+                            completion(.failure(NSError(domain: "UserService", code: statusCode, userInfo: [NSLocalizedDescriptionKey: backendError.errors])))
                         } else {
                             completion(.failure(NSError(domain: "UserService", code: statusCode, userInfo: [NSLocalizedDescriptionKey: "An error occurred"])))
                         }

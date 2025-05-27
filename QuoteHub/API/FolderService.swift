@@ -233,7 +233,7 @@ class FolderService {
     
     // MARK: - 폴더 삭제
     
-    func deleteFolder(folderId: String, completion: @escaping (Result<DeleteResponse, Error>) -> Void) {
+    func deleteFolder(folderId: String, completion: @escaping (Result<APIResponse<EmptyData>, Error>) -> Void) {
         
         guard let token = KeyChain.read(key: "JWTAccessToken") else {
             let error = NSError(domain: "FolderService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])
@@ -253,7 +253,7 @@ class FolderService {
             return
         }
         
-        AF.request(url, method: .delete, encoding: JSONEncoding.default, headers: headers).responseDecodable(of: DeleteResponse.self) { response in
+        AF.request(url, method: .delete, encoding: JSONEncoding.default, headers: headers).responseDecodable(of: APIResponse<EmptyData>.self) { response in
             switch response.result {
             case .success(let deleteResponse):
                 completion(.success(deleteResponse))

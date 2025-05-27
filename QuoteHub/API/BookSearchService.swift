@@ -9,7 +9,7 @@ import Foundation
 import Alamofire
 
 class BookSearchService {
-    func fetchBooks(query: String, page: Int, completion: @escaping (Result<BooksResponse, Error>) -> Void) {
+    func fetchBooks(query: String, page: Int, completion: @escaping (Result<APIResponse<BooksResponse>, Error>) -> Void) {
         
         let endpoint = "?query=\(query)&page=\(page)"
         let urlString = APIEndpoint.searchBookURL + endpoint
@@ -21,7 +21,7 @@ class BookSearchService {
         
         AF.request(url, method: .get)
             .validate()
-            .responseDecodable(of: BooksResponse.self) { response in
+            .responseDecodable(of: APIResponse<BooksResponse>.self) { response in
                 switch response.result {
                 case .success(let booksResponse):
                     completion(.success(booksResponse))

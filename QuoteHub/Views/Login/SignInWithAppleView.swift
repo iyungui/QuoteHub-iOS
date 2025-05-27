@@ -46,11 +46,11 @@ struct SignInWithAppleView: View {
         ]
         let url = APIEndpoint.signInWithAppleURL
 
-        AF.request(url, method: .post, parameters: requestBody, encoding: JSONEncoding.default).responseDecodable(of: SignInWithAppleResponse.self) { response in
+        AF.request(url, method: .post, parameters: requestBody, encoding: JSONEncoding.default).responseDecodable(of: APIResponse<SignInWithAppleResponse>.self) { response in
             switch response.result {
             case .success(let signInResponse):
-                KeyChain.create(key: "JWTAccessToken", token: signInResponse.JWTAccessToken)
-                KeyChain.create(key: "JWTRefreshToken", token: signInResponse.JWTRefreshToken)
+                KeyChain.create(key: "JWTAccessToken", token: signInResponse.data!.JWTAccessToken)
+                KeyChain.create(key: "JWTRefreshToken", token: signInResponse.data!.JWTRefreshToken)
                 
                 self.userAuthManager.showingLoginView = false
                 DispatchQueue.main.async {

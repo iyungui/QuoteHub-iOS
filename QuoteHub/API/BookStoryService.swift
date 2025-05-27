@@ -95,7 +95,7 @@ class BookStoryService {
     
     // MARK: - Get Book Story Count
  
-    func getUserBookStoryCount(userId: String?, completion: @escaping (Result<StoryCountResponse, Error>) -> Void) {
+    func getUserBookStoryCount(userId: String?, completion: @escaping (Result<CountResponse, Error>) -> Void) {
         var urlString = APIEndpoint.getUserStoryCount
         
         // Append the user ID to the URL if it's provided
@@ -114,7 +114,7 @@ class BookStoryService {
             headers = ["Authorization": "Bearer \(token)"]
         }
         
-        AF.request(url, method: .get, headers: headers).responseDecodable(of: StoryCountResponse.self) { response in
+        AF.request(url, method: .get, headers: headers).responseDecodable(of: CountResponse.self) { response in
             switch response.result {
             case .success(let storyCountResponse):
                 completion(.success(storyCountResponse))
@@ -394,7 +394,7 @@ class BookStoryService {
     
     // MARK: -  BookStory 삭제 함수
     
-    func deleteBookStory(storyID: String, completion: @escaping (Result<DeleteResponse, Error>) -> Void) {
+    func deleteBookStory(storyID: String, completion: @escaping (Result<APIResponse<EmptyData>, Error>) -> Void) {
 
         guard let token = KeyChain.read(key: "JWTAccessToken") else {
             let error = NSError(domain: "BookStoryService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])
@@ -414,7 +414,7 @@ class BookStoryService {
             return
         }
         
-        AF.request(url, method: .delete, encoding: JSONEncoding.default, headers: headers).responseDecodable(of: DeleteResponse.self) { response in
+        AF.request(url, method: .delete, encoding: JSONEncoding.default, headers: headers).responseDecodable(of: APIResponse<EmptyData>.self) { response in
             switch response.result {
             case .success(let deleteResponse):
                 completion(.success(deleteResponse))
