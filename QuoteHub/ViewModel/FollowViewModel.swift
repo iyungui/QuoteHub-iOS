@@ -103,9 +103,9 @@ class FollowViewModel: ObservableObject {
                     if response.success {
                         self?.isFollowing = true
                         self?.updateFollowCounts(for: userId)
-                        self?.following.append(response.data)
+                        self?.following.append(response.data!)
                     } else {
-                        self?.errorMessage = response.error
+                        self?.errorMessage = response.message
                     }
                 case .failure(let error):
                     if let afError = error.asAFError, afError.isResponseValidationError, afError.responseCode == 400 {
@@ -135,7 +135,7 @@ class FollowViewModel: ObservableObject {
                         self?.updateFollowCounts(for: userId)
                         self?.following.removeAll { $0._id == userId }
                     } else {
-                        self?.errorMessage = response.error
+                        self?.errorMessage = response.message
                     }
                 case .failure(let error):
                     print("Unfollow error: \(error)")
@@ -162,7 +162,7 @@ class FollowViewModel: ObservableObject {
                     print("팔로워 로드 성공: \(response.data.count) 명")
 
                     self?.followers.append(contentsOf: response.data)
-                    self?.isLastPage = response.currentPage >= response.totalPages
+                    self?.isLastPage = response.pagination.currentPage >= response.pagination.totalPages
                     
                     self?.currentPage += 1
                     self?.isLoading = false
@@ -189,7 +189,7 @@ class FollowViewModel: ObservableObject {
                 case .success(let response):
                     print("팔로잉 로드 성공: \(response.data.count) 명")
                     self?.following.append(contentsOf: response.data)
-                    self?.isLastPage = response.currentPage >= response.totalPages
+                    self?.isLastPage = response.pagination.currentPage >= response.pagination.totalPages
                     self?.currentPage += 1
                     self?.isLoading = false
                 case .failure(let error):

@@ -32,48 +32,12 @@ struct Follow: Codable, Identifiable {
     }
 }
 
-
-// 팔로우, 팔로우 해제
-struct FollowResponse: Codable {
-    var success: Bool
-    var data: User
-    let error: String?
-}
-
-// 팔로워, 팔로잉 목록 조회
-struct FollowListResponse: Codable {
-    var success: Bool
-    var data: [User]
-    var currentPage: Int
-    var totalPages: Int
-    var pageSize: Int
-    var totalItems: Int
-    let error: String?
-}
-
-struct FollowCountResponse: Codable {
-    var success: Bool
+struct FollowCount: Codable {
     var followersCount: Int
     var followingCount: Int
 }
 
-// 팔로우 차단 및 차단 해제
-struct FollowStatusResponse: Codable {
-    var success: Bool?
-    var data: Follow?
-    var message: String?
-    var error: String?
-}
-
-struct checkFollowStatusResponse: Codable {
-    var success: Bool
+struct CheckFollowStatus: Codable {
     var isFollowing: Bool
     var isBlocked: Bool
-}
-
-
-// 차단 목록 API
-struct BlockedUsersResponse: Codable {
-    let success: Bool
-    var blockedList: [User]
 }

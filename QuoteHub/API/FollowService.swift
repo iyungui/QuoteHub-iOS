@@ -42,7 +42,7 @@ class FollowService {
     }
     
     // check status
-    func checkFollowStatus(userId: String, completion: @escaping (Result<checkFollowStatusResponse, Error>) -> Void) {
+    func checkFollowStatus(userId: String, completion: @escaping (Result<CheckFollowStatus, Error>) -> Void) {
 
         guard let token = KeyChain.read(key: "JWTAccessToken") else {
             let error = NSError(domain: "FolderService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])
@@ -60,10 +60,10 @@ class FollowService {
             return
         }
 
-        AF.request(url, method: .get, headers: headers).responseDecodable(of: checkFollowStatusResponse.self) { response in
+        AF.request(url, method: .get, headers: headers).responseDecodable(of: CheckFollowStatusResponse.self) { response in
             switch response.result {
             case .success(let followStatusResponse):
-                completion(.success(followStatusResponse))
+                completion(.success(followStatusResponse.data!))
             case .failure(let error):
                 completion(.failure(error))
             }
@@ -114,7 +114,7 @@ class FollowService {
         }
     }
     
-    func getFollowCounts(userId: String, completion: @escaping (Result<FollowCountResponse, Error>) -> Void) {
+    func getFollowCounts(userId: String, completion: @escaping (Result<FollowCount, Error>) -> Void) {
         var urlString = APIEndpoint.getFollowCountsURL + "/\(userId)"
 
         guard let url = URL(string: urlString) else {
@@ -125,7 +125,7 @@ class FollowService {
         AF.request(url, method: .get).responseDecodable(of: FollowCountResponse.self) { response in
             switch response.result {
             case .success(let followCountResponse):
-                completion(.success(followCountResponse))
+                completion(.success(followCountResponse.data!))
             case .failure(let error):
                 completion(.failure(error))
             }
