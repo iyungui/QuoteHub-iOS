@@ -69,10 +69,10 @@ class ReportService {
 
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
 
-        AF.request(url, method: .get, headers: headers).responseDecodable(of: [ReportDataModel].self) { response in
+        AF.request(url, method: .get, headers: headers).responseDecodable(of: APIResponse<[ReportDataModel]>.self) { response in
             switch response.result {
             case .success(let reports):
-                completion(.success(reports))
+                completion(.success(reports.data!))
             case .failure(let error):
                 completion(.failure(error))
             }
@@ -89,10 +89,10 @@ class ReportService {
 
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
 
-        AF.request(url, method: .get, headers: headers).responseDecodable(of: [StoryReportDataModel].self) { response in
+        AF.request(url, method: .get, headers: headers).responseDecodable(of: APIResponse<[StoryReportDataModel]>.self) { response in
             switch response.result {
             case .success(let reports):
-                completion(.success(reports))
+                completion(.success(reports.data!))
             case .failure(let error):
                 completion(.failure(error))
             }

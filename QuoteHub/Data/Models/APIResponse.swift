@@ -60,8 +60,8 @@ struct EmptyData: Codable {}
 typealias UserResponse = APIResponse<User>
 typealias SearchUserResponse = APIResponse<[User]>
 
-typealias BookStoryCommentsResponse = PaginatedAPIResponse<BookStoryComment>
-typealias BookStoryCommentResponse = APIResponse<BookStoryComment>
+typealias BookStoryCommentsResponse = PaginatedAPIResponse<BookStoryComment>    // 댓글 조회
+typealias BookStoryCommentResponse = APIResponse<BookStoryComment>  // 댓글 올리기
 
 typealias CommentCountResponse = APIResponse<Int>
 

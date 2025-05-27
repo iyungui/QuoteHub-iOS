@@ -116,7 +116,12 @@ class CommentViewModel: ObservableObject {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let response):
-                    self?.totalCommentCount = response.data!
+                    guard let data = response.data else {
+                        print(#fileID, #function, #line, "- no data")
+                        self?.totalCommentCount = 0
+                        return
+                    }
+                    self?.totalCommentCount = data
                 case .failure(let error):
                     print("Error fetching comment count: \(error)")
                 }

@@ -208,10 +208,10 @@ class FollowService {
 
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
 
-        AF.request(url, method: .get, headers: headers).responseDecodable(of: BlockedUsersResponse.self) { response in
+        AF.request(url, method: .get, headers: headers).responseDecodable(of: SearchUserResponse.self) { response in
             switch response.result {
             case .success(let response):
-                completion(.success(response.blockedList))
+                completion(.success(response.data!))
             case .failure(let error):
                 print("Error in getBlockedList: \(error.localizedDescription)")
                 completion(.failure(error))
