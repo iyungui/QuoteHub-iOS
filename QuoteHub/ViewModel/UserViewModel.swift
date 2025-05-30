@@ -5,7 +5,6 @@
 //  Created by 이융의 on 2023/10/02.
 //
 
-import Combine
 import SwiftUI
 
 class UserViewModel: ObservableObject {
@@ -22,7 +21,6 @@ class UserViewModel: ObservableObject {
     @Published var showAlert: Bool = false
 
     private var userService = UserService()
-    private var cancellables = Set<AnyCancellable>()
     
     static let shared = UserViewModel()
 
@@ -113,10 +111,5 @@ class UserViewModel: ObservableObject {
             self?.errorMessage = error.localizedDescription
             self?.isLoading = false
         }
-    }
-     
-    // deinit에서는 모든 cancellables을 취소
-    deinit {
-        cancellables.forEach { $0.cancel() }
     }
 }

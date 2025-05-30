@@ -159,9 +159,6 @@ struct UserProfileView: View {
                 }
             })
         })
-        .onAppear {
-            UITextField.appearance().clearButtonMode = .whileEditing
-        }
     }
     
     

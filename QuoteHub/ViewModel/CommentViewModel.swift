@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftUI
-import Combine
 
 class CommentViewModel: ObservableObject {
     @Published var bookStoryComments = [BookStoryComment]()
@@ -19,7 +18,6 @@ class CommentViewModel: ObservableObject {
     private var page = 1
     private let pageSize = 10
     private var service = StoryCommentService()
-    private var cancellables = Set<AnyCancellable>()
 
     private var bookStoryId: String
     private var commentId: String?

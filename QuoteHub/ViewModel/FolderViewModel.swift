@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Combine
 import SwiftUI
 
 class FolderViewModel: ObservableObject {
@@ -17,7 +16,6 @@ class FolderViewModel: ObservableObject {
     private var currentPage = 1
     private let pageSize = 10
     private var service = FolderService()
-    private var cancellables = Set<AnyCancellable>()
 
     init() {
         loadFolders()
@@ -71,7 +69,6 @@ class MyFolderViewModel: ObservableObject {
     private var currentPage = 1
     private let pageSize = 10
     private var service = FolderService()
-    private var cancellables = Set<AnyCancellable>()
     @Published var errorMessage: String?
     
     init() {
@@ -204,7 +201,6 @@ class FriendFolderViewModel: ObservableObject {
     private var currentPage = 1
     private let pageSize = 10
     private var service = FolderService()
-    private var cancellables = Set<AnyCancellable>()
 
     private var userId: String
     

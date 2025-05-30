@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Combine
 
 class BookStoriesViewModel: ObservableObject {
     
@@ -23,7 +22,6 @@ class BookStoriesViewModel: ObservableObject {
     private var currentPage = 1
     private let pageSize = 10
     private var service = BookStoryService()
-    private var cancellables = Set<AnyCancellable>()
     
     private var folderId: String?
     private var searchKeyword: String?

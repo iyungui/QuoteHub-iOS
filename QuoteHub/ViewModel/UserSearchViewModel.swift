@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Combine
 
 class UserSearchViewModel: ObservableObject {
     @Published var users: [User] = []
@@ -14,7 +13,6 @@ class UserSearchViewModel: ObservableObject {
     @Published var errorMessage: String?
 
     private var userService: UserService
-    private var cancellables = Set<AnyCancellable>()
 
     init(userService: UserService = UserService()) {
         self.userService = userService
