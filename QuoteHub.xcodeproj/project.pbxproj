@@ -91,6 +91,7 @@
 		CE8C48442DEAD467003188ED /* CustomTabbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48432DEAD467003188ED /* CustomTabbar.swift */; };
 		CE8C48462DEAD67D003188ED /* FloatingActionOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48452DEAD67D003188ED /* FloatingActionOverlay.swift */; };
 		CE8C48652DEAE2A9003188ED /* FontManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48642DEAE2A9003188ED /* FontManager.swift */; };
+		CE8C48672DEB0F53003188ED /* CardButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48662DEB0F53003188ED /* CardButtonStyle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -177,6 +178,7 @@
 		CE8C48432DEAD467003188ED /* CustomTabbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabbar.swift; sourceTree = "<group>"; };
 		CE8C48452DEAD67D003188ED /* FloatingActionOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingActionOverlay.swift; sourceTree = "<group>"; };
 		CE8C48642DEAE2A9003188ED /* FontManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontManager.swift; sourceTree = "<group>"; };
+		CE8C48662DEB0F53003188ED /* CardButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardButtonStyle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -440,9 +442,9 @@
 		CE8C481A2DEA8DAE003188ED /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				CE8C47FA2DEA8DAE003188ED /* Main */,
 				CE8C47F42DEA8DAE003188ED /* Home */,
 				CE8C47F82DEA8DAE003188ED /* Keyword */,
-				CE8C47FA2DEA8DAE003188ED /* Main */,
 				CE8C47FF2DEA8DAE003188ED /* My Libarary */,
 				CE8C48062DEA8DAE003188ED /* Record */,
 				CE8C480D2DEA8DAE003188ED /* Setting */,
@@ -458,6 +460,7 @@
 			isa = PBXGroup;
 			children = (
 				CE8C483F2DEAB3FE003188ED /* AnimatedText.swift */,
+				CE8C48662DEB0F53003188ED /* CardButtonStyle.swift */,
 				CE8C48642DEAE2A9003188ED /* FontManager.swift */,
 			);
 			path = Components;
@@ -602,6 +605,7 @@
 				C67AA3C92AE3839F00490DDE /* BookSearchService.swift in Sources */,
 				C6DE7F612AF7C2940020F5CB /* CommentViewModel.swift in Sources */,
 				C697D1002AC9535B00F0111B /* BookStoryService.swift in Sources */,
+				CE8C48672DEB0F53003188ED /* CardButtonStyle.swift in Sources */,
 				C6B56FDD2AA8B60B003905C3 /* QuoteHubApp.swift in Sources */,
 				C63DB3AC2B1188C50026B668 /* ReportService.swift in Sources */,
 				C6D78A0A2AD03B2900F03FB8 /* APIEndpoint.swift in Sources */,

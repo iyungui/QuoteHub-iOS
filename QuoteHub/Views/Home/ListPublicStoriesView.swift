@@ -14,124 +14,323 @@ struct ListPublicStoriesView: View {
     @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
     @EnvironmentObject var userAuthManager: UserAuthenticationManager
 
-
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack {
+            LazyHStack(spacing: 20) {
                 ForEach(storiesViewModel.bookStories, id: \.id) { story in
-                    StoryView(story: story).environmentObject(userViewModel)
+                    StoryView(story: story)
+                        .environmentObject(userViewModel)
                         .environmentObject(myStoriesViewModel)
                         .environmentObject(userAuthManager)
                 }
+                
                 if !storiesViewModel.isLastPage {
-                    ProgressView()
-                        .onAppear {
-                            storiesViewModel.loadMoreIfNeeded(currentItem: storiesViewModel.bookStories.last)
-                        }
+                    loadingIndicator()
                 }
             }
-            .padding(.horizontal, 20)
-            .frame(height: 320)
+            .padding(.horizontal, 30)
+            .frame(height: 350)
+        }
+    }
+    
+    private func loadingIndicator() -> some View {
+        VStack {
+            ProgressView()
+                .scaleEffect(1.2)
+                .tint(.brownLeather)
+            
+            Text("더 불러오는 중...")
+                .font(.scoreDream(.light, size: .caption))
+                .foregroundColor(.secondaryText)
+                .padding(.top, 8)
+        }
+        .frame(width: 100)
+        .onAppear {
+            storiesViewModel.loadMoreIfNeeded(currentItem: storiesViewModel.bookStories.last)
         }
     }
 }
 
 struct StoryView: View {
     let story: BookStory
-    private let fixedHeight: CGFloat = 300
-    private let infoContentHeight: CGFloat = 100 // Adjust this value as needed
+    private let cardWidth: CGFloat = 280
+    private let cardHeight: CGFloat = 300
+    private let imageHeight: CGFloat = 200
+    
     @EnvironmentObject var userViewModel: UserViewModel
     @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
     @EnvironmentObject var userAuthManager: UserAuthenticationManager
-
     
     var body: some View {
         NavigationLink(destination: destinationView) {
-            ZStack(alignment: .bottom) {
-                VStack {
-                    storyImageView
-                        .frame(height: fixedHeight - infoContentHeight)
-                    Spacer(minLength: 0)
-                }
-
+            ZStack {
+                backgroundSection
                 
-                infoContentView
-                    .frame(width: 180, height: infoContentHeight)
-                    .background(Color(UIColor.secondarySystemBackground).opacity(0.85))
-                    .cornerRadius(4)
+                quoteOverlay
             }
-            .frame(width: 180, height: fixedHeight)
-            .background(Color(UIColor.secondarySystemBackground))
-            .cornerRadius(4)
-            .shadow(radius: 1)
-            .padding(.horizontal, 10)
+            .frame(width: cardWidth, height: cardHeight)
+            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .overlay(
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.antiqueGold.opacity(0.6), Color.brownLeather.opacity(0.4)]),
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: 1
+                    )
+            )
+            .scaleEffect(1.0)
+            .animation(.easeInOut(duration: 0.2), value: story.id)
         }
-        .buttonStyle(PlainButtonStyle())
+        .buttonStyle(CardButtonStyle())
     }
     
     private var destinationView: some View {
         if story.userId.id == userViewModel.user?.id {
-            return AnyView(myBookStoryView(storyId: story.id).environmentObject(userViewModel).environmentObject(myStoriesViewModel))
+            return AnyView(myBookStoryView(storyId: story.id)
+                .environmentObject(userViewModel)
+                .environmentObject(myStoriesViewModel))
         } else {
-            return AnyView(friendBookStoryView(story: story).environmentObject(userAuthManager))
+            return AnyView(friendBookStoryView(story: story)
+                .environmentObject(userAuthManager))
         }
     }
 
-
-    private var storyImageView: some View {
-        WebImage(url: URL(string: story.storyImageURLs?.first ?? ""))
-            .resizable()
-            .scaledToFill()
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .clipped()
+    private var newBadge: some View {
+        HStack(spacing: 4) {
+            Image(systemName: "sparkles")
+                .font(.system(size: 10, weight: .bold))
+            Text("NEW")
+                .font(.scoreDream(.bold, size: 10))
+        }
+        .foregroundColor(.white)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .background(
+            Capsule()
+                .fill(
+                    LinearGradient(
+                        gradient: Gradient(colors: [Color.orange.opacity(0.9), Color.red.opacity(0.8)]),
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+        )
+        .shadow(color: .black.opacity(0.2), radius: 4, x: 0, y: 2)
+        .padding(.top, 12)
+        .padding(.trailing, 12)
     }
-
-    private var infoContentView: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(story.quote ?? "")
-                .font(.caption)
-                .fontWeight(.semibold)
-                .lineLimit(1)
-                .foregroundColor(.primary)
-
-            Text(story.bookId.title)
-                .font(.caption2)
-                .fontWeight(.thin)
-                .lineLimit(1)
-                .foregroundColor(.secondary)
-
-            HStack {
-                if let url = URL(string: story.userId.profileImage), !story.userId.profileImage.isEmpty {
-                    WebImage(url: url)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 35, height: 35)
-                        .clipShape(Circle())
-                } else {
-                    Image(systemName: "person.crop.circle.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 35, height: 35)
-                }
-
-
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(story.userId.nickname)
-                        .font(.caption)
-                        .fontWeight(.semibold)
-                        .lineLimit(1)
-
-                    Text(story.userId.statusMessage ?? "")
-                        .font(.caption2)
-                        .fontWeight(.thin)
-                        .lineLimit(2)
-                        .foregroundColor(.secondary)
-                }
-                Spacer()
+    
+    private var profileImage: some View {
+        Group {
+            if let url = URL(string: story.userId.profileImage), !story.userId.profileImage.isEmpty {
+                WebImage(url: url)
+                    .placeholder {
+                        Circle()
+                            .fill(Color.paperBeige.opacity(0.5))
+                            .overlay(
+                                Image(systemName: "person.fill")
+                                    .foregroundColor(.brownLeather.opacity(0.7))
+                                    .font(.system(size: 16))
+                            )
+                    }
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 36, height: 36)
+                    .clipShape(Circle())
+                    .overlay(
+                        Circle()
+                            .stroke(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [.antiqueGold, .brownLeather]),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                lineWidth: 2
+                            )
+                    )
+            } else {
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.paperBeige.opacity(0.8), Color.antiqueGold.opacity(0.6)]),
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 36, height: 36)
+                    .overlay(
+                        Image(systemName: "person.fill")
+                            .foregroundColor(.brownLeather)
+                            .font(.system(size: 16, weight: .medium))
+                    )
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding([.horizontal, .bottom])
+    }
+    
+    private var backgroundSection: some View {
+        Group {
+            if let imageUrl = story.storyImageURLs?.first, !imageUrl.isEmpty {
+                // 이미지가 있는 경우
+                WebImage(url: URL(string: imageUrl))
+                    .placeholder {
+                        gradientBackground
+                    }
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: cardWidth, height: cardHeight)
+            } else {
+                // 이미지가 없는 경우
+                gradientBackground
+            }
+        }
+        .overlay(
+            // 텍스트 가독성을 위해
+            LinearGradient(
+                gradient: Gradient(colors: [
+                    Color.clear,
+                    Color.black.opacity(0.2),
+                    Color.black.opacity(0.6)
+                ]),
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        )
+        .overlay(
+            // NEW 배지 (최근 글인 경우)
+            Group {
+                if isRecentStory() {
+                    newBadge
+                }
+            },
+            alignment: .topTrailing
+        )
+    }
+    
+    private var gradientBackground: some View {
+        LinearGradient(
+            gradient: Gradient(colors: [
+                Color.paperBeige.opacity(0.8),
+                Color.antiqueGold.opacity(0.6),
+                Color.brownLeather.opacity(0.7)
+            ]),
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
+        .overlay(
+            VStack {
+                Image(systemName: "quote.bubble.fill")
+                    .font(.system(size: 40))
+                    .foregroundColor(.white.opacity(0.8))
+                Text("텍스트 중심 스토리")
+                    .font(.scoreDream(.light, size: .caption))
+                    .foregroundColor(.white.opacity(0.9))
+            }
+        )
+    }
+    
+    private var quoteOverlay: some View {
+        VStack {
+            Spacer()
+            
+            VStack(alignment: .leading, spacing: 12) {
+                // 인용구
+                HStack(alignment: .top, spacing: 8) {
+                    Image(systemName: "quote.opening")
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundColor(.white.opacity(0.9))
+                        .padding(.top, 2)
+                    
+                    Text(story.quote ?? "")
+                        .font(.scoreDream(.medium, size: .subheadline))
+                        .lineLimit(3)
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.leading)
+                        .shadow(color: .black.opacity(0.5), radius: 2, x: 0, y: 1)
+                }
+                
+                // 책 제목
+                HStack {
+                    Image(systemName: "book.closed.fill")
+                        .font(.system(size: 12))
+                        .foregroundColor(.white.opacity(0.8))
+                    
+                    Text(story.bookId.title)
+                        .font(.scoreDream(.regular, size: .caption))
+                        .lineLimit(1)
+                        .foregroundColor(.white.opacity(0.9))
+                        .shadow(color: .black.opacity(0.5), radius: 1, x: 0, y: 1)
+                }
+                
+                // 사용자 정보
+                HStack(spacing: 12) {
+                    // 프로필 이미지
+                    profileImage
+                    
+                    // 사용자 정보
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(story.userId.nickname)
+                            .font(.scoreDream(.medium, size: .caption))
+                            .lineLimit(1)
+                            .foregroundColor(.white)
+                            .shadow(color: .black.opacity(0.5), radius: 1, x: 0, y: 1)
+
+                        Text(story.userId.statusMessage ?? "")
+                            .font(.scoreDream(.light, size: .footnote))
+                            .lineLimit(1)
+                            .foregroundColor(.white.opacity(0.8))
+                            .shadow(color: .black.opacity(0.5), radius: 1, x: 0, y: 1)
+                    }
+                    
+                    Spacer()
+                    
+                    // 날짜 정보
+                    VStack(alignment: .trailing, spacing: 2) {
+                        Text(story.createdAtDate)
+                            .font(.scoreDream(.light, size: .footnote))
+                            .foregroundColor(.white.opacity(0.8))
+                            .shadow(color: .black.opacity(0.5), radius: 1, x: 0, y: 1)
+                        
+                        Image(systemName: "book.pages")
+                            .font(.system(size: 10))
+                            .foregroundColor(.white.opacity(0.7))
+                    }
+                }
+            }
+            .padding(.all, 20)
+            .background(
+                // 반투명 배경으로 가독성 향상
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color.black.opacity(0.3))
+                    .blur(radius: 1)
+            )
+            .padding(.bottom, 4)
+        }
+    }
+    
+    private var dateInfo: some View {
+        VStack(alignment: .trailing, spacing: 2) {
+            Text(story.createdAtDate)
+                .font(.scoreDream(.light, size: .footnote))
+                .foregroundColor(.secondaryText)
+            
+            // 책 아이콘
+            Image(systemName: "book.pages")
+                .font(.system(size: 10))
+                .foregroundColor(Color.antiqueGold.opacity(0.7))
+        }
+    }
+    
+    private func isRecentStory() -> Bool {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        guard let storyDate = dateFormatter.date(from: story.createdAtDate) else { return false }
+        let daysSinceCreation = Calendar.current.dateComponents([.day], from: storyDate, to: Date()).day ?? 0
+        
+        return daysSinceCreation <= 3 // 3일 이내는 NEW
     }
 }
 
