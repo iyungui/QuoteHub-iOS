@@ -92,6 +92,7 @@
 		CE8C48462DEAD67D003188ED /* FloatingActionOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48452DEAD67D003188ED /* FloatingActionOverlay.swift */; };
 		CE8C48652DEAE2A9003188ED /* FontManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48642DEAE2A9003188ED /* FontManager.swift */; };
 		CE8C48672DEB0F53003188ED /* CardButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48662DEB0F53003188ED /* CardButtonStyle.swift */; };
+		CE8C48692DEB1972003188ED /* ThemeToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48682DEB1972003188ED /* ThemeToggleButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -179,6 +180,7 @@
 		CE8C48452DEAD67D003188ED /* FloatingActionOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingActionOverlay.swift; sourceTree = "<group>"; };
 		CE8C48642DEAE2A9003188ED /* FontManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontManager.swift; sourceTree = "<group>"; };
 		CE8C48662DEB0F53003188ED /* CardButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardButtonStyle.swift; sourceTree = "<group>"; };
+		CE8C48682DEB1972003188ED /* ThemeToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeToggleButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -353,6 +355,7 @@
 			isa = PBXGroup;
 			children = (
 				CE8C47F02DEA8DAE003188ED /* HomeView.swift */,
+				CE8C48682DEB1972003188ED /* ThemeToggleButton.swift */,
 				CE8C47F12DEA8DAE003188ED /* ListPublicStoriesView.swift */,
 				CE8C47F22DEA8DAE003188ED /* ListThemaView.swift */,
 				CE8C47F32DEA8DAE003188ED /* UserSearchView.swift */,
@@ -585,6 +588,7 @@
 				CE8C482A2DEA8DAE003188ED /* SearchBookView.swift in Sources */,
 				CE8C482B2DEA8DAE003188ED /* SetAndMakeThemaView.swift in Sources */,
 				CE8C482C2DEA8DAE003188ED /* SetThemaView.swift in Sources */,
+				CE8C48692DEB1972003188ED /* ThemeToggleButton.swift in Sources */,
 				CE8C482D2DEA8DAE003188ED /* BlockedListView.swift in Sources */,
 				CE8C482E2DEA8DAE003188ED /* DeveloperInfoView.swift in Sources */,
 				CE8C482F2DEA8DAE003188ED /* ReportListView.swift in Sources */,

@@ -251,6 +251,9 @@ struct HomeView: View {
     
     private func navBarActions() -> some View {
         HStack(spacing: 15) {
+            // 테마 토글 버튼
+            ThemeToggleButton()
+            
             if userAuthManager.isUserAuthenticated {
                 NavigationLink(destination: UserSearchView()
                     .environmentObject(storiesViewModel)

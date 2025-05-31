@@ -110,8 +110,8 @@ struct FloatingActionItem: View {
             .padding(.vertical, 16)
             .background(
                 RoundedRectangle(cornerRadius: 16)
-                    .fill(.white)
-                    .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+                    .fill(Color.cardBackground)
+                    .shadow(color: Color.shadowColor, radius: 8, x: 0, y: 4)
             )
             .contentShape(Rectangle())
         }
