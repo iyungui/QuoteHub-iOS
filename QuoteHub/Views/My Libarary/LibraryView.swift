@@ -8,55 +8,6 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
-struct CustomTabButton: View {
-    let title: String
-    let isSelected: Bool
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            Text(title)
-                .fontWeight(isSelected ? .bold : .regular)
-                .padding(.vertical, 10)
-                .padding(.horizontal, 20)
-                .foregroundColor(isSelected ? .white : .secondary)
-                .background(isSelected ? Color.black : Color.clear)
-                .frame(minWidth: 70, minHeight: 40)
-                .cornerRadius(4)
-        }
-        .buttonStyle(PlainButtonStyle())
-        .padding(10)
-    }
-}
-
-
-struct EmptyStateText: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "tray")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 60, height: 60)
-                .foregroundColor(.gray)
-                .padding(.bottom, 20)
-            
-            Text("아직 기록이 없어요")
-                .font(.title2)
-                .fontWeight(.bold)
-                .foregroundColor(.gray)
-
-            Text("지금 바로 나만의 문장을 기록해보세요")
-                .font(.headline)
-                .fontWeight(.medium)
-                .foregroundColor(.gray)
-                .multilineTextAlignment(.center)
-                .padding()
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding()
-    }
-}
-
 struct LibraryView: View {
     @State private var selectedView: Int = 0
 
@@ -73,13 +24,13 @@ struct LibraryView: View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 20) {
                 profileView
-                CustomTabView(selectedView: $selectedView)
+                LibraryTabButtonView(selectedView: $selectedView)
                 tabIndicator
 
                 Group {
                     if selectedView == 0 {
                         if myFolderViewModel.folder.isEmpty {
-                            EmptyStateText()
+                            ContentUnavailableView("아직 기록이 없어요", systemImage: "tray", description: Text("지금 바로 나만의 문장을 기록해보세요"))
                         } else {
                             LibraryThemaView()
                                 .environmentObject(myFolderViewModel)
@@ -88,7 +39,7 @@ struct LibraryView: View {
                         }
                     } else {
                         if myStoriesViewModel.bookStories.isEmpty {
-                            EmptyStateText()
+                            ContentUnavailableView("아직 기록이 없어요", systemImage: "tray", description: Text("지금 바로 나만의 문장을 기록해보세요"))
                         } else {
                             LibraryStoryView()
                                 .environmentObject(myStoriesViewModel)

@@ -62,13 +62,13 @@ struct FriendLibraryView: View {
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 20) {
                         profileView
-                        CustomTabView(selectedView: $selectedView)
+                        LibraryTabButtonView(selectedView: $selectedView)
                         tabIndicator
                         
                         Group {
                             if selectedView == 0 {
                                 if FolderViewModel.folder.isEmpty {
-                                    emptyStateText
+                                    ContentUnavailableView("아직 기록이 없어요", systemImage: "tray")
                                 } else {
                                     FriendLibraryThemaView()
                                         .environmentObject(viewModel)
@@ -78,7 +78,7 @@ struct FriendLibraryView: View {
                                 }
                             } else {
                                 if viewModel.bookStories.isEmpty {
-                                    emptyStateText
+                                    ContentUnavailableView("아직 기록이 없어요", systemImage: "tray")
                                 } else {
                                     FriendLibraryStoryView()
                                         .environmentObject(viewModel)
@@ -177,24 +177,6 @@ struct FriendLibraryView: View {
                 self.showAlert = true
             }
         }
-    }
-    
-    private var emptyStateText: some View {
-        VStack {
-            Image(systemName: "tray")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 60, height: 60)
-                .foregroundColor(.gray)
-                .padding(.bottom, 20)
-            
-            Text("아직 기록이 없어요")
-                .font(.title2)
-                .fontWeight(.bold)
-                .foregroundColor(.gray)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .padding()
     }
     
     private var tabIndicator: some View {
@@ -468,25 +450,5 @@ struct FriendLibraryStoryView: View {
         .background(Color(.systemBackground))
         .cornerRadius(4)
         .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.gray.opacity(0.3), lineWidth: 1))
-    }
-}
-
-import SwiftUI
-
-struct CustomTabView: View {
-    @Binding var selectedView: Int
-
-    var body: some View {
-        HStack {
-            CustomTabButton(title: "테마", isSelected: selectedView == 0) {
-                selectedView = 0
-            }
-
-            CustomTabButton(title: "스토리", isSelected: selectedView == 1) {
-                selectedView = 1
-            }
-
-        }
-        .padding()
     }
 }
