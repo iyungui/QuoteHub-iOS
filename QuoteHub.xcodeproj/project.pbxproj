@@ -28,7 +28,6 @@
 		C6B56FDF2AA8B60B003905C3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6B56FDE2AA8B60B003905C3 /* ContentView.swift */; };
 		C6B56FE12AA8B60D003905C3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C6B56FE02AA8B60D003905C3 /* Assets.xcassets */; };
 		C6B56FE42AA8B60D003905C3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C6B56FE32AA8B60D003905C3 /* Preview Assets.xcassets */; };
-		C6B56FF22AA8B793003905C3 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C6B56FF12AA8B793003905C3 /* Launch Screen.storyboard */; };
 		C6D78A0A2AD03B2900F03FB8 /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6D78A092AD03B2900F03FB8 /* APIEndpoint.swift */; };
 		C6DE7F512AF76B480020F5CB /* StoryCommentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6DE7F502AF76B480020F5CB /* StoryCommentService.swift */; };
 		C6DE7F562AF76EA30020F5CB /* TabBar in Frameworks */ = {isa = PBXBuildFile; productRef = C6DE7F552AF76EA30020F5CB /* TabBar */; };
@@ -93,6 +92,7 @@
 		CE8C48652DEAE2A9003188ED /* FontManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48642DEAE2A9003188ED /* FontManager.swift */; };
 		CE8C48672DEB0F53003188ED /* CardButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48662DEB0F53003188ED /* CardButtonStyle.swift */; };
 		CE8C48692DEB1972003188ED /* ThemeToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48682DEB1972003188ED /* ThemeToggleButton.swift */; };
+		CE8C486D2DEB2A62003188ED /* LaunchScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C486C2DEB2A62003188ED /* LaunchScreenView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -116,7 +116,6 @@
 		C6B56FDE2AA8B60B003905C3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		C6B56FE02AA8B60D003905C3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C6B56FE32AA8B60D003905C3 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		C6B56FF12AA8B793003905C3 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		C6B56FFD2AA8CC1B003905C3 /* QuoteHub.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QuoteHub.entitlements; sourceTree = "<group>"; };
 		C6D78A092AD03B2900F03FB8 /* APIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
 		C6DE7F502AF76B480020F5CB /* StoryCommentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCommentService.swift; sourceTree = "<group>"; };
@@ -181,6 +180,7 @@
 		CE8C48642DEAE2A9003188ED /* FontManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontManager.swift; sourceTree = "<group>"; };
 		CE8C48662DEB0F53003188ED /* CardButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardButtonStyle.swift; sourceTree = "<group>"; };
 		CE8C48682DEB1972003188ED /* ThemeToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeToggleButton.swift; sourceTree = "<group>"; };
+		CE8C486C2DEB2A62003188ED /* LaunchScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -271,7 +271,6 @@
 				C676F5422AAC443500EC7241 /* API */,
 				C676F5252AAC02CB00EC7241 /* ViewModel */,
 				C6B56FE02AA8B60D003905C3 /* Assets.xcassets */,
-				C6B56FF12AA8B793003905C3 /* Launch Screen.storyboard */,
 				C6336CF12AAF1A91007355EC /* Extension */,
 				C6B56FE22AA8B60D003905C3 /* Preview Content */,
 			);
@@ -291,6 +290,7 @@
 			children = (
 				C6B56FDC2AA8B60B003905C3 /* QuoteHubApp.swift */,
 				C6B56FDE2AA8B60B003905C3 /* ContentView.swift */,
+				CE8C486C2DEB2A62003188ED /* LaunchScreenView.swift */,
 			);
 			path = APP;
 			sourceTree = "<group>";
@@ -541,7 +541,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C6B56FE42AA8B60D003905C3 /* Preview Assets.xcassets in Resources */,
-				C6B56FF22AA8B793003905C3 /* Launch Screen.storyboard in Resources */,
 				C6B56FE12AA8B60D003905C3 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -579,6 +578,7 @@
 				CE8C48212DEA8DAE003188ED /* SearchKeywordView.swift in Sources */,
 				CE8C48222DEA8DAE003188ED /* MainView.swift in Sources */,
 				CE8C48232DEA8DAE003188ED /* FollowersListView.swift in Sources */,
+				CE8C486D2DEB2A62003188ED /* LaunchScreenView.swift in Sources */,
 				CE8C48242DEA8DAE003188ED /* FollowingListView.swift in Sources */,
 				CE8C48252DEA8DAE003188ED /* FriendLibraryView.swift in Sources */,
 				CE8C48262DEA8DAE003188ED /* LibraryView.swift in Sources */,

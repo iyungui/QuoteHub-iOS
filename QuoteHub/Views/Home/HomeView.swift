@@ -241,10 +241,10 @@ struct HomeView: View {
     func navBarLogo() -> some View {
         HStack(spacing: 8) {
             Image("logo")
-                .resizable().scaledToFit().frame(height: 30)
+                .resizable().scaledToFit().frame(height: 24)
             
             Text("문장모아")
-                .font(.scoreDream(.bold, size: .body))
+                .font(.custom("EF_jejudoldam", size: 17))
                 .foregroundStyle(Color.appAccent)
         }
     }

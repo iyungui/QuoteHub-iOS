@@ -15,7 +15,9 @@ struct QuoteHubApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(userAuthManager)
-
+//                .onAppear {
+//                    task1()
+//                }
         }
     }
     
