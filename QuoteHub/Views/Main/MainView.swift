@@ -8,239 +8,113 @@
 import SwiftUI
 
 enum ActiveSheet: Identifiable {
-    case search, thema
-    var id: Int {
-        self.hashValue
+    case search, theme
+    
+    var id: String {
+        switch self {
+        case .search: return "search"
+        case .theme: return "theme"
+        }
     }
 }
 
 struct MainView: View {
     @State private var selectedTab: Int = 0
     @State private var showAlert: Bool = false
-    @State private var shouldShowOverlay: Bool = false
+    @State private var showActionButtons: Bool = false
     @State private var activeSheet: ActiveSheet?
     
     @EnvironmentObject var userAuthManager: UserAuthenticationManager
-    @StateObject var userViewModel = UserViewModel()
-    @StateObject var myStoriesViewModel = BookStoriesViewModel(mode: .myStories)
-    @StateObject var myFolderViewModel = MyFolderViewModel()
-
+    @StateObject private var userViewModel = UserViewModel()
+    @StateObject private var myStoriesViewModel = BookStoriesViewModel(mode: .myStories)
+    @StateObject private var myFolderViewModel = MyFolderViewModel()
+    
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
-                Group {
-                    switch selectedTab {
-                    case 0:
-                        HomeView()
-                            .environmentObject(userAuthManager)
-                            .environmentObject(userViewModel)
-                            .environmentObject(myStoriesViewModel)
-                            .environmentObject(myFolderViewModel)
-                    case 1:
-                        EmptyView()
-                    case 2:
-                        LibraryView()
-                            .environmentObject(userAuthManager)
-                            .environmentObject(myStoriesViewModel)
-                            .environmentObject(userViewModel)
-                            .environmentObject(myFolderViewModel)
-                    default:
-                        EmptyView()
-                    }
+                // 메인 콘텐츠
+                mainContent
+                    .environmentObject(userAuthManager)
+                    .environmentObject(myStoriesViewModel)
+                    .environmentObject(userViewModel)
+                    .environmentObject(myFolderViewModel)
+                
+                // 플로팅 액션 버튼들
+                if showActionButtons {
+                    FloatingActionOverlay(
+                        showActionButtons: $showActionButtons,
+                        activeSheet: $activeSheet,
+                        showAlert: showLoginAlert
+                    )
+                    .environmentObject(userAuthManager)
+                    .zIndex(2)
                 }
+                
+                // 커스텀 탭바
                 VStack {
                     Spacer()
-                    CustomTabBar(selectedTab: $selectedTab, shouldShowOverlay: $shouldShowOverlay, showAlert: {
-                        // 로그인 알림을 표시하도록 showAlert 상태를 true로 설정
-                        showAlert = true
-                    })
+                    CustomTabbar(
+                        selectedTab: $selectedTab,
+                        showActionButtons: $showActionButtons,
+                        showAlert: showLoginAlert
+                    )
                     .environmentObject(userAuthManager)
-                    .padding(.bottom, 10)
-                    .background(Color(UIColor.secondarySystemBackground).opacity(0.98))
                 }
-                
-                NavigationLink(destination: LoginView(isOnboarding: false).environmentObject(userAuthManager), isActive: $userAuthManager.showingLoginView) {
-                    EmptyView()
-                }
-                
-                // Overlay
-                if shouldShowOverlay {
-                    OverlayView(shouldShowOverlay: $shouldShowOverlay, activeSheet: $activeSheet, showAlert: {
-                        showAlert = true
-                    })
-                    .environmentObject(userAuthManager)
-                        .transition(.move(edge: .bottom))
-                        .zIndex(1)
-                }
-            }
-            .alert(isPresented: $showAlert) {  // Alert presentation
-                Alert(
-                    title: Text("로그인 필요"),
-                    message: Text("이 기능을 사용하려면 로그인이 필요합니다."),
-                    primaryButton: .default(Text("로그인"), action: {
-                        userAuthManager.showingLoginView = true
-                    }),
-                    secondaryButton: .cancel(Text("취소")) {
-                        userAuthManager.showingLoginView = false
-                    }
-                )
-            }
-            .animation(.default, value: shouldShowOverlay)
-            .fullScreenCover(item: $activeSheet) { item in
-                switch item {
-                case .search:
-                    SearchBookView().environmentObject(myStoriesViewModel).environmentObject(userAuthManager)
-                case .thema:
-                    MakeThemaView()
-                        .environmentObject(myFolderViewModel)
-                }
+                .zIndex(1)
             }
             .navigationBarBackButtonHidden()
             .onAppear(perform: onAppear)
         }
+        .alert("로그인 필요", isPresented: $showAlert) {
+            Button("로그인") {
+                userAuthManager.showingLoginView = true
+            }
+            Button("취소", role: .cancel) { }
+        } message: {
+            Text("이 기능을 사용하려면 로그인이 필요합니다.")
+        }
+        .fullScreenCover(item: $activeSheet) { sheet in
+            destinationView(for: sheet)
+        }
+        // showingLoginView -> 로그인 창으로 이동
+        .navigationDestination(isPresented: $userAuthManager.showingLoginView) {
+            LoginView(isOnboarding: false).environmentObject(userAuthManager)
+        }
     }
+    
+    @ViewBuilder
+    private var mainContent: some View {
+        switch selectedTab {
+        case 0:
+            HomeView()
+        case 2:
+            LibraryView()
+        default:
+            EmptyView()
+        }
+    }
+    
+    @ViewBuilder
+    private func destinationView(for sheet: ActiveSheet) -> some View {
+        switch sheet {
+        case .search:
+            SearchBookView()
+                .environmentObject(myStoriesViewModel)
+                .environmentObject(userAuthManager)
+        case .theme:
+            MakeThemaView()
+                .environmentObject(myFolderViewModel)
+        }
+    }
+    
+    private func showLoginAlert() {
+        showAlert = true
+    }
+    
+    // TODO: - onAppear 없애기
     private func onAppear() {
-        if (userAuthManager.isUserAuthenticated) {
+        if userAuthManager.isUserAuthenticated {
             userViewModel.getProfile(userId: nil)
-        } else {
-            print("No Authorization Token Found for Login")
         }
-    }
-}
-
-struct OverlayView: View {
-    @Binding var shouldShowOverlay: Bool
-    @Binding var activeSheet: ActiveSheet?
-    var showAlert: () -> Void  // 로그인 알림을 표시하기 위한 클로저 추가
-    @EnvironmentObject var userAuthManager: UserAuthenticationManager
-
-    var body: some View {
-        // Full screen background that will fade in and out
-        Color.black.opacity(0.5)
-            .edgesIgnoringSafeArea(.all)
-            .onTapGesture {
-                withAnimation {
-                    shouldShowOverlay = false
-                }
-            }
-            .zIndex(0)
-            .animation(.easeInOut, value: shouldShowOverlay)
-            .transition(.opacity) // Fade transition for background
-
-        GeometryReader { geometry in
-            VStack {
-                Spacer()
-                VStack(spacing: 0) {
-                    searchBookButton
-                    
-                    Divider().padding(.horizontal)
-                    
-                    makeThemeButton
-                }
-                .padding(.bottom, 40)
-                .background(Color(.systemBackground).edgesIgnoringSafeArea(.all))
-                .padding(.bottom, geometry.safeAreaInsets.bottom) // Add padding for the bottom safe area
-                .background(Color.white)
-                .cornerRadius(20)
-                .shadow(radius: 10)
-                .frame(width: geometry.size.width)
-                .transition(.move(edge: .bottom))
-            }
-            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottom)
-        }
-        .edgesIgnoringSafeArea(.all) // We want the semi-transparent background to cover the entire screen
-        .animation(.easeInOut, value: shouldShowOverlay)
-        .zIndex(1) // Keeps the overlay content above the background
-        .opacity(shouldShowOverlay ? 1 : 0)
-        .onTapGesture {
-            withAnimation {
-                shouldShowOverlay = false
-            }
-        }
-    }
-    
-    private var searchBookButton: some View {
-        Button(action: {
-            if userAuthManager.isUserAuthenticated {
-                withAnimation {
-                    shouldShowOverlay = false
-                    activeSheet = .search
-                }
-            } else {
-                showAlert()
-            }
-        }) {
-            HStack {
-                Image(systemName: "square.and.pencil")
-                    .font(.title)
-                    .padding(.trailing, 10)
-                VStack(alignment: .leading) {
-                    Text("문장 기록")
-                        .font(.headline)
-                        .fontWeight(.semibold)
-                    Text("책을 읽고 기억하고 싶은 문장을 기록")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                Spacer()
-            }
-            .padding()
-        }
-        .frame(maxWidth: .infinity)
-        .contentShape(Rectangle())
-        .onTapGesture {
-            if userAuthManager.isUserAuthenticated {
-                withAnimation {
-                    shouldShowOverlay = false
-                    activeSheet = .search
-                }
-            } else {
-                showAlert()
-            }
-        }
-        .buttonStyle(PlainButtonStyle())
-    }
-    
-    private var makeThemeButton: some View {
-        Button(action: {
-            if userAuthManager.isUserAuthenticated {
-                withAnimation {
-                    shouldShowOverlay = false
-                    activeSheet = .thema
-                }
-            } else {
-                showAlert()
-            }
-        }) {
-            HStack {
-
-                Image(systemName: "folder.badge.plus")
-                    .font(.title)
-                    .padding(.trailing, 10)
-                VStack(alignment: .leading) {
-                    Text("테마 만들기")
-                        .font(.headline)
-                        .fontWeight(.semibold)
-                    Text("테마를 만들어 나의 기록을 분류")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                Spacer()
-            }
-            .padding()
-        }
-        .frame(maxWidth: .infinity)
-        .contentShape(Rectangle())
-        .onTapGesture {
-            if userAuthManager.isUserAuthenticated {
-                withAnimation {
-                    shouldShowOverlay = false
-                    activeSheet = .thema
-                }
-            } else {
-                showAlert()
-            }
-        }
-        .buttonStyle(PlainButtonStyle())
     }
 }

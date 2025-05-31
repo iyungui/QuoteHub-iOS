@@ -470,3 +470,23 @@ struct FriendLibraryStoryView: View {
         .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.gray.opacity(0.3), lineWidth: 1))
     }
 }
+
+import SwiftUI
+
+struct CustomTabView: View {
+    @Binding var selectedView: Int
+
+    var body: some View {
+        HStack {
+            CustomTabButton(title: "테마", isSelected: selectedView == 0) {
+                selectedView = 0
+            }
+
+            CustomTabButton(title: "스토리", isSelected: selectedView == 1) {
+                selectedView = 1
+            }
+
+        }
+        .padding()
+    }
+}

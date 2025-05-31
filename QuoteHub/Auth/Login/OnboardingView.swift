@@ -50,7 +50,7 @@ struct OnboardingContentView: View {
             
             HStack {
                 Text(onboardingPages[index].title)
-                    .font(.largeTitle)
+                    .font(ScoreDreamFont.font(.medium, size: .title1))
                     .fontWeight(.black)
                     .padding(.top)
                 Spacer()
@@ -61,8 +61,8 @@ struct OnboardingContentView: View {
                 AnimatedText(.constant(onboardingPages[index].description),
                              currentPage: $currentPage,
                              targetPage: index)
-                .font(.headline)
-                .fontWeight(.semibold)
+                .font(.scoreDreamBody)
+                
                 .multilineTextAlignment(.leading)
                 Spacer()
             }
@@ -77,12 +77,12 @@ struct OnboardingContentView: View {
                     }
                 }) {
                     Text("다음")
-                        .font(.title3)
-                        .fontWeight(.bold)
+                        .font(.scoreDream(.extraBold, size: .medium))
                         .foregroundColor(.white)
                         .frame(width: 280, height: 60, alignment: .center)
                         .background(Color.black)
                         .cornerRadius(8)
+                        .padding(.bottom, 10)
                 }
                 .buttonStyle(PlainButtonStyle())
             }
@@ -91,8 +91,8 @@ struct OnboardingContentView: View {
                 currentPage = 3 // 마지막 페이지로 이동
             }) {
                 Text("건너뛰기")
-                    .font(.callout)
-                    .fontWeight(.medium)
+                    .font(.scoreDream(.regular, size: .callout))
+                    .underline()
                     .foregroundColor(.gray)
             }
             Spacer()

@@ -15,6 +15,18 @@ struct QuoteHubApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(userAuthManager)
+                .onAppear {
+                    task1()
+                }
+        }
+    }
+    
+    func task1() {
+        for family in UIFont.familyNames {
+            print(family)
+            for names in UIFont.fontNames(forFamilyName: family) {
+                print("== \(names)")
+            }
         }
     }
 }
