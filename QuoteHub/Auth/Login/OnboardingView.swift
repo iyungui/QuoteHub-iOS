@@ -58,10 +58,12 @@ struct OnboardingContentView: View {
             .padding(.leading, 50)
             
             HStack {
-                AnimatedText(.constant(onboardingPages[index].description))
-                    .font(.headline)
-                    .fontWeight(.semibold)
-                    .multilineTextAlignment(.leading)
+                AnimatedText(.constant(onboardingPages[index].description),
+                             currentPage: $currentPage,
+                             targetPage: index)
+                .font(.headline)
+                .fontWeight(.semibold)
+                .multilineTextAlignment(.leading)
                 Spacer()
             }
             .padding(.leading, 50)
@@ -110,8 +112,10 @@ struct AnimatedText: View {
     
     // MARK: - Inits
     
-    init(_ text: Binding<String>) {
+    init(_ text: Binding<String>, currentPage: Binding<Int>, targetPage: Int) {
         self._text = text
+        self._currentPage = currentPage
+        self.targetPage = targetPage
         var attributedText = AttributedString(text.wrappedValue)
         attributedText.foregroundColor = .clear
         self._attributedText = State(initialValue: attributedText)
@@ -120,6 +124,8 @@ struct AnimatedText: View {
     // MARK: - Properties ( Private )
     
     @Binding private var text: String
+    @Binding private var currentPage: Int
+    private let targetPage: Int
     @State private var attributedText: AttributedString
     @State private var currentWorkItem: DispatchWorkItem?
     
@@ -127,20 +133,44 @@ struct AnimatedText: View {
     
     var body: some View {
         Text(attributedText)
-            .onAppear { animateText() }
-            .onDisappear { cancelAnimation() }
+            .onAppear {
+//                print("onAppear - page: \(targetPage), current: \(currentPage)")
+                if currentPage == targetPage {
+                    animateText()
+                }
+            }
+            .onChange(of: currentPage) { _, newPage in
+//                print("onChange - page: \(targetPage), newPage: \(newPage)")
+                if newPage == targetPage {
+                    animateText()  // 현재 페이지가 되면 시작
+                } else {
+                    cancelAnimation()  // 다른 페이지면 취소
+                }
+            }
+            .onDisappear {
+                print("onDisappear - page: \(targetPage)")
+                cancelAnimation()
+            }
     }
     
     // MARK: - Methods ( Private )
 
     private func cancelAnimation() {
+//        print("cancelAnimation - page: \(targetPage)")
+        var initialAttributedText = AttributedString(text)
+        initialAttributedText.foregroundColor = .clear
+        attributedText = initialAttributedText
+
         currentWorkItem?.cancel()
         currentWorkItem = nil
     }
     
     private func animateText(at position: Int = 0) {
+//        print("animateText - page: \(targetPage), position: \(position)/\(text.count)")
+        
         guard position <= text.count else {
             attributedText = AttributedString(text)
+//            print("애니메이션 완료 - page: \(targetPage)")
             return
         }
         
@@ -150,8 +180,8 @@ struct AnimatedText: View {
             let attributedTextStart = AttributedString(stringStart)
             var attributedTextEnd = AttributedString(stringEnd)
             attributedTextEnd.foregroundColor = .clear
-            attributedText = attributedTextStart + attributedTextEnd
-            animateText(at: position + 1)
+            self.attributedText = attributedTextStart + attributedTextEnd
+            self.animateText(at: position + 1)
         }
         
         currentWorkItem = workItem
