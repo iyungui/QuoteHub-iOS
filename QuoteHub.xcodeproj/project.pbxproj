@@ -89,6 +89,7 @@
 		CE8C483A2DEA8DAE003188ED /* UpdateThemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48162DEA8DAE003188ED /* UpdateThemaView.swift */; };
 		CE8C483B2DEA8DAE003188ED /* ReportSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48182DEA8DAE003188ED /* ReportSheetView.swift */; };
 		CE8C483C2DEA8DAE003188ED /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48192DEA8DAE003188ED /* WebView.swift */; };
+		CE8C48402DEAB3FE003188ED /* AnimatedText.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C483F2DEAB3FE003188ED /* AnimatedText.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -173,6 +174,7 @@
 		CE8C48162DEA8DAE003188ED /* UpdateThemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateThemaView.swift; sourceTree = "<group>"; };
 		CE8C48182DEA8DAE003188ED /* ReportSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportSheetView.swift; sourceTree = "<group>"; };
 		CE8C48192DEA8DAE003188ED /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
+		CE8C483F2DEAB3FE003188ED /* AnimatedText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatedText.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -251,6 +253,7 @@
 			isa = PBXGroup;
 			children = (
 				C6B56FFD2AA8CC1B003905C3 /* QuoteHub.entitlements */,
+				CE8C483E2DEAB3EA003188ED /* Components */,
 				CE8C47772DEA8D01003188ED /* APP */,
 				CE8C477E2DEA8D84003188ED /* Auth */,
 				CE8C478D2DEA8D93003188ED /* Data */,
@@ -444,6 +447,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		CE8C483E2DEAB3EA003188ED /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				CE8C483F2DEAB3FE003188ED /* AnimatedText.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -588,6 +599,7 @@
 				CE8C47822DEA8D84003188ED /* KeyChain.swift in Sources */,
 				CE8C47832DEA8D84003188ED /* UserAuthenticationManager.swift in Sources */,
 				CE8C479D2DEA8D97003188ED /* APIClient.swift in Sources */,
+				CE8C48402DEAB3FE003188ED /* AnimatedText.swift in Sources */,
 				CE8C479E2DEA8D97003188ED /* AuthEndpoints.swift in Sources */,
 				CE8C479F2DEA8D97003188ED /* BookEndpoints.swift in Sources */,
 				CE8C47A02DEA8D97003188ED /* EndpointProtocol.swift in Sources */,

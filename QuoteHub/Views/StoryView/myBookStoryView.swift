@@ -68,7 +68,7 @@ struct myBookStoryView: View {
                             Spacer()
                         }
                         
-                        Text(story.quote ?? "")
+                        AnimatedText(.constant(story.quote ?? ""))
                             .frame(minHeight: 100)
                             .padding(.horizontal)
                         
