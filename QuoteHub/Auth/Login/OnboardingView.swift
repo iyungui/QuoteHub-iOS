@@ -35,8 +35,7 @@ struct OnboardingView: View {
                     }
                 }
             }
-            .tabViewStyle(PageTabViewStyle())
-            .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+            .tabViewStyle(.page(indexDisplayMode: .always))
         }
     }
 }
@@ -58,9 +57,8 @@ struct OnboardingContentView: View {
             }
             .padding(.leading, 50)
             
-            
             HStack {
-                Text(onboardingPages[index].description)
+                AnimatedText(.constant(onboardingPages[index].description))
                     .font(.headline)
                     .fontWeight(.semibold)
                     .multilineTextAlignment(.leading)
@@ -106,4 +104,57 @@ struct OnboardingContentView: View {
         OnboardingView()
     }
     .environmentObject(UserAuthenticationManager())
+}
+
+struct AnimatedText: View {
+    
+    // MARK: - Inits
+    
+    init(_ text: Binding<String>) {
+        self._text = text
+        var attributedText = AttributedString(text.wrappedValue)
+        attributedText.foregroundColor = .clear
+        self._attributedText = State(initialValue: attributedText)
+    }
+    
+    // MARK: - Properties ( Private )
+    
+    @Binding private var text: String
+    @State private var attributedText: AttributedString
+    @State private var currentWorkItem: DispatchWorkItem?
+    
+    // MARK: - Properties ( View )
+    
+    var body: some View {
+        Text(attributedText)
+            .onAppear { animateText() }
+            .onDisappear { cancelAnimation() }
+    }
+    
+    // MARK: - Methods ( Private )
+
+    private func cancelAnimation() {
+        currentWorkItem?.cancel()
+        currentWorkItem = nil
+    }
+    
+    private func animateText(at position: Int = 0) {
+        guard position <= text.count else {
+            attributedText = AttributedString(text)
+            return
+        }
+        
+        let workItem = DispatchWorkItem {
+            let stringStart = String(text.prefix(position))
+            let stringEnd = String(text.suffix(text.count - position))
+            let attributedTextStart = AttributedString(stringStart)
+            var attributedTextEnd = AttributedString(stringEnd)
+            attributedTextEnd.foregroundColor = .clear
+            attributedText = attributedTextStart + attributedTextEnd
+            animateText(at: position + 1)
+        }
+        
+        currentWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: workItem)
+    }
 }
