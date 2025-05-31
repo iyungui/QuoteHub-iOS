@@ -84,7 +84,7 @@ struct UserSearchView: View {
             } else {
                 ForEach(viewModel.users, id: \.id) { user in
                     NavigationLink(destination: FriendLibraryView(friendId: user).environmentObject(userAuthManager)) {
-                        ProfileView(user: user)
+                        ProfileRowView(user: user)
                     }
                 }
             }
@@ -92,7 +92,7 @@ struct UserSearchView: View {
     }
 }
 
-struct ProfileView: View {
+struct ProfileRowView: View {
     let user: User
     
     var body: some View {
@@ -125,4 +125,5 @@ struct ProfileView: View {
         }
     }
 }
+
 

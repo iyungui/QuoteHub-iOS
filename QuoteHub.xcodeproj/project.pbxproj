@@ -94,6 +94,7 @@
 		CE8C48692DEB1972003188ED /* ThemeToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48682DEB1972003188ED /* ThemeToggleButton.swift */; };
 		CE8C486D2DEB2A62003188ED /* LaunchScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C486C2DEB2A62003188ED /* LaunchScreenView.swift */; };
 		CE8C486F2DEB2E39003188ED /* LibraryTabButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C486E2DEB2E39003188ED /* LibraryTabButtonView.swift */; };
+		CE8C48712DEB5190003188ED /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48702DEB5190003188ED /* ProfileView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -183,6 +184,7 @@
 		CE8C48682DEB1972003188ED /* ThemeToggleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeToggleButton.swift; sourceTree = "<group>"; };
 		CE8C486C2DEB2A62003188ED /* LaunchScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenView.swift; sourceTree = "<group>"; };
 		CE8C486E2DEB2E39003188ED /* LibraryTabButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTabButtonView.swift; sourceTree = "<group>"; };
+		CE8C48702DEB5190003188ED /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -393,6 +395,7 @@
 				CE8C47FD2DEA8DAE003188ED /* FriendLibraryView.swift */,
 				CE8C486E2DEB2E39003188ED /* LibraryTabButtonView.swift */,
 				CE8C47FE2DEA8DAE003188ED /* LibraryView.swift */,
+				CE8C48702DEB5190003188ED /* ProfileView.swift */,
 			);
 			path = "My Libarary";
 			sourceTree = "<group>";
@@ -600,6 +603,7 @@
 				CE8C48312DEA8DAE003188ED /* UserProfileView.swift in Sources */,
 				CE8C48322DEA8DAE003188ED /* VersionInfoView.swift in Sources */,
 				CE8C48332DEA8DAE003188ED /* CommentView.swift in Sources */,
+				CE8C48712DEB5190003188ED /* ProfileView.swift in Sources */,
 				CE8C48342DEA8DAE003188ED /* friendBookStoryView.swift in Sources */,
 				CE8C48352DEA8DAE003188ED /* myBookStoryView.swift in Sources */,
 				CE8C48362DEA8DAE003188ED /* UpdateStoryView.swift in Sources */,

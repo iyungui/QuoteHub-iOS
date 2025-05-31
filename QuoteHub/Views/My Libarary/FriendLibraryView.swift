@@ -8,13 +8,6 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
-enum AlertType {
-    case loginRequired
-    case followError
-    case blocked
-}
-
-
 struct FriendLibraryView: View {
     let friendId: User
     
@@ -61,7 +54,10 @@ struct FriendLibraryView: View {
             } else {
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 20) {
-                        profileView
+                        ProfileView(friendId: friendId)
+                            .environmentObject(userViewModel)
+                            .environmentObject(userAuthManager)
+
                         LibraryTabButtonView(selectedView: $selectedView)
                         tabIndicator
                         
@@ -210,120 +206,120 @@ struct FriendLibraryView: View {
         followViewModel.loadFollowCounts()
     }
     
-    private var profileView: some View {
-        VStack(alignment: .center, spacing: 10) {
-            if let url = URL(string: userViewModel.user?.profileImage ?? ""), !(userViewModel.user?.profileImage ?? "").isEmpty {
-                WebImage(url: url)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 100, height: 100)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.gray.opacity(0.5), lineWidth: 1))
-                    .shadow(radius: 4)
-                    .padding(.bottom)
-            } else {
-                Image(systemName: "person.crop.circle.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 100, height: 100)
-                    .padding(.bottom)
-            }
-
-            
-            Text(userViewModel.user?.nickname ?? "")
-                .font(.title2)
-                .fontWeight(.bold)
-            
-            Button(action: {
-                if userAuthManager.isUserAuthenticated {
-                    if followViewModel.isFollowing {
-                        followViewModel.unfollowUser(userId: friendId.id)
-                    } else {
-                        followViewModel.followUser(userId: friendId.id)
-                        // 에러 메시지 확인 후 알림 타입 설정
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            if let errorMessage = followViewModel.errorMessage, !errorMessage.isEmpty {
-                                alertType = .followError
-                                showAlert = true
-                            }
-                        }
-                    }
-                } else {
-                    // 로그인이 필요한 경우 `loginRequired` 알림 타입을 설정합니다.
-                    alertType = .loginRequired
-                    showAlert = true
-                }
-            }) {
-                Text(followViewModel.isFollowing ? "팔로잉" : "+ 팔로우")
-                    .font(.callout)
-                    .fontWeight(.bold)
-                // 컬러 스킴과 팔로우 상태에 따라 텍스트 색상을 변경
-                    .foregroundColor(followViewModel.isFollowing ? (colorScheme == .dark ? .white : .black) : (colorScheme == .dark ? .black : .white))
-                    .frame(width: 100, height: 30)
-                // 팔로우 상태에 따라 배경색과 아웃라인을 변경
-                    .background(followViewModel.isFollowing ? Color.clear : (colorScheme == .dark ? .white : .black))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 15)
-                            .stroke(followViewModel.isFollowing ? (colorScheme == .dark ? .white : .black) : Color.clear, lineWidth: 1)
-                    )
-                    .cornerRadius(15)
-            }
-            .buttonStyle(PlainButtonStyle())
-            .environment(\.colorScheme, colorScheme)
-            
-            Text(userViewModel.user?.statusMessage ?? "")
-                .font(.subheadline)
-                .padding(.bottom, 10)
-            
-            HStack {
-                // 팔로워 & 독서목표
-                VStack {
-                    NavigationLink(destination: FollowersListView(userId: friendId.id).environmentObject(followViewModel).environmentObject(userAuthManager)) {
-                        VStack {
-                            Text("팔로워")
-                                .font(.subheadline)
-                                .fontWeight(.medium)
-                            Text("\(followViewModel.followersCount)")
-                                .font(.headline)
-                        }
-                    }
-
-                    Spacer(minLength: 20) // 여백 추가
-
-                    Text("독서목표")
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                    Text("\(userViewModel.user?.monthlyReadingGoal ?? 0)")
-                        .font(.headline)
-                }
-
-                Spacer().frame(width: 60)
-                
-                // 팔로잉 & 기록 수
-                VStack {
-                    NavigationLink(destination: FollowingListView(userId: friendId.id).environmentObject(followViewModel).environmentObject(userAuthManager)) {
-                        VStack {
-                            Text("팔로잉")
-                                .font(.subheadline)
-                                .fontWeight(.medium)
-                            Text("\(followViewModel.followingCount)")
-                                .font(.headline)
-                        }
-                    }
-
-                    Spacer(minLength: 20) // 여백 추가
-
-                    Text("기록 수")
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                    Text("\(userViewModel.storyCount ?? 0)")
-                        .font(.headline)
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.horizontal, 80)
-        }
-    }
+//    private var profileView: some View {
+//        VStack(alignment: .center, spacing: 10) {
+//            if let url = URL(string: userViewModel.user?.profileImage ?? ""), !(userViewModel.user?.profileImage ?? "").isEmpty {
+//                WebImage(url: url)
+//                    .resizable()
+//                    .scaledToFill()
+//                    .frame(width: 100, height: 100)
+//                    .clipShape(Circle())
+//                    .overlay(Circle().stroke(Color.gray.opacity(0.5), lineWidth: 1))
+//                    .shadow(radius: 4)
+//                    .padding(.bottom)
+//            } else {
+//                Image(systemName: "person.crop.circle.fill")
+//                    .resizable()
+//                    .scaledToFit()
+//                    .frame(width: 100, height: 100)
+//                    .padding(.bottom)
+//            }
+//
+//            
+//            Text(userViewModel.user?.nickname ?? "")
+//                .font(.title2)
+//                .fontWeight(.bold)
+//            
+//            Button(action: {
+//                if userAuthManager.isUserAuthenticated {
+//                    if followViewModel.isFollowing {
+//                        followViewModel.unfollowUser(userId: friendId.id)
+//                    } else {
+//                        followViewModel.followUser(userId: friendId.id)
+//                        // 에러 메시지 확인 후 알림 타입 설정
+//                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//                            if let errorMessage = followViewModel.errorMessage, !errorMessage.isEmpty {
+//                                alertType = .followError
+//                                showAlert = true
+//                            }
+//                        }
+//                    }
+//                } else {
+//                    // 로그인이 필요한 경우 `loginRequired` 알림 타입을 설정합니다.
+//                    alertType = .loginRequired
+//                    showAlert = true
+//                }
+//            }) {
+//                Text(followViewModel.isFollowing ? "팔로잉" : "+ 팔로우")
+//                    .font(.callout)
+//                    .fontWeight(.bold)
+//                // 컬러 스킴과 팔로우 상태에 따라 텍스트 색상을 변경
+//                    .foregroundColor(followViewModel.isFollowing ? (colorScheme == .dark ? .white : .black) : (colorScheme == .dark ? .black : .white))
+//                    .frame(width: 100, height: 30)
+//                // 팔로우 상태에 따라 배경색과 아웃라인을 변경
+//                    .background(followViewModel.isFollowing ? Color.clear : (colorScheme == .dark ? .white : .black))
+//                    .overlay(
+//                        RoundedRectangle(cornerRadius: 15)
+//                            .stroke(followViewModel.isFollowing ? (colorScheme == .dark ? .white : .black) : Color.clear, lineWidth: 1)
+//                    )
+//                    .cornerRadius(15)
+//            }
+//            .buttonStyle(PlainButtonStyle())
+//            .environment(\.colorScheme, colorScheme)
+//            
+//            Text(userViewModel.user?.statusMessage ?? "")
+//                .font(.subheadline)
+//                .padding(.bottom, 10)
+//            
+//            HStack {
+//                // 팔로워 & 독서목표
+//                VStack {
+//                    NavigationLink(destination: FollowersListView(userId: friendId.id).environmentObject(followViewModel).environmentObject(userAuthManager)) {
+//                        VStack {
+//                            Text("팔로워")
+//                                .font(.subheadline)
+//                                .fontWeight(.medium)
+//                            Text("\(followViewModel.followersCount)")
+//                                .font(.headline)
+//                        }
+//                    }
+//
+//                    Spacer(minLength: 20) // 여백 추가
+//
+//                    Text("독서목표")
+//                        .font(.subheadline)
+//                        .fontWeight(.medium)
+//                    Text("\(userViewModel.user?.monthlyReadingGoal ?? 0)")
+//                        .font(.headline)
+//                }
+//
+//                Spacer().frame(width: 60)
+//                
+//                // 팔로잉 & 기록 수
+//                VStack {
+//                    NavigationLink(destination: FollowingListView(userId: friendId.id).environmentObject(followViewModel).environmentObject(userAuthManager)) {
+//                        VStack {
+//                            Text("팔로잉")
+//                                .font(.subheadline)
+//                                .fontWeight(.medium)
+//                            Text("\(followViewModel.followingCount)")
+//                                .font(.headline)
+//                        }
+//                    }
+//
+//                    Spacer(minLength: 20) // 여백 추가
+//
+//                    Text("기록 수")
+//                        .font(.subheadline)
+//                        .fontWeight(.medium)
+//                    Text("\(userViewModel.storyCount ?? 0)")
+//                        .font(.headline)
+//                }
+//            }
+//            .frame(maxWidth: .infinity)
+//            .padding(.horizontal, 80)
+//        }
+//    }
 }
 
 struct FriendLibraryThemaView: View {

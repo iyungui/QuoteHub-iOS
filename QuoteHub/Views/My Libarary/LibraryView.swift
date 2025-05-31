@@ -23,8 +23,12 @@ struct LibraryView: View {
     var body: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 20) {
-                profileView
+                ProfileView()
+                    .environmentObject(userViewModel)
+                    .environmentObject(userAuthManager)
+                
                 LibraryTabButtonView(selectedView: $selectedView)
+                
                 tabIndicator
 
                 Group {
@@ -47,15 +51,7 @@ struct LibraryView: View {
                         }
                     }
                 }
-                .gesture(
-                    DragGesture().onEnded { value in
-                        if value.translation.width > 0 {
-                            self.selectedView = max(self.selectedView - 1, 0)
-                        } else if value.translation.width < 0 {
-                            self.selectedView = min(self.selectedView + 1, 1)
-                        }
-                    }
-                )
+                
                 Spacer().frame(height: 50)
 
             }
@@ -65,13 +61,11 @@ struct LibraryView: View {
         .refreshable {
             await refreshContent()
         }
-        .navigationBarItems(
-            trailing:
-                HStack {
-                    leadingNavigationItem
-                    trailingNavigationItem
-                }
-        )
+        .toolbar {
+            ToolbarItem {
+                navBarItems
+            }
+        }
         .navigationBarTitleDisplayMode(.inline)
     }
     
@@ -90,84 +84,6 @@ struct LibraryView: View {
         .frame(width: totalWidth, height: 3, alignment: .leading)
     }
 
-    private var profileView: some View {
-        VStack(alignment: .center, spacing: 10) {
-            if let url = URL(string: userViewModel.user?.profileImage ?? ""), !(userViewModel.user?.profileImage ?? "").isEmpty {
-                WebImage(url: url)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 100, height: 100)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.gray.opacity(0.5), lineWidth: 1))
-                    .shadow(radius: 4)
-                    .padding(.bottom)
-            } else {
-                Image(systemName: "person.crop.circle.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 100, height: 100)
-                    .padding(.bottom)
-            }
-
-
-            Text(userViewModel.user?.nickname ?? "")
-                .font(.title2)
-                .fontWeight(.bold)
-            
-            Text(userViewModel.user?.statusMessage ?? "")
-                .font(.subheadline)
-                .padding(.bottom, 10)
-
-            HStack {
-                // 팔로워 & 독서목표
-                VStack {
-                    NavigationLink(destination: FollowersListView(userId: userViewModel.user?.id).environmentObject(followViewModel).environmentObject(userAuthManager)) {
-                        VStack {
-                            Text("팔로워")
-                                .font(.subheadline)
-                                .fontWeight(.medium)
-                            Text("\(followViewModel.followersCount)")
-                                .font(.headline)
-                        }
-                    }
-
-                    Spacer(minLength: 20) // 여백 추가
-
-                    Text("독서목표")
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                    Text("\(userViewModel.user?.monthlyReadingGoal ?? 0)")
-                        .font(.headline)
-                }
-
-                Spacer().frame(width: 60)
-                
-                // 팔로잉 & 기록 수
-                VStack {
-                    NavigationLink(destination: FollowingListView(userId: userViewModel.user?.id).environmentObject(followViewModel).environmentObject(userAuthManager)) {
-                        VStack {
-                            Text("팔로잉")
-                                .font(.subheadline)
-                                .fontWeight(.medium)
-                            Text("\(followViewModel.followingCount)")
-                                .font(.headline)
-                        }
-                    }
-
-                    Spacer(minLength: 20) // 여백 추가
-
-                    Text("기록 수")
-                        .font(.subheadline)
-                        .fontWeight(.medium)
-                    Text("\(userViewModel.storyCount ?? 0)")
-                        .font(.headline)
-                }
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.horizontal, 80)
-        }
-    }
-
     private func refreshContent() async {
         userViewModel.getProfile(userId: nil)
         userViewModel.loadStoryCount(userId: nil)
@@ -184,21 +100,21 @@ struct LibraryView: View {
         followViewModel.loadFollowCounts()
     }
 
-    private var leadingNavigationItem: some View {
-        NavigationLink(destination: MySearchKeywordView().environmentObject(myStoriesViewModel).environmentObject(userViewModel)) {
-            Image(systemName: "magnifyingglass").foregroundColor(Color(.systemGray)).frame(width: 25, height: 25)
-        }
-    }
-
-    private var trailingNavigationItem: some View {
-        NavigationLink(
-            destination: SettingView()
-                .environmentObject(userViewModel)
-                .environmentObject(userAuthManager)
-        ) {
-            Image(systemName: "gearshape.fill")
-                .foregroundColor(Color(.systemGray))
-                .frame(width: 25, height: 25)
+    private var navBarItems: some View {
+        HStack {
+            NavigationLink(destination: MySearchKeywordView().environmentObject(myStoriesViewModel).environmentObject(userViewModel)) {
+                Image(systemName: "magnifyingglass").foregroundColor(Color(.systemGray)).frame(width: 25, height: 25)
+            }
+            
+            NavigationLink(
+                destination: SettingView()
+                    .environmentObject(userViewModel)
+                    .environmentObject(userAuthManager)
+            ) {
+                Image(systemName: "gearshape.fill")
+                    .foregroundColor(Color(.systemGray))
+                    .frame(width: 25, height: 25)
+            }
         }
     }
 }
@@ -255,9 +171,6 @@ struct LibraryThemaView: View {
                 }
             }
         }
-//        .onAppear {
-//            myFolderViewModel.loadFolders()
-//        }
         .padding(.all, spacing)
     }
 }
