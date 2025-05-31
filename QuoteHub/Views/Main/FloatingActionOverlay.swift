@@ -88,20 +88,10 @@ struct FloatingActionItem: View {
     var body: some View {
         Button(action: action) {
             HStack(spacing: 16) {
-                // 아이콘 원형 배경
-//                ZStack {
-//                    Circle()
-//                        .fill(.ultraThinMaterial)
-//                        .frame(width: 50, height: 50)
-//                        .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
-//                    
                     Image(systemName: icon)
                         .font(.title2)
                         .fontWeight(.medium)
-//                        .foregroundStyle(Color.appAccent)
-//                }
                 
-                // 텍스트 정보
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)
                         .font(.headline)

@@ -65,19 +65,20 @@ struct MainView: View {
             .navigationBarBackButtonHidden()
             .onAppear(perform: onAppear)
         }
-        .alert("로그인 필요", isPresented: $showAlert) {
-            Button("로그인") {
+        .alert("", isPresented: $showAlert) {
+            Button {
                 userAuthManager.showingLoginView = true
+            } label: {
+                Text("로그인").font(.scoreDreamBody)
             }
-            Button("취소", role: .cancel) { }
+            Button("취소", role: .cancel) {}
         } message: {
-            Text("이 기능을 사용하려면 로그인이 필요합니다.")
+            Text("이 기능을 사용하려면 로그인이 필요합니다.").font(.scoreDreamBody)
         }
         .fullScreenCover(item: $activeSheet) { sheet in
             destinationView(for: sheet)
         }
-        // showingLoginView -> 로그인 창으로 이동
-        .navigationDestination(isPresented: $userAuthManager.showingLoginView) {
+        .fullScreenCover(isPresented: $userAuthManager.showingLoginView) {
             LoginView(isOnboarding: false).environmentObject(userAuthManager)
         }
     }

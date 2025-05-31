@@ -9,20 +9,37 @@ import SwiftUI
 
 struct LoginView: View {
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.dismiss) var dismiss
+
     @EnvironmentObject var userAuthManager: UserAuthenticationManager
     let isOnboarding: Bool
+    
     var body: some View {
         VStack(alignment: .center, spacing: 15) {
+            if !isOnboarding {
+                HStack {
+                    Button {
+                        userAuthManager.showingLoginView = false
+                        dismiss()
+                    } label: {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 18, weight: .medium))
+                            .foregroundColor(.primary)
+                    }
+                    Spacer()
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 10)
+            }
             Spacer()
             
             Text("지금 바로 나만의 문장을 기록해보세요.")
-                .font(.largeTitle)
+                .font(.scoreDreamTitle)
                 .multilineTextAlignment(.center)
-                .fontWeight(.black)
                 .padding(.horizontal, 20)
             
             Text("문장을 모아 지혜를 담다, 문장모아")
-                .fontWeight(.semibold)
+                .font(.scoreDream(.medium, size: .body))
                 .padding(.horizontal, 20)
 
             Spacer()
@@ -34,16 +51,22 @@ struct LoginView: View {
               .environmentObject(userAuthManager)
             
             if isOnboarding {
-                Button("나중에 하기") {
+                Button {
                     userAuthManager.isOnboardingComplete = true
+                } label: {
+                    Text("나중에 하기")
+                        .font(.scoreDream(.regular, size: .callout))
+                        .underline()
+                        .foregroundColor(.gray)
                 }
-                .font(.callout)
-                .fontWeight(.medium)
-                .foregroundColor(.gray)
             }
             
             Spacer()
         }
         .navigationBarBackButtonHidden(!isOnboarding)
     }
+}
+
+#Preview {
+    LoginView(isOnboarding: true).environmentObject(UserAuthenticationManager())
 }
