@@ -1,5 +1,5 @@
 //
-//  ThemaView.swift
+//  ThemeDetailView.swift
 //  QuoteHub
 //
 //  Created by 이융의 on 11/8/23.
@@ -8,58 +8,65 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
-struct ThemaView: View {
+struct ThemeDetailView: View {
     
-    let folderId: String
-    @StateObject var myStoriesViewModel: BookStoriesViewModel
+    // MARK: - PROPERTIES
+    
+    let themeId: String
+    let isMy: Bool
 
-    init(folderId: String) {
-        self.folderId = folderId
-        _myStoriesViewModel = StateObject(wrappedValue: BookStoriesViewModel(folderId: folderId, mode: .myStories))
+    init(themeId: String, isMy: Bool) {
+        self.themeId = themeId
+        self.isMy = isMy
+        _storiesViewModel = StateObject(wrappedValue: BookStoriesViewModel(folderId: themeId))
     }
     
-    @State private var selectedThema: Int = 0
+    @State private var selectedTheme: Int = 0
     @State private var showActionSheet: Bool = false
     
-    @EnvironmentObject var myFolderViewModel: MyFolderViewModel
-    
-    @EnvironmentObject var userViewModel: UserViewModel
+    @EnvironmentObject private var themesViewModel: ThemesViewModel
+    @EnvironmentObject private var userViewModel: UserViewModel
+    @StateObject private var storiesViewModel: BookStoriesViewModel
+
     @State private var isEditing = false
     
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
     @Environment(\.presentationMode) var presentationMode
 
+    // MARK: - BODY
+    
     var body: some View {
         ScrollView(showsIndicators: false) {
-            NavigationLink(destination: UpdateThemaView(folderId: folderId).environmentObject(myFolderViewModel), isActive: $isEditing) {
+            NavigationLink(
+                destination: UpdateThemaView(folderId: themeId)
+                    .environmentObject(themesViewModel)
+                , isActive: $isEditing
+            ) {
                 EmptyView()
             }
             VStack(spacing: 0) {
+                ThemeImageView(themeId: themeId, selectedTheme: $selectedTheme)
+                    .environmentObject(themesViewModel)
                 
-                ThemaImageView(folderId: folderId, selectedThema: $selectedThema)
-                    .environmentObject(myFolderViewModel)
-                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
-                    .clipped()
-                
-                TabIndicator
+                tabIndicator(height: 3, selectedView: selectedTheme)
                 
                 Group {
-                    if selectedThema == 0 {
-                        GalleryGridView()
+                    if selectedTheme == 0 {
+                        ThemeGalleryGridView(isMy: isMy)
                             .environmentObject(userViewModel)
-                            .environmentObject(myStoriesViewModel)
+                            .environmentObject(storiesViewModel)
 
                     } else {
-                        GalleryListView()
-                            .environmentObject(myStoriesViewModel)
+                        ThemeGalleryListView(isMy: isMy)
                             .environmentObject(userViewModel)
+                            .environmentObject(storiesViewModel)
                     }
                 }
             }
         }
         .refreshable {
-            // Handle refresh action
+            // TODO: - Handle refresh action
         }
         .alert(isPresented: $showAlert, content: {
             Alert(title: Text("알림"), message: Text(alertMessage), dismissButton: .default(Text("확인")))
@@ -81,7 +88,7 @@ struct ThemaView: View {
                         isEditing = true
                     }),
                     .destructive(Text("삭제하기"), action: {
-                        myFolderViewModel.deleteFolder(folderId: folderId) { isSuccess in
+                        themesViewModel.deleteFolder(folderId: themeId) { isSuccess in
                             if isSuccess {
                                 self.presentationMode.wrappedValue.dismiss()
                             } else {
@@ -96,34 +103,21 @@ struct ThemaView: View {
         )
     }
     
-    private var TabIndicator: some View {
-        let totalWidth = UIScreen.main.bounds.width
-        let indicatorWidth = totalWidth * (2/3)
-        let offsetWhenRight = totalWidth - indicatorWidth
-
-        return ZStack(alignment: .leading) {
-            Rectangle()
-                .fill(Color.secondary)
-                .frame(width: indicatorWidth, height: 3)
-                .offset(x: selectedThema == 0 ? 0 : offsetWhenRight)
-                .animation(.easeInOut(duration: 0.2), value: selectedThema)
-        }
-        .frame(width: totalWidth, height: 3, alignment: .leading)
-    }
 }
 
+// MARK: - THEME IMAGE VIEW
 
-struct ThemaImageView: View {
-    let folderId: String
-    @Binding var selectedThema: Int
-    @EnvironmentObject var myFolderViewModel: MyFolderViewModel
+struct ThemeImageView: View {
+    let themeId: String
+    @Binding var selectedTheme: Int
+    @EnvironmentObject private var themesViewModel: ThemesViewModel
 
 
     var body: some View {
-        if let folder = myFolderViewModel.folder.first(where: { $0.id == folderId }) {
+        if let theme = themesViewModel.themes.first(where: { $0.id == themeId }) {
             ZStack {
                 
-                if let url = URL(string: folder.folderImageURL), !folder.folderImageURL.isEmpty {
+                if let url = URL(string: theme.folderImageURL), !theme.folderImageURL.isEmpty {
                     WebImage(url: url)
                         .resizable()
                         .scaledToFill()
@@ -142,13 +136,13 @@ struct ThemaImageView: View {
                 HStack {
                     VStack {
                         VStack(alignment: .leading) {
-                            Text(folder.name)
+                            Text(theme.name)
                                 .font(.title)
                                 .foregroundColor(.white)
-                            Text(folder.description)
+                            Text(theme.description)
                                 .font(.body)
                                 .foregroundColor(.white)
-                            Text("작성일: \(folder.updatedAtDate)")
+                            Text("작성일: \(theme.updatedAtDate)")
                                 .font(.caption)
                                 .foregroundColor(.white.opacity(0.7))
                         }
@@ -161,10 +155,10 @@ struct ThemaImageView: View {
                 VStack {
                     Spacer()
                     HStack(spacing: 10) {
-                        Text(folder.isPublic ? "공개" : "비공개")
+                        Text(theme.isPublic ? "공개" : "비공개")
                             .font(.caption)
                             .foregroundColor(.white)
-                        Image(systemName: folder.isPublic ? "lock.open.fill" : "lock.fill")
+                        Image(systemName: theme.isPublic ? "lock.open.fill" : "lock.fill")
                             .font(.caption)
                             .foregroundColor(.white)
                         
@@ -172,28 +166,30 @@ struct ThemaImageView: View {
                         
                         Button(action: {
                             withAnimation {
-                                self.selectedThema = 0
+                                self.selectedTheme = 0
                             }
                         }) {
                             Image(systemName: "square.grid.2x2")
-                                .foregroundColor(selectedThema == 0 ? Color.appAccent : .gray)
-                                .scaleEffect(selectedThema == 0 ? 1.2 : 1.0)  // Slightly larger when selected
+                                .foregroundColor(selectedTheme == 0 ? Color.appAccent : .gray)
+                                .scaleEffect(selectedTheme == 0 ? 1.2 : 1.0)
                         }
 
                         Button(action: {
                             withAnimation {
-                                self.selectedThema = 1
+                                self.selectedTheme = 1
                             }
                         }) {
                             Image(systemName: "list.dash")
-                                .foregroundColor(selectedThema == 1 ? Color.appAccent : .gray)
-                                .scaleEffect(selectedThema == 1 ? 1.2 : 1.0)  // Slightly larger when selected
+                                .foregroundColor(selectedTheme == 1 ? Color.appAccent : .gray)
+                                .scaleEffect(selectedTheme == 1 ? 1.2 : 1.0)
                         }
                     }
                     .padding([.horizontal, .bottom], 20)
                 }
                 
             }
+            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
+            .clipped()
         } else {
             Text("해당 테마를 찾을 수 없습니다.")
         }
@@ -201,15 +197,21 @@ struct ThemaImageView: View {
 }
 
 
+// MARK: - THEME GALLERY GRID VIEW
 
-struct GalleryGridView: View {
-    @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
-    @EnvironmentObject var userViewModel: UserViewModel
+struct ThemeGalleryGridView: View {
+    let isMy: Bool
+    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
+    @EnvironmentObject private var userViewModel: UserViewModel
 
     var body: some View {
         LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 3), spacing: 3) {
-            ForEach(myStoriesViewModel.bookStories, id: \.id) { story in
-                NavigationLink(destination: myBookStoryView(storyId: story.id).environmentObject(myStoriesViewModel).environmentObject(userViewModel)) {
+            ForEach(storiesViewModel.bookStories, id: \.id) { story in
+                NavigationLink(
+                    destination: BookStoryDetailView(story: story, isMyStory: isMy)
+                        .environmentObject(storiesViewModel)
+                        .environmentObject(userViewModel)
+                ) {
                     WebImage(url: URL(string: story.storyImageURLs?.first ?? ""))
                         .resizable()
                         .scaledToFill()
@@ -217,9 +219,9 @@ struct GalleryGridView: View {
                         .clipped()
                 }
             }
-            if !myStoriesViewModel.isLastPage {
+            if !storiesViewModel.isLastPage {
                 ProgressView().onAppear {
-                    myStoriesViewModel.loadMoreIfNeeded(currentItem: myStoriesViewModel.bookStories.last)
+                    storiesViewModel.loadMoreIfNeeded(currentItem: storiesViewModel.bookStories.last)
                 }
             }
         }
@@ -227,14 +229,21 @@ struct GalleryGridView: View {
 }
 
 
-struct GalleryListView: View {
-    @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
-    @EnvironmentObject var userViewModel: UserViewModel
+// MARK: - THEME GALLERY LIST VIEW
+
+struct ThemeGalleryListView: View {
+    let isMy: Bool
+    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
+    @EnvironmentObject private var userViewModel: UserViewModel
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            ForEach(myStoriesViewModel.bookStories, id: \.id) { story in
-                NavigationLink(destination: myBookStoryView(storyId: story.id).environmentObject(myStoriesViewModel).environmentObject(userViewModel)) {
+            ForEach(storiesViewModel.bookStories, id: \.id) { story in
+                NavigationLink(
+                    destination: BookStoryDetailView(story: story, isMyStory: isMy)
+                        .environmentObject(storiesViewModel)
+                        .environmentObject(userViewModel)
+                ) {
                     HStack {
                         Text(story.quote ?? "")
                             .font(.callout)
@@ -254,9 +263,9 @@ struct GalleryListView: View {
                 Divider()
             }
             
-            if !myStoriesViewModel.isLastPage {
+            if !storiesViewModel.isLastPage {
                 ProgressView().onAppear {
-                    myStoriesViewModel.loadMoreIfNeeded(currentItem: myStoriesViewModel.bookStories.last)
+                    storiesViewModel.loadMoreIfNeeded(currentItem: storiesViewModel.bookStories.last)
                 }
             }
         }

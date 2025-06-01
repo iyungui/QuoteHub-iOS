@@ -154,12 +154,3 @@ struct BookDetailView: View {
     }
 }
 
-struct MyActionButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .font(.headline.bold())
-            .foregroundColor(.black)
-            .frame(maxWidth: .infinity)
-            .cornerRadius(8)
-    }
-}

@@ -92,13 +92,15 @@ struct StoryView: View {
     
     private var destinationView: some View {
         if story.userId.id == userViewModel.user?.id {
-            return AnyView(BookStoryDetailView(story: story, friendBookStory: false)
+            return AnyView(BookStoryDetailView(story: story, isMyStory: true)
                 .environmentObject(userViewModel)
                 .environmentObject(storiesViewModel))
-                .environmentObject(userAuthManager))
+                .environmentObject(userAuthManager)
         } else {
-            return AnyView(BookStoryDetailView(story: story, friendBookStory: true)
-                .environmentObject(userAuthManager))
+            return AnyView(BookStoryDetailView(story: story)
+                .environmentObject(userViewModel)
+                .environmentObject(storiesViewModel))
+                .environmentObject(userAuthManager)
         }
     }
 

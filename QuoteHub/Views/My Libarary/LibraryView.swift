@@ -13,36 +13,38 @@ struct LibraryView: View {
     // MARK: - Properties
     
     // 친구 프로필인지 구분하는 프로퍼티
-    let friendId: User?
+    let user: User?
     
     // 내 라이브러리인지 친구 라이브러리인지 구분
-    var isMyLibaray: Bool { friendId == nil }   // friendId 가 nil 이면, 내 라이브러리
+    var isMyLibaray: Bool { user == nil }   // friendId 가 nil 이면, 내 라이브러리
     
-    init(friendId: User) {
-        self.friendId = friendId
-        self._friendStoriesViewModel = StateObject(wrappedValue: BookStoriesViewModel(mode: .friendStories(friendId.id)))
-        self._friendFolderViewModel = StateObject(wrappedValue: FriendFolderViewModel(userId: friendId.id))
-        self._followViewModel = StateObject(wrappedValue: FollowViewModel(userId: friendId.id))
+    var loadType: LoadType {
+        if !isMyLibaray {
+            guard let userId = user?.id else { return LoadType.my }
+            return LoadType.friend(userId)
+        } else {
+            return LoadType.my
+        }
     }
+    
+    // viewmodel
+    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
+    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
+    @EnvironmentObject private var themesViewModel: ThemesViewModel
+    @EnvironmentObject private var userViewModel: UserViewModel
+
+    // 신고, 차단 기능을 위한
+    @StateObject private var followViewModel: FollowViewModel
+
+    init(user: User) {
+        self.user = user
+        self._followViewModel = StateObject(wrappedValue: FollowViewModel(userId: user.id))
+    }
+    
     
     @State private var selectedView: Int = 0    // 테마, 스토리 탭
 
     @Environment(\.colorScheme) var colorScheme // 다크모드 지원
-    @EnvironmentObject var userAuthManager: UserAuthenticationManager
-
-    // 뷰모델들
-    /// 내 라이브러리용 뷰모델들 (환경 객체로 받음)
-    @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
-    @EnvironmentObject var myFolderViewModel: MyFolderViewModel
-    
-    /// 공통?
-    @StateObject var userViewModel = UserViewModel()
-    
-    /// 친구 라이브러리용 뷰모델들 (StateObject로 생성)
-    // TODO: - 뷰모델 통합하기.. (북스토리뷰모델, 폴더뷰모델은 반드시 하나로 통합하기)
-    @StateObject private var followViewModel: FollowViewModel
-    @StateObject private var friendStoriesViewModel: BookStoriesViewModel
-    @StateObject private var friendFolderViewModel: FriendFolderViewModel
 
     // 알림 관련
     @State private var showAlert: Bool = false
@@ -60,7 +62,7 @@ struct LibraryView: View {
         Group {
             /// 친구의 라이브러리이고 해당 친구가 차단된 사용자일 때
             if !isMyLibaray && followViewModel.isBlocked {
-                blockedUserView
+                ContentUnavailableView("차단된 사용자", systemImage: "person.crop.circle.badge.xmark.fill", description: Text("설정의 차단 목록을 확인해주세요."))
             } else {
                 mainContent
             }
@@ -73,7 +75,7 @@ struct LibraryView: View {
         
         /// 유저 신고하기 창
         .sheet(isPresented: $showReportSheet) {
-            if let friend = friendId {
+            if let friend = user {
                 UserReportSheetView(
                     userId: friend.id,
                     reportReason: $reportReason
@@ -83,7 +85,7 @@ struct LibraryView: View {
         
         /// 새로 고침
         .refreshable {
-            await refreshContent()
+            await refreshContent(type: loadType)
         }
         
         .navigationBarTitleDisplayMode(.inline)
@@ -99,34 +101,24 @@ struct LibraryView: View {
     
     // MARK: - Private Views
     
-    /// 차단된 사용자 뷰
-    private var blockedUserView: some View {
-        VStack {
-            Spacer()
-            ContentUnavailableView("차단된 사용자", systemImage: "person.crop.circle.badge.xmark.fill", description: Text("설정의 차단 목록을 확인해주세요."))
-            Spacer()
-        }
-    }
-    
     /// main 컨텐츠
     private var mainContent: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 20) {
-//                if friendId != nil {
-                    ProfileView(friendId: friendId)
+                if let friend = user {   // 친구 프로필
+                    ProfileView(user: friend)
+                        .environmentObject(userViewModel)
+                        .environmentObject(userAuthManager)
+                } else {    // 내 프로필
+                    ProfileView()
                         .environmentObject(userViewModel)
                         .environmentObject(userAuthManager)
 
-//                } else {
-//                    ProfileView()
-//                        .environmentObject(userViewModel)
-//                        .environmentObject(userAuthManager)
-//
-//                }
+                }
                 
                 LibraryTabButtonView(selectedView: $selectedView)
                 
-                tabIndicator
+                tabIndicator(height: 2, selectedView: selectedView)
                 
                 contentSection
                 
@@ -136,63 +128,47 @@ struct LibraryView: View {
         }
     }
     
+    @ViewBuilder
     private var contentSection: some View {
-        Group {
-            
-            if selectedView == 0 {
-                // 테마 뷰
-                if isMyLibaray {
-                    if myFolderViewModel.folder.isEmpty {
-                        ContentUnavailableView("아직 기록이 없어요", systemImage: "tray", description: Text("지금 바로 나만의 문장을 기록해보세요"))
-                    } else {
-                        MyLibraryThemeView()
-                            .environmentObject(myFolderViewModel)
-                            .environmentObject(userViewModel)
-                            .environmentObject(myStoriesViewModel)
-                    }
-                } else {
-                    if friendFolderViewModel.folder.isEmpty {
-                        ContentUnavailableView("아직 기록이 없어요", systemImage: "tray")
-                    } else {
-                        FriendLibraryThemeView()
-                            .environmentObject(friendStoriesViewModel)
-                            .environmentObject(friendFolderViewModel)
-                            .environmentObject(userAuthManager)
-                    }
-                }
+        if selectedView == 0 {  // 테마 기록
+            if themesViewModel.themes.isEmpty {
+                ContentUnavailableView("아직 기록이 없어요", systemImage: "tray", description: Text("지금 바로 나만의 문장을 기록해보세요"))
             } else {
-                // 스토리 뷰
-                if isMyLibaray {
-                    if myStoriesViewModel.bookStories.isEmpty {
-                        ContentUnavailableView("아직 기록이 없어요", systemImage: "tray", description: Text("지금 바로 나만의 문장을 기록해보세요"))
-                    } else {
-                        MyLibraryStoryView()
-                            .environmentObject(myStoriesViewModel)
-                            .environmentObject(userViewModel)
-                    }
-                } else {
-                    if friendStoriesViewModel.bookStories.isEmpty {
-                        ContentUnavailableView("아직 기록이 없어요", systemImage: "tray")
-                    } else {
-                        FriendLibraryStoryView()
-                            .environmentObject(friendStoriesViewModel)
-                            .environmentObject(userAuthManager)
-                    }
-                }
+                LibraryThemesListView(isMy: isMyLibaray)
+                    .environmentObject(themesViewModel)
+                    .environmentObject(userViewModel)
+//                    .environmentObject(storiesViewModel)
+            }
+            
+        } else {    // 스토리 기록
+            if storiesViewModel.bookStories.isEmpty {
+                ContentUnavailableView("아직 기록이 없어요", systemImage: "tray", description: Text("지금 바로 나만의 문장을 기록해보세요"))
+            } else {
+                LibraryStoriesListView(isMy: isMyLibaray)
+                    .environmentObject(storiesViewModel)
+                    .environmentObject(userAuthManager)
             }
         }
     }
     
     private var myLibraryNavBarItems: some View {
-        /// 내 라이브러리에는 '내 기록을 키워드로 찾을 수 있는 뷰. 와, 설정' 버튼
+        /// 내 라이브러리에는 '내 기록을 키워드로 찾을 수 있는 뷰와, 설정' 버튼
         HStack {
-            NavigationLink(destination: MySearchKeywordView().environmentObject(myStoriesViewModel).environmentObject(userViewModel)) {
+            NavigationLink(
+                destination: MySearchKeywordView()
+                    .environmentObject(storiesViewModel)
+                    .environmentObject(userViewModel)
+            ) {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(Color(.systemGray))
                     .frame(width: 25, height: 25)
             }
             
-            NavigationLink(destination: SettingView().environmentObject(userViewModel).environmentObject(userAuthManager)) {
+            NavigationLink(
+                destination: SettingView()
+                    .environmentObject(userViewModel)
+                    .environmentObject(userAuthManager)
+            ) {
                 Image(systemName: "gearshape.fill")
                     .foregroundColor(Color(.systemGray))
                     .frame(width: 25, height: 25)
@@ -212,213 +188,88 @@ struct LibraryView: View {
         }
     }
     
-        ScrollView(showsIndicators: false) {
-            VStack(spacing: 20) {
-                ProfileView()
-                    .environmentObject(userViewModel)
-                    .environmentObject(userAuthManager)
-                
-                LibraryTabButtonView(selectedView: $selectedView)
-                
-                tabIndicator
-
-                Group {
-                    if selectedView == 0 {
-                        if myFolderViewModel.folder.isEmpty {
-                            ContentUnavailableView("아직 기록이 없어요", systemImage: "tray", description: Text("지금 바로 나만의 문장을 기록해보세요"))
-                        } else {
-                            LibraryThemaView()
-                                .environmentObject(myFolderViewModel)
-                                .environmentObject(userViewModel)
-                                .environmentObject(myStoriesViewModel)
-                        }
-                    } else {
-                        if myStoriesViewModel.bookStories.isEmpty {
-                            ContentUnavailableView("아직 기록이 없어요", systemImage: "tray", description: Text("지금 바로 나만의 문장을 기록해보세요"))
-                        } else {
-                            LibraryStoryView()
-                                .environmentObject(myStoriesViewModel)
-                                .environmentObject(userViewModel)
-                        }
-                    }
-                }
-                
-                Spacer().frame(height: 50)
-
-            }
-            .padding(.top, 10)
-        }
-        .onAppear(perform: onAppear)
-        .refreshable {
-            await refreshContent()
-        }
-        .toolbar {
-            ToolbarItem {
-                navBarItems
-            }
-        }
-        .navigationBarTitleDisplayMode(.inline)
-    }
-    
-    private var tabIndicator: some View {
-        let totalWidth = UIScreen.main.bounds.width
-        let indicatorWidth = totalWidth * (2/3)
-        let offsetWhenRight = totalWidth - indicatorWidth
-
-        return ZStack(alignment: .leading) {
-            Rectangle()
-                .fill(Color.secondary)
-                .frame(width: indicatorWidth, height: 2)
-                .offset(x: selectedView == 0 ? 0 : offsetWhenRight)
-                .animation(.easeInOut(duration: 0.2), value: selectedView)
-        }
-        .frame(width: totalWidth, height: 3, alignment: .leading)
-    }
-
-    private func refreshContent() async {
+    private func refreshContent(type: LoadType) async {
         userViewModel.getProfile(userId: nil)
         userViewModel.loadStoryCount(userId: nil)
-        myStoriesViewModel.refreshBookStories()
-        myFolderViewModel.refreshFolders()
+        
+        storiesViewModel.refreshBookStories(type: type)
+        themesViewModel.refreshThemes(type: type)
+        
         followViewModel.setUserId(userViewModel.user?.id)
         followViewModel.loadFollowCounts()
-
     }
-    private func onAppear() {
+    
+    private func onAppear(type: LoadType) {
         userViewModel.getProfile(userId: nil)
         userViewModel.loadStoryCount(userId: nil)
         followViewModel.setUserId(userViewModel.user?.id)
         followViewModel.loadFollowCounts()
+        
+        storiesViewModel.refreshBookStories(type: type)
+        themesViewModel.refreshThemes(type: type)
     }
-
-    private var navBarItems: some View {
-        HStack {
-            NavigationLink(destination: MySearchKeywordView().environmentObject(myStoriesViewModel).environmentObject(userViewModel)) {
-                Image(systemName: "magnifyingglass").foregroundColor(Color(.systemGray)).frame(width: 25, height: 25)
-            }
-            
-            NavigationLink(
-                destination: SettingView()
-                    .environmentObject(userViewModel)
-                    .environmentObject(userAuthManager)
-            ) {
-                Image(systemName: "gearshape.fill")
-                    .foregroundColor(Color(.systemGray))
-                    .frame(width: 25, height: 25)
-            }
-        }
-    }
-}
-
-struct LibraryThemaView: View {
-    private let columns: [GridItem] = [
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
-    private let spacing: CGFloat = 20
     
-    @EnvironmentObject var myFolderViewModel: MyFolderViewModel
-    @EnvironmentObject var userViewModel: UserViewModel
-    @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
-
-    var body: some View {
-        LazyVGrid(columns: columns, spacing: spacing) {
-            ForEach(myFolderViewModel.folder, id: \.id) { folder in
-                NavigationLink(destination: ThemaView(folderId: folder.id)
-                    .environmentObject(myFolderViewModel)
-                    .environmentObject(userViewModel)
-                    .environmentObject(myStoriesViewModel))
-                {
-                        VStack(alignment: .leading) {
-                            if let url = URL(string: folder.folderImageURL), !folder.folderImageURL.isEmpty {
-                                WebImage(url: url)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: (UIScreen.main.bounds.width / 2) - 35, height: (UIScreen.main.bounds.width / 2) - 35)
-                                    .cornerRadius(8)
-                                    .clipped()
-                                    .shadow(radius: 4)
-                                
-                            } else {
-                                Color.gray
-                                    .frame(width: (UIScreen.main.bounds.width / 2) - 35, height: (UIScreen.main.bounds.width / 2) - 35)
-                                    .cornerRadius(8)
-                                    .clipped()
-                                    .shadow(radius: 4)
-                            }
-                            
-                            Text(folder.name)
-                                .font(.headline)
-                                .fontWeight(.bold)
-                                .padding(.top, 5)
-                        }
-                        .padding(.horizontal, 10)
-                        .padding(.bottom)
-                }
-            }
-            if !myFolderViewModel.isLastPage {
-                ProgressView().onAppear {
-                    myFolderViewModel.loadMoreIfNeeded(currentItem: myFolderViewModel.folder.last)
-                }
-            }
+    private var alertView: Alert {
+        switch alertType {
+        case .loginRequired:
+            return Alert(
+                title: Text("로그인 필요"),
+                message: Text("이 기능을 사용하려면 로그인이 필요합니다."),
+                dismissButton: .default(Text("확인"))
+            )
+        case .followError:
+            return Alert(
+                title: Text("오류 발생"),
+                message: Text(followViewModel.errorMessage ?? "알 수 없는 오류가 발생했습니다."),
+                dismissButton: .default(Text("확인"))
+            )
+        case .blocked:
+            return Alert(
+                title: Text("알림"),
+                message: Text(alertMessage),
+                dismissButton: .default(Text("확인"))
+            )
         }
-        .padding(.all, spacing)
     }
-}
-
-struct LibraryStoryView: View {
-    @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
-    @EnvironmentObject var userViewModel: UserViewModel
-
-    private let columns: [GridItem] = [
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
-    private let spacing: CGFloat = 20
     
-    var body: some View {
-        LazyVGrid(columns: columns, spacing: spacing) {
-            ForEach(myStoriesViewModel.bookStories, id: \.id) { story in
-                NavigationLink(destination: myBookStoryView(storyId: story.id).environmentObject(myStoriesViewModel).environmentObject(userViewModel)) {
-                    VStack(alignment: .leading, spacing: 10) {
-                        WebImage(url: URL(string: story.storyImageURLs?.first ?? ""))
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: (UIScreen.main.bounds.width / 2) - 60, height: (UIScreen.main.bounds.width / 2) - 20)
-                            .cornerRadius(4)
-                            .clipped()
-                            .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.gray.opacity(0.25), lineWidth: 1))
-                        
-                        Text(story.quote ?? "")
-                            .font(.headline)
-                            .fontWeight(.bold)
-                        
-                        Text(story.content ?? "")
-                            .font(.subheadline)
-                        
-                        Text(story.keywords?.prefix(2).map { "#\($0)" }.joined(separator: " ") ?? "")
-                            .font(.caption)
-                            .foregroundColor(.blue)
-                            .lineLimit(2) // 텍스트 줄 수 제한
-                    }
-                    .frame(width: (UIScreen.main.bounds.width / 2) - 60, height: 250)
-                    .padding(.all, 15)
-                    .background(Color(.systemBackground))
-                    .cornerRadius(4)
-                    .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.gray.opacity(0.3), lineWidth: 1))
+    private var actionSheetView: ActionSheet {
+        ActionSheet(title: Text("선택"), buttons: [
+            .default(Text("차단하기"), action: {
+                if userAuthManager.isUserAuthenticated {
+                    blockUser()
+                } else {
+                    alertType = .loginRequired
+                    showAlert = true
                 }
-                .buttonStyle(PlainButtonStyle())
-            }
-            
-            if !myStoriesViewModel.isLastPage {
-                ProgressView().onAppear {
-                    myStoriesViewModel.loadMoreIfNeeded(currentItem: myStoriesViewModel.bookStories.last)
+            }),
+            .destructive(Text("신고하기"), action: {
+                if userAuthManager.isUserAuthenticated {
+                    showReportSheet = true
+                } else {
+                    alertType = .loginRequired
+                    showAlert = true
                 }
+            }),
+            .cancel()
+        ])
+    }
+    
+    private func blockUser() {
+        guard let friend = user else { return }
+        
+        FollowService().updateFollowStatus(userId: friend.id, status: "BLOCKED") { result in
+            switch result {
+            case .success(_):
+                DispatchQueue.main.async {
+                    self.alertType = .blocked
+                    self.followViewModel.updateFollowStatus(userId: friend.id)
+                    self.followViewModel.loadFollowCounts()
+                }
+            case .failure(let error):
+                self.alertType = .blocked
+                self.alertMessage = "오류: \(error.localizedDescription)"
+                self.showAlert = true
             }
         }
-//        .onAppear {
-//            myStoriesViewModel.loadBookStories()
-//        }
-        .padding(.all, 20)
     }
 }

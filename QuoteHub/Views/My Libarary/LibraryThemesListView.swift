@@ -1,0 +1,79 @@
+//
+//  LibraryThemesListView.swift
+//  QuoteHub
+//
+//  Created by 이융의 on 6/1/25.
+//
+
+import SwiftUI
+import SDWebImageSwiftUI
+
+struct LibraryThemesListView: View {
+    let isMy: Bool
+    
+    private let columns: [GridItem] = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+    private let spacing: CGFloat = 20
+    
+    @EnvironmentObject private var themesViewModel: ThemesViewModel
+    @EnvironmentObject private var userViewModel: UserViewModel
+//    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
+
+    var body: some View {
+        LazyVGrid(columns: columns, spacing: spacing) {
+            ForEach(themesViewModel.themes, id: \.id) { theme in
+                NavigationLink(
+                    destination: ThemeDetailView(themeId: theme.id, isMy: isMy)
+                        .environmentObject(themesViewModel)
+                        .environmentObject(userViewModel)
+//                        .environmentObject(storiesViewModel)
+                ) {
+                    LibThemeRowView(theme: theme)
+                }
+            }
+            if !themesViewModel.isLastPage {
+                ProgressView().onAppear {
+                    themesViewModel.loadMoreIfNeeded(currentItem: themesViewModel.themes.last)
+                }
+            }
+        }
+        .padding(.all, spacing)
+    }
+}
+
+// MARK: - THEME ROW VIEW
+
+struct LibThemeRowView: View {
+    let theme: Folder
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            if let url = URL(string: theme.folderImageURL), !theme.folderImageURL.isEmpty {
+                WebImage(url: url)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: (UIScreen.main.bounds.width / 2) - 35, height: (UIScreen.main.bounds.width / 2) - 35)
+                    .cornerRadius(8)
+                    .clipped()
+                    .shadow(radius: 4)
+                
+            } else {
+                Color.gray
+                    .frame(width: (UIScreen.main.bounds.width / 2) - 35, height: (UIScreen.main.bounds.width / 2) - 35)
+                    .cornerRadius(8)
+                    .clipped()
+                    .shadow(radius: 4)
+            }
+            
+            Text(theme.name)
+                .font(.headline)
+                .fontWeight(.bold)
+                .padding(.top, 5)
+        }
+        .padding(.horizontal, 10)
+        .padding(.bottom)
+    }
+}
+

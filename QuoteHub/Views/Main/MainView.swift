@@ -89,7 +89,7 @@ struct MainView: View {
         case 0:
             HomeView()
         case 2:
-            LibraryView()
+            LibraryView(user: nil)
         default:
             EmptyView()
         }

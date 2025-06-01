@@ -24,17 +24,17 @@ struct ProfileView: View {
     @State private var alertType: AlertType = .loginRequired
 
     // 친구 프로필인지 구분하는 파라미터
-    let friendId: User?
-    var showFollowButton: Bool { friendId != nil }
+    let user: User?
+    var showFollowButton: Bool { user != nil }
     
     // 초기화 메서드
-    init(friendId: User? = nil) {
-        self.friendId = friendId
+    init(user: User? = nil) {
+        self.user = user
     }
     
     // 현재 표시할 사용자 ID (내 프로필이면 userViewModel.user?.id, 친구면 friendId?.id)
     private var currentUserId: String? {
-        return friendId?.id ?? userViewModel.user?.id
+        return user?.id ?? userViewModel.user?.id
     }
     
     var body: some View {
@@ -54,7 +54,7 @@ struct ProfileView: View {
             followViewModel.loadFollowCounts()
             
             // 친구 프로필인 경우 팔로우 상태 업데이트
-            if let friend = friendId {
+            if let friend = user {
                 followViewModel.updateFollowStatus(userId: friend.id)
             }
         }
@@ -88,7 +88,7 @@ struct ProfileView: View {
     
     private var followButton: some View {
         Button(action: {
-            guard let friend = friendId else { return }
+            guard let friend = user else { return }
             
             if userAuthManager.isUserAuthenticated {
                 if followViewModel.isFollowing {

@@ -62,7 +62,6 @@
 		CE8C48222DEA8DAE003188ED /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47F92DEA8DAE003188ED /* MainView.swift */; };
 		CE8C48232DEA8DAE003188ED /* FollowersListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47FB2DEA8DAE003188ED /* FollowersListView.swift */; };
 		CE8C48242DEA8DAE003188ED /* FollowingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47FC2DEA8DAE003188ED /* FollowingListView.swift */; };
-		CE8C48252DEA8DAE003188ED /* FriendLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47FD2DEA8DAE003188ED /* FriendLibraryView.swift */; };
 		CE8C48262DEA8DAE003188ED /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47FE2DEA8DAE003188ED /* LibraryView.swift */; };
 		CE8C482D2DEA8DAE003188ED /* BlockedListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48072DEA8DAE003188ED /* BlockedListView.swift */; };
 		CE8C482E2DEA8DAE003188ED /* DeveloperInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48082DEA8DAE003188ED /* DeveloperInfoView.swift */; };
@@ -72,11 +71,10 @@
 		CE8C48322DEA8DAE003188ED /* VersionInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C480C2DEA8DAE003188ED /* VersionInfoView.swift */; };
 		CE8C48332DEA8DAE003188ED /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C480E2DEA8DAE003188ED /* CommentView.swift */; };
 		CE8C48342DEA8DAE003188ED /* BookStoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C480F2DEA8DAE003188ED /* BookStoryDetailView.swift */; };
-		CE8C48352DEA8DAE003188ED /* myBookStoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48102DEA8DAE003188ED /* myBookStoryView.swift */; };
 		CE8C48362DEA8DAE003188ED /* UpdateStoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48112DEA8DAE003188ED /* UpdateStoryView.swift */; };
 		CE8C48372DEA8DAE003188ED /* FriendThemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48132DEA8DAE003188ED /* FriendThemaView.swift */; };
 		CE8C48382DEA8DAE003188ED /* PublicThemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48142DEA8DAE003188ED /* PublicThemaView.swift */; };
-		CE8C48392DEA8DAE003188ED /* ThemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48152DEA8DAE003188ED /* ThemaView.swift */; };
+		CE8C48392DEA8DAE003188ED /* ThemeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48152DEA8DAE003188ED /* ThemeDetailView.swift */; };
 		CE8C483A2DEA8DAE003188ED /* UpdateThemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48162DEA8DAE003188ED /* UpdateThemaView.swift */; };
 		CE8C483B2DEA8DAE003188ED /* ReportSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48182DEA8DAE003188ED /* ReportSheetView.swift */; };
 		CE8C483C2DEA8DAE003188ED /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48192DEA8DAE003188ED /* WebView.swift */; };
@@ -98,6 +96,9 @@
 		CE8C48822DEBF39D003188ED /* SetThemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C487D2DEBF39D003188ED /* SetThemaView.swift */; };
 		CE8C48862DEBF39F003188ED /* MakeThemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48832DEBF39F003188ED /* MakeThemaView.swift */; };
 		CE8C48872DEBF39F003188ED /* SetAndMakeThemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48842DEBF39F003188ED /* SetAndMakeThemaView.swift */; };
+		CE8C488A2DEC3BF2003188ED /* LibraryThemesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48892DEC3BF2003188ED /* LibraryThemesListView.swift */; };
+		CE8C488C2DEC3E73003188ED /* LibraryStoriesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C488B2DEC3E73003188ED /* LibraryStoriesListView.swift */; };
+		CE8C488E2DEC46E9003188ED /* tabIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C488D2DEC46E9003188ED /* tabIndicator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -155,7 +156,6 @@
 		CE8C47F92DEA8DAE003188ED /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		CE8C47FB2DEA8DAE003188ED /* FollowersListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowersListView.swift; sourceTree = "<group>"; };
 		CE8C47FC2DEA8DAE003188ED /* FollowingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingListView.swift; sourceTree = "<group>"; };
-		CE8C47FD2DEA8DAE003188ED /* FriendLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendLibraryView.swift; sourceTree = "<group>"; };
 		CE8C47FE2DEA8DAE003188ED /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
 		CE8C48072DEA8DAE003188ED /* BlockedListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedListView.swift; sourceTree = "<group>"; };
 		CE8C48082DEA8DAE003188ED /* DeveloperInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperInfoView.swift; sourceTree = "<group>"; };
@@ -165,11 +165,10 @@
 		CE8C480C2DEA8DAE003188ED /* VersionInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionInfoView.swift; sourceTree = "<group>"; };
 		CE8C480E2DEA8DAE003188ED /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		CE8C480F2DEA8DAE003188ED /* BookStoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookStoryDetailView.swift; sourceTree = "<group>"; };
-		CE8C48102DEA8DAE003188ED /* myBookStoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myBookStoryView.swift; sourceTree = "<group>"; };
 		CE8C48112DEA8DAE003188ED /* UpdateStoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateStoryView.swift; sourceTree = "<group>"; };
 		CE8C48132DEA8DAE003188ED /* FriendThemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendThemaView.swift; sourceTree = "<group>"; };
 		CE8C48142DEA8DAE003188ED /* PublicThemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicThemaView.swift; sourceTree = "<group>"; };
-		CE8C48152DEA8DAE003188ED /* ThemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemaView.swift; sourceTree = "<group>"; };
+		CE8C48152DEA8DAE003188ED /* ThemeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeDetailView.swift; sourceTree = "<group>"; };
 		CE8C48162DEA8DAE003188ED /* UpdateThemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateThemaView.swift; sourceTree = "<group>"; };
 		CE8C48182DEA8DAE003188ED /* ReportSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportSheetView.swift; sourceTree = "<group>"; };
 		CE8C48192DEA8DAE003188ED /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
@@ -191,10 +190,14 @@
 		CE8C487D2DEBF39D003188ED /* SetThemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetThemaView.swift; sourceTree = "<group>"; };
 		CE8C48832DEBF39F003188ED /* MakeThemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeThemaView.swift; sourceTree = "<group>"; };
 		CE8C48842DEBF39F003188ED /* SetAndMakeThemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetAndMakeThemaView.swift; sourceTree = "<group>"; };
+		CE8C48892DEC3BF2003188ED /* LibraryThemesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryThemesListView.swift; sourceTree = "<group>"; };
+		CE8C488B2DEC3E73003188ED /* LibraryStoriesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryStoriesListView.swift; sourceTree = "<group>"; };
+		CE8C488D2DEC46E9003188ED /* tabIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tabIndicator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		CE8C48472DEADAAC003188ED /* Font */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Font; sourceTree = "<group>"; };
+		CE8C48882DEC035A003188ED /* Legacy */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Legacy; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -272,6 +275,7 @@
 			children = (
 				CE8C48472DEADAAC003188ED /* Font */,
 				C6B56FFD2AA8CC1B003905C3 /* QuoteHub.entitlements */,
+				CE8C48882DEC035A003188ED /* Legacy */,
 				CE8C483E2DEAB3EA003188ED /* Common */,
 				CE8C47772DEA8D01003188ED /* APP */,
 				CE8C477E2DEA8D84003188ED /* Auth */,
@@ -399,9 +403,10 @@
 			children = (
 				CE8C47FB2DEA8DAE003188ED /* FollowersListView.swift */,
 				CE8C47FC2DEA8DAE003188ED /* FollowingListView.swift */,
-				CE8C47FD2DEA8DAE003188ED /* FriendLibraryView.swift */,
 				CE8C486E2DEB2E39003188ED /* LibraryTabButtonView.swift */,
 				CE8C47FE2DEA8DAE003188ED /* LibraryView.swift */,
+				CE8C48892DEC3BF2003188ED /* LibraryThemesListView.swift */,
+				CE8C488B2DEC3E73003188ED /* LibraryStoriesListView.swift */,
 				CE8C48702DEB5190003188ED /* ProfileView.swift */,
 			);
 			path = "My Libarary";
@@ -434,21 +439,20 @@
 			children = (
 				CE8C480E2DEA8DAE003188ED /* CommentView.swift */,
 				CE8C480F2DEA8DAE003188ED /* BookStoryDetailView.swift */,
-				CE8C48102DEA8DAE003188ED /* myBookStoryView.swift */,
 				CE8C48112DEA8DAE003188ED /* UpdateStoryView.swift */,
 			);
 			path = BookStoryView;
 			sourceTree = "<group>";
 		};
-		CE8C48172DEA8DAE003188ED /* ThemaView */ = {
+		CE8C48172DEA8DAE003188ED /* ThemeView */ = {
 			isa = PBXGroup;
 			children = (
 				CE8C48132DEA8DAE003188ED /* FriendThemaView.swift */,
 				CE8C48142DEA8DAE003188ED /* PublicThemaView.swift */,
-				CE8C48152DEA8DAE003188ED /* ThemaView.swift */,
+				CE8C48152DEA8DAE003188ED /* ThemeDetailView.swift */,
 				CE8C48162DEA8DAE003188ED /* UpdateThemaView.swift */,
 			);
-			path = ThemaView;
+			path = ThemeView;
 			sourceTree = "<group>";
 		};
 		CE8C481A2DEA8DAE003188ED /* Views */ = {
@@ -461,7 +465,7 @@
 				CE8C48062DEA8DAE003188ED /* Record */,
 				CE8C480D2DEA8DAE003188ED /* Setting */,
 				CE8C48122DEA8DAE003188ED /* BookStoryView */,
-				CE8C48172DEA8DAE003188ED /* ThemaView */,
+				CE8C48172DEA8DAE003188ED /* ThemeView */,
 				CE8C48182DEA8DAE003188ED /* ReportSheetView.swift */,
 				CE8C48192DEA8DAE003188ED /* WebView.swift */,
 			);
@@ -472,6 +476,7 @@
 			isa = PBXGroup;
 			children = (
 				CE8C483F2DEAB3FE003188ED /* AnimatedText.swift */,
+				CE8C488D2DEC46E9003188ED /* tabIndicator.swift */,
 				CE8C48722DEBECAC003188ED /* Spacer.swift */,
 				CE8C48742DEBECED003188ED /* navBarLogo.swift */,
 				CE8C48662DEB0F53003188ED /* CardButtonStyle.swift */,
@@ -517,6 +522,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				CE8C48472DEADAAC003188ED /* Font */,
+				CE8C48882DEC035A003188ED /* Legacy */,
 			);
 			name = QuoteHub;
 			packageProductDependencies = (
@@ -595,6 +601,7 @@
 				CE8C47922DEA8D93003188ED /* Folder.swift in Sources */,
 				CE8C48652DEAE2A9003188ED /* FontManager.swift in Sources */,
 				CE8C47932DEA8D93003188ED /* Follow.swift in Sources */,
+				CE8C488C2DEC3E73003188ED /* LibraryStoriesListView.swift in Sources */,
 				CE8C47942DEA8D93003188ED /* ReportDataModel.swift in Sources */,
 				CE8C47952DEA8D93003188ED /* User.swift in Sources */,
 				C67AA3CB2AE389F500490DDE /* BooksViewModel.swift in Sources */,
@@ -611,10 +618,10 @@
 				CE8C48232DEA8DAE003188ED /* FollowersListView.swift in Sources */,
 				CE8C486D2DEB2A62003188ED /* LaunchScreenView.swift in Sources */,
 				CE8C48242DEA8DAE003188ED /* FollowingListView.swift in Sources */,
-				CE8C48252DEA8DAE003188ED /* FriendLibraryView.swift in Sources */,
 				CE8C48262DEA8DAE003188ED /* LibraryView.swift in Sources */,
 				CE8C48772DEBEDE0003188ED /* RandomBookListView.swift in Sources */,
 				CE8C48692DEB1972003188ED /* ThemeToggleButton.swift in Sources */,
+				CE8C488A2DEC3BF2003188ED /* LibraryThemesListView.swift in Sources */,
 				CE8C48732DEBECAC003188ED /* Spacer.swift in Sources */,
 				CE8C482D2DEA8DAE003188ED /* BlockedListView.swift in Sources */,
 				CE8C482E2DEA8DAE003188ED /* DeveloperInfoView.swift in Sources */,
@@ -630,11 +637,10 @@
 				CE8C48802DEBF39D003188ED /* RecordView.swift in Sources */,
 				CE8C48812DEBF39D003188ED /* SearchBookView.swift in Sources */,
 				CE8C48822DEBF39D003188ED /* SetThemaView.swift in Sources */,
-				CE8C48352DEA8DAE003188ED /* myBookStoryView.swift in Sources */,
 				CE8C48362DEA8DAE003188ED /* UpdateStoryView.swift in Sources */,
 				CE8C48372DEA8DAE003188ED /* FriendThemaView.swift in Sources */,
 				CE8C48382DEA8DAE003188ED /* PublicThemaView.swift in Sources */,
-				CE8C48392DEA8DAE003188ED /* ThemaView.swift in Sources */,
+				CE8C48392DEA8DAE003188ED /* ThemeDetailView.swift in Sources */,
 				CE8C483A2DEA8DAE003188ED /* UpdateThemaView.swift in Sources */,
 				CE8C483B2DEA8DAE003188ED /* ReportSheetView.swift in Sources */,
 				CE8C483C2DEA8DAE003188ED /* WebView.swift in Sources */,
@@ -646,6 +652,7 @@
 				C6B56FDD2AA8B60B003905C3 /* QuoteHubApp.swift in Sources */,
 				C63DB3AC2B1188C50026B668 /* ReportService.swift in Sources */,
 				C6D78A0A2AD03B2900F03FB8 /* APIEndpoint.swift in Sources */,
+				CE8C488E2DEC46E9003188ED /* tabIndicator.swift in Sources */,
 				C6691C5A2B0619C10083C678 /* UserSearchViewModel.swift in Sources */,
 				CE8C486F2DEB2E39003188ED /* LibraryTabButtonView.swift in Sources */,
 				CE8C477F2DEA8D84003188ED /* LoginView.swift in Sources */,

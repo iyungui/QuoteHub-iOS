@@ -56,6 +56,8 @@ class BookStoriesViewModel: ObservableObject {
     
     // MARK: - LOAD STORIES
     
+    // TODO: - 단일 북스토리 조회 메서드 추가필요
+    
     func loadBookStories(type: LoadType) {
         guard !isLoading && !isLastPage else { return }
         

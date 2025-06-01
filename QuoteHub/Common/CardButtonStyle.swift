@@ -15,3 +15,14 @@ struct CardButtonStyle: ButtonStyle {
             .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
 }
+
+
+struct MyActionButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.headline.bold())
+            .foregroundColor(.black)
+            .frame(maxWidth: .infinity)
+            .cornerRadius(8)
+    }
+}
