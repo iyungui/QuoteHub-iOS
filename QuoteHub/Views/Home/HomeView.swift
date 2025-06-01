@@ -192,9 +192,9 @@ struct HomeView: View {
                 }
             }
             
-            NavigationLink(destination: SearchKeywordView()
+            NavigationLink(destination: SearchStoryByKeywordView(type: .public)
                 .environmentObject(userViewModel)
-                .environmentObject(storiesViewModel)
+//                .environmentObject(storiesViewModel)
                 .environmentObject(userAuthManager)
             ) {
                 Image(systemName: "magnifyingglass")

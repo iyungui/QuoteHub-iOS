@@ -1,58 +1,80 @@
-////
-////  SetAndMakeThemaView.swift
-////  QuoteHub
-////
-////  Created by 이융의 on 11/8/23.
-////
+//
+//  CreateThemeView.swift
+//  QuoteHub
+//
+//  Created by 이융의 on 11/5/23.
 //
 
 import SwiftUI
 
-struct SetAndMakeThemaView: View {
-    @ObservedObject var myFolderViewModel: MyFolderViewModel
+struct CreateThemeView: View {
+    
+    // MARK: - PROPERTIES
+    
+    enum DisplayMode {
+        case fullScreenSheet    // 홈뷰에서 접근했을 때
+        case embedded   // record뷰의 setTheme 뷰에서 접근했을 때
+    }
+    
+    let mode: DisplayMode
+    
+    init(mode: DisplayMode) {
+        self.mode = mode
+    }
+    
+    @EnvironmentObject private var themesViewModel: ThemesViewModel
+    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.dismiss) private var dismiss
+    
+    // 알림 관련
+    @State private var showAlert: Bool = false
+    @State private var alertMessage: String = ""
+    @State private var alertType: PhotoPickerAlertType = .authorized
+    @State private var feedbackMessage: String? = nil
 
+    // 테마 입력 프로퍼티들
     @State private var title: String = ""
     @State private var content: String = ""
     @State private var inputImage: UIImage?
     @State private var showingImagePicker = false
     @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
-    @Environment(\.colorScheme) var colorScheme
-    
     @State private var isPublic: Bool = true
 
-    @Environment(\.presentationMode) var presentationMode
-
+    // focus
     enum Field: Hashable {
         case title
         case content
     }
     
     @FocusState private var focusField: Field?
-    
-    enum AlertType {
-        case authorized
-        case make
-    }
-    @State private var alertType: AlertType = .authorized
-    @State private var showAlert: Bool = false
-    @State private var alertMessage: String = ""
-    
-    @State private var feedbackMessage: String? = nil
 
+    
+    // MARK: - BODY
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 10) {
-                inputThemaImageView
+                if mode == .fullScreenSheet {
+                    HStack {
+                        backButton
+                        Spacer()
+                    }
+                    .padding(10)
+                    .padding(.leading, 5)
+                }
+                
+                inputThemeImageView
                     .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
                     .clipped()
+
                 contentTextEditor
                 Divider()
+
                 publicToggleView
                     .padding(.horizontal)
                     .padding(.vertical, 5)
-                Divider()
 
+                Divider()
 
                 imagePickerSection
                 
@@ -68,36 +90,21 @@ struct SetAndMakeThemaView: View {
             }
             .navigationBarTitle("새 테마 만들기", displayMode: .inline)
         }
-        .alert(isPresented: $showAlert) {
-            switch alertType {
-            case .authorized:
-                return Alert(title: Text("권한 필요"),
-                             message: Text(alertMessage),
-                             primaryButton: .default(Text("설정으로 이동"), action: {
-                                 if let settingsUrl = URL(string: UIApplication.openSettingsURLString),
-                                    UIApplication.shared.canOpenURL(settingsUrl) {
-                                     UIApplication.shared.open(settingsUrl)
-                                 }
-                             }),
-                             secondaryButton: .cancel()
-                )
-            case .make:
-                return Alert(title: Text("알림"),
-                             message: Text(alertMessage),
-                             dismissButton: .default(Text("확인")))
-            }
-        }
-        
+        .alert(isPresented: $showAlert) { alertView }
         .onTapGesture {
             hideKeyboard()
         }
         .sheet(isPresented: $showingImagePicker) {
+            // TODO: 이미지 피커 리팩토링 (하나의 이미지 피커로 가능하도록)
             SingleImagePicker(selectedImage: self.$inputImage)
                 .ignoresSafeArea(.all)
         }
+//        .onAppear {
+//            UITextField.appearance().clearButtonMode = .whileEditing
+//        }
     }
     
-    private var inputThemaImageView: some View {
+    private var inputThemeImageView: some View {
         ZStack(alignment: .bottom) {
             if let inputImage = inputImage {
                 Image(uiImage: inputImage)
@@ -125,6 +132,7 @@ struct SetAndMakeThemaView: View {
             }
             .padding(.vertical, 10)
     }
+
     
     private var contentTextEditor: some View {
         VStack(alignment: .leading) {
@@ -190,16 +198,16 @@ struct SetAndMakeThemaView: View {
     private var registerButton: some View {
         Button(action: {
             if !title.isEmpty {
-                myFolderViewModel.createFolder(image: inputImage, name: title, description: content, isPublic: isPublic) { isSuccess in
+                themesViewModel.createTheme(image: inputImage, name: title, description: content, isPublic: isPublic) { isSuccess in
                     if isSuccess {
-                        self.alertType = .make
-                        self.alertMessage = "테마가 성공적으로 등록되었어요."
-                        self.showAlert = true
-                        self.presentationMode.wrappedValue.dismiss()
+                        alertType = .make
+                        alertMessage = "테마가 성공적으로 등록되었어요!"
+                        showAlert = true
+                        dismiss()
                     } else {
-                        self.alertType = .make
-                        self.alertMessage = myFolderViewModel.errorMessage ?? "테마 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
-                        self.showAlert = true
+                        alertType = .make
+                        alertMessage = themesViewModel.errorMessage ?? "테마 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+                        showAlert = true
                     }
                 }
             } else {
@@ -219,6 +227,7 @@ struct SetAndMakeThemaView: View {
         .buttonStyle(PlainButtonStyle())
         .padding(.vertical, 5)
     }
+    
     private func updateFeedbackMessage() {
         if title.isEmpty {
             feedbackMessage = "테마의 제목을 입력해주세요."
@@ -227,4 +236,33 @@ struct SetAndMakeThemaView: View {
         }
     }
     
+    @ViewBuilder
+    private var backButton: some View {
+        Button(action: {
+            dismiss()
+        }) {
+            Image(systemName: "xmark")
+                .foregroundColor(colorScheme == .dark ? .white : .black)
+        }
+    }
+    
+    private var alertView: Alert {
+        switch alertType {
+        case .authorized:
+            return Alert(title: Text("권한 필요"),
+                         message: Text(alertMessage),
+                         primaryButton: .default(Text("설정으로 이동"), action: {
+                             if let settingsUrl = URL(string: UIApplication.openSettingsURLString),
+                                UIApplication.shared.canOpenURL(settingsUrl) {
+                                 UIApplication.shared.open(settingsUrl)
+                             }
+                         }),
+                         secondaryButton: .cancel()
+            )
+        case .make:
+            return Alert(title: Text("알림"),
+                         message: Text(alertMessage),
+                         dismissButton: .default(Text("확인")))
+        }
+    }
 }

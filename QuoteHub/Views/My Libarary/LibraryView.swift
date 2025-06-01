@@ -69,11 +69,18 @@ struct LibraryView: View {
                 mainContent
             }
         }
+//        /// 툴바
+//        .toolbar {
+//            ToolbarItemGroup(placement: .topBarLeading) {
+//                if isMyLibaray { myLibraryNavBarItems }
+//                else { friendLibraryNavBarItems }
+//            }
+//        }
         /// 알림창 (비로그인, 오류, 블럭?)
         .alert(isPresented: $showAlert) { alertView }
         
         /// 차단, 신고하기 버튼 시트
-        .confirmationDialog(Text(""), isPresented: $showActionSheet) { actionSheetView }
+//        .confirmationDialog(Text(""), isPresented: $showActionSheet) { actionSheetView }
         
         /// 유저 신고하기 창
         .sheet(isPresented: $showReportSheet) {
@@ -91,14 +98,6 @@ struct LibraryView: View {
         }
         
         .navigationBarTitleDisplayMode(.inline)
-        
-        /// 툴바
-        .toolbar {
-            ToolbarItem {
-                if isMyLibaray { myLibraryNavBarItems }
-                else { friendLibraryNavBarItems }
-            }
-        }
     }
     
     // MARK: - Private Views
@@ -109,13 +108,17 @@ struct LibraryView: View {
             VStack(spacing: 20) {
                 if let friend = user {   // 친구 프로필
                     ProfileView(user: friend)
-                        .environmentObject(userViewModel)
                         .environmentObject(userAuthManager)
+                        .environmentObject(userViewModel)
+                        .environmentObject(storiesViewModel)
+                        .environmentObject(themesViewModel)
+
                 } else {    // 내 프로필
                     ProfileView()
-                        .environmentObject(userViewModel)
                         .environmentObject(userAuthManager)
-
+                        .environmentObject(userViewModel)
+                        .environmentObject(storiesViewModel)
+                        .environmentObject(themesViewModel)
                 }
                 
                 LibraryTabButtonView(selectedView: $selectedView)
@@ -159,7 +162,7 @@ struct LibraryView: View {
         /// 내 라이브러리에는 '내 기록을 키워드로 찾을 수 있는 뷰와, 설정' 버튼
         HStack {
             NavigationLink(
-                destination: MySearchKeywordView()
+                destination: SearchStoryByKeywordView(type: loadType)
                     .environmentObject(storiesViewModel)
                     .environmentObject(userViewModel)
             ) {

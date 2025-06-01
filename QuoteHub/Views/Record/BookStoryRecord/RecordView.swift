@@ -59,13 +59,7 @@ struct RecordView: View {
     }
     @FocusState private var focusField: Field?
     
-    // 알림 관련
-    enum AlertType {
-        case authorized
-        case make
-    }
-    
-    @State private var alertType: AlertType = .authorized
+    @State private var alertType: PhotoPickerAlertType = .authorized
     
     // MARK: - BODY
     

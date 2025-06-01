@@ -16,9 +16,13 @@ enum AlertType {
 
 /// 라이브러리에서 보이는 프로필 뷰
 struct ProfileView: View {
-    @EnvironmentObject var userViewModel: UserViewModel
-    @StateObject var followViewModel = FollowViewModel()
-    @EnvironmentObject var userAuthManager: UserAuthenticationManager
+    @StateObject private var followViewModel = FollowViewModel()
+
+    @EnvironmentObject private var userViewModel: UserViewModel
+    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
+    @EnvironmentObject private var themesViewModel: ThemesViewModel
+    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
+    
     @Environment(\.colorScheme) var colorScheme
     
     @State private var showAlert: Bool = false
@@ -216,7 +220,16 @@ struct ProfileView: View {
             .buttonStyle(PlainButtonStyle())
             
             // 팔로잉
-            NavigationLink(destination: FollowingListView(userId: currentUserId).environmentObject(followViewModel).environmentObject(userAuthManager)) {
+            NavigationLink(
+                destination: FollowingListView(userId: currentUserId)
+                    .environmentObject(followViewModel)
+                    .environmentObject(userAuthManager)
+                    .environmentObject(userViewModel)
+                
+                    .environmentObject(storiesViewModel)
+                    .environmentObject(themesViewModel)
+
+            ) {
                 VStack(spacing: 4) {
                     Text("\(followViewModel.followingCount)")
                         .font(.title2)

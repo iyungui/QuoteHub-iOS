@@ -11,12 +11,15 @@ import SDWebImageSwiftUI
 /// 홈뷰 -> 유저 검색
 struct UserSearchView: View {
     @State private var searchNickname: String = ""
-    @EnvironmentObject var storiesViewModel: BookStoriesViewModel
-    @StateObject var viewModel = UserSearchViewModel()
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.presentationMode) var presentationMode
     @State private var isActioned: Bool = false
-    @EnvironmentObject var userAuthManager: UserAuthenticationManager
+    @StateObject var viewModel = UserSearchViewModel()
+    
+    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
+    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
+    @EnvironmentObject private var themesViewModel: ThemesViewModel
+    @EnvironmentObject private var userViewModel: UserViewModel
 
     enum Field: Hashable {
         case searchNickname
@@ -82,7 +85,13 @@ struct UserSearchView: View {
                     .padding(.top)
             } else {
                 ForEach(viewModel.users, id: \.id) { user in
-                    NavigationLink(destination: FriendLibraryView(friendId: user).environmentObject(userAuthManager)) {
+                    NavigationLink(
+                        destination: LibraryView(user: user)
+                            .environmentObject(userAuthManager)
+                            .environmentObject(userViewModel)
+                            .environmentObject(storiesViewModel)
+                            .environmentObject(themesViewModel)
+                    ) {
                         ProfileRowView(user: user)
                     }
                 }

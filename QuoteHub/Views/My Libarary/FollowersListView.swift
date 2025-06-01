@@ -10,13 +10,23 @@ import SDWebImageSwiftUI
 
 struct FollowersListView: View {
     let userId: String?
-    @EnvironmentObject var followViewModel: FollowViewModel
-    @EnvironmentObject var userAuthManager: UserAuthenticationManager
+    @EnvironmentObject private var followViewModel: FollowViewModel
+    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
+    
+    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
+    @EnvironmentObject private var themesViewModel: ThemesViewModel
+    @EnvironmentObject private var userViewModel: UserViewModel
 
+    
     var body: some View {
         List {
             ForEach(followViewModel.followers) { friend in
-                NavigationLink(destination: FriendLibraryView(friendId: friend).environmentObject(userAuthManager)) {
+                NavigationLink(destination: LibraryView(user: friend)
+                    .environmentObject(userAuthManager)
+                    .environmentObject(userViewModel)
+                    .environmentObject(storiesViewModel)
+                    .environmentObject(themesViewModel)
+                ) {
                     HStack {
                         if let url = URL(string: friend.profileImage), !friend.profileImage.isEmpty {
                             WebImage(url: URL(string: friend.profileImage))

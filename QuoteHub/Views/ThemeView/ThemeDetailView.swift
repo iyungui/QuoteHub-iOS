@@ -40,9 +40,12 @@ struct ThemeDetailView: View {
     var body: some View {
         ScrollView(showsIndicators: false) {
             NavigationLink(
-                destination: UpdateThemaView(folderId: theme.id)
-                    .environmentObject(themesViewModel)
-                , isActive: $isEditing
+                // TODO: - update theme view 추가하기
+//                destination: UpdateThemaView(folderId: theme.id)
+//                    .environmentObject(themesViewModel)
+//                , isActive: $isEditing
+                
+                destination: EmptyView()
             ) {
                 EmptyView()
             }

@@ -11,15 +11,16 @@ import SDWebImageSwiftUI
 /// 북스토리 생성 4 (option): 테마 선택/만들기링크 뷰
 
 struct SetThemeView: View {
+    
     // MARK: - PROPERTIES
     
     @Binding var selectedThemeIds: [String]
     @StateObject var themesViewModel = ThemesViewModel()
     @Environment(\.dismiss) var dismiss
-
+    
     // 테마 선택 상태를 관리하는 Set
     @State private var selectedSet = Set<String>()
-
+    
     // MARK: - BODY
     
     var body: some View {
@@ -40,8 +41,10 @@ struct SetThemeView: View {
     // 테마 만들기
     var linkMakeThemeView: some View {
         HStack {
-            // TODO: make theme view 하나로 통일
-            NavigationLink(destination: SetAndMakeThemaView(myFolderViewModel: themesViewModel)) {
+            NavigationLink(
+                destination: CreateThemeView(mode: .embedded)
+                    .environmentObject(themesViewModel)
+            ) {
                 Text("새 테마 만들기")
                     .font(.callout)
                     .fontWeight(.semibold)
@@ -53,7 +56,7 @@ struct SetThemeView: View {
         .padding(.horizontal, 20)
         .padding(.top)
     }
-
+    
     // 테마 리스트
     private var listThemeView: some View {
         VStack(alignment: .center, spacing: 10) {
@@ -68,7 +71,7 @@ struct SetThemeView: View {
             if themesViewModel.themes.isEmpty {
                 emptyThemeListView
             } else {
-                themeGridListView
+//                themeGridListView
             }
             
         }
@@ -83,56 +86,46 @@ struct SetThemeView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
-    private var themeGridListView: some View {
-        let spacing: CGFloat = 20
-        let horizontalPadding: CGFloat = 10
-        let columns: Int = 2
-        let totalSpacing: CGFloat = spacing * CGFloat(columns - 1)
-        let screenWidth: CGFloat = UIScreen.main.bounds.width
-        let contentWidth: CGFloat = screenWidth - (horizontalPadding * 2) - totalSpacing
-
-        LazyVGrid(columns: Array(repeating: .init(.flexible()), count: columns), spacing: spacing) {
-            ForEach(themesViewModel.folder, id: \.id) { folder in
-                Button(action: {
-                    // Toggle selection state
-                    if selectedSet.contains(folder.id) {
-                        selectedSet.remove(folder.id)
-                    } else {
-                        selectedSet.insert(folder.id)
-                    }
-                    print("Selected Folders: \(selectedSet)")
-
-                }) {
-                    VStack(alignment: .leading) {
-                        WebImage(url: URL(string: folder.folderImageURL))
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: contentWidth / CGFloat(columns) - 10, height: (contentWidth / CGFloat(columns)) * 5 / 8)
-                            .cornerRadius(10)
-                            .clipped()
-                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(selectedSet.contains(folder.id) ? Color.black : Color.clear, lineWidth: 1))
-                        
-                        Text(folder.name)
-                            .font(.callout)
-                            .fontWeight(.semibold)
-
-                    }
-                    .overlay(
-                        Image(systemName: selectedSet.contains(folder.id) ? "checkmark.circle.fill" : "circle")
-                            .font(.title2)
-                            .foregroundColor(selectedSet.contains(folder.id) ? Color.black : Color.gray.opacity(0.5))
-                            .padding(4),
-                        alignment: .topTrailing
-                    )
-                }
-            }
-            if !myFolderViewModel.isLastPage {
-                ProgressView().onAppear {
-                    myFolderViewModel.loadMoreIfNeeded(currentItem: myFolderViewModel.folder.last)
-                }
-            }
-        }
-        .padding(.horizontal, horizontalPadding)
-        .padding(.top)
-    }
+//    private var themeGridListView: some View {
+//        LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2), spacing: 20) {
+//            ForEach(themesViewModel.folder, id: \.id) { folder in
+//                Button(action: {
+//                    if selectedSet.contains(folder.id) {
+//                        selectedSet.remove(folder.id)
+//                    } else {
+//                        selectedSet.insert(folder.id)
+//                    }
+//                }) {
+//                    VStack(alignment: .leading) {
+//                        WebImage(url: URL(string: folder.folderImageURL))
+//                            .resizable()
+//                            .scaledToFill()
+//                            .frame(width: (UIScreen.main.bounds.width / 2) - 25, height: ((UIScreen.main.bounds.width / 2) - 25) * 5 / 8)
+//                            .cornerRadius(10)
+//                            .clipped()
+//                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(selectedSet.contains(folder.id) ? Color.black : Color.clear, lineWidth: 1))
+//                        
+//                        Text(folder.name)
+//                            .font(.callout)
+//                            .fontWeight(.semibold)
+//                    }
+//                    .overlay(
+//                        Image(systemName: selectedSet.contains(folder.id) ? "checkmark.circle.fill" : "circle")
+//                            .font(.title2)
+//                            .foregroundColor(selectedSet.contains(folder.id) ? Color.black : Color.gray.opacity(0.5))
+//                            .padding(4),
+//                        alignment: .topTrailing
+//                    )
+//                }
+//            }
+//            
+//            if !themesViewModel.isLastPage {
+//                ProgressView().onAppear {
+//                    themesViewModel.loadMoreIfNeeded(currentItem: themesViewModel.themes.last)
+//                }
+//            }
+//        }
+//        .padding(.horizontal, 10)
+//        .padding(.top)
+//    }
 }

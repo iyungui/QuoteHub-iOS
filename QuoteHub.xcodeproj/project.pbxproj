@@ -56,9 +56,7 @@
 		CE8C481C2DEA8DAE003188ED /* PublicStoriesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47F12DEA8DAE003188ED /* PublicStoriesListView.swift */; };
 		CE8C481D2DEA8DAE003188ED /* ThemeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47F22DEA8DAE003188ED /* ThemeListView.swift */; };
 		CE8C481E2DEA8DAE003188ED /* UserSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47F32DEA8DAE003188ED /* UserSearchView.swift */; };
-		CE8C481F2DEA8DAE003188ED /* FriendSearchKeywordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47F52DEA8DAE003188ED /* FriendSearchKeywordView.swift */; };
-		CE8C48202DEA8DAE003188ED /* MySearchKeywordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47F62DEA8DAE003188ED /* MySearchKeywordView.swift */; };
-		CE8C48212DEA8DAE003188ED /* SearchKeywordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47F72DEA8DAE003188ED /* SearchKeywordView.swift */; };
+		CE8C48202DEA8DAE003188ED /* SearchStoryByKeywordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47F62DEA8DAE003188ED /* SearchStoryByKeywordView.swift */; };
 		CE8C48222DEA8DAE003188ED /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47F92DEA8DAE003188ED /* MainView.swift */; };
 		CE8C48232DEA8DAE003188ED /* FollowersListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47FB2DEA8DAE003188ED /* FollowersListView.swift */; };
 		CE8C48242DEA8DAE003188ED /* FollowingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47FC2DEA8DAE003188ED /* FollowingListView.swift */; };
@@ -92,11 +90,11 @@
 		CE8C48802DEBF39D003188ED /* RecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C487B2DEBF39D003188ED /* RecordView.swift */; };
 		CE8C48812DEBF39D003188ED /* SearchBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C487C2DEBF39D003188ED /* SearchBookView.swift */; };
 		CE8C48822DEBF39D003188ED /* SetThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C487D2DEBF39D003188ED /* SetThemeView.swift */; };
-		CE8C48862DEBF39F003188ED /* MakeThemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48832DEBF39F003188ED /* MakeThemaView.swift */; };
-		CE8C48872DEBF39F003188ED /* SetAndMakeThemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48842DEBF39F003188ED /* SetAndMakeThemaView.swift */; };
+		CE8C48862DEBF39F003188ED /* CreateThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48832DEBF39F003188ED /* CreateThemeView.swift */; };
 		CE8C488A2DEC3BF2003188ED /* LibraryThemesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48892DEC3BF2003188ED /* LibraryThemesListView.swift */; };
 		CE8C488C2DEC3E73003188ED /* LibraryStoriesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C488B2DEC3E73003188ED /* LibraryStoriesListView.swift */; };
 		CE8C488E2DEC46E9003188ED /* tabIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C488D2DEC46E9003188ED /* tabIndicator.swift */; };
+		CE8C48902DEC96B6003188ED /* PhotoPickerAlertType.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C488F2DEC96B6003188ED /* PhotoPickerAlertType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -148,9 +146,7 @@
 		CE8C47F12DEA8DAE003188ED /* PublicStoriesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicStoriesListView.swift; sourceTree = "<group>"; };
 		CE8C47F22DEA8DAE003188ED /* ThemeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeListView.swift; sourceTree = "<group>"; };
 		CE8C47F32DEA8DAE003188ED /* UserSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchView.swift; sourceTree = "<group>"; };
-		CE8C47F52DEA8DAE003188ED /* FriendSearchKeywordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSearchKeywordView.swift; sourceTree = "<group>"; };
-		CE8C47F62DEA8DAE003188ED /* MySearchKeywordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MySearchKeywordView.swift; sourceTree = "<group>"; };
-		CE8C47F72DEA8DAE003188ED /* SearchKeywordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchKeywordView.swift; sourceTree = "<group>"; };
+		CE8C47F62DEA8DAE003188ED /* SearchStoryByKeywordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchStoryByKeywordView.swift; sourceTree = "<group>"; };
 		CE8C47F92DEA8DAE003188ED /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		CE8C47FB2DEA8DAE003188ED /* FollowersListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowersListView.swift; sourceTree = "<group>"; };
 		CE8C47FC2DEA8DAE003188ED /* FollowingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingListView.swift; sourceTree = "<group>"; };
@@ -184,11 +180,11 @@
 		CE8C487B2DEBF39D003188ED /* RecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordView.swift; sourceTree = "<group>"; };
 		CE8C487C2DEBF39D003188ED /* SearchBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBookView.swift; sourceTree = "<group>"; };
 		CE8C487D2DEBF39D003188ED /* SetThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetThemeView.swift; sourceTree = "<group>"; };
-		CE8C48832DEBF39F003188ED /* MakeThemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeThemaView.swift; sourceTree = "<group>"; };
-		CE8C48842DEBF39F003188ED /* SetAndMakeThemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetAndMakeThemaView.swift; sourceTree = "<group>"; };
+		CE8C48832DEBF39F003188ED /* CreateThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateThemeView.swift; sourceTree = "<group>"; };
 		CE8C48892DEC3BF2003188ED /* LibraryThemesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryThemesListView.swift; sourceTree = "<group>"; };
 		CE8C488B2DEC3E73003188ED /* LibraryStoriesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryStoriesListView.swift; sourceTree = "<group>"; };
 		CE8C488D2DEC46E9003188ED /* tabIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tabIndicator.swift; sourceTree = "<group>"; };
+		CE8C488F2DEC96B6003188ED /* PhotoPickerAlertType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerAlertType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -377,9 +373,7 @@
 		CE8C47F82DEA8DAE003188ED /* Keyword */ = {
 			isa = PBXGroup;
 			children = (
-				CE8C47F52DEA8DAE003188ED /* FriendSearchKeywordView.swift */,
-				CE8C47F62DEA8DAE003188ED /* MySearchKeywordView.swift */,
-				CE8C47F72DEA8DAE003188ED /* SearchKeywordView.swift */,
+				CE8C47F62DEA8DAE003188ED /* SearchStoryByKeywordView.swift */,
 			);
 			path = Keyword;
 			sourceTree = "<group>";
@@ -475,6 +469,7 @@
 				CE8C48742DEBECED003188ED /* navBarLogo.swift */,
 				CE8C48662DEB0F53003188ED /* CardButtonStyle.swift */,
 				CE8C48642DEAE2A9003188ED /* FontManager.swift */,
+				CE8C488F2DEC96B6003188ED /* PhotoPickerAlertType.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -493,8 +488,7 @@
 		CE8C48852DEBF39F003188ED /* ThemeRecord */ = {
 			isa = PBXGroup;
 			children = (
-				CE8C48832DEBF39F003188ED /* MakeThemaView.swift */,
-				CE8C48842DEBF39F003188ED /* SetAndMakeThemaView.swift */,
+				CE8C48832DEBF39F003188ED /* CreateThemeView.swift */,
 			);
 			path = ThemeRecord;
 			sourceTree = "<group>";
@@ -605,9 +599,7 @@
 				CE8C481C2DEA8DAE003188ED /* PublicStoriesListView.swift in Sources */,
 				CE8C481D2DEA8DAE003188ED /* ThemeListView.swift in Sources */,
 				CE8C481E2DEA8DAE003188ED /* UserSearchView.swift in Sources */,
-				CE8C481F2DEA8DAE003188ED /* FriendSearchKeywordView.swift in Sources */,
-				CE8C48202DEA8DAE003188ED /* MySearchKeywordView.swift in Sources */,
-				CE8C48212DEA8DAE003188ED /* SearchKeywordView.swift in Sources */,
+				CE8C48202DEA8DAE003188ED /* SearchStoryByKeywordView.swift in Sources */,
 				CE8C48222DEA8DAE003188ED /* MainView.swift in Sources */,
 				CE8C48232DEA8DAE003188ED /* FollowersListView.swift in Sources */,
 				CE8C486D2DEB2A62003188ED /* LaunchScreenView.swift in Sources */,
@@ -662,8 +654,8 @@
 				CE8C47A22DEA8D97003188ED /* UserEndpoints.swift in Sources */,
 				C60700CD2AFE05D9009D202A /* FolderService.swift in Sources */,
 				C667E9802ACA388C006EE7A9 /* UserViewModel.swift in Sources */,
-				CE8C48862DEBF39F003188ED /* MakeThemaView.swift in Sources */,
-				CE8C48872DEBF39F003188ED /* SetAndMakeThemaView.swift in Sources */,
+				CE8C48862DEBF39F003188ED /* CreateThemeView.swift in Sources */,
+				CE8C48902DEC96B6003188ED /* PhotoPickerAlertType.swift in Sources */,
 				C6336CF32AAF1AA0007355EC /* ImagePicker.swift in Sources */,
 				C627C8CC2AE25831004D867B /* ColorExtension.swift in Sources */,
 				C6691C522B04DA8C0083C678 /* FollowViewModel.swift in Sources */,

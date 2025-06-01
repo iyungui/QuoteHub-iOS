@@ -1,27 +1,26 @@
 //
-//  SearchKeywordView.swift
+//  SearchStoryByKeywordView.swift
 //  QuoteHub
 //
-//  Created by 이융의 on 11/8/23.
+//  Created by 이융의 on 11/13/23.
 //
 
 import SwiftUI
 import SDWebImageSwiftUI
 
-// MARK: - PUBLIC
-
-struct SearchKeywordView: View {
-    @EnvironmentObject var userAuthManager: UserAuthenticationManager
-
+struct SearchStoryByKeywordView: View {
     @State private var searchKeyword: String
-    @StateObject private var viewModel: BookStoriesViewModel
-    @EnvironmentObject var userViewModel: UserViewModel
-    @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
-    @State private var isActioned: Bool = false
+    
+    let type: LoadType
+    
+    @StateObject private var storiesViewModel: BookStoriesViewModel
+    @EnvironmentObject private var userViewModel: UserViewModel
+    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
 
-    init(searchKeyword: String = "") {
+    init(searchKeyword: String = "", type: LoadType) {
         self.searchKeyword = searchKeyword
-        self._viewModel = StateObject(wrappedValue: BookStoriesViewModel(searchKeyword: searchKeyword, mode: .public))
+        self.type = type
+        self._storiesViewModel = StateObject(wrappedValue: BookStoriesViewModel(searchKeyword: searchKeyword))
     }
     
     enum Field: Hashable {
@@ -46,9 +45,8 @@ struct SearchKeywordView: View {
     }
     
     private func searchWithKeyword() {
-        self.isActioned = true
-        viewModel.updateSearchKeyword(searchKeyword)
-        viewModel.refreshBookStories()
+        storiesViewModel.updateSearchKeyword(searchKeyword)
+//        storiesViewModel.refreshBookStories(type: type) // TODO: - 이거 맞는지 확인.
     }
     
     private var searchField: some View {
@@ -75,20 +73,21 @@ struct SearchKeywordView: View {
     private var resultsListView: some View {
         ScrollView {
             LazyVStack {
-                if viewModel.bookStories.isEmpty && isActioned {
+                if storiesViewModel.bookStories.isEmpty {
                     Text("검색결과가 없습니다.")
                         .foregroundColor(.gray)
                         .font(.headline)
                         .padding(.top)
                 } else {
-                    ForEach(viewModel.bookStories, id: \.id) { story in
-                        StoryItemView(story: story).environmentObject(userViewModel)
-                            .environmentObject(myStoriesViewModel).environmentObject(userAuthManager)
+                    ForEach(storiesViewModel.bookStories, id: \.id) { story in
+                        StoryRowInSearchKeyword(story: story, type: type)
+                            .environmentObject(storiesViewModel)
+                            .environmentObject(userViewModel)
                     }
-                    if !viewModel.isLastPage && isActioned {
+                    if !storiesViewModel.isLastPage {
                         ProgressView()
                             .onAppear {
-                                viewModel.loadMoreIfNeeded(currentItem: viewModel.bookStories.last)
+                                storiesViewModel.loadMoreIfNeeded(currentItem: storiesViewModel.bookStories.last)
                             }
                     }
                 }
@@ -97,15 +96,27 @@ struct SearchKeywordView: View {
     }
 }
 
-struct StoryItemView: View {
+// MARK: - STOEY ROW IN SEARCH KEYWORD
+
+struct StoryRowInSearchKeyword: View {
     let story: BookStory
-    @EnvironmentObject var userViewModel: UserViewModel
-    @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
-    @EnvironmentObject var userAuthManager: UserAuthenticationManager
-
-
+    let type: LoadType
+    var isMy: Bool {
+        if type == .my {
+            return true
+        }
+        return false
+    }
+    
+    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
+    @EnvironmentObject private var userViewModel: UserViewModel
+    
     var body: some View {
-        NavigationLink(destination: destinationView) {
+        NavigationLink(
+            destination: BookStoryDetailView(story: story, isMyStory: isMy)
+                .environmentObject(storiesViewModel)
+                .environmentObject(userViewModel)
+        ) {
             VStack {
                 HStack {
                     storyImages
@@ -117,14 +128,6 @@ struct StoryItemView: View {
             }
         }
         .buttonStyle(PlainButtonStyle())
-    }
-    
-    private var destinationView: some View {
-        if story.userId.id == userViewModel.user?.id {
-            return AnyView(myBookStoryView(storyId: story.id).environmentObject(userViewModel).environmentObject(myStoriesViewModel))
-        } else {
-            return AnyView(friendBookStoryView(story: story).environmentObject(userAuthManager))
-        }
     }
     
     @ViewBuilder

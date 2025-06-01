@@ -103,7 +103,7 @@ struct MainView: View {
                 .environmentObject(storiesViewModel)
                 .environmentObject(userAuthManager)
         case .theme:
-            MakeThemaView()
+            CreateThemeView(mode: .fullScreenSheet)
                 .environmentObject(themesViewModel)
         }
     }

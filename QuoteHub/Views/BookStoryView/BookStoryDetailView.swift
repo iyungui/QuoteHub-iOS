@@ -30,6 +30,8 @@ struct BookStoryDetailView: View {
     @EnvironmentObject private var userAuthManager: UserAuthenticationManager
     @StateObject private var commentViewModel: CommentViewModel
     
+    @EnvironmentObject private var themesViewModel: ThemesViewModel
+    
     // 친구 스토리 전용
     @StateObject private var followViewModel: FollowViewModel   // 차단상태확인 위해
     // (차단 여부는 followViewModel.updateFollowStatus 로 확인 가능)
@@ -61,12 +63,14 @@ struct BookStoryDetailView: View {
         self.story = story
         self.isMyStory = isMyStory
         self._commentViewModel = StateObject(wrappedValue: CommentViewModel(bookStoryId: story.id))
+        self._followViewModel = StateObject(wrappedValue: FollowViewModel())
+        self._reportViewModel = StateObject(wrappedValue: ReportViewModel())
     }
     
     // 친구 스토리 초기화
     init(story: BookStory) {
         self.story = story
-        
+        self.isMyStory = false
         self._commentViewModel = StateObject(wrappedValue: CommentViewModel(bookStoryId: story.id))
         self._followViewModel = StateObject(wrappedValue: FollowViewModel(userId: story.userId.id))
         self._reportViewModel = StateObject(wrappedValue: ReportViewModel())
@@ -83,15 +87,15 @@ struct BookStoryDetailView: View {
             }
         }
         
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                navBarButton
-            }
-        }
+        //        .toolbar {
+        //            ToolbarItem(placement: .topBarTrailing) {
+        //                navBarButton
+        //            }
+        //        }
         
         // 북스토리 신고, 차단 액션 시트
-        .confirmationDialog("", isPresented: $showActionSheet) { actionSheetView }
-
+        //        .confirmationDialog("", isPresented: $showActionSheet) { actionSheetView }
+        
         // 알림
         .alert(isPresented: $showAlert) { alertView }
         
@@ -245,49 +249,50 @@ struct BookStoryDetailView: View {
             // 친구 스토리 - 친구 프로필 정보 표시 + NavigationLink
             NavigationLink(
                 destination: LibraryView(user: story.userId)
-                .environmentObject(storiesViewModel)
-                .environmentObject(userViewModel)
-                .environmentObject(userAuthManager)
+                    .environmentObject(userAuthManager)
+                    .environmentObject(userViewModel)
+                    .environmentObject(storiesViewModel)
+                    .environmentObject(themesViewModel)
             ) {
-                    HStack {
-                        if let url = URL(string: story.userId.profileImage), !story.userId.profileImage.isEmpty {
-                            WebImage(url: url)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 80, height: 80)
-                                .clipShape(Circle())
-                                .overlay(Circle().stroke(Color.gray, lineWidth: 1))
-                        } else {
-                            Image(systemName: "person.crop.circle.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 80, height: 80)
-                        }
-                        
-                        VStack(alignment: .leading, spacing: 15) {
-                            Text(story.userId.nickname)
-                                .font(.headline)
-                                .fontWeight(.bold)
-                                .lineLimit(1)
-                                .truncationMode(.tail)
-                            
-                            Text(story.userId.statusMessage ?? "")
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                                .lineLimit(1)
-                        }
-                        .padding(.leading, 10)
-                        
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .fontWeight(.medium)
-                            .foregroundColor(.gray)
+                HStack {
+                    if let url = URL(string: story.userId.profileImage), !story.userId.profileImage.isEmpty {
+                        WebImage(url: url)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 80, height: 80)
+                            .clipShape(Circle())
+                            .overlay(Circle().stroke(Color.gray, lineWidth: 1))
+                    } else {
+                        Image(systemName: "person.crop.circle.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 80, height: 80)
                     }
-                    .padding(.all, 10)
-                    .cornerRadius(12)
-                    .padding(.horizontal)
+                    
+                    VStack(alignment: .leading, spacing: 15) {
+                        Text(story.userId.nickname)
+                            .font(.headline)
+                            .fontWeight(.bold)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                        
+                        Text(story.userId.statusMessage ?? "")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .lineLimit(1)
+                    }
+                    .padding(.leading, 10)
+                    
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .fontWeight(.medium)
+                        .foregroundColor(.gray)
                 }
-                .buttonStyle(PlainButtonStyle())
+                .padding(.all, 10)
+                .cornerRadius(12)
+                .padding(.horizontal)
+            }
+            .buttonStyle(PlainButtonStyle())
         }
     }
     
@@ -473,9 +478,11 @@ struct BookStoryDetailView: View {
             return ActionSheet(title: Text("선택"), buttons: [
                 .default(Text("수정하기"), action: {
                     NavigationLink(
-                        destination: UpdateStoryView(storyId: story.id)
-                            .environmentObject(storiesViewModel)
-                            .environmentObject(userViewModel)
+                        // TODO: - UpdateStoryView
+                        //                        destination: UpdateStoryView(storyId: story.id)
+                        //                            .environmentObject(storiesViewModel)
+                        //                            .environmentObject(userViewModel)
+                        destination: EmptyView()
                     ) {
                         EmptyView()
                     }
