@@ -1,5 +1,5 @@
 //
-//  ListPublicStoriesView.swift
+//  PublicStoriesListView.swift
 //  QuoteHub
 //
 //  Created by 이융의 on 11/9/23.
@@ -8,11 +8,12 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
-struct ListPublicStoriesView: View {
-    @ObservedObject var storiesViewModel: BookStoriesViewModel
-    @EnvironmentObject var userViewModel: UserViewModel
-    @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
-    @EnvironmentObject var userAuthManager: UserAuthenticationManager
+struct PublicStoriesListView: View {
+    
+    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
+//    @EnvironmentObject private var themesViewModel: ThemesViewModel
+    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
+    @EnvironmentObject private var userViewModel: UserViewModel
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -20,7 +21,7 @@ struct ListPublicStoriesView: View {
                 ForEach(storiesViewModel.bookStories, id: \.id) { story in
                     StoryView(story: story)
                         .environmentObject(userViewModel)
-                        .environmentObject(myStoriesViewModel)
+                        .environmentObject(storiesViewModel)
                         .environmentObject(userAuthManager)
                 }
                 
@@ -57,10 +58,10 @@ struct StoryView: View {
     private let cardHeight: CGFloat = 300
     private let imageHeight: CGFloat = 200
     
-    @EnvironmentObject var userViewModel: UserViewModel
-    @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
-    @EnvironmentObject var userAuthManager: UserAuthenticationManager
-    
+    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
+    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
+    @EnvironmentObject private var userViewModel: UserViewModel
+
     var body: some View {
         NavigationLink(destination: destinationView) {
             ZStack {
@@ -89,11 +90,12 @@ struct StoryView: View {
     
     private var destinationView: some View {
         if story.userId.id == userViewModel.user?.id {
-            return AnyView(myBookStoryView(storyId: story.id)
+            return AnyView(BookStoryDetailView(story: story, friendBookStory: false)
                 .environmentObject(userViewModel)
-                .environmentObject(myStoriesViewModel))
+                .environmentObject(storiesViewModel))
+                .environmentObject(userAuthManager))
         } else {
-            return AnyView(friendBookStoryView(story: story)
+            return AnyView(BookStoryDetailView(story: story, friendBookStory: true)
                 .environmentObject(userAuthManager))
         }
     }
@@ -140,18 +142,9 @@ struct StoryView: View {
                     .scaledToFill()
                     .frame(width: 36, height: 36)
                     .clipShape(Circle())
-                    .overlay(
-                        Circle()
-                            .stroke(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [.antiqueGold, .brownLeather]),
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                ),
-                                lineWidth: 2
-                            )
-                    )
+                    .overlay(Circle().stroke(Color.gray.opacity(0.5), lineWidth: 1))
             } else {
+                // 대체 이미지
                 Circle()
                     .fill(
                         LinearGradient(
@@ -163,7 +156,7 @@ struct StoryView: View {
                     .frame(width: 36, height: 36)
                     .overlay(
                         Image(systemName: "person.fill")
-                            .foregroundColor(.brownLeather)
+                            .foregroundColor(.brownLeather.opacity(0.7))
                             .font(.system(size: 16, weight: .medium))
                     )
             }

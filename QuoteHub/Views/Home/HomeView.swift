@@ -13,7 +13,6 @@ struct HomeView: View {
     
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
     @EnvironmentObject private var themesViewModel: ThemesViewModel
-
     @EnvironmentObject private var userAuthManager: UserAuthenticationManager
     @EnvironmentObject private var userViewModel: UserViewModel
     
@@ -34,8 +33,8 @@ struct HomeView: View {
                             title: "북스토리 모아보기",
                             gradient: [.brownLeather, .antiqueGold]
                         )
-                        
-                        ListPublicStoriesView()
+                        // TODO: - 로딩 중 상태 표시
+                        PublicStoriesListView()
                             .environmentObject(storiesViewModel)
                             .environmentObject(userAuthManager)
                             .environmentObject(userViewModel)
@@ -51,7 +50,8 @@ struct HomeView: View {
                             gradient: [.antiqueGold, .brownLeather]
                         )
                         
-                        ListThemaView()
+                        // TODO: - 로딩 중 상태 표시
+                        ThemeListView()
                             .environmentObject(userAuthManager)
                             .environmentObject(userViewModel)
                             .environmentObject(themesViewModel)
@@ -73,7 +73,7 @@ struct HomeView: View {
                                 .scaleEffect(1.2)
                                 .tint(.brownLeather)
                         } else {
-                            horizontalBookScroll()
+                            RandomBookListView()
                                 .frame(height: 320)
                         }
                     }
@@ -86,12 +86,26 @@ struct HomeView: View {
                 await refreshContent()
             }
         }
-        .navigationBarItems(
-            leading: navBarLogo(),
-            trailing: navBarActions()
-        )
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                navBarLogo()
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                navBarActions()
+            }
+        }
     }
     
+    // MARK: - Private Methods
+    // TODO: - 비동기적으로 처리
+    private func refreshContent() async {
+        booksViewModel.getRandomBooks()
+        storiesViewModel.refreshBookStories(type: .public)
+        themesViewModel.refreshThemes(type: .public)
+    }
+    
+    // MARK: - UI Components
+
     private var backgroundColor: some View {
         LinearGradient(
             gradient: Gradient(colors: [
@@ -137,20 +151,7 @@ struct HomeView: View {
         .padding(.horizontal, 20)
     }
     
-    private func refreshContent() async {
-        // TODO: - 비동기적으로 처리
-        booksViewModel.getRandomBooks()
-        storiesViewModel.refreshBookStories(type: .public)
-        themesViewModel.refreshThemes(type: .public)
-    }
-
-    // MARK: - Components
-    
-    func spacer(height: CGFloat) -> some View {
-        Spacer().frame(height: height)
-    }
-
-    func sectionHeader(title: String, gradient: [Color]) -> some View {
+    private func sectionHeader(title: String, gradient: [Color]) -> some View {
         HStack(spacing: 15) {
             // 제목
             Text(title)
@@ -174,87 +175,7 @@ struct HomeView: View {
         .padding(.horizontal, 30)
     }
     
-    func horizontalBookScroll() -> some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 20) {
-                ForEach(Array(booksViewModel.books.enumerated()), id: \.element.id) { _, book in
-                    
-                    // TODO: - Book DetailView 뷰모델 주입
-                    
-                    NavigationLink(destination: BookDetailView(book: book)
-                        .environmentObject(userAuthManager)
-                        .environmentObject(themesViewModel)
-                        .environmentObject(storiesViewModel)
-                    ) {
-                        bookCard(book: book)
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                }
-            }
-            .padding(.horizontal, 30)
-        }
-        .onAppear(perform: booksViewModel.getRandomBooksIfNeeded)
-    }
-    
-    private func bookCard(book: Book) -> some View {
-        VStack(alignment: .center, spacing: 12) {
-            ZStack(alignment: .topLeading) {
-                // 책 이미지
-                WebImage(url: URL(string: book.bookImageURL ?? ""))
-                    .placeholder {
-                        Rectangle()
-                            .fill(Color.paperBeige.opacity(0.3))
-                            .overlay(
-                                Image(systemName: "book.closed")
-                                    .foregroundColor(.brownLeather)
-                                    .font(.largeTitle)
-                            )
-                    }
-                    .resizable()
-                    .indicator(.activity)
-                    .transition(.fade(duration: 0.5))
-                    .scaledToFill()
-                    .frame(width: 120, height: 180)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color.antiqueGold.opacity(0.4), lineWidth: 1)
-                    )
-                    .shadow(color: .brownLeather.opacity(0.3), radius: 8, x: 0, y: 4)
-            }
-            
-            VStack(alignment: .center, spacing: 6) {
-                Text(book.title ?? "제목 없음")
-                    .font(.scoreDream(.medium, size: .caption))
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
-                    .foregroundColor(.primaryText)
-                
-                Text(book.author?.joined(separator: ", ") ?? "")
-                    .font(.scoreDream(.light, size: .footnote))
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
-                    .foregroundColor(.secondaryText)
-            }
-            .frame(width: 140)
-        }
-        .padding(.horizontal, 10)
-        .scaleEffect(1.0)
-        .animation(.easeInOut(duration: 0.2), value: booksViewModel.isLoading)
-    }
-    
-    func navBarLogo() -> some View {
-        HStack(spacing: 8) {
-            Image("logo")
-                .resizable().scaledToFit().frame(height: 24)
-            
-            Text("문장모아")
-                .font(.custom("EF_jejudoldam", size: 17))
-                .foregroundStyle(Color.appAccent)
-        }
-    }
-    
-    private func navBarActions() -> some View {
+    public func navBarActions() -> some View {
         HStack(spacing: 15) {
             // 테마 토글 버튼
             ThemeToggleButton()
@@ -272,7 +193,7 @@ struct HomeView: View {
             
             NavigationLink(destination: SearchKeywordView()
                 .environmentObject(userViewModel)
-                .environmentObject(myStoriesViewModel)
+                .environmentObject(storiesViewModel)
                 .environmentObject(userAuthManager)
             ) {
                 Image(systemName: "magnifyingglass")
@@ -282,3 +203,4 @@ struct HomeView: View {
         }
     }
 }
+

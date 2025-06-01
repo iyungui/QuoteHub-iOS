@@ -1,5 +1,5 @@
 //
-//  ListThemaView.swift
+//  ThemeListView.swift
 //  QuoteHub
 //
 //  Created by 이융의 on 11/11/23.
@@ -8,27 +8,25 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
-struct ListThemaView: View {
-    @ObservedObject var viewModel: FolderViewModel
-    
-    @EnvironmentObject var myFolderViewModel: MyFolderViewModel
-    @EnvironmentObject var userViewModel: UserViewModel
-    @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
-    @EnvironmentObject var userAuthManager: UserAuthenticationManager
+struct ThemeListView: View {
+    @EnvironmentObject private var themesViewModel: ThemesViewModel
+    @EnvironmentObject private var userViewModel: UserViewModel
+    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
+    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 20) {
-                ForEach(Array(viewModel.folder.enumerated()), id: \.element.id) { index, folder in
-                    FolderView(folder: folder, index: index)
-                        .environmentObject(viewModel)
-                        .environmentObject(myFolderViewModel)
+                ForEach(Array(themesViewModel.themes.enumerated()), id: \.element.id) { index, folder in
+                    // TODO: - index 파라미터 지우기
+                    ThemeView(theme: folder, index: index)
+                        .environmentObject(themesViewModel)
                         .environmentObject(userViewModel)
-                        .environmentObject(myStoriesViewModel)
+                        .environmentObject(storiesViewModel)
                         .environmentObject(userAuthManager)
                 }
                 
-                if !viewModel.isLastPage {
+                if !themesViewModel.isLastPage {
                     loadingIndicator()
                 }
             }
@@ -50,20 +48,19 @@ struct ListThemaView: View {
         }
         .frame(width: 120)
         .onAppear {
-            viewModel.loadMoreIfNeeded(currentItem: viewModel.folder.last)
+            themesViewModel.loadMoreIfNeeded(currentItem: themesViewModel.themes.last)
         }
     }
 }
 
-struct FolderView: View {
-    let folder: Folder
+struct ThemeView: View {
+    let theme: Folder
     let index: Int
     
-    @EnvironmentObject var viewModel: FolderViewModel
-    @EnvironmentObject var myFolderViewModel: MyFolderViewModel
-    @EnvironmentObject var userViewModel: UserViewModel
-    @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
-    @EnvironmentObject var userAuthManager: UserAuthenticationManager
+    @EnvironmentObject private var themesViewModel: ThemesViewModel
+    @EnvironmentObject private var userViewModel: UserViewModel
+    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
+    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
 
     private var themeGradient: [Color] {
         let gradients: [[Color]] = [
@@ -97,7 +94,7 @@ struct FolderView: View {
     }
     
     private var backgroundImage: some View {
-        WebImage(url: URL(string: folder.folderImageURL))
+        WebImage(url: URL(string: theme.folderImageURL))
             .placeholder {
                 Rectangle()
                     .fill(
@@ -143,7 +140,7 @@ struct FolderView: View {
             // 하단 텍스트 정보
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
-                    Text(folder.name)
+                    Text(theme.name)
                         .font(.title3)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
@@ -157,7 +154,7 @@ struct FolderView: View {
                         .foregroundColor(.white.opacity(0.8))
                 }
                 
-                Text(folder.description)
+                Text(theme.description)
                     .font(.caption)
                     .foregroundColor(.white.opacity(0.9))
                     .lineLimit(2)
@@ -166,7 +163,7 @@ struct FolderView: View {
                 HStack {
                     Spacer()
                     
-                    Text(folder.createdAtDate)
+                    Text(theme.createdAtDate)
                         .font(.scoreDream(.light, size: .footnote))
                         .foregroundColor(.white.opacity(0.7))
                 }
@@ -176,10 +173,12 @@ struct FolderView: View {
         }
     }
     
+    // TODO: - userProfile View 구조체로 변경하기
+    
     private var userProfileView: some View {
         HStack(spacing: 8) {
             // 프로필 이미지
-            if let url = URL(string: folder.userId.profileImage), !folder.userId.profileImage.isEmpty {
+            if let url = URL(string: theme.userId.profileImage), !theme.userId.profileImage.isEmpty {
                 WebImage(url: url)
                     .placeholder {
                         Circle()
@@ -198,7 +197,7 @@ struct FolderView: View {
                         Circle()
                             .stroke(Color.white.opacity(0.5), lineWidth: 1)
                     )
-            } else {
+            } else {    // 이미지 없을 때
                 Circle()
                     .fill(Color.white.opacity(0.3))
                     .frame(width: 24, height: 24)
@@ -209,7 +208,7 @@ struct FolderView: View {
                     )
             }
             
-            Text(folder.userId.nickname)
+            Text(theme.userId.nickname)
                 .font(.scoreDream(.medium, size: .footnote))
                 .fontWeight(.medium)
                 .foregroundColor(.white.opacity(0.9))
@@ -219,15 +218,18 @@ struct FolderView: View {
     }
     
     private var destinationView: some View {
-        if folder.userId.id == userViewModel.user?.id {
-            return AnyView(ThemaView(folderId: folder.id)
-                .environmentObject(myFolderViewModel)
+        if theme.userId.id == userViewModel.user?.id {
+            return AnyView(ThemeDetailView(theme: theme)
+                .environmentObject(themesViewModel)
                 .environmentObject(userViewModel)
-                .environmentObject(myStoriesViewModel)
+                .environmentObject(storiesViewModel)
+                .environmentObject(userAuthManager))
             )
         } else {
-            return AnyView(PublicThemaView(folder: folder)
-                .environmentObject(viewModel)
+            return AnyView(ThemeDetailView(theme: theme)
+                .environmentObject(themesViewModel)
+                .environmentObject(storiesViewModel)
+                .environmentObject(userViewModel)
                 .environmentObject(userAuthManager))
         }
     }
