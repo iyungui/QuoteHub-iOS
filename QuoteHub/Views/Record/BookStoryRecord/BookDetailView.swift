@@ -8,14 +8,14 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
+/// 북스토리 기록 2: 책 상세 뷰
 struct BookDetailView: View {
     let book: Book
-    @State private var navigateToRecordView = false
-    @Environment(\.colorScheme) var colorScheme
-    @EnvironmentObject var userAuthManager: UserAuthenticationManager
     @State private var showAlert: Bool = false
-    @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
-
+    @Environment(\.colorScheme) var colorScheme
+    
+    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
+    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
 
     var body: some View {
         ScrollView {
@@ -36,6 +36,7 @@ struct BookDetailView: View {
             .padding()
         }
         .alert(isPresented: $showAlert) {
+            // TODO: alert 모디파이어로 변경
              Alert(
                  title: Text("외부 사이트로 이동"),
                  message: Text("이 책에 대한 추가 정보를 외부 사이트에서 제공합니다. 외부 링크를 통해 해당 정보를 보시겠습니까?"),
@@ -72,6 +73,7 @@ struct BookDetailView: View {
             }
         }
     }
+    
     private var bookTitle: some View {
         Text(book.title ?? "No title")
             .font(.title2)
@@ -129,17 +131,16 @@ struct BookDetailView: View {
     }
 
     private var recordLinkButton: some View {
-        NavigationLink(destination: RecordView(book: book).environmentObject(myStoriesViewModel), isActive: $navigateToRecordView) {
-            Button(action: {
-                navigateToRecordView = true
-            }) {
-                HStack {
-                    Text("북스토리 기록")
-                        .foregroundColor(colorScheme == .dark ? .white : .black)
-                    Image(systemName: "highlighter")
-                }
+        NavigationLink(
+            destination: RecordView(book: book)
+//                .environmentObject(userAuthManager)
+                .environmentObject(storiesViewModel)
+        ) {
+            HStack {
+                Text("북스토리 기록")
+                    .foregroundColor(colorScheme == .dark ? .white : .black)
+                Image(systemName: "highlighter")
             }
-            .buttonStyle(MyActionButtonStyle())
         }
     }
 

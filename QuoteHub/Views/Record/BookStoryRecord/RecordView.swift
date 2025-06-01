@@ -8,50 +8,66 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
+/// 북스토리 기록 3: 북스토리 기록 뷰
 struct RecordView: View {
     
-    @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
-
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @State private var showAlert: Bool = false
-    @State private var alertMessage: String = ""
+    // MARK: - PROPERTIES
     
     let book: Book
+
+    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
+
+    @Environment(\.dismiss) private var dismiss
     
+    @State private var showAlert: Bool = false
+    @State private var alertMessage: String = ""
+        
+    // 키워드 입력
     @State private var keywords: [String] = []
+    // 인용구 입력
+    @State private var quote: String = ""
+    // 컨텐츠 (느낀점, 생각) 입력
+    @State private var content: String = ""
+
+    // 텍스트 인풋 관련
     @State private var currentInput: String = ""
     @State private var isShowingDuplicateWarning = false
-    
-    @State private var quote: String = ""
+    @State private var feedbackMessage: String? = nil
+
+    // placeholder
     let quotePlaceholder: String = "간직하고 싶은 문장을 기록해보세요."
-    
+    let contentPlaceholder: String = "문장을 읽고 떠오른 생각을 기록해보세요."
+
+    // 이미지 피커
     @State private var showingImagePicker = false
     @State private var showingCamera = false
     @State private var showingGallery = false
     @State private var selectedImages: [UIImage] = []
     @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
     
-    @State private var content: String = ""
-    let contentPlaceholder: String = "문장을 읽고 떠오른 생각을 기록해보세요."
-    
+    // 북스토리 공개 여부 토글
     @State private var isPublic: Bool = true
-    @State private var folderIds: [String] = []
     
+    // 어느 테마에 북스토리 올릴 것인지
+    @State private var themeIds: [String] = []
+    
+    // focus state
     enum Field: Hashable {
         case keywords
         case quote
         case content
     }
+    @FocusState private var focusField: Field?
     
+    // 알림 관련
     enum AlertType {
         case authorized
         case make
     }
+    
     @State private var alertType: AlertType = .authorized
     
-    @FocusState private var focusField: Field?
-    
-    @State private var feedbackMessage: String? = nil
+    // MARK: - BODY
     
     var body: some View {
         ScrollView {
@@ -151,7 +167,7 @@ struct RecordView: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .focused($focusField, equals: .keywords)
                     .submitLabel(.done)
-                    .onChange(of: currentInput) { newValue in
+                    .onChange(of: currentInput) { _, newValue in
                         if newValue.count > 8 {
                             currentInput = String(newValue.prefix(8))
                         }
@@ -292,7 +308,7 @@ struct RecordView: View {
     
     var selectThemaView: some View {
         HStack {
-            NavigationLink(destination: SetThemaView(selectedFolderIds: $folderIds)) {
+            NavigationLink(destination: SetThemeView(selectedThemeIds: $themeIds)) {
                 Text("테마 선택하기")
                     .font(.callout)
                     .fontWeight(.semibold)
@@ -356,16 +372,16 @@ struct RecordView: View {
     var buttonView: some View {
         Button(action: {
             if filledField(images: selectedImages, quote: quote, content: content, keywords: keywords) {
-                myStoriesViewModel.createBookStory(images: selectedImages, bookId: book.id, quote: quote, content: content, isPublic: isPublic, keywords: keywords, folderIds: folderIds) { isSuccess in
+                storiesViewModel.createBookStory(images: selectedImages, bookId: book.id, quote: quote, content: content, isPublic: isPublic, keywords: keywords, folderIds: themeIds) { isSuccess in
                     if isSuccess {
-                        self.alertType = .make
-                        self.alertMessage = "북스토리가 성공적으로 등록되었어요!"
-                        self.showAlert = true
-                        self.presentationMode.wrappedValue.dismiss()
+                        alertType = .make
+                        alertMessage = "북스토리가 성공적으로 등록되었어요!"
+                        showAlert = true
+                        dismiss()
                     } else {
-                        self.alertType = .make
-                        self.alertMessage = "북스토리 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
-                        self.showAlert = true
+                        alertType = .make
+                        alertMessage = "북스토리 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+                        showAlert = true
                     }
                 }
             } else {

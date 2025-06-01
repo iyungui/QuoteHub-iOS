@@ -244,7 +244,7 @@ struct BookStoryDetailView: View {
         } else {
             // 친구 스토리 - 친구 프로필 정보 표시 + NavigationLink
             NavigationLink(
-                destination: LibraryView(friendId: story.userId)
+                destination: LibraryView(user: story.userId)
                 .environmentObject(storiesViewModel)
                 .environmentObject(userViewModel)
                 .environmentObject(userAuthManager)

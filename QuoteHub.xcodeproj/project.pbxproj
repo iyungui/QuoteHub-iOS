@@ -91,7 +91,7 @@
 		CE8C487F2DEBF39D003188ED /* BookDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C487A2DEBF39D003188ED /* BookDetailView.swift */; };
 		CE8C48802DEBF39D003188ED /* RecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C487B2DEBF39D003188ED /* RecordView.swift */; };
 		CE8C48812DEBF39D003188ED /* SearchBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C487C2DEBF39D003188ED /* SearchBookView.swift */; };
-		CE8C48822DEBF39D003188ED /* SetThemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C487D2DEBF39D003188ED /* SetThemaView.swift */; };
+		CE8C48822DEBF39D003188ED /* SetThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C487D2DEBF39D003188ED /* SetThemeView.swift */; };
 		CE8C48862DEBF39F003188ED /* MakeThemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48832DEBF39F003188ED /* MakeThemaView.swift */; };
 		CE8C48872DEBF39F003188ED /* SetAndMakeThemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48842DEBF39F003188ED /* SetAndMakeThemaView.swift */; };
 		CE8C488A2DEC3BF2003188ED /* LibraryThemesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48892DEC3BF2003188ED /* LibraryThemesListView.swift */; };
@@ -183,7 +183,7 @@
 		CE8C487A2DEBF39D003188ED /* BookDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailView.swift; sourceTree = "<group>"; };
 		CE8C487B2DEBF39D003188ED /* RecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordView.swift; sourceTree = "<group>"; };
 		CE8C487C2DEBF39D003188ED /* SearchBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBookView.swift; sourceTree = "<group>"; };
-		CE8C487D2DEBF39D003188ED /* SetThemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetThemaView.swift; sourceTree = "<group>"; };
+		CE8C487D2DEBF39D003188ED /* SetThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetThemeView.swift; sourceTree = "<group>"; };
 		CE8C48832DEBF39F003188ED /* MakeThemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeThemaView.swift; sourceTree = "<group>"; };
 		CE8C48842DEBF39F003188ED /* SetAndMakeThemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetAndMakeThemaView.swift; sourceTree = "<group>"; };
 		CE8C48892DEC3BF2003188ED /* LibraryThemesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryThemesListView.swift; sourceTree = "<group>"; };
@@ -482,10 +482,10 @@
 		CE8C487E2DEBF39D003188ED /* BookStoryRecord */ = {
 			isa = PBXGroup;
 			children = (
+				CE8C487C2DEBF39D003188ED /* SearchBookView.swift */,
 				CE8C487A2DEBF39D003188ED /* BookDetailView.swift */,
 				CE8C487B2DEBF39D003188ED /* RecordView.swift */,
-				CE8C487C2DEBF39D003188ED /* SearchBookView.swift */,
-				CE8C487D2DEBF39D003188ED /* SetThemaView.swift */,
+				CE8C487D2DEBF39D003188ED /* SetThemeView.swift */,
 			);
 			path = BookStoryRecord;
 			sourceTree = "<group>";
@@ -630,7 +630,7 @@
 				CE8C487F2DEBF39D003188ED /* BookDetailView.swift in Sources */,
 				CE8C48802DEBF39D003188ED /* RecordView.swift in Sources */,
 				CE8C48812DEBF39D003188ED /* SearchBookView.swift in Sources */,
-				CE8C48822DEBF39D003188ED /* SetThemaView.swift in Sources */,
+				CE8C48822DEBF39D003188ED /* SetThemeView.swift in Sources */,
 				CE8C48362DEA8DAE003188ED /* UpdateStoryView.swift in Sources */,
 				CE8C48392DEA8DAE003188ED /* ThemeDetailView.swift in Sources */,
 				CE8C483A2DEA8DAE003188ED /* UpdateThemaView.swift in Sources */,

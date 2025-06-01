@@ -8,23 +8,26 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
+/// 북스토리 기록 1: 책검색 뷰 (책 검색, 결과 리스트 뷰 - 무한스크롤로 구현)
 struct SearchBookView: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.presentationMode) var presentationMode
-    @StateObject var viewModel = BooksViewModel()
-    @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
+    
+    // viewmodel
+    @StateObject var booksViewModel = BooksViewModel()
+    @EnvironmentObject var storiesViewModel: BookStoriesViewModel
     @EnvironmentObject var userAuthManager: UserAuthenticationManager
 
-    
     @State private var searchText: String = ""
     
+    // focusField
     enum Field: Hashable {
         case searchText
     }
     @FocusState private var focusField: Field?
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack(spacing: 20) {
                 searchField
                 Group {
@@ -33,8 +36,13 @@ struct SearchBookView: View {
             }
             .padding()
             .navigationBarTitle("책 검색", displayMode: .inline)
-            .navigationBarItems(leading: backButton)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    backButton
+                }
+            }
             .onAppear {
+                // TODO: - 이 부분 수정 (삭제)
                 UITextField.appearance().clearButtonMode = .whileEditing
             }
         }
@@ -49,13 +57,6 @@ struct SearchBookView: View {
         }
     }
     
-    private func searchBook() {
-        viewModel.books.removeAll()
-        viewModel.resetCurrentPage()
-        viewModel.isEnd = false
-        viewModel.fetchBooks(query: searchText)
-    }
-
     private var searchField: some View {
         HStack {
             TextField("제목이나 저자명을 입력하세요", text: $searchText)
@@ -84,22 +85,23 @@ struct SearchBookView: View {
         }
     }
 
+    // result list view (책 검색 결과)
     private var resultsListView: some View {
         ScrollView {
             LazyVStack {
-                if viewModel.books.isEmpty && viewModel.hasSearched {
-                    Text("검색결과가 없습니다.")
-                        .foregroundColor(.gray)
-                        .font(.headline)
-                        .padding(.top)
+                if booksViewModel.books.isEmpty && booksViewModel.hasSearched {
+                    ContentUnavailableView("", systemImage: "books.vertical.fill", description: Text("검색결과가 없습니다."))
                 } else {
-                    ForEach(Array(viewModel.books.enumerated()), id: \.element.id) { index, book in
-                        bookItemView(book: book).environmentObject(viewModel).environmentObject(myStoriesViewModel).environmentObject(userAuthManager)
+                    ForEach(Array(booksViewModel.books.enumerated()), id: \.element.id) { index, book in
+                        BookRowView(book: book)
+                            .environmentObject(booksViewModel)
+                            .environmentObject(storiesViewModel)
+                            .environmentObject(userAuthManager)
                             .onAppear {
                                 // 마지막 책이 화면에 나타날 때
-                                if index == viewModel.books.count - 1 && !viewModel.isEnd {
+                                if index == booksViewModel.books.count - 1 && !booksViewModel.isEnd {
                                     // 추가 데이터 로드
-                                    viewModel.fetchBooks(query: searchText)
+                                    booksViewModel.fetchBooks(query: searchText)
                                 }
                             }
                     }
@@ -107,16 +109,30 @@ struct SearchBookView: View {
             }
         }
     }
+    
+    private func searchBook() {
+        booksViewModel.books.removeAll()
+        booksViewModel.resetCurrentPage()
+        booksViewModel.isEnd = false
+        booksViewModel.fetchBooks(query: searchText)
+    }
 }
 
-struct bookItemView: View {
-    var book: Book
-    @EnvironmentObject var viewModel: BooksViewModel
-    @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
-    @EnvironmentObject var userAuthManager: UserAuthenticationManager
+// MARK: - BOOK ROW VIEW
 
+struct BookRowView: View {
+    var book: Book
+    
+    @EnvironmentObject private var booksViewModel: BooksViewModel
+    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
+    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
+    
     var body: some View {
-        NavigationLink(destination: (BookDetailView(book: book)).environmentObject(myStoriesViewModel).environmentObject(userAuthManager)) {
+        NavigationLink(
+            destination: BookDetailView(book: book)
+                .environmentObject(storiesViewModel)
+                .environmentObject(userAuthManager)
+        ) {
             HStack {
                 if let imageUrl = book.bookImageURL, !imageUrl.isEmpty {
                     WebImage(url: URL(string: imageUrl))
