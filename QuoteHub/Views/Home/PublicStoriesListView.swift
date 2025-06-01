@@ -52,6 +52,8 @@ struct PublicStoriesListView: View {
     }
 }
 
+// MARK: - BOOK STORY VIEW
+
 struct StoryView: View {
     let story: BookStory
     private let cardWidth: CGFloat = 280

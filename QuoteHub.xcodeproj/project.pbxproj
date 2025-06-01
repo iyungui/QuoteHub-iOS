@@ -77,7 +77,7 @@
 		CE8C48312DEA8DAE003188ED /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C480B2DEA8DAE003188ED /* UserProfileView.swift */; };
 		CE8C48322DEA8DAE003188ED /* VersionInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C480C2DEA8DAE003188ED /* VersionInfoView.swift */; };
 		CE8C48332DEA8DAE003188ED /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C480E2DEA8DAE003188ED /* CommentView.swift */; };
-		CE8C48342DEA8DAE003188ED /* friendBookStoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C480F2DEA8DAE003188ED /* friendBookStoryView.swift */; };
+		CE8C48342DEA8DAE003188ED /* BookStoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C480F2DEA8DAE003188ED /* BookStoryDetailView.swift */; };
 		CE8C48352DEA8DAE003188ED /* myBookStoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48102DEA8DAE003188ED /* myBookStoryView.swift */; };
 		CE8C48362DEA8DAE003188ED /* UpdateStoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48112DEA8DAE003188ED /* UpdateStoryView.swift */; };
 		CE8C48372DEA8DAE003188ED /* FriendThemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48132DEA8DAE003188ED /* FriendThemaView.swift */; };
@@ -170,7 +170,7 @@
 		CE8C480B2DEA8DAE003188ED /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		CE8C480C2DEA8DAE003188ED /* VersionInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionInfoView.swift; sourceTree = "<group>"; };
 		CE8C480E2DEA8DAE003188ED /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
-		CE8C480F2DEA8DAE003188ED /* friendBookStoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = friendBookStoryView.swift; sourceTree = "<group>"; };
+		CE8C480F2DEA8DAE003188ED /* BookStoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookStoryDetailView.swift; sourceTree = "<group>"; };
 		CE8C48102DEA8DAE003188ED /* myBookStoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myBookStoryView.swift; sourceTree = "<group>"; };
 		CE8C48112DEA8DAE003188ED /* UpdateStoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateStoryView.swift; sourceTree = "<group>"; };
 		CE8C48132DEA8DAE003188ED /* FriendThemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendThemaView.swift; sourceTree = "<group>"; };
@@ -433,15 +433,15 @@
 			path = Setting;
 			sourceTree = "<group>";
 		};
-		CE8C48122DEA8DAE003188ED /* StoryView */ = {
+		CE8C48122DEA8DAE003188ED /* BookStoryView */ = {
 			isa = PBXGroup;
 			children = (
 				CE8C480E2DEA8DAE003188ED /* CommentView.swift */,
-				CE8C480F2DEA8DAE003188ED /* friendBookStoryView.swift */,
+				CE8C480F2DEA8DAE003188ED /* BookStoryDetailView.swift */,
 				CE8C48102DEA8DAE003188ED /* myBookStoryView.swift */,
 				CE8C48112DEA8DAE003188ED /* UpdateStoryView.swift */,
 			);
-			path = StoryView;
+			path = BookStoryView;
 			sourceTree = "<group>";
 		};
 		CE8C48172DEA8DAE003188ED /* ThemaView */ = {
@@ -464,7 +464,7 @@
 				CE8C47FF2DEA8DAE003188ED /* My Libarary */,
 				CE8C48062DEA8DAE003188ED /* Record */,
 				CE8C480D2DEA8DAE003188ED /* Setting */,
-				CE8C48122DEA8DAE003188ED /* StoryView */,
+				CE8C48122DEA8DAE003188ED /* BookStoryView */,
 				CE8C48172DEA8DAE003188ED /* ThemaView */,
 				CE8C48182DEA8DAE003188ED /* ReportSheetView.swift */,
 				CE8C48192DEA8DAE003188ED /* WebView.swift */,
@@ -615,7 +615,7 @@
 				CE8C48322DEA8DAE003188ED /* VersionInfoView.swift in Sources */,
 				CE8C48332DEA8DAE003188ED /* CommentView.swift in Sources */,
 				CE8C48712DEB5190003188ED /* ProfileView.swift in Sources */,
-				CE8C48342DEA8DAE003188ED /* friendBookStoryView.swift in Sources */,
+				CE8C48342DEA8DAE003188ED /* BookStoryDetailView.swift in Sources */,
 				CE8C48352DEA8DAE003188ED /* myBookStoryView.swift in Sources */,
 				CE8C48362DEA8DAE003188ED /* UpdateStoryView.swift in Sources */,
 				CE8C48372DEA8DAE003188ED /* FriendThemaView.swift in Sources */,

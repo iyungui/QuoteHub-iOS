@@ -53,6 +53,8 @@ struct ThemeListView: View {
     }
 }
 
+// MARK: - THEME VIEW
+
 struct ThemeView: View {
     let theme: Folder
     let index: Int

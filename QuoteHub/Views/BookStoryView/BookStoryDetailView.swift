@@ -1,5 +1,5 @@
 //
-//  friendBookStoryView.swift
+//  BookStoryDetailView.swift
 //  QuoteHub
 //
 //  Created by 이융의 on 2023/09/12.
@@ -14,7 +14,7 @@ enum LinkAlertType {
     case blocked
 }
 
-struct friendBookStoryView: View {
+struct BookStoryDetailView: View {
     let story: BookStory
     @EnvironmentObject var viewModel: BookStoriesViewModel
 
