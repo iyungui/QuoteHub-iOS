@@ -87,14 +87,14 @@ struct BookStoryDetailView: View {
             }
         }
         
-        //        .toolbar {
-        //            ToolbarItem(placement: .topBarTrailing) {
-        //                navBarButton
-        //            }
-        //        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                navBarButton
+            }
+        }
         
         // 북스토리 신고, 차단 액션 시트
-        //        .confirmationDialog("", isPresented: $showActionSheet) { actionSheetView }
+        .confirmationDialog("", isPresented: $showActionSheet) { actionSheetView }
         
         // 알림
         .alert(isPresented: $showAlert) { alertView }
@@ -472,51 +472,46 @@ struct BookStoryDetailView: View {
             )
         }
     }
-    private var actionSheetView: ActionSheet {
+    
+    @ViewBuilder
+    private var actionSheetView: some View {
         if isMyStory {
             // 내 스토리 - 편집/삭제
-            return ActionSheet(title: Text("선택"), buttons: [
-                .default(Text("수정하기"), action: {
-                    NavigationLink(
-                        // TODO: - UpdateStoryView
-                        //                        destination: UpdateStoryView(storyId: story.id)
-                        //                            .environmentObject(storiesViewModel)
-                        //                            .environmentObject(userViewModel)
-                        destination: EmptyView()
-                    ) {
-                        EmptyView()
+            Button("수정하기") {
+                // TODO: - UpdateStoryView 네비게이션 로직
+            }
+            
+            Button("삭제하기", role: .destructive) {
+                storiesViewModel.deleteBookStory(storyID: story.id) { isSuccess in
+                    if isSuccess {
+                        dismiss()
                     }
-                }),
-                .destructive(Text("삭제하기"), action: {
-                    storiesViewModel.deleteBookStory(storyID: story.id) { isSuccess in
-                        if isSuccess {
-                            dismiss()
-                        }
-                    }
-                }),
-                .cancel()
-            ])
+                }
+            }
+            
+            Button("취소", role: .cancel) { }
+            
         } else {
             // 친구 스토리 - 차단/신고
-            return ActionSheet(title: Text("선택"), buttons: [
-                .default(Text("차단하기"), action: {
-                    if userAuthManager.isUserAuthenticated {
-                        blockUser()
-                    } else {
-                        alertType = .loginRequired
-                        showAlert = true
-                    }
-                }),
-                .destructive(Text("신고하기"), action: {
-                    if userAuthManager.isUserAuthenticated {
-                        showReportSheet = true
-                    } else {
-                        alertType = .loginRequired
-                        showAlert = true
-                    }
-                }),
-                .cancel()
-            ])
+            Button("차단하기") {
+                if userAuthManager.isUserAuthenticated {
+                    blockUser()
+                } else {
+                    alertType = .loginRequired
+                    showAlert = true
+                }
+            }
+            
+            Button("신고하기", role: .destructive) {
+                if userAuthManager.isUserAuthenticated {
+                    showReportSheet = true
+                } else {
+                    alertType = .loginRequired
+                    showAlert = true
+                }
+            }
+            
+            Button("취소", role: .cancel) { }
         }
     }
 }

@@ -12,7 +12,7 @@ import SDWebImageSwiftUI
 struct RandomBookListView: View {
     @EnvironmentObject private var booksViewModel: RandomBooksViewModel
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
-    @EnvironmentObject private var themesViewModel: ThemesViewModel
+//    @EnvironmentObject private var themesViewModel: ThemesViewModel
     @EnvironmentObject private var userAuthManager: UserAuthenticationManager
 
     var body: some View {
@@ -22,7 +22,7 @@ struct RandomBookListView: View {
                     
                     NavigationLink(destination: BookDetailView(book: book)
                         .environmentObject(userAuthManager)
-                        .environmentObject(themesViewModel)
+//                        .env YironmentObject(themesViewModel)
                         .environmentObject(storiesViewModel)
                     ) {
                         BookCard(book: book).environmentObject(booksViewModel)

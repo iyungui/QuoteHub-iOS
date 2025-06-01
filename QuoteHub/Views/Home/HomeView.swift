@@ -75,6 +75,9 @@ struct HomeView: View {
                                 .tint(.brownLeather)
                         } else {
                             RandomBookListView()
+                                .environmentObject(booksViewModel)
+                                .environmentObject(storiesViewModel)
+                                .environmentObject(userAuthManager)
                                 .frame(height: 320)
                         }
                     }

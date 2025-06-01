@@ -18,7 +18,9 @@ struct LibraryView: View {
     let user: User?
     
     // 내 라이브러리인지 친구 라이브러리인지 구분
-    var isMyLibaray: Bool { user == nil }   // friendId 가 nil 이면, 내 라이브러리
+    var isMyLibaray: Bool {
+        return user == nil
+    }   // friendId 가 nil 이면, 내 라이브러리
     
     var loadType: LoadType {
         if !isMyLibaray {
@@ -69,18 +71,18 @@ struct LibraryView: View {
                 mainContent
             }
         }
-//        /// 툴바
-//        .toolbar {
-//            ToolbarItemGroup(placement: .topBarLeading) {
-//                if isMyLibaray { myLibraryNavBarItems }
-//                else { friendLibraryNavBarItems }
-//            }
-//        }
+        /// 툴바
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                currentNavBarItems
+            }
+        }
+        
         /// 알림창 (비로그인, 오류, 블럭?)
         .alert(isPresented: $showAlert) { alertView }
         
         /// 차단, 신고하기 버튼 시트
-//        .confirmationDialog(Text(""), isPresented: $showActionSheet) { actionSheetView }
+        .confirmationDialog(Text(""), isPresented: $showActionSheet) { actionSheetView }
         
         /// 유저 신고하기 창
         .sheet(isPresented: $showReportSheet) {
@@ -155,6 +157,15 @@ struct LibraryView: View {
                     .environmentObject(storiesViewModel)
                     .environmentObject(userAuthManager)
             }
+        }
+    }
+    
+    @ViewBuilder
+    private var currentNavBarItems: some View {
+        if isMyLibaray {
+            myLibraryNavBarItems
+        } else {
+            friendLibraryNavBarItems
         }
     }
     
@@ -239,26 +250,27 @@ struct LibraryView: View {
         }
     }
     
-    private var actionSheetView: ActionSheet {
-        ActionSheet(title: Text("선택"), buttons: [
-            .default(Text("차단하기"), action: {
-                if userAuthManager.isUserAuthenticated {
-                    blockUser()
-                } else {
-                    alertType = .loginRequired
-                    showAlert = true
-                }
-            }),
-            .destructive(Text("신고하기"), action: {
-                if userAuthManager.isUserAuthenticated {
-                    showReportSheet = true
-                } else {
-                    alertType = .loginRequired
-                    showAlert = true
-                }
-            }),
-            .cancel()
-        ])
+    @ViewBuilder
+    private var actionSheetView: some View {
+        Button("차단하기") {
+            if userAuthManager.isUserAuthenticated {
+                blockUser()
+            } else {
+                alertType = .loginRequired
+                showAlert = true
+            }
+        }
+        
+        Button("신고하기", role: .destructive) {
+            if userAuthManager.isUserAuthenticated {
+                showReportSheet = true
+            } else {
+                alertType = .loginRequired
+                showAlert = true
+            }
+        }
+        
+        Button("취소", role: .cancel) { }
     }
     
     private func blockUser() {

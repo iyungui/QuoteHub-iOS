@@ -40,6 +40,7 @@ struct ContentView: View {
             Group {
                 if authManager.isUserAuthenticated || authManager.isOnboardingComplete {
                     MainView()
+                        .environmentObject(userViewModel)
                         .environmentObject(authManager)
                         .environmentObject(storiesViewModel)
                         .environmentObject(themesViewModel)

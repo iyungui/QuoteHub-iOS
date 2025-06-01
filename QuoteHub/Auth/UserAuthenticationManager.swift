@@ -84,7 +84,7 @@ class UserAuthenticationManager: ObservableObject {
         let refreshToken = KeyChain.read(key: "JWTRefreshToken")
         
         guard let accessToken = accessToken, let refreshToken = refreshToken else {
-            isUserAuthenticated = false
+            DispatchQueue.main.async { [weak self] in self?.isUserAuthenticated = false }
             return
         }
         
