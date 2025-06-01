@@ -10,69 +10,58 @@ import SDWebImageSwiftUI
 
 struct HomeView: View {
     @StateObject var booksViewModel = RandomBooksViewModel()
-    @StateObject var folderViewModel = FolderViewModel()
     
-    @EnvironmentObject var myFolderViewModel: MyFolderViewModel
-    
-    @EnvironmentObject var userAuthManager: UserAuthenticationManager
-    @EnvironmentObject var userViewModel: UserViewModel
-    @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
-    @StateObject var storiesViewModel = BookStoriesViewModel(mode: .public)
+    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
+    @EnvironmentObject private var themesViewModel: ThemesViewModel
+
+    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
+    @EnvironmentObject private var userViewModel: UserViewModel
     
     var body: some View {
         ZStack {
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    Color.softBeige.opacity(0.3),
-                    Color.lightPaper.opacity(0.3),
-                    Color.paperBeige.opacity(0.1)
-                ]),
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea()
+            backgroundColor
             
             ScrollView {
                 VStack(spacing: 0) {
-                    // Hero Section
-                    heroSection()
+                    /// hero 섹션
+                    heroSection
                     
                     spacer(height: 40)
                     
-                    // 최신 북스토리 섹션
+                    /// 북스토리 모아보기 섹션 (최신순)
                     VStack(spacing: 20) {
                         sectionHeader(
                             title: "북스토리 모아보기",
                             gradient: [.brownLeather, .antiqueGold]
                         )
                         
-                        ListPublicStoriesView(storiesViewModel: storiesViewModel)
-                            .environmentObject(userViewModel)
-                            .environmentObject(myStoriesViewModel)
+                        ListPublicStoriesView()
+                            .environmentObject(storiesViewModel)
                             .environmentObject(userAuthManager)
+                            .environmentObject(userViewModel)
                             .frame(height: 350)
                     }
                     
                     spacer(height: 60)
                     
-                    // 테마별 모아보기 섹션
+                    /// 테마별 모아보기 섹션
                     VStack(spacing: 20) {
                         sectionHeader(
                             title: "테마별 모아보기",
                             gradient: [.antiqueGold, .brownLeather]
                         )
                         
-                        ListThemaView(viewModel: folderViewModel)
+                        ListThemaView()
                             .environmentObject(userAuthManager)
-                            .environmentObject(myFolderViewModel)
                             .environmentObject(userViewModel)
-                            .environmentObject(myStoriesViewModel)
+                            .environmentObject(themesViewModel)
+                            .environmentObject(storiesViewModel)
                             .frame(height: 220)
                     }
 
                     spacer(height: 60)
                     
-                    // 지금 뜨고 있는 책 섹션
+                    /// 지금 뜨고 있는 책 섹션
                     VStack(spacing: 20) {
                         sectionHeader(
                             title: "지금 뜨고 있는 책",
@@ -103,8 +92,20 @@ struct HomeView: View {
         )
     }
     
-    // MARK: - Hero Section
-    private func heroSection() -> some View {
+    private var backgroundColor: some View {
+        LinearGradient(
+            gradient: Gradient(colors: [
+                Color.softBeige.opacity(0.3),
+                Color.lightPaper.opacity(0.3),
+                Color.paperBeige.opacity(0.1)
+            ]),
+            startPoint: .top,
+            endPoint: .bottom
+        )
+        .ignoresSafeArea()
+    }
+    
+    private var heroSection: some View {
         VStack(spacing: 12) {
             Text("오늘도 좋은 문장과 함께")
                 .font(.scoreDream(.bold, size: .title2))
@@ -137,9 +138,10 @@ struct HomeView: View {
     }
     
     private func refreshContent() async {
+        // TODO: - 비동기적으로 처리
         booksViewModel.getRandomBooks()
-        storiesViewModel.refreshBookStories()
-        folderViewModel.refreshFolders()
+        storiesViewModel.refreshBookStories(type: .public)
+        themesViewModel.refreshThemes(type: .public)
     }
 
     // MARK: - Components
@@ -176,10 +178,13 @@ struct HomeView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 20) {
                 ForEach(Array(booksViewModel.books.enumerated()), id: \.element.id) { _, book in
+                    
+                    // TODO: - Book DetailView 뷰모델 주입
+                    
                     NavigationLink(destination: BookDetailView(book: book)
                         .environmentObject(userAuthManager)
-                        .environmentObject(myFolderViewModel)
-                        .environmentObject(myStoriesViewModel)
+                        .environmentObject(themesViewModel)
+                        .environmentObject(storiesViewModel)
                     ) {
                         bookCard(book: book)
                     }

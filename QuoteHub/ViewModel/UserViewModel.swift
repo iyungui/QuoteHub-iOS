@@ -25,7 +25,7 @@ class UserViewModel: ObservableObject {
     static let shared = UserViewModel()
 
     // 프로필 정보 가져오기
-    func getProfile(userId: String?) {
+    func  getProfile(userId: String?) {
         isLoading = true
         userService.getProfile(userId: userId) { [weak self] result in
             DispatchQueue.main.async {

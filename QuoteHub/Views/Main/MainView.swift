@@ -24,10 +24,10 @@ struct MainView: View {
     @State private var showActionButtons: Bool = false
     @State private var activeSheet: ActiveSheet?
     
-    @EnvironmentObject var userAuthManager: UserAuthenticationManager
-    @StateObject private var userViewModel = UserViewModel()
-    @StateObject private var myStoriesViewModel = BookStoriesViewModel(mode: .myStories)
-    @StateObject private var myFolderViewModel = MyFolderViewModel()
+    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
+    @EnvironmentObject private var userViewModel: UserViewModel
+    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
+    @EnvironmentObject private var themesViewModel: ThemesViewModel
     
     var body: some View {
         NavigationStack {
@@ -35,9 +35,9 @@ struct MainView: View {
                 // 메인 콘텐츠
                 mainContent
                     .environmentObject(userAuthManager)
-                    .environmentObject(myStoriesViewModel)
                     .environmentObject(userViewModel)
-                    .environmentObject(myFolderViewModel)
+                    .environmentObject(storiesViewModel)
+                    .environmentObject(themesViewModel)
                 
                 // 플로팅 액션 버튼들
                 if showActionButtons {
@@ -100,11 +100,11 @@ struct MainView: View {
         switch sheet {
         case .search:
             SearchBookView()
-                .environmentObject(myStoriesViewModel)
+                .environmentObject(storiesViewModel)
                 .environmentObject(userAuthManager)
         case .theme:
             MakeThemaView()
-                .environmentObject(myFolderViewModel)
+                .environmentObject(themesViewModel)
         }
     }
     

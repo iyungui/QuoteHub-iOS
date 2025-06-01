@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum LoadType {
+enum LoadType: Equatable {
     case my
     case friend(String) // friendID
     case `public`

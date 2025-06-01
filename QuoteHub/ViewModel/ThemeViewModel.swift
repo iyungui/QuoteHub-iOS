@@ -8,9 +8,11 @@
 import Foundation
 import SwiftUI
 
-class ThemeViewModel: ObservableObject {
+class ThemesViewModel: ObservableObject {
     
     @Published var themes = [Folder]()
+//    @Published var myThemes = [Folder]()
+    
     @Published var isLoading = false
     @Published var isLastPage = false
     @Published var errorMessage: String?
@@ -58,7 +60,11 @@ class ThemeViewModel: ObservableObject {
                     
                     // TODO: UI관계없고, 시간이 오래걸리는 작업은 다른 쓰레드로 옮기기
                 case .success(let response):
-                    self.themes.append(contentsOf: response.data)
+//                    if type == .my {
+//                        self.myThemes.append(contentsOf: response.data)
+//                    } else {
+                        self.themes.append(contentsOf: response.data)
+//                    }
                     self.isLastPage = response.pagination.currentPage >= response.pagination.totalPages
                     self.currentPage += 1
                     self.isLoading = false
