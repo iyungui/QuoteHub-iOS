@@ -8,6 +8,7 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
+/// 첫번째 탭 뷰
 struct HomeView: View {
     @StateObject var booksViewModel = RandomBooksViewModel()
     

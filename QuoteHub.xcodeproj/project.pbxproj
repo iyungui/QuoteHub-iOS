@@ -72,8 +72,6 @@
 		CE8C48332DEA8DAE003188ED /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C480E2DEA8DAE003188ED /* CommentView.swift */; };
 		CE8C48342DEA8DAE003188ED /* BookStoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C480F2DEA8DAE003188ED /* BookStoryDetailView.swift */; };
 		CE8C48362DEA8DAE003188ED /* UpdateStoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48112DEA8DAE003188ED /* UpdateStoryView.swift */; };
-		CE8C48372DEA8DAE003188ED /* FriendThemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48132DEA8DAE003188ED /* FriendThemaView.swift */; };
-		CE8C48382DEA8DAE003188ED /* PublicThemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48142DEA8DAE003188ED /* PublicThemaView.swift */; };
 		CE8C48392DEA8DAE003188ED /* ThemeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48152DEA8DAE003188ED /* ThemeDetailView.swift */; };
 		CE8C483A2DEA8DAE003188ED /* UpdateThemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48162DEA8DAE003188ED /* UpdateThemaView.swift */; };
 		CE8C483B2DEA8DAE003188ED /* ReportSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48182DEA8DAE003188ED /* ReportSheetView.swift */; };
@@ -166,8 +164,6 @@
 		CE8C480E2DEA8DAE003188ED /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		CE8C480F2DEA8DAE003188ED /* BookStoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookStoryDetailView.swift; sourceTree = "<group>"; };
 		CE8C48112DEA8DAE003188ED /* UpdateStoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateStoryView.swift; sourceTree = "<group>"; };
-		CE8C48132DEA8DAE003188ED /* FriendThemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendThemaView.swift; sourceTree = "<group>"; };
-		CE8C48142DEA8DAE003188ED /* PublicThemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicThemaView.swift; sourceTree = "<group>"; };
 		CE8C48152DEA8DAE003188ED /* ThemeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeDetailView.swift; sourceTree = "<group>"; };
 		CE8C48162DEA8DAE003188ED /* UpdateThemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateThemaView.swift; sourceTree = "<group>"; };
 		CE8C48182DEA8DAE003188ED /* ReportSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportSheetView.swift; sourceTree = "<group>"; };
@@ -447,8 +443,6 @@
 		CE8C48172DEA8DAE003188ED /* ThemeView */ = {
 			isa = PBXGroup;
 			children = (
-				CE8C48132DEA8DAE003188ED /* FriendThemaView.swift */,
-				CE8C48142DEA8DAE003188ED /* PublicThemaView.swift */,
 				CE8C48152DEA8DAE003188ED /* ThemeDetailView.swift */,
 				CE8C48162DEA8DAE003188ED /* UpdateThemaView.swift */,
 			);
@@ -638,8 +632,6 @@
 				CE8C48812DEBF39D003188ED /* SearchBookView.swift in Sources */,
 				CE8C48822DEBF39D003188ED /* SetThemaView.swift in Sources */,
 				CE8C48362DEA8DAE003188ED /* UpdateStoryView.swift in Sources */,
-				CE8C48372DEA8DAE003188ED /* FriendThemaView.swift in Sources */,
-				CE8C48382DEA8DAE003188ED /* PublicThemaView.swift in Sources */,
 				CE8C48392DEA8DAE003188ED /* ThemeDetailView.swift in Sources */,
 				CE8C483A2DEA8DAE003188ED /* UpdateThemaView.swift in Sources */,
 				CE8C483B2DEA8DAE003188ED /* ReportSheetView.swift in Sources */,

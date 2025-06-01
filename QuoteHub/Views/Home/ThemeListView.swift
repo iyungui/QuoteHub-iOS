@@ -8,6 +8,7 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
+/// 홈뷰에서 보이는 공개된 테마 리스트 뷰
 struct ThemeListView: View {
     @EnvironmentObject private var themesViewModel: ThemesViewModel
     @EnvironmentObject private var userViewModel: UserViewModel
@@ -221,18 +222,13 @@ struct ThemeView: View {
     
     private var destinationView: some View {
         if theme.userId.id == userViewModel.user?.id {
-            return AnyView(ThemeDetailView(theme: theme)
+            return AnyView(ThemeDetailView(theme: theme, isMy: true))
                 .environmentObject(themesViewModel)
                 .environmentObject(userViewModel)
-                .environmentObject(storiesViewModel)
-                .environmentObject(userAuthManager))
-            )
         } else {
-            return AnyView(ThemeDetailView(theme: theme)
+            return AnyView(ThemeDetailView(theme: theme, isMy: false))
                 .environmentObject(themesViewModel)
-                .environmentObject(storiesViewModel)
                 .environmentObject(userViewModel)
-                .environmentObject(userAuthManager))
         }
     }
 }

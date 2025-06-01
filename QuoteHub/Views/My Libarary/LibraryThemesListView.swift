@@ -8,6 +8,7 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
+/// 라이브러리 -> 테마 탭뷰에서 보이는 테마 리스트 뷰
 struct LibraryThemesListView: View {
     let isMy: Bool
     
@@ -25,7 +26,7 @@ struct LibraryThemesListView: View {
         LazyVGrid(columns: columns, spacing: spacing) {
             ForEach(themesViewModel.themes, id: \.id) { theme in
                 NavigationLink(
-                    destination: ThemeDetailView(themeId: theme.id, isMy: isMy)
+                    destination: ThemeDetailView(theme: theme, isMy: isMy)
                         .environmentObject(themesViewModel)
                         .environmentObject(userViewModel)
 //                        .environmentObject(storiesViewModel)

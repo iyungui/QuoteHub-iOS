@@ -8,6 +8,8 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
+/// 내 라이브러리, 친구 라이브러리 모두 LibraryView 로 접근
+/// 친구 라이브러리의 경우 user 파라미터를 추가로 받아서 구분
 struct LibraryView: View {
     
     // MARK: - Properties
@@ -27,6 +29,12 @@ struct LibraryView: View {
         }
     }
     
+    // 초기화
+    init(user: User? = nil) {
+        self.user = user
+        self._followViewModel = StateObject(wrappedValue: FollowViewModel(userId: user?.id))
+    }
+    
     // viewmodel
     @EnvironmentObject private var userAuthManager: UserAuthenticationManager
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
@@ -36,12 +44,6 @@ struct LibraryView: View {
     // 신고, 차단 기능을 위한
     @StateObject private var followViewModel: FollowViewModel
 
-    init(user: User) {
-        self.user = user
-        self._followViewModel = StateObject(wrappedValue: FollowViewModel(userId: user.id))
-    }
-    
-    
     @State private var selectedView: Int = 0    // 테마, 스토리 탭
 
     @Environment(\.colorScheme) var colorScheme // 다크모드 지원
@@ -127,6 +129,8 @@ struct LibraryView: View {
             .padding(.top, 10)
         }
     }
+    
+    // MARK: - CONTENT SECTION
     
     @ViewBuilder
     private var contentSection: some View {

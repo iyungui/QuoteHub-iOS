@@ -8,6 +8,7 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
+/// 홈뷰에서 쓰는 랜덤(최근에 검색된 책들중) 책 리스트 뷰
 struct RandomBookListView: View {
     @EnvironmentObject private var booksViewModel: RandomBooksViewModel
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel

@@ -8,17 +8,18 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
+/// 테마 상세 뷰 (isMy 가 true인 경우, 수정하기 버튼 활성화
 struct ThemeDetailView: View {
     
     // MARK: - PROPERTIES
     
-    let themeId: String
+    let theme: Folder
     let isMy: Bool
 
-    init(themeId: String, isMy: Bool) {
-        self.themeId = themeId
+    init(theme: Folder, isMy: Bool) {
+        self.theme = theme
         self.isMy = isMy
-        _storiesViewModel = StateObject(wrappedValue: BookStoriesViewModel(folderId: themeId))
+        _storiesViewModel = StateObject(wrappedValue: BookStoriesViewModel(folderId: theme.id))
     }
     
     @State private var selectedTheme: Int = 0
@@ -39,14 +40,14 @@ struct ThemeDetailView: View {
     var body: some View {
         ScrollView(showsIndicators: false) {
             NavigationLink(
-                destination: UpdateThemaView(folderId: themeId)
+                destination: UpdateThemaView(folderId: theme.id)
                     .environmentObject(themesViewModel)
                 , isActive: $isEditing
             ) {
                 EmptyView()
             }
             VStack(spacing: 0) {
-                ThemeImageView(themeId: themeId, selectedTheme: $selectedTheme)
+                ThemeImageView(theme: theme, selectedTheme: $selectedTheme)
                     .environmentObject(themesViewModel)
                 
                 tabIndicator(height: 3, selectedView: selectedTheme)
@@ -88,7 +89,7 @@ struct ThemeDetailView: View {
                         isEditing = true
                     }),
                     .destructive(Text("삭제하기"), action: {
-                        themesViewModel.deleteFolder(folderId: themeId) { isSuccess in
+                        themesViewModel.deleteFolder(folderId: theme.id) { isSuccess in
                             if isSuccess {
                                 self.presentationMode.wrappedValue.dismiss()
                             } else {
@@ -108,91 +109,87 @@ struct ThemeDetailView: View {
 // MARK: - THEME IMAGE VIEW
 
 struct ThemeImageView: View {
-    let themeId: String
+    let theme: Folder
     @Binding var selectedTheme: Int
     @EnvironmentObject private var themesViewModel: ThemesViewModel
 
 
     var body: some View {
-        if let theme = themesViewModel.themes.first(where: { $0.id == themeId }) {
-            ZStack {
-                
-                if let url = URL(string: theme.folderImageURL), !theme.folderImageURL.isEmpty {
-                    WebImage(url: url)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
-                } else {
-                    Color.gray
-                        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
-                }
-
-                GeometryReader { geometry in
-                    Rectangle()
-                        .foregroundColor(.black.opacity(0.5))
-                        .frame(width: geometry.size.width, height: geometry.size.height)
-                }
-                
-                HStack {
-                    VStack {
-                        VStack(alignment: .leading) {
-                            Text(theme.name)
-                                .font(.title)
-                                .foregroundColor(.white)
-                            Text(theme.description)
-                                .font(.body)
-                                .foregroundColor(.white)
-                            Text("작성일: \(theme.updatedAtDate)")
-                                .font(.caption)
-                                .foregroundColor(.white.opacity(0.7))
-                        }
-                        .padding([.top, .leading], 20)
-                        Spacer()
-                    }
-                    Spacer()
-                }
-                
-                VStack {
-                    Spacer()
-                    HStack(spacing: 10) {
-                        Text(theme.isPublic ? "공개" : "비공개")
-                            .font(.caption)
-                            .foregroundColor(.white)
-                        Image(systemName: theme.isPublic ? "lock.open.fill" : "lock.fill")
-                            .font(.caption)
-                            .foregroundColor(.white)
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            withAnimation {
-                                self.selectedTheme = 0
-                            }
-                        }) {
-                            Image(systemName: "square.grid.2x2")
-                                .foregroundColor(selectedTheme == 0 ? Color.appAccent : .gray)
-                                .scaleEffect(selectedTheme == 0 ? 1.2 : 1.0)
-                        }
-
-                        Button(action: {
-                            withAnimation {
-                                self.selectedTheme = 1
-                            }
-                        }) {
-                            Image(systemName: "list.dash")
-                                .foregroundColor(selectedTheme == 1 ? Color.appAccent : .gray)
-                                .scaleEffect(selectedTheme == 1 ? 1.2 : 1.0)
-                        }
-                    }
-                    .padding([.horizontal, .bottom], 20)
-                }
-                
+        ZStack {
+            
+            if let url = URL(string: theme.folderImageURL), !theme.folderImageURL.isEmpty {
+                WebImage(url: url)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
+            } else {
+                Color.gray
+                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
             }
-            .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
-            .clipped()
-        } else {
-            Text("해당 테마를 찾을 수 없습니다.")
+
+            GeometryReader { geometry in
+                Rectangle()
+                    .foregroundColor(.black.opacity(0.5))
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+            }
+            
+            HStack {
+                VStack {
+                    VStack(alignment: .leading) {
+                        Text(theme.name)
+                            .font(.title)
+                            .foregroundColor(.white)
+                        Text(theme.description)
+                            .font(.body)
+                            .foregroundColor(.white)
+                        Text("작성일: \(theme.updatedAtDate)")
+                            .font(.caption)
+                            .foregroundColor(.white.opacity(0.7))
+                    }
+                    .padding([.top, .leading], 20)
+                    Spacer()
+                }
+                Spacer()
+            }
+            
+            VStack {
+                Spacer()
+                HStack(spacing: 10) {
+                    Text(theme.isPublic ? "공개" : "비공개")
+                        .font(.caption)
+                        .foregroundColor(.white)
+                    Image(systemName: theme.isPublic ? "lock.open.fill" : "lock.fill")
+                        .font(.caption)
+                        .foregroundColor(.white)
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        withAnimation {
+                            self.selectedTheme = 0
+                        }
+                    }) {
+                        Image(systemName: "square.grid.2x2")
+                            .foregroundColor(selectedTheme == 0 ? Color.appAccent : .gray)
+                            .scaleEffect(selectedTheme == 0 ? 1.2 : 1.0)
+                    }
+
+                    Button(action: {
+                        withAnimation {
+                            self.selectedTheme = 1
+                        }
+                    }) {
+                        Image(systemName: "list.dash")
+                            .foregroundColor(selectedTheme == 1 ? Color.appAccent : .gray)
+                            .scaleEffect(selectedTheme == 1 ? 1.2 : 1.0)
+                    }
+                }
+                .padding([.horizontal, .bottom], 20)
+            }
+            
         }
+        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width)
+        .clipped()
     }
 }
 

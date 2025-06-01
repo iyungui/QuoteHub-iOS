@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// 홈뷰에서 쓰는 테마 토글 버튼
 struct ThemeToggleButton: View {
     @Environment(\.colorScheme) private var colorScheme
     @State private var isDarkMode: Bool = false

@@ -8,6 +8,7 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
+/// 라이브러리 -> 북스토리 탭뷰에서 보이는 북스토리 리스트 뷰
 struct LibraryStoriesListView: View {
     let isMy: Bool
     

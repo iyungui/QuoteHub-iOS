@@ -8,6 +8,7 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
+/// 홈뷰 -> 유저 검색
 struct UserSearchView: View {
     @State private var searchNickname: String = ""
     @EnvironmentObject var storiesViewModel: BookStoriesViewModel
@@ -16,8 +17,6 @@ struct UserSearchView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var isActioned: Bool = false
     @EnvironmentObject var userAuthManager: UserAuthenticationManager
-
-
 
     enum Field: Hashable {
         case searchNickname

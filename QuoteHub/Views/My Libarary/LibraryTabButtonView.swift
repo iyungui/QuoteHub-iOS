@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// 라이브러리에서 쓰는 테마/스토리 탭 전환 버튼
 struct LibraryTabButtonView: View {
     @Binding var selectedView: Int
 

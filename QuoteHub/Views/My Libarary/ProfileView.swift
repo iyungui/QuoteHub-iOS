@@ -14,6 +14,7 @@ enum AlertType {
     case blocked
 }
 
+/// 라이브러리에서 보이는 프로필 뷰
 struct ProfileView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @StateObject var followViewModel = FollowViewModel()
