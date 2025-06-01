@@ -64,12 +64,6 @@
 		CE8C48242DEA8DAE003188ED /* FollowingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47FC2DEA8DAE003188ED /* FollowingListView.swift */; };
 		CE8C48252DEA8DAE003188ED /* FriendLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47FD2DEA8DAE003188ED /* FriendLibraryView.swift */; };
 		CE8C48262DEA8DAE003188ED /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47FE2DEA8DAE003188ED /* LibraryView.swift */; };
-		CE8C48272DEA8DAE003188ED /* BookDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48002DEA8DAE003188ED /* BookDetailView.swift */; };
-		CE8C48282DEA8DAE003188ED /* MakeThemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48012DEA8DAE003188ED /* MakeThemaView.swift */; };
-		CE8C48292DEA8DAE003188ED /* RecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48022DEA8DAE003188ED /* RecordView.swift */; };
-		CE8C482A2DEA8DAE003188ED /* SearchBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48032DEA8DAE003188ED /* SearchBookView.swift */; };
-		CE8C482B2DEA8DAE003188ED /* SetAndMakeThemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48042DEA8DAE003188ED /* SetAndMakeThemaView.swift */; };
-		CE8C482C2DEA8DAE003188ED /* SetThemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48052DEA8DAE003188ED /* SetThemaView.swift */; };
 		CE8C482D2DEA8DAE003188ED /* BlockedListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48072DEA8DAE003188ED /* BlockedListView.swift */; };
 		CE8C482E2DEA8DAE003188ED /* DeveloperInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48082DEA8DAE003188ED /* DeveloperInfoView.swift */; };
 		CE8C482F2DEA8DAE003188ED /* ReportListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48092DEA8DAE003188ED /* ReportListView.swift */; };
@@ -98,6 +92,12 @@
 		CE8C48732DEBECAC003188ED /* Spacer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48722DEBECAC003188ED /* Spacer.swift */; };
 		CE8C48752DEBECED003188ED /* navBarLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48742DEBECED003188ED /* navBarLogo.swift */; };
 		CE8C48772DEBEDE0003188ED /* RandomBookListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48762DEBEDE0003188ED /* RandomBookListView.swift */; };
+		CE8C487F2DEBF39D003188ED /* BookDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C487A2DEBF39D003188ED /* BookDetailView.swift */; };
+		CE8C48802DEBF39D003188ED /* RecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C487B2DEBF39D003188ED /* RecordView.swift */; };
+		CE8C48812DEBF39D003188ED /* SearchBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C487C2DEBF39D003188ED /* SearchBookView.swift */; };
+		CE8C48822DEBF39D003188ED /* SetThemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C487D2DEBF39D003188ED /* SetThemaView.swift */; };
+		CE8C48862DEBF39F003188ED /* MakeThemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48832DEBF39F003188ED /* MakeThemaView.swift */; };
+		CE8C48872DEBF39F003188ED /* SetAndMakeThemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48842DEBF39F003188ED /* SetAndMakeThemaView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -157,12 +157,6 @@
 		CE8C47FC2DEA8DAE003188ED /* FollowingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingListView.swift; sourceTree = "<group>"; };
 		CE8C47FD2DEA8DAE003188ED /* FriendLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendLibraryView.swift; sourceTree = "<group>"; };
 		CE8C47FE2DEA8DAE003188ED /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
-		CE8C48002DEA8DAE003188ED /* BookDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailView.swift; sourceTree = "<group>"; };
-		CE8C48012DEA8DAE003188ED /* MakeThemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeThemaView.swift; sourceTree = "<group>"; };
-		CE8C48022DEA8DAE003188ED /* RecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordView.swift; sourceTree = "<group>"; };
-		CE8C48032DEA8DAE003188ED /* SearchBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBookView.swift; sourceTree = "<group>"; };
-		CE8C48042DEA8DAE003188ED /* SetAndMakeThemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetAndMakeThemaView.swift; sourceTree = "<group>"; };
-		CE8C48052DEA8DAE003188ED /* SetThemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetThemaView.swift; sourceTree = "<group>"; };
 		CE8C48072DEA8DAE003188ED /* BlockedListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedListView.swift; sourceTree = "<group>"; };
 		CE8C48082DEA8DAE003188ED /* DeveloperInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperInfoView.swift; sourceTree = "<group>"; };
 		CE8C48092DEA8DAE003188ED /* ReportListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportListView.swift; sourceTree = "<group>"; };
@@ -191,6 +185,12 @@
 		CE8C48722DEBECAC003188ED /* Spacer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spacer.swift; sourceTree = "<group>"; };
 		CE8C48742DEBECED003188ED /* navBarLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = navBarLogo.swift; sourceTree = "<group>"; };
 		CE8C48762DEBEDE0003188ED /* RandomBookListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomBookListView.swift; sourceTree = "<group>"; };
+		CE8C487A2DEBF39D003188ED /* BookDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailView.swift; sourceTree = "<group>"; };
+		CE8C487B2DEBF39D003188ED /* RecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordView.swift; sourceTree = "<group>"; };
+		CE8C487C2DEBF39D003188ED /* SearchBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBookView.swift; sourceTree = "<group>"; };
+		CE8C487D2DEBF39D003188ED /* SetThemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetThemaView.swift; sourceTree = "<group>"; };
+		CE8C48832DEBF39F003188ED /* MakeThemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeThemaView.swift; sourceTree = "<group>"; };
+		CE8C48842DEBF39F003188ED /* SetAndMakeThemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetAndMakeThemaView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -410,12 +410,8 @@
 		CE8C48062DEA8DAE003188ED /* Record */ = {
 			isa = PBXGroup;
 			children = (
-				CE8C48002DEA8DAE003188ED /* BookDetailView.swift */,
-				CE8C48012DEA8DAE003188ED /* MakeThemaView.swift */,
-				CE8C48022DEA8DAE003188ED /* RecordView.swift */,
-				CE8C48032DEA8DAE003188ED /* SearchBookView.swift */,
-				CE8C48042DEA8DAE003188ED /* SetAndMakeThemaView.swift */,
-				CE8C48052DEA8DAE003188ED /* SetThemaView.swift */,
+				CE8C487E2DEBF39D003188ED /* BookStoryRecord */,
+				CE8C48852DEBF39F003188ED /* ThemeRecord */,
 			);
 			path = Record;
 			sourceTree = "<group>";
@@ -482,6 +478,26 @@
 				CE8C48642DEAE2A9003188ED /* FontManager.swift */,
 			);
 			path = Common;
+			sourceTree = "<group>";
+		};
+		CE8C487E2DEBF39D003188ED /* BookStoryRecord */ = {
+			isa = PBXGroup;
+			children = (
+				CE8C487A2DEBF39D003188ED /* BookDetailView.swift */,
+				CE8C487B2DEBF39D003188ED /* RecordView.swift */,
+				CE8C487C2DEBF39D003188ED /* SearchBookView.swift */,
+				CE8C487D2DEBF39D003188ED /* SetThemaView.swift */,
+			);
+			path = BookStoryRecord;
+			sourceTree = "<group>";
+		};
+		CE8C48852DEBF39F003188ED /* ThemeRecord */ = {
+			isa = PBXGroup;
+			children = (
+				CE8C48832DEBF39F003188ED /* MakeThemaView.swift */,
+				CE8C48842DEBF39F003188ED /* SetAndMakeThemaView.swift */,
+			);
+			path = ThemeRecord;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -598,12 +614,6 @@
 				CE8C48252DEA8DAE003188ED /* FriendLibraryView.swift in Sources */,
 				CE8C48262DEA8DAE003188ED /* LibraryView.swift in Sources */,
 				CE8C48772DEBEDE0003188ED /* RandomBookListView.swift in Sources */,
-				CE8C48272DEA8DAE003188ED /* BookDetailView.swift in Sources */,
-				CE8C48282DEA8DAE003188ED /* MakeThemaView.swift in Sources */,
-				CE8C48292DEA8DAE003188ED /* RecordView.swift in Sources */,
-				CE8C482A2DEA8DAE003188ED /* SearchBookView.swift in Sources */,
-				CE8C482B2DEA8DAE003188ED /* SetAndMakeThemaView.swift in Sources */,
-				CE8C482C2DEA8DAE003188ED /* SetThemaView.swift in Sources */,
 				CE8C48692DEB1972003188ED /* ThemeToggleButton.swift in Sources */,
 				CE8C48732DEBECAC003188ED /* Spacer.swift in Sources */,
 				CE8C482D2DEA8DAE003188ED /* BlockedListView.swift in Sources */,
@@ -616,6 +626,10 @@
 				CE8C48332DEA8DAE003188ED /* CommentView.swift in Sources */,
 				CE8C48712DEB5190003188ED /* ProfileView.swift in Sources */,
 				CE8C48342DEA8DAE003188ED /* BookStoryDetailView.swift in Sources */,
+				CE8C487F2DEBF39D003188ED /* BookDetailView.swift in Sources */,
+				CE8C48802DEBF39D003188ED /* RecordView.swift in Sources */,
+				CE8C48812DEBF39D003188ED /* SearchBookView.swift in Sources */,
+				CE8C48822DEBF39D003188ED /* SetThemaView.swift in Sources */,
 				CE8C48352DEA8DAE003188ED /* myBookStoryView.swift in Sources */,
 				CE8C48362DEA8DAE003188ED /* UpdateStoryView.swift in Sources */,
 				CE8C48372DEA8DAE003188ED /* FriendThemaView.swift in Sources */,
@@ -649,6 +663,8 @@
 				CE8C47A22DEA8D97003188ED /* UserEndpoints.swift in Sources */,
 				C60700CD2AFE05D9009D202A /* FolderService.swift in Sources */,
 				C667E9802ACA388C006EE7A9 /* UserViewModel.swift in Sources */,
+				CE8C48862DEBF39F003188ED /* MakeThemaView.swift in Sources */,
+				CE8C48872DEBF39F003188ED /* SetAndMakeThemaView.swift in Sources */,
 				C6336CF32AAF1AA0007355EC /* ImagePicker.swift in Sources */,
 				C627C8CC2AE25831004D867B /* ColorExtension.swift in Sources */,
 				C6691C522B04DA8C0083C678 /* FollowViewModel.swift in Sources */,
