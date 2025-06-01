@@ -9,18 +9,209 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct LibraryView: View {
-    @State private var selectedView: Int = 0
-
-    @Environment(\.colorScheme) var colorScheme
-    @EnvironmentObject var userAuthManager: UserAuthenticationManager
     
+    // MARK: - Properties
+    
+    // 친구 프로필인지 구분하는 프로퍼티
+    let friendId: User?
+    
+    // 내 라이브러리인지 친구 라이브러리인지 구분
+    var isMyLibaray: Bool { friendId == nil }   // friendId 가 nil 이면, 내 라이브러리
+    
+    init(friendId: User) {
+        self.friendId = friendId
+        self._friendStoriesViewModel = StateObject(wrappedValue: BookStoriesViewModel(mode: .friendStories(friendId.id)))
+        self._friendFolderViewModel = StateObject(wrappedValue: FriendFolderViewModel(userId: friendId.id))
+        self._followViewModel = StateObject(wrappedValue: FollowViewModel(userId: friendId.id))
+    }
+    
+    @State private var selectedView: Int = 0    // 테마, 스토리 탭
+
+    @Environment(\.colorScheme) var colorScheme // 다크모드 지원
+    @EnvironmentObject var userAuthManager: UserAuthenticationManager
+
+    // 뷰모델들
+    /// 내 라이브러리용 뷰모델들 (환경 객체로 받음)
     @EnvironmentObject var myStoriesViewModel: BookStoriesViewModel
     @EnvironmentObject var myFolderViewModel: MyFolderViewModel
+    
+    /// 공통?
+    @StateObject var userViewModel = UserViewModel()
+    
+    /// 친구 라이브러리용 뷰모델들 (StateObject로 생성)
+    // TODO: - 뷰모델 통합하기.. (북스토리뷰모델, 폴더뷰모델은 반드시 하나로 통합하기)
+    @StateObject private var followViewModel: FollowViewModel
+    @StateObject private var friendStoriesViewModel: BookStoriesViewModel
+    @StateObject private var friendFolderViewModel: FriendFolderViewModel
 
-    @EnvironmentObject var userViewModel: UserViewModel
-    @StateObject var followViewModel = FollowViewModel()
+    // 알림 관련
+    @State private var showAlert: Bool = false
+    @State private var alertType: AlertType = .loginRequired
+    @State private var alertMessage = ""
+    
+    // 신고 관련 (친구 프로필에서만 사용)
+    @State private var reportReason = ""
+    @State private var showReportSheet = false
+    @State private var showActionSheet = false
 
+    // MARK: - BODY
+    
     var body: some View {
+        Group {
+            /// 친구의 라이브러리이고 해당 친구가 차단된 사용자일 때
+            if !isMyLibaray && followViewModel.isBlocked {
+                blockedUserView
+            } else {
+                mainContent
+            }
+        }
+        /// 알림창 (비로그인, 오류, 블럭?)
+        .alert(isPresented: $showAlert) { alertView }
+        
+        /// 차단, 신고하기 버튼 시트
+        .confirmationDialog(Text(""), isPresented: $showActionSheet) { actionSheetView }
+        
+        /// 유저 신고하기 창
+        .sheet(isPresented: $showReportSheet) {
+            if let friend = friendId {
+                UserReportSheetView(
+                    userId: friend.id,
+                    reportReason: $reportReason
+                ).environmentObject(followViewModel)
+            }
+        }
+        
+        /// 새로 고침
+        .refreshable {
+            await refreshContent()
+        }
+        
+        .navigationBarTitleDisplayMode(.inline)
+        
+        /// 툴바
+        .toolbar {
+            ToolbarItem {
+                if isMyLibaray { myLibraryNavBarItems }
+                else { friendLibraryNavBarItems }
+            }
+        }
+    }
+    
+    // MARK: - Private Views
+    
+    /// 차단된 사용자 뷰
+    private var blockedUserView: some View {
+        VStack {
+            Spacer()
+            ContentUnavailableView("차단된 사용자", systemImage: "person.crop.circle.badge.xmark.fill", description: Text("설정의 차단 목록을 확인해주세요."))
+            Spacer()
+        }
+    }
+    
+    /// main 컨텐츠
+    private var mainContent: some View {
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 20) {
+//                if friendId != nil {
+                    ProfileView(friendId: friendId)
+                        .environmentObject(userViewModel)
+                        .environmentObject(userAuthManager)
+
+//                } else {
+//                    ProfileView()
+//                        .environmentObject(userViewModel)
+//                        .environmentObject(userAuthManager)
+//
+//                }
+                
+                LibraryTabButtonView(selectedView: $selectedView)
+                
+                tabIndicator
+                
+                contentSection
+                
+                Spacer().frame(height: 50)
+            }
+            .padding(.top, 10)
+        }
+    }
+    
+    private var contentSection: some View {
+        Group {
+            
+            if selectedView == 0 {
+                // 테마 뷰
+                if isMyLibaray {
+                    if myFolderViewModel.folder.isEmpty {
+                        ContentUnavailableView("아직 기록이 없어요", systemImage: "tray", description: Text("지금 바로 나만의 문장을 기록해보세요"))
+                    } else {
+                        MyLibraryThemeView()
+                            .environmentObject(myFolderViewModel)
+                            .environmentObject(userViewModel)
+                            .environmentObject(myStoriesViewModel)
+                    }
+                } else {
+                    if friendFolderViewModel.folder.isEmpty {
+                        ContentUnavailableView("아직 기록이 없어요", systemImage: "tray")
+                    } else {
+                        FriendLibraryThemeView()
+                            .environmentObject(friendStoriesViewModel)
+                            .environmentObject(friendFolderViewModel)
+                            .environmentObject(userAuthManager)
+                    }
+                }
+            } else {
+                // 스토리 뷰
+                if isMyLibaray {
+                    if myStoriesViewModel.bookStories.isEmpty {
+                        ContentUnavailableView("아직 기록이 없어요", systemImage: "tray", description: Text("지금 바로 나만의 문장을 기록해보세요"))
+                    } else {
+                        MyLibraryStoryView()
+                            .environmentObject(myStoriesViewModel)
+                            .environmentObject(userViewModel)
+                    }
+                } else {
+                    if friendStoriesViewModel.bookStories.isEmpty {
+                        ContentUnavailableView("아직 기록이 없어요", systemImage: "tray")
+                    } else {
+                        FriendLibraryStoryView()
+                            .environmentObject(friendStoriesViewModel)
+                            .environmentObject(userAuthManager)
+                    }
+                }
+            }
+        }
+    }
+    
+    private var myLibraryNavBarItems: some View {
+        /// 내 라이브러리에는 '내 기록을 키워드로 찾을 수 있는 뷰. 와, 설정' 버튼
+        HStack {
+            NavigationLink(destination: MySearchKeywordView().environmentObject(myStoriesViewModel).environmentObject(userViewModel)) {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(Color(.systemGray))
+                    .frame(width: 25, height: 25)
+            }
+            
+            NavigationLink(destination: SettingView().environmentObject(userViewModel).environmentObject(userAuthManager)) {
+                Image(systemName: "gearshape.fill")
+                    .foregroundColor(Color(.systemGray))
+                    .frame(width: 25, height: 25)
+            }
+        }
+    }
+    
+    private var friendLibraryNavBarItems: some View {
+        /// 친구 라이브러리에는 액션시트(신고/차단) 활성화 버튼
+        Button(action: {
+            showActionSheet = true
+        }) {
+            Image(systemName: "ellipsis")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 25, height: 25)
+        }
+    }
+    
         ScrollView(showsIndicators: false) {
             VStack(spacing: 20) {
                 ProfileView()

@@ -9,11 +9,12 @@ import SwiftUI
 
 struct ReportSheetView: View {
     @Environment(\.presentationMode) var presentationMode
-    @ObservedObject var reportViewModel: ReportViewModel
     let story: BookStory
     @Binding var reportReason: String
     @State private var showAlert = false
     @State private var alertMessage = ""
+    
+    @StateObject var reportViewModel = ReportViewModel()
     @EnvironmentObject var viewModel: FollowViewModel
     
     var body: some View {
@@ -75,11 +76,12 @@ struct ReportSheetView: View {
 
 struct UserReportSheetView: View {
     @Environment(\.presentationMode) var presentationMode
-    @ObservedObject var reportViewModel: ReportViewModel
     let userId: String
     @Binding var reportReason: String
     @State private var showAlert = false
     @State private var alertMessage = ""
+    
+    @StateObject var reportViewModel = ReportViewModel()
     @EnvironmentObject var viewModel: FollowViewModel
 
     
