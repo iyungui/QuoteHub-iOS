@@ -56,7 +56,7 @@ struct BookCard: View {
     }
     
     private var bookImage: some View {
-        WebImage(url: URL(string: book.bookImageURL ?? ""))
+        WebImage(url: URL(string: book.bookImageURL))
             .placeholder {
                 Rectangle()
                     .fill(Color.paperBeige.opacity(0.3))
@@ -81,13 +81,13 @@ struct BookCard: View {
     
     private var bookInfo: some View {
         VStack(alignment: .center, spacing: 6) {
-            Text(book.title ?? "제목 없음")
+            Text(book.title)
                 .font(.scoreDream(.medium, size: .caption))
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
                 .foregroundColor(.primaryText)
             
-            Text(book.author?.joined(separator: ", ") ?? "")
+            Text(book.author.joined(separator: ", "))
                 .font(.scoreDream(.light, size: .footnote))
                 .multilineTextAlignment(.center)
                 .lineLimit(2)

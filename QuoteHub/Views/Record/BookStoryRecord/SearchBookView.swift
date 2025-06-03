@@ -134,29 +134,20 @@ struct BookRowView: View {
                 .environmentObject(userAuthManager)
         ) {
             HStack {
-                if let imageUrl = book.bookImageURL, !imageUrl.isEmpty {
-                    WebImage(url: URL(string: imageUrl))
-                        .placeholder {
-                            Rectangle().foregroundColor(.clear)
-                        }
-                        .resizable()
-                        .indicator(.activity)
-                        .scaledToFit()
-                        .frame(width: 80, height: 100)
-                        .padding(.trailing)
-                } else {
-                    Image(systemName: "book.closed.circle")
-                        .resizable()
-                        .scaledToFit()
-                        .padding()
-                        .frame(width: 80, height: 100)
-                        .padding(.trailing)
-                }
+                WebImage(url: URL(string: book.bookImageURL))
+                    .placeholder {
+                        Rectangle().foregroundColor(.clear)
+                    }
+                    .resizable()
+                    .indicator(.activity)
+                    .scaledToFit()
+                    .frame(width: 80, height: 100)
+                    .padding(.trailing)
 
                 VStack(alignment: .leading, spacing: 5) {
-                    Text(book.title ?? "제목 없음").font(.subheadline)
-                    Text(book.author?.joined(separator: ", ") ?? "").font(.footnote).foregroundColor(.gray)
-                    Text("출판사: \(book.publisher ?? "출판사 정보 없음")").font(.footnote).foregroundColor(.gray)
+                    Text(book.title).font(.subheadline)
+                    Text(book.author.joined(separator: ", ")).font(.footnote).foregroundColor(.gray)
+                    Text("출판사: \(book.publisher)").font(.footnote).foregroundColor(.gray)
                 }
                 Spacer()
             }

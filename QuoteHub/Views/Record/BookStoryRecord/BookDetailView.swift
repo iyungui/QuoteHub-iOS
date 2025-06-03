@@ -41,7 +41,7 @@ struct BookDetailView: View {
                  title: Text("외부 사이트로 이동"),
                  message: Text("이 책에 대한 추가 정보를 외부 사이트에서 제공합니다. 외부 링크를 통해 해당 정보를 보시겠습니까?"),
                  primaryButton: .default(Text("확인")) {
-                     if let url = URL(string: book.bookLink ?? "") {
+                     if let url = URL(string: book.bookLink) {
                          UIApplication.shared.open(url)
                      }
                  },
@@ -51,31 +51,20 @@ struct BookDetailView: View {
     }
 
     private var bookImage: some View {
-        Group {
-            if let imageUrl = book.bookImageURL, !imageUrl.isEmpty {
-                WebImage(url: URL(string: imageUrl))
-                    .resizable()
-                    .placeholder {
-                        Rectangle().foregroundColor(.clear)
-                    }
-                    .indicator(.activity)
-                    .scaledToFit()
-                    .frame(width: 100, height: 140)
-                    .padding(.vertical)
-                    .shadow(color: Color.black.opacity(0.9), radius: 2, x: 0, y: 5)
-            } else {
-                Image(systemName: "book.closed.circle")
-                    .resizable()
-                    .scaledToFit()
-                    .padding()
-                    .frame(width: 100, height: 140)
-                    .padding(.vertical)
+        WebImage(url: URL(string: book.bookImageURL))
+            .resizable()
+            .placeholder {
+                Rectangle().foregroundColor(.clear)
             }
-        }
+            .indicator(.activity)
+            .scaledToFit()
+            .frame(width: 100, height: 140)
+            .padding(.vertical)
+            .shadow(color: Color.black.opacity(0.9), radius: 2, x: 0, y: 5)
     }
     
     private var bookTitle: some View {
-        Text(book.title ?? "No title")
+        Text(book.title)
             .font(.title2)
             .fontWeight(.heavy)
             .padding(.horizontal)
@@ -83,17 +72,17 @@ struct BookDetailView: View {
 
     private var bookDetails: some View {
         VStack(alignment: .leading, spacing: 15) {
-            detailRow(label: "저자", value: book.author?.joined(separator: ", ") ?? "")
-            if !(book.translator?.isEmpty ?? true) {
-                detailRow(label: "옮긴이", value: book.translator?.joined(separator: ", ") ?? "정보 없음")
+            detailRow(label: "저자", value: book.author.joined(separator: ", "))
+            if !(book.translator.isEmpty) {
+                detailRow(label: "옮긴이", value: book.translator.joined(separator: ", "))
             }
-            detailRow(label: "출판사", value: book.publisher ?? "출판사 정보 없음")
-            Text(book.introduction ?? "정보 없음")
+            detailRow(label: "출판사", value: book.publisher)
+            Text(book.introduction)
                 .font(.subheadline)
                 .lineLimit(6)
                 .padding(.vertical, 15)
-            detailRow(label: "ISBN", value: book.ISBN?.joined(separator: ", ") ?? "", isFootnote: true)
-            detailRow(label: "출판일", value: book.publicationDatePrefix ?? "", isFootnote: true)
+            detailRow(label: "ISBN", value: book.ISBN.joined(separator: ", "), isFootnote: true)
+            detailRow(label: "출판일", value: book.publicationDatePrefix, isFootnote: true)
         }
         .padding(10)
     }

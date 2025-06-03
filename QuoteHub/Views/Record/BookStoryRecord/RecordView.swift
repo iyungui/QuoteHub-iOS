@@ -328,7 +328,7 @@ struct RecordView: View {
     
     var infoBookView: some View {
         HStack {
-            WebImage(url: URL(string: book.bookImageURL ?? ""))
+            WebImage(url: URL(string: book.bookImageURL))
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 80, height: 80)
@@ -336,17 +336,17 @@ struct RecordView: View {
                 .shadow(radius: 3)
             
             VStack(alignment: .leading, spacing: 5) {
-                Text(book.title ?? "제목 없음")
+                Text(book.title)
                     .font(.headline)
                     .fontWeight(.bold)
                     .lineLimit(1)
                     .truncationMode(.tail)
                 
-                Text(book.author?.joined(separator: ", ") ?? "저자 미상")
+                Text(book.author.joined(separator: ", "))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                 
-                Text(book.publisher ?? "출판사 정보 없음")
+                Text(book.publisher)
                     .font(.caption)
                     .foregroundColor(.secondary)
             }

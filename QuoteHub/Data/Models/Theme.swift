@@ -30,4 +30,15 @@ struct Theme: Codable, Identifiable, Equatable {
     static func ==(lhs: Theme, rhs: Theme) -> Bool {
         return lhs.id == rhs.id
     }
+    
+    enum CodingKeys: String, CodingKey {
+        case _id
+        case userId
+        case name
+        case description
+        case themeImageURL = "folderImageURL"
+        case isPublic
+        case createdAt
+        case updatedAt
+    }
 }

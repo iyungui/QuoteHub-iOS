@@ -33,17 +33,18 @@ struct BookStory: Codable, Identifiable, Equatable {
         return lhs.id == rhs.id
     }
     
-    struct Book: Codable {
-        var _id: String
-        var title: String
-        var author: [String]
-        var translator: [String]
-        var introduction: String
-        var publisher: String
-        var publicationDate: String
-        var bookImageURL: String
-        var bookLink: String
-        var ISBN: [String]
+    enum CodingKeys: String, CodingKey {
+        case _id
+        case userId
+        case bookId
+        case quote
+        case content
+        case storyImageURLs
+        case isPublic
+        case createdAt
+        case updatedAt
+        case keywords
+        case themesIds = "folderIds"
     }
 }
 
