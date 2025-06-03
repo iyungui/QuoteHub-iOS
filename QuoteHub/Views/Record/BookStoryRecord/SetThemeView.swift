@@ -85,47 +85,4 @@ struct SetThemeView: View {
             .fontWeight(.bold)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
-    
-//    private var themeGridListView: some View {
-//        LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 2), spacing: 20) {
-//            ForEach(themesViewModel.folder, id: \.id) { folder in
-//                Button(action: {
-//                    if selectedSet.contains(folder.id) {
-//                        selectedSet.remove(folder.id)
-//                    } else {
-//                        selectedSet.insert(folder.id)
-//                    }
-//                }) {
-//                    VStack(alignment: .leading) {
-//                        WebImage(url: URL(string: folder.folderImageURL))
-//                            .resizable()
-//                            .scaledToFill()
-//                            .frame(width: (UIScreen.main.bounds.width / 2) - 25, height: ((UIScreen.main.bounds.width / 2) - 25) * 5 / 8)
-//                            .cornerRadius(10)
-//                            .clipped()
-//                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(selectedSet.contains(folder.id) ? Color.black : Color.clear, lineWidth: 1))
-//                        
-//                        Text(folder.name)
-//                            .font(.callout)
-//                            .fontWeight(.semibold)
-//                    }
-//                    .overlay(
-//                        Image(systemName: selectedSet.contains(folder.id) ? "checkmark.circle.fill" : "circle")
-//                            .font(.title2)
-//                            .foregroundColor(selectedSet.contains(folder.id) ? Color.black : Color.gray.opacity(0.5))
-//                            .padding(4),
-//                        alignment: .topTrailing
-//                    )
-//                }
-//            }
-//            
-//            if !themesViewModel.isLastPage {
-//                ProgressView().onAppear {
-//                    themesViewModel.loadMoreIfNeeded(currentItem: themesViewModel.themes.last)
-//                }
-//            }
-//        }
-//        .padding(.horizontal, 10)
-//        .padding(.top)
-//    }
 }

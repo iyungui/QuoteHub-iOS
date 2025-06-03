@@ -60,18 +60,4 @@ struct StoryReportDataModel: Codable, Identifiable {
         case User
         case BookStory
     }
-    
-    struct BookStory: Codable {
-        var _id: String
-        var userId: String
-        var bookId: String
-        var quote: String?
-        var content: String?
-        var storyImageURLs: [String]?
-        var isPublic: Bool
-        var createdAt: String
-        var updatedAt: String
-        var keywords: [String]?
-        var folderIds: [String]?
-    }
 }

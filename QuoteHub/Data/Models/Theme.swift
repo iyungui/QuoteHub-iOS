@@ -14,7 +14,7 @@ struct Theme: Codable, Identifiable, Equatable {
     
     var name: String
     var description: String
-    var folderImageURL: String
+    var themeImageURL: String
     var isPublic: Bool
 
     var createdAt: String

@@ -51,7 +51,7 @@ class ThemesViewModel: ObservableObject {
         isLoading = true
         currentThemeType = type
         
-        let completion: (Result<FolderListResponse, Error>) -> Void = { [weak self] result in
+        let completion: (Result<ThemesListResponse, Error>) -> Void = { [weak self] result in
             guard let self = self else { return }
             
             DispatchQueue.main.async {

@@ -51,7 +51,7 @@ struct LibThemeRowView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            if let url = URL(string: theme.folderImageURL), !theme.folderImageURL.isEmpty {
+            if let url = URL(string: theme.themeImageURL), !theme.themeImageURL.isEmpty {
                 WebImage(url: url)
                     .resizable()
                     .scaledToFill()

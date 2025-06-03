@@ -18,9 +18,9 @@ struct ThemeListView: View {
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 20) {
-                ForEach(Array(themesViewModel.themes.enumerated()), id: \.element.id) { index, folder in
+                ForEach(Array(themesViewModel.themes.enumerated()), id: \.element.id) { index, theme in
                     // TODO: - index 파라미터 지우기
-                    ThemeView(theme: folder, index: index)
+                    ThemeView(theme: theme, index: index)
                         .environmentObject(themesViewModel)
                         .environmentObject(userViewModel)
                         .environmentObject(storiesViewModel)
@@ -97,7 +97,7 @@ struct ThemeView: View {
     }
     
     private var backgroundImage: some View {
-        WebImage(url: URL(string: theme.folderImageURL))
+        WebImage(url: URL(string: theme.themeImageURL))
             .placeholder {
                 Rectangle()
                     .fill(

@@ -20,7 +20,7 @@ struct BookStory: Codable, Identifiable, Equatable {
     var createdAt: String
     var updatedAt: String
     var keywords: [String]?
-    var folderIds: [String]?
+    var themesIds: [String]?
     
     var createdAtDate: String {
         return String(createdAt.prefix(10))

@@ -11,7 +11,7 @@ import SwiftUI
 
 class FolderService {
     
-    func createFolder(image: UIImage?, name: String, description: String?, isPublic: Bool, completion: @escaping (Result<FolderResponse, Error>) -> Void) {
+    func createFolder(image: UIImage?, name: String, description: String?, isPublic: Bool, completion: @escaping (Result<ThemeResponse, Error>) -> Void) {
         let url = APIEndpoint.createFolderURL
         
         guard let token = KeyChain.read(key: "JWTAccessToken") else {
@@ -46,7 +46,7 @@ class FolderService {
             }
             
         }, to: url, method: .post, headers: headers)
-        .responseDecodable(of: FolderResponse.self) { response in
+        .responseDecodable(of: ThemeResponse.self) { response in
             switch response.result {
             case .success(let data):
                 completion(.success(data))
@@ -78,10 +78,10 @@ class FolderService {
     // MARK: - 폴더 목록 조회
     
     // public
-    func getAllFolders(page: Int, pageSize: Int, completion: @escaping (Result<FolderListResponse, Error>) -> Void) {
+    func getAllFolders(page: Int, pageSize: Int, completion: @escaping (Result<ThemesListResponse, Error>) -> Void) {
         let urlString = APIEndpoint.getAllFoldersURL + "?page=\(page)&pageSize=\(pageSize)"
                 
-        AF.request(urlString, method: .get).responseDecodable(of: FolderListResponse.self) { response in
+        AF.request(urlString, method: .get).responseDecodable(of: ThemesListResponse.self) { response in
 
             switch response.result {
             case .success(let folderListResponse):
@@ -95,7 +95,7 @@ class FolderService {
 
     
     // my
-    func getMyFolders(page: Int, pageSize: Int, completion: @escaping (Result<FolderListResponse, Error>) -> Void) {
+    func getMyFolders(page: Int, pageSize: Int, completion: @escaping (Result<ThemesListResponse, Error>) -> Void) {
         
         var urlString = APIEndpoint.getMyFoldersURL
 
@@ -114,7 +114,7 @@ class FolderService {
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
 
 
-        AF.request(urlString, method: .get, headers: headers).responseDecodable(of: FolderListResponse.self) { response in
+        AF.request(urlString, method: .get, headers: headers).responseDecodable(of: ThemesListResponse.self) { response in
             switch response.result {
             case .success(let folderListResponse):
                 completion(.success(folderListResponse))
@@ -134,7 +134,7 @@ class FolderService {
     }
     
     // friend
-    func getUserFolders(userId: String, page: Int, pageSize: Int, completion: @escaping (Result<FolderListResponse, Error>) -> Void) {
+    func getUserFolders(userId: String, page: Int, pageSize: Int, completion: @escaping (Result<ThemesListResponse, Error>) -> Void) {
         
         var urlString = APIEndpoint.getUserFoldersURL
 
@@ -145,7 +145,7 @@ class FolderService {
             return
         }
         
-        AF.request(url, method: .get).responseDecodable(of: FolderListResponse.self) { response in
+        AF.request(url, method: .get).responseDecodable(of: ThemesListResponse.self) { response in
             switch response.result {
             case .success(let folderListResponse):
                 completion(.success(folderListResponse))
@@ -158,7 +158,7 @@ class FolderService {
     
     // MARK: - 폴더 수정
     
-    func updateFolder(folderId: String, image: UIImage?, name: String, description: String?, isPublic: Bool, completion: @escaping (Result<FolderResponse, Error>) -> Void) {
+    func updateFolder(folderId: String, image: UIImage?, name: String, description: String?, isPublic: Bool, completion: @escaping (Result<ThemeResponse, Error>) -> Void) {
         
         guard let token = KeyChain.read(key: "JWTAccessToken") else {
             completion(.failure(NSError(domain: "BookStoryService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])))
@@ -198,7 +198,7 @@ class FolderService {
             }
         }, to: url, method: .put, headers: headers)
         .validate()
-        .responseDecodable(of: FolderResponse.self) { response in
+        .responseDecodable(of: ThemeResponse.self) { response in
             switch response.result {
             case .success(let data):
                 completion(.success(data))
