@@ -13,10 +13,10 @@ struct ThemeDetailView: View {
     
     // MARK: - PROPERTIES
     
-    let theme: Folder
+    let theme: Theme
     let isMy: Bool
 
-    init(theme: Folder, isMy: Bool) {
+    init(theme: Theme, isMy: Bool) {
         self.theme = theme
         self.isMy = isMy
         _storiesViewModel = StateObject(wrappedValue: BookStoriesViewModel(folderId: theme.id))
@@ -112,7 +112,7 @@ struct ThemeDetailView: View {
 // MARK: - THEME IMAGE VIEW
 
 struct ThemeImageView: View {
-    let theme: Folder
+    let theme: Theme
     @Binding var selectedTheme: Int
     @EnvironmentObject private var themesViewModel: ThemesViewModel
 

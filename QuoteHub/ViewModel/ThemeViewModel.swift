@@ -10,7 +10,7 @@ import SwiftUI
 
 class ThemesViewModel: ObservableObject {
     
-    @Published var themes = [Folder]()
+    @Published var themes = [Theme]()
 //    @Published var myThemes = [Folder]()
     
     @Published var isLoading = false
@@ -37,7 +37,7 @@ class ThemesViewModel: ObservableObject {
     
     // TODO: - 사용하지 않는 메서드 제거
     
-    func theme(with id: String) -> Folder? {
+    func theme(with id: String) -> Theme? {
         return themes.first { $0.id == id }
     }
     
@@ -86,7 +86,7 @@ class ThemesViewModel: ObservableObject {
         }
     }
     
-    func loadMoreIfNeeded(currentItem item: Folder?) {
+    func loadMoreIfNeeded(currentItem item: Theme?) {
         print(#fileID, #function, #line, "- ")
         
         guard let item = item else { return }

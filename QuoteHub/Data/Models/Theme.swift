@@ -1,5 +1,5 @@
 //
-//  Folder.swift
+//  Theme.swift
 //  QuoteHub
 //
 //  Created by 이융의 on 10/30/23.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Folder: Codable, Identifiable, Equatable {
+struct Theme: Codable, Identifiable, Equatable {
     var id: String { _id }
     var _id: String
     var userId: User
@@ -27,7 +27,7 @@ struct Folder: Codable, Identifiable, Equatable {
         return String(updatedAt.prefix(10))
     }
     
-    static func ==(lhs: Folder, rhs: Folder) -> Bool {
+    static func ==(lhs: Theme, rhs: Theme) -> Bool {
         return lhs.id == rhs.id
     }
 }

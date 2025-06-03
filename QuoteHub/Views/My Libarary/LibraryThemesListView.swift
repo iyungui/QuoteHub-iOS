@@ -47,7 +47,7 @@ struct LibraryThemesListView: View {
 // MARK: - THEME ROW VIEW
 
 struct LibThemeRowView: View {
-    let theme: Folder
+    let theme: Theme
     
     var body: some View {
         VStack(alignment: .leading) {

@@ -57,7 +57,7 @@ struct ThemeListView: View {
 // MARK: - THEME VIEW
 
 struct ThemeView: View {
-    let theme: Folder
+    let theme: Theme
     let index: Int
     
     @EnvironmentObject private var themesViewModel: ThemesViewModel

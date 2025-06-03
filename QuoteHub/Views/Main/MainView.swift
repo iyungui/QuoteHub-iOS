@@ -83,6 +83,7 @@ struct MainView: View {
         }
     }
     
+    /// 메인뷰 - 홈뷰와 라이브러리뷰
     @ViewBuilder
     private var mainContent: some View {
         switch selectedTab {
@@ -95,6 +96,7 @@ struct MainView: View {
         }
     }
     
+    /// 책 검색뷰와 테마 만들기뷰
     @ViewBuilder
     private func destinationView(for sheet: ActiveSheet) -> some View {
         switch sheet {

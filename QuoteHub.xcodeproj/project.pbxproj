@@ -42,7 +42,7 @@
 		CE8C478F2DEA8D93003188ED /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47852DEA8D93003188ED /* Book.swift */; };
 		CE8C47902DEA8D93003188ED /* BookStory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47862DEA8D93003188ED /* BookStory.swift */; };
 		CE8C47912DEA8D93003188ED /* BookStoryComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47872DEA8D93003188ED /* BookStoryComment.swift */; };
-		CE8C47922DEA8D93003188ED /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47882DEA8D93003188ED /* Folder.swift */; };
+		CE8C47922DEA8D93003188ED /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47882DEA8D93003188ED /* Theme.swift */; };
 		CE8C47932DEA8D93003188ED /* Follow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47892DEA8D93003188ED /* Follow.swift */; };
 		CE8C47942DEA8D93003188ED /* ReportDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C478A2DEA8D93003188ED /* ReportDataModel.swift */; };
 		CE8C47952DEA8D93003188ED /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C478B2DEA8D93003188ED /* User.swift */; };
@@ -132,7 +132,7 @@
 		CE8C47852DEA8D93003188ED /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		CE8C47862DEA8D93003188ED /* BookStory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookStory.swift; sourceTree = "<group>"; };
 		CE8C47872DEA8D93003188ED /* BookStoryComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookStoryComment.swift; sourceTree = "<group>"; };
-		CE8C47882DEA8D93003188ED /* Folder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
+		CE8C47882DEA8D93003188ED /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		CE8C47892DEA8D93003188ED /* Follow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Follow.swift; sourceTree = "<group>"; };
 		CE8C478A2DEA8D93003188ED /* ReportDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportDataModel.swift; sourceTree = "<group>"; };
 		CE8C478B2DEA8D93003188ED /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -328,7 +328,7 @@
 				CE8C47852DEA8D93003188ED /* Book.swift */,
 				CE8C47862DEA8D93003188ED /* BookStory.swift */,
 				CE8C47872DEA8D93003188ED /* BookStoryComment.swift */,
-				CE8C47882DEA8D93003188ED /* Folder.swift */,
+				CE8C47882DEA8D93003188ED /* Theme.swift */,
 				CE8C47892DEA8D93003188ED /* Follow.swift */,
 				CE8C478A2DEA8D93003188ED /* ReportDataModel.swift */,
 				CE8C478B2DEA8D93003188ED /* User.swift */,
@@ -586,7 +586,7 @@
 				CE8C478F2DEA8D93003188ED /* Book.swift in Sources */,
 				CE8C47902DEA8D93003188ED /* BookStory.swift in Sources */,
 				CE8C47912DEA8D93003188ED /* BookStoryComment.swift in Sources */,
-				CE8C47922DEA8D93003188ED /* Folder.swift in Sources */,
+				CE8C47922DEA8D93003188ED /* Theme.swift in Sources */,
 				CE8C48652DEAE2A9003188ED /* FontManager.swift in Sources */,
 				CE8C47932DEA8D93003188ED /* Follow.swift in Sources */,
 				CE8C488C2DEC3E73003188ED /* LibraryStoriesListView.swift in Sources */,

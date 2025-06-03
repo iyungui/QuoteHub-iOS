@@ -64,8 +64,8 @@ typealias BookStoryCommentResponse = APIResponse<BookStoryComment>  // 댓글 �
 
 typealias CommentCountResponse = APIResponse<Int>
 
-typealias FolderResponse = APIResponse<Folder>
-typealias FolderListResponse = PaginatedAPIResponse<Folder>
+typealias FolderResponse = APIResponse<Theme>
+typealias FolderListResponse = PaginatedAPIResponse<Theme>
 
 typealias RandomBooksResponse = APIResponse<[Book]>
 
