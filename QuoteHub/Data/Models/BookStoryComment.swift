@@ -16,13 +16,6 @@ struct BookStoryComment: Codable, Identifiable, Equatable {
     var parentCommentId: String?
     var createdAt: String
     var updatedAt: String
-    
-    var createdAtDate: String {
-        return String(createdAt.prefix(10))
-    }
-    var updatedAtDate: String {
-        return String(updatedAt.prefix(10))
-    }
     var replies: [BookStoryComment]?
     
     static func ==(lhs: BookStoryComment, rhs: BookStoryComment) -> Bool {

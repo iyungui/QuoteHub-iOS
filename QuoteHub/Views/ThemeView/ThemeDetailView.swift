@@ -145,7 +145,7 @@ struct ThemeImageView: View {
                         Text(theme.description)
                             .font(.body)
                             .foregroundColor(.white)
-                        Text("작성일: \(theme.updatedAtDate)")
+                        Text("작성일: \(theme.updatedAt)")
                             .font(.caption)
                             .foregroundColor(.white.opacity(0.7))
                     }

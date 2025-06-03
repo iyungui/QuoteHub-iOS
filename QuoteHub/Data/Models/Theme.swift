@@ -20,13 +20,6 @@ struct Theme: Codable, Identifiable, Equatable {
     var createdAt: String
     var updatedAt: String
 
-    var createdAtDate: String {
-        return String(createdAt.prefix(10))
-    }
-    var updatedAtDate: String {
-        return String(updatedAt.prefix(10))
-    }
-    
     static func ==(lhs: Theme, rhs: Theme) -> Bool {
         return lhs.id == rhs.id
     }

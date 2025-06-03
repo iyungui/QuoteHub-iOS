@@ -17,15 +17,7 @@ struct Follow: Codable, Identifiable {
     
     let createdAt: String
     let updatedAt: String
-    
-    var createdAtDate: String {
-        return String(createdAt.prefix(10))
-    }
-    
-    var updatedAtDate: String {
-        return String(updatedAt.prefix(10))
-    }
-    
+
     enum Status: String, Codable {
         case following = "FOLLOWING"
         case blocked = "BLOCKED"

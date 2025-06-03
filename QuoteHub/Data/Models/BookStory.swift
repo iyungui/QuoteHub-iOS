@@ -21,13 +21,6 @@ struct BookStory: Codable, Identifiable, Equatable {
     var updatedAt: String
     var keywords: [String]?
     var themesIds: [String]?
-    
-    var createdAtDate: String {
-        return String(createdAt.prefix(10))
-    }
-    var updatedAtDate: String {
-        return String(updatedAt.prefix(10))
-    }
 
     static func ==(lhs: BookStory, rhs: BookStory) -> Bool {
         return lhs.id == rhs.id
