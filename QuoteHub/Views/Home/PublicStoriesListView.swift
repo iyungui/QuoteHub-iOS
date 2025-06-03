@@ -286,7 +286,7 @@ struct StoryView: View {
                     
                     // 날짜 정보
                     VStack(alignment: .trailing, spacing: 2) {
-                        Text(story.createdAt)
+                        Text(story.createdAt.prefix(10))
                             .font(.scoreDream(.light, size: .footnote))
                             .foregroundColor(.white.opacity(0.8))
                             .shadow(color: .black.opacity(0.5), radius: 1, x: 0, y: 1)
@@ -310,7 +310,7 @@ struct StoryView: View {
     
     private var dateInfo: some View {
         VStack(alignment: .trailing, spacing: 2) {
-            Text(story.createdAt)
+            Text(story.createdAt.prefix(10))
                 .font(.scoreDream(.light, size: .footnote))
                 .foregroundColor(.secondaryText)
             
@@ -325,7 +325,7 @@ struct StoryView: View {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         
-        guard let storyDate = dateFormatter.date(from: story.createdAt) else { return false }
+        guard let storyDate = dateFormatter.date(from: String(story.createdAt.prefix(10))) else { return false }
         let daysSinceCreation = Calendar.current.dateComponents([.day], from: storyDate, to: Date()).day ?? 0
         
         return daysSinceCreation <= 3 // 3일 이내는 NEW

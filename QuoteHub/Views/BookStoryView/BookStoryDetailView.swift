@@ -370,7 +370,7 @@ struct BookStoryDetailView: View {
                     .padding(.trailing)
             }
             
-            Text("작성일: \(story.updatedAt)")
+            Text("작성일: \(story.updatedAt.prefix(10))")
                 .padding(.trailing)
                 .font(.caption)
                 .foregroundColor(.gray)

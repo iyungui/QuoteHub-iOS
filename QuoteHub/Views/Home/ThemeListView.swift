@@ -166,7 +166,7 @@ struct ThemeView: View {
                 HStack {
                     Spacer()
                     
-                    Text(theme.createdAt)
+                    Text(theme.createdAt.prefix(10))
                         .font(.scoreDream(.light, size: .footnote))
                         .foregroundColor(.white.opacity(0.7))
                 }
