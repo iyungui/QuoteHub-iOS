@@ -174,7 +174,7 @@ struct ProfileView: View {
                 }
                 
                 ProgressView(value: progress)
-                    .progressViewStyle(LinearProgressViewStyle(tint: nextLevelInfo.isMaxLevel ? .appAccent : .blue))
+                    .progressViewStyle(LinearProgressViewStyle(tint: nextLevelInfo.isMaxLevel ? .appAccent : .appAccent.opacity(0.8)))
                     .scaleEffect(x: 1, y: 2, anchor: .center)
             }
             

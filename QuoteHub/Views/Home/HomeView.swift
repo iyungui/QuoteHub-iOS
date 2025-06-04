@@ -131,7 +131,7 @@ struct HomeView: View {
     private var heroSection: some View {
         VStack(spacing: 12) {
             Text("오늘도 좋은 문장과 함께")
-                .font(.scoreDream(.bold, size: .title2))
+                .font(.scoreDream(.bold, size: .title3))
                 .foregroundStyle(Color.brown)
 
             Text("마음에 드는 구절들을 깊이 간직해보세요")
@@ -164,7 +164,7 @@ struct HomeView: View {
         HStack(spacing: 15) {
             // 제목
             Text(title)
-                .font(.scoreDream(.bold, size: .title2))
+                .font(.scoreDream(.bold, size: .title3))
                 .foregroundColor(.primaryText)
             
             Spacer()

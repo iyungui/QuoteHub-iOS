@@ -24,6 +24,7 @@ struct SearchBookView: View {
     enum Field: Hashable {
         case searchText
     }
+    
     @FocusState private var focusField: Field?
 
     var body: some View {

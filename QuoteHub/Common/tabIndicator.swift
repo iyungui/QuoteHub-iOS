@@ -14,7 +14,7 @@ public func tabIndicator(height: CGFloat, selectedView: Int) -> some View {
 
     return ZStack(alignment: .leading) {
         Rectangle()
-            .fill(Color.secondary)
+            .fill(Color.appAccent.opacity(0.8))
             .frame(width: indicatorWidth, height: height)
             .offset(x: selectedView == 0 ? 0 : offsetWhenRight)
             .animation(.easeInOut(duration: 0.2), value: selectedView)

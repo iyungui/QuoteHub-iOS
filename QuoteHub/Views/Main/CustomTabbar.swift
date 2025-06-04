@@ -17,7 +17,7 @@ struct CustomTabbar: View {
         VStack(spacing: 0) {
             // 상단 여백 (투명 영역)
             Spacer()
-                .frame(height: 80) // 큰 여백으로 탭바 영역 확장
+                .frame(height: 60) // 큰 여백으로 탭바 영역 확장
             
             // 실제 탭바 콘텐츠
             HStack(spacing: 0) {
