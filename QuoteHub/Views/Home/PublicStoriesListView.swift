@@ -19,7 +19,7 @@ struct PublicStoriesListView: View {
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 20) {
-                ForEach(storiesViewModel.bookStories, id: \.id) { story in
+                ForEach(storiesViewModel.bookStories(for: .public), id: \.id) { story in
                     StoryView(story: story)
                         .environmentObject(userViewModel)
                         .environmentObject(storiesViewModel)
@@ -48,7 +48,10 @@ struct PublicStoriesListView: View {
         }
         .frame(width: 100)
         .onAppear {
-            storiesViewModel.loadMoreIfNeeded(currentItem: storiesViewModel.bookStories.last)
+            storiesViewModel.loadMoreIfNeeded(
+                currentItem: storiesViewModel.bookStories(for: .public).last,
+                type: .public
+            )
         }
     }
 }

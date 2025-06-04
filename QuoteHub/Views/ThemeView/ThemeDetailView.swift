@@ -16,6 +16,10 @@ struct ThemeDetailView: View {
     let theme: Theme
     let isMy: Bool
 
+    private var loadType: LoadType {
+        return isMy ? .my : .public
+    }
+    
     init(theme: Theme, isMy: Bool) {
         self.theme = theme
         self.isMy = isMy
@@ -57,12 +61,12 @@ struct ThemeDetailView: View {
                 
                 Group {
                     if selectedTheme == 0 {
-                        ThemeGalleryGridView(isMy: isMy)
+                        ThemeGalleryGridView(isMy: isMy, loadType: loadType)
                             .environmentObject(userViewModel)
                             .environmentObject(storiesViewModel)
 
                     } else {
-                        ThemeGalleryListView(isMy: isMy)
+                        ThemeGalleryListView(isMy: isMy, loadType: loadType)
                             .environmentObject(userViewModel)
                             .environmentObject(storiesViewModel)
                     }
@@ -201,12 +205,13 @@ struct ThemeImageView: View {
 
 struct ThemeGalleryGridView: View {
     let isMy: Bool
+    let loadType: LoadType
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
     @EnvironmentObject private var userViewModel: UserViewModel
 
     var body: some View {
         LazyVGrid(columns: Array(repeating: .init(.flexible()), count: 3), spacing: 3) {
-            ForEach(storiesViewModel.bookStories, id: \.id) { story in
+            ForEach(storiesViewModel.bookStories(for: loadType), id: \.id) { story in
                 NavigationLink(
                     destination: BookStoryDetailView(story: story, isMyStory: isMy)
                         .environmentObject(storiesViewModel)
@@ -221,7 +226,10 @@ struct ThemeGalleryGridView: View {
             }
             if !storiesViewModel.isLastPage {
                 ProgressView().onAppear {
-                    storiesViewModel.loadMoreIfNeeded(currentItem: storiesViewModel.bookStories.last)
+                    storiesViewModel.loadMoreIfNeeded(
+                        currentItem: storiesViewModel.bookStories(for: loadType).last,
+                        type: loadType
+                    )
                 }
             }
         }
@@ -233,12 +241,13 @@ struct ThemeGalleryGridView: View {
 
 struct ThemeGalleryListView: View {
     let isMy: Bool
+    let loadType: LoadType
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
     @EnvironmentObject private var userViewModel: UserViewModel
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            ForEach(storiesViewModel.bookStories, id: \.id) { story in
+            ForEach(storiesViewModel.bookStories(for: loadType), id: \.id) { story in
                 NavigationLink(
                     destination: BookStoryDetailView(story: story, isMyStory: isMy)
                         .environmentObject(storiesViewModel)
@@ -265,7 +274,10 @@ struct ThemeGalleryListView: View {
             
             if !storiesViewModel.isLastPage {
                 ProgressView().onAppear {
-                    storiesViewModel.loadMoreIfNeeded(currentItem: storiesViewModel.bookStories.last)
+                    storiesViewModel.loadMoreIfNeeded(
+                        currentItem: storiesViewModel.bookStories(for: loadType).last,
+                        type: loadType
+                    )
                 }
             }
         }

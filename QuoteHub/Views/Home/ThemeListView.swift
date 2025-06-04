@@ -18,7 +18,7 @@ struct ThemeListView: View {
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 20) {
-                ForEach(Array(themesViewModel.themes.enumerated()), id: \.element.id) { index, theme in
+                ForEach(Array(themesViewModel.themes(for: .public).enumerated()), id: \.element.id) { index, theme in
                     // TODO: - index 파라미터 지우기
                     ThemeView(theme: theme, index: index)
                         .environmentObject(themesViewModel)
@@ -49,7 +49,10 @@ struct ThemeListView: View {
         }
         .frame(width: 120)
         .onAppear {
-            themesViewModel.loadMoreIfNeeded(currentItem: themesViewModel.themes.last)
+            themesViewModel.loadMoreIfNeeded(
+                currentItem: themesViewModel.themes(for: .public).last,
+                type: .public
+            )
         }
     }
 }

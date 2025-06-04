@@ -11,7 +11,7 @@ import SDWebImageSwiftUI
 /// 라이브러리 -> 북스토리 탭뷰에서 보이는 북스토리 리스트 뷰
 struct LibraryStoriesListView: View {
     let isMy: Bool
-    
+    let loadType: LoadType
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
     @EnvironmentObject private var userViewModel: UserViewModel
     @EnvironmentObject private var userAuthManager: UserAuthenticationManager
@@ -25,7 +25,7 @@ struct LibraryStoriesListView: View {
     
     var body: some View {
         LazyVGrid(columns: columns, spacing: spacing) {
-            ForEach(storiesViewModel.bookStories, id: \.id) { story in
+            ForEach(storiesViewModel.bookStories(for: loadType), id: \.id) { story in
                 NavigationLink(
                     destination: BookStoryDetailView(story: story, isMyStory: isMy)
                         .environmentObject(storiesViewModel)
@@ -38,7 +38,10 @@ struct LibraryStoriesListView: View {
             
             if !storiesViewModel.isLastPage {
                 ProgressView().onAppear {
-                    storiesViewModel.loadMoreIfNeeded(currentItem: storiesViewModel.bookStories.last)
+                    storiesViewModel.loadMoreIfNeeded(
+                        currentItem: storiesViewModel.bookStories(for: loadType).last,
+                        type: loadType
+                    )
                 }
             }
         }

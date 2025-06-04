@@ -73,13 +73,13 @@ struct SearchStoryByKeywordView: View {
     private var resultsListView: some View {
         ScrollView {
             LazyVStack {
-                if storiesViewModel.bookStories.isEmpty {
+                if storiesViewModel.bookStories(for: type).isEmpty {
                     Text("검색결과가 없습니다.")
                         .foregroundColor(.gray)
                         .font(.headline)
                         .padding(.top)
                 } else {
-                    ForEach(storiesViewModel.bookStories, id: \.id) { story in
+                    ForEach(storiesViewModel.bookStories(for: type), id: \.id) { story in
                         StoryRowInSearchKeyword(story: story, type: type)
                             .environmentObject(storiesViewModel)
                             .environmentObject(userViewModel)
@@ -87,7 +87,10 @@ struct SearchStoryByKeywordView: View {
                     if !storiesViewModel.isLastPage {
                         ProgressView()
                             .onAppear {
-                                storiesViewModel.loadMoreIfNeeded(currentItem: storiesViewModel.bookStories.last)
+                                storiesViewModel.loadMoreIfNeeded(
+                                    currentItem: storiesViewModel.bookStories(for: type).last,
+                                    type: type
+                                )
                             }
                     }
                 }

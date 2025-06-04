@@ -11,6 +11,7 @@ import SDWebImageSwiftUI
 /// 라이브러리 -> 테마 탭뷰에서 보이는 테마 리스트 뷰
 struct LibraryThemesListView: View {
     let isMy: Bool
+    let loadType: LoadType
     
     private let columns: [GridItem] = [
         GridItem(.flexible()),
@@ -24,7 +25,7 @@ struct LibraryThemesListView: View {
 
     var body: some View {
         LazyVGrid(columns: columns, spacing: spacing) {
-            ForEach(themesViewModel.themes, id: \.id) { theme in
+            ForEach(themesViewModel.themes(for: loadType), id: \.id) { theme in
                 NavigationLink(
                     destination: ThemeDetailView(theme: theme, isMy: isMy)
                         .environmentObject(themesViewModel)
@@ -36,7 +37,10 @@ struct LibraryThemesListView: View {
             }
             if !themesViewModel.isLastPage {
                 ProgressView().onAppear {
-                    themesViewModel.loadMoreIfNeeded(currentItem: themesViewModel.themes.last)
+                    themesViewModel.loadMoreIfNeeded(
+                        currentItem: themesViewModel.themes(for: loadType).last,
+                        type: loadType
+                    )
                 }
             }
         }

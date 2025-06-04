@@ -140,20 +140,20 @@ struct LibraryView: View {
     @ViewBuilder
     private var contentSection: some View {
         if selectedView == 0 {  // 테마 기록
-            if themesViewModel.themes.isEmpty {
+            if themesViewModel.themes(for: loadType).isEmpty {
                 ContentUnavailableView("아직 기록이 없어요", systemImage: "tray", description: Text("지금 바로 나만의 문장을 기록해보세요"))
             } else {
-                LibraryThemesListView(isMy: isMyLibaray)
+                LibraryThemesListView(isMy: isMyLibaray, loadType: loadType)
                     .environmentObject(themesViewModel)
                     .environmentObject(userViewModel)
 //                    .environmentObject(storiesViewModel)
             }
             
         } else {    // 스토리 기록
-            if storiesViewModel.bookStories.isEmpty {
+            if storiesViewModel.bookStories(for: loadType).isEmpty {
                 ContentUnavailableView("아직 기록이 없어요", systemImage: "tray", description: Text("지금 바로 나만의 문장을 기록해보세요"))
             } else {
-                LibraryStoriesListView(isMy: isMyLibaray)
+                LibraryStoriesListView(isMy: isMyLibaray, loadType: loadType)
                     .environmentObject(storiesViewModel)
                     .environmentObject(userAuthManager)
             }

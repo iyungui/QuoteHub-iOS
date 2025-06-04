@@ -68,7 +68,7 @@ struct SetThemeView: View {
             }
             .padding(.leading)
             
-            if themesViewModel.themes.isEmpty {
+            if themesViewModel.themesByType.isEmpty {
                 emptyThemeListView
             } else {
 //                themeGridListView

@@ -10,8 +10,7 @@ import SwiftUI
 
 class ThemesViewModel: ObservableObject {
     
-    @Published var themes = [Theme]()
-//    @Published var myThemes = [Folder]()
+    @Published var themesByType: [LoadType: [Theme]] = [:]
     
     @Published var isLoading = false
     @Published var isLastPage = false
@@ -23,22 +22,19 @@ class ThemesViewModel: ObservableObject {
     
     private var currentThemeType: LoadType = .my
 
-//    init() {
-//        loadFolders()
-//    }
+    func themes(for type: LoadType) -> [Theme] {
+        return themesByType[type] ?? []
+    }
     
     func refreshThemes(type: LoadType) {
+        currentThemeType = type
         currentPage = 1
         isLastPage = false
         isLoading = false
-        themes.removeAll()
+        
+        // 해당 타입의 데이터만 초기화
+        themesByType[type] = []
         loadThemes(type: type)
-    }
-    
-    // TODO: - 사용하지 않는 메서드 제거
-    
-    func theme(with id: String) -> Theme? {
-        return themes.first { $0.id == id }
     }
     
     // MARK: - LOAD THEMES
@@ -46,10 +42,17 @@ class ThemesViewModel: ObservableObject {
     func loadThemes(type: LoadType) {
         print(#fileID, #function, #line, "- ")
         
+        // 타입이 바뀐 경우 상태 초기화
+        if currentThemeType != type {
+            currentThemeType = type
+            currentPage = 1
+            isLastPage = false
+            isLoading = false
+        }
+        
         guard !isLoading && !isLastPage else { return }
         
         isLoading = true
-        currentThemeType = type
         
         let completion: (Result<ThemesListResponse, Error>) -> Void = { [weak self] result in
             guard let self = self else { return }
@@ -60,11 +63,10 @@ class ThemesViewModel: ObservableObject {
                     
                     // TODO: UI관계없고, 시간이 오래걸리는 작업은 다른 쓰레드로 옮기기
                 case .success(let response):
-//                    if type == .my {
-//                        self.myThemes.append(contentsOf: response.data)
-//                    } else {
-                        self.themes.append(contentsOf: response.data)
-//                    }
+                    var existingThemes = self.themesByType[type] ?? []
+                    existingThemes.append(contentsOf: response.data)
+                    self.themesByType[type] = existingThemes
+                    
                     self.isLastPage = response.pagination.currentPage >= response.pagination.totalPages
                     self.currentPage += 1
                     self.isLoading = false
@@ -86,14 +88,43 @@ class ThemesViewModel: ObservableObject {
         }
     }
     
-    func loadMoreIfNeeded(currentItem item: Theme?) {
+    func loadMoreIfNeeded(currentItem item: Theme?, type: LoadType) {
         print(#fileID, #function, #line, "- ")
         
         guard let item = item else { return }
+        let themes = themes(for: type)
         
         if item == themes.last {
-            loadThemes(type: currentThemeType)
+            loadThemes(type: type)
         }
+    }
+    
+    // MARK: - HELPER METHODS
+    private func addThemeToTypes(_ theme: Theme) {
+        // my에 항상 추가
+        var myThemes = themesByType[.my] ?? []
+        myThemes.insert(theme, at: 0)
+        themesByType[.my] = myThemes
+        
+        // isPublic인 테마는 public에도 바로 추가
+        if theme.isPublic {
+            var publicThemes = themesByType[.public] ?? []
+            publicThemes.insert(theme, at: 0)
+            themesByType[.public] = publicThemes
+        }
+    }
+    
+    private func removeThemeFromTypes(themeID: String) {
+        for (type, themes) in themesByType {
+            var updatedThemes = themes
+            updatedThemes.removeAll { $0.id == themeID }
+            themesByType[type] = updatedThemes
+        }
+    }
+    
+    private func updateThemeInTypes(_ theme: Theme) {
+        removeThemeFromTypes(themeID: theme.id)
+        addThemeToTypes(theme)
     }
 
     // MARK: - CREATE NEW THEME
@@ -110,8 +141,10 @@ class ThemesViewModel: ObservableObject {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let themeResponse):
-                    // 새 폴더를 themes 배열에 추가
-                    self.themes.insert(themeResponse.data!, at: 0)
+                    // 새 폴더를 (my + public) themes에 추가
+                    guard let newTheme = themeResponse.data else { return }
+                    self.addThemeToTypes(newTheme)
+                    
                     self.isLoading = false
                     
                     print("테마 생성 완료")
@@ -145,10 +178,11 @@ class ThemesViewModel: ObservableObject {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let updatedFolderResponse):
-                    if let index = self.themes.firstIndex(where: { $0.id == folderId}) {
-                        self.themes[index] = updatedFolderResponse.data!
-                    }
+                    guard let updatedTheme = updatedFolderResponse.data else { return }
                     
+                    // 관련된 타입들에서 테마 업데이트
+                    self.updateThemeInTypes(updatedTheme)
+
                     self.isLoading = false
                     
                     print("테마 업데이트 완료")
@@ -183,11 +217,10 @@ class ThemesViewModel: ObservableObject {
             DispatchQueue.main.async {
                 switch result {
                 case .success(_):
+                    self.removeThemeFromTypes(themeID: folderId)
+                    
                     self.isLoading = false
                     
-                    if let index = self.themes.firstIndex(where: { $0.id == folderId}) {
-                        self.themes.remove(at: index)
-                    }
                     print("테마 삭제 완료")
                     completion(true)
                     
