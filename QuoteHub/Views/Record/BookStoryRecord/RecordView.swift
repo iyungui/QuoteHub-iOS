@@ -147,9 +147,11 @@ struct RecordView: View {
                              secondaryButton: .cancel()
                 )
             case .make:
-                return Alert(title: Text("알림"),
-                             message: Text(alertMessage),
-                             dismissButton: .default(Text("확인")))
+                return Alert(
+                    title: Text("알림"),
+                    message: Text(alertMessage),
+                    dismissButton: .default(Text("확인"), action: { dismiss() })
+                )
             }
         }
     }
@@ -371,7 +373,6 @@ struct RecordView: View {
                         alertType = .make
                         alertMessage = "북스토리가 성공적으로 등록되었어요!"
                         showAlert = true
-                        dismiss()
                     } else {
                         alertType = .make
                         alertMessage = "북스토리 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
