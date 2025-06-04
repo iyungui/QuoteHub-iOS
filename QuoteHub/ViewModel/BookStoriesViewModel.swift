@@ -7,15 +7,16 @@
 
 import SwiftUI
 
-enum LoadType: Equatable {
+enum LoadType: Equatable, Hashable {
     case my
     case friend(String) // friendID
     case `public`
 }
 
 class BookStoriesViewModel: ObservableObject {
+    // MARK: - PROPERTIES
     
-    @Published var bookStories = [BookStory]()
+    @Published var storiesByType: [LoadType: [BookStory]] = [:]
     @Published var isLoading = false
     @Published var isLastPage = false
     @Published var errorMessage: String?
@@ -24,15 +25,19 @@ class BookStoriesViewModel: ObservableObject {
     private let pageSize = 10
     private var service = BookStoryService()
     
-    private var folderId: String?
+    private var themeId: String?
     private var searchKeyword: String?
     
     private var currentStoryType: LoadType = .my
 
-    init(folderId: String? = nil, searchKeyword: String? = nil) {
-        self.folderId = folderId
+    init(themeId: String? = nil, searchKeyword: String? = nil) {
+        self.themeId = themeId
         self.searchKeyword = searchKeyword
-//        loadBookStories()
+    }
+    
+    // 뷰에서 사용할 현재 타입의 북스토리들
+    func bookStories(for type: LoadType) -> [BookStory] {
+        return storiesByType[type] ?? []
     }
     
     func updateSearchKeyword(_ keyword: String) {
@@ -41,10 +46,15 @@ class BookStoriesViewModel: ObservableObject {
 
     /// 새로고침 (북스토리 타입 파라미터로 받음)
     func refreshBookStories(type: LoadType) {
+        currentStoryType = type
         currentPage = 1
         isLastPage = false
         isLoading = false
-        bookStories.removeAll()
+        
+//        storiesByType.removeAll()
+        
+        // 해당 타입의 데이터만 초기화
+        storiesByType[type] = []
         loadBookStories(type: type)
     }
     
@@ -55,20 +65,33 @@ class BookStoriesViewModel: ObservableObject {
     
     func loadBookStories(type: LoadType) {
         print(#fileID, #function, #line, "- ")
+        
+        // 타입이 바뀐 경우 상태 초기화
+        if currentStoryType != type {
+            currentStoryType = type
+            currentPage = 1
+            isLastPage = false
+            isLoading = false
+        }
+        
         guard !isLoading && !isLastPage else { return }
         
         if searchKeyword?.isEmpty == true {
             return
         }
-        isLoading = true
-        currentStoryType = type
         
+        isLoading = true
+                
         let completion: (Result<BookStoriesResponse, Error>) -> Void = { [weak self] result in
             guard let self = self else { return }
             DispatchQueue.main.async {
                 switch result {
                 case .success(let response):
-                    self.bookStories.append(contentsOf: response.data)
+                    // 해당 타입의 기존 데이터에 추가
+                    var existingStories = self.storiesByType[type] ?? []
+                    existingStories.append(contentsOf: response.data)
+                    self.storiesByType[type] = existingStories
+                    
                     self.isLastPage = response.pagination.currentPage >= response.pagination.totalPages
                     self.currentPage += 1
                     self.isLoading = false
@@ -82,24 +105,24 @@ class BookStoriesViewModel: ObservableObject {
         // 내 북스토리만, or 친구의 북스토리만 or 모든 사용자의 북스토리만 조회
         switch type {
         case .my:
-            if let folderId = folderId {    // 테마에서 북스토리 조회하는 경우
-                service.getMyStoriesByFolder(folderId: folderId, page: currentPage, pageSize: pageSize, completion: completion)
+            if let themeId = themeId {    // 테마에서 북스토리 조회하는 경우
+                service.getMyStoriesByFolder(folderId: themeId, page: currentPage, pageSize: pageSize, completion: completion)
             } else if let searchKeyword = searchKeyword {   // 키워드로 북스토리 조회하는 경우
                 service.getAllmyStoriesKeyword(keyword: searchKeyword, page: currentPage, pageSize: pageSize, completion: completion)
             } else {    // 내 북스토리 다 조회하기
                 service.fetchMyBookStories(page: currentPage, pageSize: pageSize, completion: completion)
             }
         case .friend(let friendId):
-            if let folderId = folderId {
-                service.getFriendStoriesByFolder(folderId: folderId, friendId: friendId, page: currentPage, pageSize: pageSize, completion: completion)
+            if let themeId = themeId {
+                service.getFriendStoriesByFolder(folderId: themeId, friendId: friendId, page: currentPage, pageSize: pageSize, completion: completion)
             } else if let searchKeyword = searchKeyword {
                 service.getAllFriendStoriesKeyword(friendId: friendId, keyword: searchKeyword, page: currentPage, pageSize: pageSize, completion: completion)
             } else {
                 service.fetchFriendBookStories(friendId: friendId, page: currentPage, pageSize: pageSize, completion: completion)
             }
         case .public:
-            if let folderId = folderId {
-                service.getAllStoriesByFolder(folderId: folderId, page: currentPage, pageSize: pageSize, completion: completion)
+            if let themeId = themeId {
+                service.getAllStoriesByFolder(folderId: themeId, page: currentPage, pageSize: pageSize, completion: completion)
             } else if let searchKeyword = searchKeyword {
                 service.getAllPublicStoriesKeyword(keyword: searchKeyword, page: currentPage, pageSize: pageSize, completion: completion)
             } else {
@@ -109,16 +132,52 @@ class BookStoriesViewModel: ObservableObject {
     }
     
     /// for pagination
-    func loadMoreIfNeeded(currentItem item: BookStory?) {
+    func loadMoreIfNeeded(currentItem item: BookStory?, type: LoadType) {
         guard let item = item else { return }
-
-        if item == bookStories.last {
-            loadBookStories(type: currentStoryType)
+        let stories = bookStories(for: type)
+        
+        if item == stories.last {
+            loadBookStories(type: type)
         }
     }
     
+    // MARK: - HELPER METHODS FOR MULTI TYPE UPDATES
     
-    // 여기서부터는 내 북스토리에 해당됨
+    // 스토리를 my 타입과 (isPublic일 경우) public 타입에 추가하는 메서드
+    private func addStoryToTypes(_ story: BookStory) {
+        // my 타입에 추가
+        var myStories = storiesByType[.my] ?? []
+        myStories.insert(story, at: 0)
+        storiesByType[.my] = myStories
+        
+        // isPublic인 경우 .public에도 추가 -- 스토리 추가하면 홈뷰에도 바로뜨도록
+        if story.isPublic {
+            var publicStories = storiesByType[.public] ?? []
+            publicStories.insert(story, at: 0)
+            storiesByType[.public] = publicStories
+        }
+    }
+    
+    // 스토리를 관련된 타입들에서 삭제
+    private func removeStoryFromTypes(storyID: String) {
+        // 모든 타입에서 해당 스토리 삭제
+        for (type, stories) in storiesByType {
+            var updatedStories = stories
+            updatedStories.removeAll { $0.id == storyID }
+            storiesByType[type] = updatedStories
+        }
+    }
+    
+    // 스토리를 관련된 타입들에서 업데이트
+    private func updateStoryInTypes(_ story: BookStory) {
+        // 먼저 모든 타입에서 해당 스토리 제거 -> O(n)
+        removeStoryFromTypes(storyID: story.id)
+        
+        // 새로운 상태에 맞게 다시 추가 (0번째에 다시 추가함. 만약 이번에 isPublic이 아니면, public 타입에는 추가되지 않음)
+        addStoryToTypes(story)
+    }
+    
+    // 내 북스토리에 해당됨
     // MARK: - CREATE NEW STORY
     
     // TODO: 이미지 옵셔널로 변경
@@ -132,7 +191,11 @@ class BookStoriesViewModel: ObservableObject {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let bookStoryResponse):
-                    self.bookStories.insert(bookStoryResponse.data!, at: 0)    ///  로컬에서 바로 적용
+                    guard let newStory = bookStoryResponse.data else { return }
+                    
+                    // (my 타입과 공개인 경우 public 타입에 새 스토리 추가하기)
+                    self.addStoryToTypes(newStory)
+                    
                     self.isLoading = false
                     
                     print("북스토리 생성 완료")
@@ -160,9 +223,10 @@ class BookStoriesViewModel: ObservableObject {
                 switch result {
                 case .success(_):
                     /// 해당 삭제된 북스토리를 로컬에서도 바로 삭제
-                    if let index = self.bookStories.firstIndex(where: { $0.id == storyID }) {
-                        self.bookStories.remove(at: index)
-                    }
+                    
+                    // 모든 타입에서 해당 스토리 삭제 (my + public)
+                    self.removeStoryFromTypes(storyID: storyID)
+                    
                     self.isLoading = false
                     
                     print("북스토리 삭제 성공")
@@ -189,16 +253,19 @@ class BookStoriesViewModel: ObservableObject {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let updatedStoryResponse):
-                    if let index = self.bookStories.firstIndex(where: { $0.id == storyID }) {
-                        // 해당 북스토리를 바로 업데이트
-                        self.bookStories[index] = updatedStoryResponse.data!
-                    }
+                    guard let updatedStory = updatedStoryResponse.data else { return }
+                    
+                    // 관련된 타입에서 스토리 업데이트
+                    self.updateStoryInTypes(updatedStory)
+                    
+                    self.isLoading = false
                     
                     print("북스토리 업데이트 성공")
                     completion(true)
                     
                 case .failure(let error):
-                    
+                    self.isLoading = false
+                
                     print("북스토리 업데이트 실패: \(error.localizedDescription)")
                     completion(false)
                 }

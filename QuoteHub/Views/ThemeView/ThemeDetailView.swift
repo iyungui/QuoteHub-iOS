@@ -19,7 +19,7 @@ struct ThemeDetailView: View {
     init(theme: Theme, isMy: Bool) {
         self.theme = theme
         self.isMy = isMy
-        _storiesViewModel = StateObject(wrappedValue: BookStoriesViewModel(folderId: theme.id))
+        _storiesViewModel = StateObject(wrappedValue: BookStoriesViewModel(themeId: theme.id))
     }
     
     @State private var selectedTheme: Int = 0
