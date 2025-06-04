@@ -6,30 +6,25 @@
 //
 
 import SwiftUI
+import Lottie
 
 struct LaunchScreenView: View {
-    @State private var logoOffset: CGFloat = UIScreen.main.bounds.width
-    @State private var showTitle: Bool = false
+//    @State private var showTitle: Bool = false
+    
     var body: some View {
         VStack(spacing: 25) {
-            Image("logo")
-                .resizable()
-                .scaledToFit()
-                .frame(height: 60)
-                .offset(x: logoOffset)
-                .onAppear {
-                    withAnimation(.easeOut(duration: 0.9)) {
-                        logoOffset = 0
-                        showTitle = true
-                    }
-                }
+            LottieView(animation: .named("quotehub_logo"))
+                .playing(loopMode: .playOnce)
+                .frame(height: 100)
             
-            if showTitle {
-                Text("문장을 모아 지혜를 담다, 문장모아")
-                    .font(.scoreDream(.bold, size: .medium))
-                    .padding(.horizontal, 20)
-                    .foregroundStyle(Color.appAccent)
-            }
+//            if showTitle {
+//                Text("문장을 모아 지혜를 담다, 문장모아")
+//                .font(.custom("EF_jejudoldam", size: 17))
+//                .font(.scoreDream(.bold, size: .caption))
+//                    .padding(.horizontal, 20)
+//                    .foregroundStyle(Color.appAccent)
+//                    .transition(.opacity.combined(with: .move(edge: .bottom)))
+//            }
         }
     }
 }
