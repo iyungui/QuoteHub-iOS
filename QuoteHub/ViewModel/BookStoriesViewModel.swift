@@ -35,11 +35,6 @@ class BookStoriesViewModel: ObservableObject {
 //        loadBookStories()
     }
     
-    // TODO: - 사용하지 않는 메서드 제거
-    func storyData(forId storyId: String) -> BookStory? {
-        return bookStories.first { $0.id == storyId }
-    }
-    
     func updateSearchKeyword(_ keyword: String) {
         self.searchKeyword = keyword
     }
@@ -59,6 +54,7 @@ class BookStoriesViewModel: ObservableObject {
     // TODO: - 단일 북스토리 조회 메서드 추가필요
     
     func loadBookStories(type: LoadType) {
+        print(#fileID, #function, #line, "- ")
         guard !isLoading && !isLastPage else { return }
         
         if searchKeyword?.isEmpty == true {

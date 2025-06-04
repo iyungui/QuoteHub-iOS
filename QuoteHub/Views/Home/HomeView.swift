@@ -28,7 +28,7 @@ struct HomeView: View {
                     
                     spacer(height: 40)
                     
-                    /// 북스토리 모아보기 섹션 (최신순)
+                    // MARK: - 북스토리 모아보기 섹션 (최신순)
                     VStack(spacing: 20) {
                         sectionHeader(
                             title: "북스토리 모아보기",
@@ -44,7 +44,7 @@ struct HomeView: View {
                     
                     spacer(height: 60)
                     
-                    /// 테마별 모아보기 섹션
+                    // MARK: - 테마별 모아보기 섹션
                     VStack(spacing: 20) {
                         sectionHeader(
                             title: "테마별 모아보기",
@@ -62,7 +62,7 @@ struct HomeView: View {
 
                     spacer(height: 60)
                     
-                    /// 지금 뜨고 있는 책 섹션
+                    // MARK: - 지금 뜨고 있는 책 섹션
                     VStack(spacing: 20) {
                         sectionHeader(
                             title: "지금 뜨고 있는 책",

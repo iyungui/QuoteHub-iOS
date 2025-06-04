@@ -47,7 +47,6 @@ struct BookStoryDetailView: View {
     // 댓글창 on off
     @State private var isExpanded: Bool = false
     
-    
     // 알림 관련
     @State private var showAlert: Bool = false
     @State private var alertType: StoryAlertType = .link

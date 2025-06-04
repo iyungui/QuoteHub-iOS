@@ -201,7 +201,7 @@ struct RecordView: View {
                 HStack(spacing: 10) {
                     ForEach(keywords, id: \.self) { keyword in
                         ZStack(alignment: .trailing) {
-                            Text("#\(keyword)")
+                            Text(keyword)
                                 .padding(.horizontal, 10)
                                 .padding(.vertical, 5)
                                 .background(Color.secondary.opacity(0.1))

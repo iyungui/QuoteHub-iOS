@@ -38,8 +38,8 @@ struct ProfileView: View {
     }
     
     // 현재 표시할 사용자 ID (내 프로필이면 userViewModel.user?.id, 친구면 friendId?.id)
-    private var currentUserId: String? {
-        return user?.id ?? userViewModel.user?.id
+    private var currentUser: User? {
+        return user ?? userViewModel.user
     }
     
     var body: some View {
@@ -55,7 +55,7 @@ struct ProfileView: View {
             followStats
         }
         .onAppear {
-            followViewModel.setUserId(currentUserId)
+            followViewModel.setUserId(currentUser?.id)
             followViewModel.loadFollowCounts()
             
             // 친구 프로필인 경우 팔로우 상태 업데이트
@@ -68,7 +68,7 @@ struct ProfileView: View {
     
     private var userImage: some View {
         Group {
-            if let url = URL(string: userViewModel.user?.profileImage ?? ""), !(userViewModel.user?.profileImage ?? "").isEmpty {
+            if let url = URL(string: currentUser?.profileImage ?? "") {
                 WebImage(url: url)
                     .resizable()
                     .scaledToFill()
@@ -86,7 +86,7 @@ struct ProfileView: View {
     }
     
     private var userName: some View {
-        Text(userViewModel.user?.nickname ?? "")
+        Text(currentUser?.nickname ?? "")
             .font(.title2)
             .fontWeight(.bold)
     }
@@ -123,7 +123,7 @@ struct ProfileView: View {
     }
     
     private var userStatusMessage: some View {
-        Text(userViewModel.user?.statusMessage ?? "")
+        Text(currentUser?.statusMessage ?? "")
             .font(.subheadline)
             .foregroundColor(.secondary)
     }
@@ -207,7 +207,7 @@ struct ProfileView: View {
     private var followStats: some View {
         HStack(spacing: 40) {
             // 팔로워
-            NavigationLink(destination: FollowersListView(userId: currentUserId).environmentObject(followViewModel).environmentObject(userAuthManager)) {
+            NavigationLink(destination: FollowersListView(userId: currentUser?.id).environmentObject(followViewModel).environmentObject(userAuthManager)) {
                 VStack(spacing: 4) {
                     Text("\(followViewModel.followersCount)")
                         .font(.title2)
@@ -221,7 +221,7 @@ struct ProfileView: View {
             
             // 팔로잉
             NavigationLink(
-                destination: FollowingListView(userId: currentUserId)
+                destination: FollowingListView(userId: currentUser?.id)
                     .environmentObject(followViewModel)
                     .environmentObject(userAuthManager)
                     .environmentObject(userViewModel)
