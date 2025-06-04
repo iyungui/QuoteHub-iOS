@@ -82,7 +82,7 @@ struct RecordView: View {
                 infoBookView
                 
                 VStack(alignment:.center) {
-                    if let message = feedbackMessage, !filledField(images: selectedImages, quote: quote, content: content, keywords: keywords) {
+                    if let message = feedbackMessage, !filledField(quote: quote, content: content, keywords: keywords) {
                         Text(message)
                             .font(.footnote)
                             .foregroundColor(.red)
@@ -367,7 +367,7 @@ struct RecordView: View {
     
     var buttonView: some View {
         Button(action: {
-            if filledField(images: selectedImages, quote: quote, content: content, keywords: keywords) {
+            if filledField(quote: quote, content: content, keywords: keywords) {
                 storiesViewModel.createBookStory(images: selectedImages, bookId: book.id, quote: quote, content: content, isPublic: isPublic, keywords: keywords, folderIds: themeIds) { isSuccess in
                     if isSuccess {
                         alertType = .make
@@ -388,18 +388,15 @@ struct RecordView: View {
                 .foregroundColor(.white)
                 .padding()
                 .frame(maxWidth: .infinity)
-                .background(filledField(images: selectedImages, quote: quote, content: content, keywords: keywords) ? Color.appAccent : Color.gray)
+                .background(filledField(quote: quote, content: content, keywords: keywords) ? Color.appAccent : Color.gray)
                 .cornerRadius(6)
         }
         .padding(.horizontal, 30)
         .buttonStyle(PlainButtonStyle())
     }
 
-    private func filledField(images: [UIImage]?, quote: String?, content: String?, keywords: [String]?) -> Bool {
-        let areTextFieldsFilled = !(quote?.isEmpty ?? true) && !(content?.isEmpty ?? true)
-        let areKeywordsAndFoldersFilled = !(keywords?.isEmpty ?? true)
-        let areImagesFilled = !(images?.isEmpty ?? true)
-        return areTextFieldsFilled && areKeywordsAndFoldersFilled && areImagesFilled
+    private func filledField(quote: String, content: String, keywords: [String]) -> Bool {
+        return !quote.isEmpty && !content.isEmpty && !keywords.isEmpty
     }
 
     private func updateFeedbackMessage() {
@@ -409,13 +406,10 @@ struct RecordView: View {
             feedbackMessage = "인용문을 입력해주세요."
         } else if content.isEmpty {
             feedbackMessage = "내용을 입력해주세요."
-        } else if selectedImages.isEmpty {
-            feedbackMessage = "이미지를 추가해주세요."
         } else {
             feedbackMessage = nil
         }
     }
-
 }
 
 // only iOS

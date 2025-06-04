@@ -1,5 +1,5 @@
 //
-//  ThemeListView.swift
+//  PublicThemesListView.swift
 //  QuoteHub
 //
 //  Created by 이융의 on 11/11/23.
@@ -9,7 +9,7 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 /// 홈뷰에서 보이는 공개된 테마 리스트 뷰
-struct ThemeListView: View {
+struct PublicThemesListView: View {
     @EnvironmentObject private var themesViewModel: ThemesViewModel
     @EnvironmentObject private var userViewModel: UserViewModel
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel

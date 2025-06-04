@@ -221,16 +221,6 @@ struct StoryView: View {
             startPoint: .topLeading,
             endPoint: .bottomTrailing
         )
-        .overlay(
-            VStack {
-                Image(systemName: "quote.bubble.fill")
-                    .font(.system(size: 40))
-                    .foregroundColor(.white.opacity(0.8))
-                Text("텍스트 중심 스토리")
-                    .font(.scoreDream(.light, size: .caption))
-                    .foregroundColor(.white.opacity(0.9))
-            }
-        )
     }
     
     private var quoteOverlay: some View {

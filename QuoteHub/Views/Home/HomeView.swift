@@ -52,7 +52,7 @@ struct HomeView: View {
                         )
                         
                         // TODO: - 로딩 중 상태 표시
-                        ThemeListView()
+                        PublicThemesListView()
                             .environmentObject(userAuthManager)
                             .environmentObject(userViewModel)
                             .environmentObject(themesViewModel)
