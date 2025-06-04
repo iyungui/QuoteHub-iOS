@@ -98,7 +98,11 @@ struct LibraryView: View {
         .refreshable {
             await refreshContent(type: loadType)
         }
-        
+        .onAppear {
+            userViewModel.getProfile(userId: user?.id)
+            storiesViewModel.loadBookStories(type: loadType)
+            themesViewModel.loadThemes(type: loadType)
+        }
         .navigationBarTitleDisplayMode(.inline)
     }
     

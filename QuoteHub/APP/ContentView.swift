@@ -20,17 +20,17 @@ struct ContentView: View {
             LaunchScreenView()
                 // TODO: 비동기 Task 추가 - 앱 시작할 때 미리 데이터 로드
                 .onAppear {
-                    DispatchQueue.global().async {
+                    DispatchQueue.main.async {
                         authManager.validateToken()
                     }
                     
-                    DispatchQueue.global().async {
-                        if authManager.isUserAuthenticated {
-                            loadData()
-                        }
-                    }
+//                    DispatchQueue.global().async {
+//                        if authManager.isUserAuthenticated {
+//                            loadData()
+//                        }
+//                    }
                     
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                         withAnimation {
                             isSplashView = false
                         }
@@ -52,9 +52,9 @@ struct ContentView: View {
     }
     
     private func loadData() {
-        userViewModel.getProfile(userId: nil)   // 내 프로필 정보 가져오기
-        storiesViewModel.loadBookStories(type: .public) // 홈뷰에서 표시되는 북스토리 미리 가져오기
-        themesViewModel.loadThemes(type: .public)   // 홈뷰에서 표시되는 테마 미리 가져오기
+//        userViewModel.getProfile(userId: nil)   // 내 프로필 정보 가져오기
+//        storiesViewModel.loadBookStories(type: .public) // 홈뷰에서 표시되는 북스토리 미리 가져오기
+//        themesViewModel.loadThemes(type: .public)   // 홈뷰에서 표시되는 테마 미리 가져오기
     }
 }
 

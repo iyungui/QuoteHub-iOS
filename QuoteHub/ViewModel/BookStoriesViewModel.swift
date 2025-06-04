@@ -133,6 +133,7 @@ class BookStoriesViewModel: ObservableObject {
     
     /// for pagination
     func loadMoreIfNeeded(currentItem item: BookStory?, type: LoadType) {
+        print(#fileID, #function, #line, "- ")
         guard let item = item else { return }
         let stories = bookStories(for: type)
         

@@ -90,6 +90,11 @@ struct HomeView: View {
                 await refreshContent()
             }
         }
+        .onAppear {
+            storiesViewModel.loadBookStories(type: .public)
+            themesViewModel.loadThemes(type: .public)
+            userViewModel.getProfile(userId: nil)
+        }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 navBarLogo()
