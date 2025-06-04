@@ -95,6 +95,8 @@
 		CE8C488C2DEC3E73003188ED /* LibraryStoriesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C488B2DEC3E73003188ED /* LibraryStoriesListView.swift */; };
 		CE8C488E2DEC46E9003188ED /* tabIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C488D2DEC46E9003188ED /* tabIndicator.swift */; };
 		CE8C48902DEC96B6003188ED /* PhotoPickerAlertType.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C488F2DEC96B6003188ED /* PhotoPickerAlertType.swift */; };
+		CE8C48E12DF04BD8003188ED /* CustomProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48E02DF04BD8003188ED /* CustomProgressView.swift */; };
+		CE8C48E42DF05290003188ED /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = CE8C48E32DF05290003188ED /* Lottie */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -185,11 +187,13 @@
 		CE8C488B2DEC3E73003188ED /* LibraryStoriesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryStoriesListView.swift; sourceTree = "<group>"; };
 		CE8C488D2DEC46E9003188ED /* tabIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tabIndicator.swift; sourceTree = "<group>"; };
 		CE8C488F2DEC96B6003188ED /* PhotoPickerAlertType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerAlertType.swift; sourceTree = "<group>"; };
+		CE8C48E02DF04BD8003188ED /* CustomProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		CE8C48472DEADAAC003188ED /* Font */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Font; sourceTree = "<group>"; };
 		CE8C48882DEC035A003188ED /* Legacy */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Legacy; sourceTree = "<group>"; };
+		CE8C48E92DF05884003188ED /* Lottie */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Lottie; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -200,6 +204,7 @@
 				C6DE7F562AF76EA30020F5CB /* TabBar in Frameworks */,
 				C697D0F82AC8F64400F0111B /* SDWebImageSwiftUI in Frameworks */,
 				C694A2DF2AC3FFBA00574D20 /* Alamofire in Frameworks */,
+				CE8C48E42DF05290003188ED /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,7 +270,6 @@
 		C6B56FDB2AA8B60B003905C3 /* QuoteHub */ = {
 			isa = PBXGroup;
 			children = (
-				CE8C48472DEADAAC003188ED /* Font */,
 				C6B56FFD2AA8CC1B003905C3 /* QuoteHub.entitlements */,
 				CE8C48882DEC035A003188ED /* Legacy */,
 				CE8C483E2DEAB3EA003188ED /* Common */,
@@ -276,8 +280,8 @@
 				CE8C481A2DEA8DAE003188ED /* Views */,
 				C676F5422AAC443500EC7241 /* API */,
 				C676F5252AAC02CB00EC7241 /* ViewModel */,
-				C6B56FE02AA8B60D003905C3 /* Assets.xcassets */,
 				C6336CF12AAF1A91007355EC /* Extension */,
+				CE8C48E82DF0586A003188ED /* Resources */,
 				C6B56FE22AA8B60D003905C3 /* Preview Content */,
 			);
 			path = QuoteHub;
@@ -465,6 +469,7 @@
 			children = (
 				CE8C483F2DEAB3FE003188ED /* AnimatedText.swift */,
 				CE8C488D2DEC46E9003188ED /* tabIndicator.swift */,
+				CE8C48E02DF04BD8003188ED /* CustomProgressView.swift */,
 				CE8C48722DEBECAC003188ED /* Spacer.swift */,
 				CE8C48742DEBECED003188ED /* navBarLogo.swift */,
 				CE8C48662DEB0F53003188ED /* CardButtonStyle.swift */,
@@ -493,6 +498,16 @@
 			path = ThemeRecord;
 			sourceTree = "<group>";
 		};
+		CE8C48E82DF0586A003188ED /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C6B56FE02AA8B60D003905C3 /* Assets.xcassets */,
+				CE8C48E92DF05884003188ED /* Lottie */,
+				CE8C48472DEADAAC003188ED /* Font */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -511,12 +526,14 @@
 			fileSystemSynchronizedGroups = (
 				CE8C48472DEADAAC003188ED /* Font */,
 				CE8C48882DEC035A003188ED /* Legacy */,
+				CE8C48E92DF05884003188ED /* Lottie */,
 			);
 			name = QuoteHub;
 			packageProductDependencies = (
 				C694A2DE2AC3FFBA00574D20 /* Alamofire */,
 				C697D0F72AC8F64400F0111B /* SDWebImageSwiftUI */,
 				C6DE7F552AF76EA30020F5CB /* TabBar */,
+				CE8C48E32DF05290003188ED /* Lottie */,
 			);
 			productName = QuoteHub;
 			productReference = C6B56FD92AA8B60B003905C3 /* QuoteHub.app */;
@@ -550,6 +567,7 @@
 				C694A2DD2AC3FFBA00574D20 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				C697D0F62AC8F64400F0111B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				C6DE7F542AF76EA30020F5CB /* XCRemoteSwiftPackageReference "TabBar" */,
+				CE8C48E22DF05290003188ED /* XCRemoteSwiftPackageReference "lottie-ios" */,
 			);
 			productRefGroup = C6B56FDA2AA8B60B003905C3 /* Products */;
 			projectDirPath = "";
@@ -617,6 +635,7 @@
 				CE8C48312DEA8DAE003188ED /* UserProfileView.swift in Sources */,
 				CE8C48322DEA8DAE003188ED /* VersionInfoView.swift in Sources */,
 				CE8C48332DEA8DAE003188ED /* CommentView.swift in Sources */,
+				CE8C48E12DF04BD8003188ED /* CustomProgressView.swift in Sources */,
 				CE8C48712DEB5190003188ED /* ProfileView.swift in Sources */,
 				CE8C48342DEA8DAE003188ED /* BookStoryDetailView.swift in Sources */,
 				CE8C487F2DEBF39D003188ED /* BookDetailView.swift in Sources */,
@@ -925,6 +944,14 @@
 				minimumVersion = 1.3.0;
 			};
 		};
+		CE8C48E22DF05290003188ED /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.5.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -942,6 +969,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C6DE7F542AF76EA30020F5CB /* XCRemoteSwiftPackageReference "TabBar" */;
 			productName = TabBar;
+		};
+		CE8C48E32DF05290003188ED /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CE8C48E22DF05290003188ED /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
