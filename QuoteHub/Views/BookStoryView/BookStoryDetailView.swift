@@ -153,6 +153,7 @@ struct BookStoryDetailView: View {
             HStack(spacing: 10) {
                 ForEach(story.keywords ?? [], id: \.self) { keyword in
                     Text("#\(keyword)")
+                        .font(.scoreDreamBody)
                         .padding(.horizontal, 10)
                         .padding(.vertical, 5)
                         .background(Color.secondary.opacity(0.1))
@@ -169,20 +170,19 @@ struct BookStoryDetailView: View {
         VStack(alignment: .center, spacing: 10) {
             HStack {
                 Text("“")
-                    .font(.largeTitle)
-                    .fontWeight(.black)
+                    .font(.scoreDreamLargeTitle)
                 Spacer()
             }
             
             AnimatedText(.constant(story.quote ?? ""))
+                .font(.scoreDreamBody)
                 .frame(minHeight: 100)
                 .padding(.horizontal)
             
             HStack {
                 Spacer()
                 Text("”")
-                    .font(.largeTitle)
-                    .fontWeight(.black)
+                    .font(.scoreDreamLargeTitle)
             }
         }
         .padding(.horizontal, 20)
@@ -228,13 +228,11 @@ struct BookStoryDetailView: View {
                 
                 VStack(alignment: .leading, spacing: 5) {
                     Text(userViewModel.user?.nickname ?? "닉네임 없음")
-                        .font(.headline)
-                        .fontWeight(.bold)
+                        .font(.scoreDream(.bold, size: .body))
                         .lineLimit(1)
                         .truncationMode(.tail)
                     Text(userViewModel.user?.statusMessage ?? "")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
+                        .font(.scoreDream(.medium, size: .subheadline))
                         .lineLimit(1)
                 }
                 .padding(.leading, 10)
@@ -270,14 +268,12 @@ struct BookStoryDetailView: View {
                     
                     VStack(alignment: .leading, spacing: 15) {
                         Text(story.userId.nickname)
-                            .font(.headline)
-                            .fontWeight(.bold)
+                            .font(.scoreDream(.bold, size: .body))
                             .lineLimit(1)
                             .truncationMode(.tail)
                         
                         Text(story.userId.statusMessage ?? "")
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
+                            .font(.scoreDream(.medium, size: .subheadline))
                             .lineLimit(1)
                     }
                     .padding(.leading, 10)
@@ -299,7 +295,7 @@ struct BookStoryDetailView: View {
     private var storyContentSection: some View {
         VStack(alignment: .leading) {
             Text(story.content ?? "")
-                .font(.body)
+                .font(.scoreDreamBody)
                 .frame(minHeight: 50)
                 .padding()
         }
@@ -317,24 +313,23 @@ struct BookStoryDetailView: View {
             HStack {
                 WebImage(url: URL(string: story.bookId.bookImageURL))
                     .resizable()
-                    .aspectRatio(contentMode: .fill)
+                    .scaledToFit()
                     .frame(width: 80, height: 100)
                     .cornerRadius(4)
                     .shadow(radius: 3)
                 
                 VStack(alignment: .leading, spacing: 5) {
                     Text(story.bookId.title)
-                        .font(.headline)
-                        .fontWeight(.bold)
+                        .font(.scoreDream(.bold, size: .body))
                         .lineLimit(1)
                         .truncationMode(.tail)
                     
                     Text(story.bookId.author.joined(separator: ", "))
-                        .font(.subheadline)
+                        .font(.scoreDream(.medium, size: .subheadline))
                         .foregroundColor(.secondary)
                     
                     Text(story.bookId.publisher)
-                        .font(.caption)
+                        .font(.scoreDreamCaption)
                         .foregroundColor(.secondary)
                 }
                 .padding(.leading, 10)
@@ -360,7 +355,7 @@ struct BookStoryDetailView: View {
             // 내 스토리에서만 공개/비공개 표시
             if isMyStory {
                 Text(story.isPublic ? "공개" : "비공개")
-                    .font(.caption)
+                    .font(.scoreDreamCaption)
                     .foregroundColor(.gray)
                 
                 Image(systemName: story.isPublic ? "lock.open.fill" : "lock.fill")
@@ -371,7 +366,7 @@ struct BookStoryDetailView: View {
             
             Text("작성일: \(story.updatedAt.prefix(10))")
                 .padding(.trailing)
-                .font(.caption)
+                .font(.scoreDreamCaption)
                 .foregroundColor(.gray)
         }
     }
@@ -395,7 +390,7 @@ struct BookStoryDetailView: View {
                         .foregroundColor(.accentColor)
                         .padding()
                     Text("\(commentViewModel.totalCommentCount)")
-                        .font(.headline)
+                        .font(.scoreDream(.bold, size: .body))
                     Spacer()
                 }
             }

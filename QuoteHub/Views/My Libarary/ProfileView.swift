@@ -87,8 +87,7 @@ struct ProfileView: View {
     
     private var userName: some View {
         Text(currentUser?.nickname ?? "")
-            .font(.title2)
-            .fontWeight(.bold)
+            .font(.scoreDream(.bold, size: .title2))
     }
     
     private var followButton: some View {
@@ -108,8 +107,7 @@ struct ProfileView: View {
             }
         }) {
             Text(followViewModel.isFollowing ? "팔로잉" : "+ 팔로우")
-                .font(.callout)
-                .fontWeight(.bold)
+                .font(.scoreDream(.bold, size: .callout))
                 .foregroundColor(followViewModel.isFollowing ? (colorScheme == .dark ? .white : .black) : (colorScheme == .dark ? .black : .white))
                 .frame(width: 100, height: 30)
                 .background(followViewModel.isFollowing ? Color.clear : (colorScheme == .dark ? .white : .black))
@@ -124,7 +122,7 @@ struct ProfileView: View {
     
     private var userStatusMessage: some View {
         Text(currentUser?.statusMessage ?? "")
-            .font(.subheadline)
+            .font(.scoreDream(.regular, size: .subheadline))
             .foregroundColor(.secondary)
     }
     
@@ -136,13 +134,12 @@ struct ProfileView: View {
                 Text(level.icon)
                     .font(.title2)
                 Text(level.title)
-                    .font(.headline)
-                    .fontWeight(.semibold)
+                    .font(.scoreDream(.medium, size: .body))
                 Text("Lv.\(level.level)")
-                    .font(.caption)
+                    .font(.scoreDreamCaption)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
-                    .background(Color.blue.opacity(0.1))
+                    .background(Color.appAccent.opacity(0.1))
                     .foregroundColor(.blue)
                     .cornerRadius(8)
             }
@@ -161,18 +158,17 @@ struct ProfileView: View {
             VStack(spacing: 6) {
                 HStack {
                     Text("다음 레벨까지")
-                        .font(.subheadline)
-                        .fontWeight(.medium)
+                        .font(.scoreDream(.medium, size: .subheadline))
+
                     Spacer()
+                    
                     if nextLevelInfo.isMaxLevel {
                         Text("최고 레벨 달성!")
-                            .font(.subheadline)
-                            .fontWeight(.medium)
+                            .font(.scoreDream(.medium, size: .subheadline))
                             .foregroundColor(.appAccent)
                     } else {
                         Text("\(storyCount)/\(nextLevelInfo.storiesNeeded)")
-                            .font(.subheadline)
-                            .fontWeight(.medium)
+                            .font(.scoreDream(.medium, size: .subheadline))
                             .foregroundColor(.primary)
                     }
                 }
@@ -185,23 +181,20 @@ struct ProfileView: View {
             // 동기부여 메시지
             if nextLevelInfo.isMaxLevel {
                 Text("🌟 최고 레벨 달성! 코스모스만큼 광활한 지식을 쌓으셨어요!")
-                    .font(.caption)
+                    .font(.scoreDreamCaption)
                     .foregroundColor(.appAccent)
                     .multilineTextAlignment(.center)
             } else {
                 (Text(nextLevelInfo.nextLevelTitle)
-                    .fontWeight(.bold)
+                    .font(.scoreDream(.medium, size: .caption))
                     .foregroundColor(.blue) +
-                 Text("레벨 까지 \(nextLevelInfo.storiesNeeded - storyCount)권 남았어요!"))
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-                    .font(.caption)
+                 Text(" 레벨까지 \(nextLevelInfo.storiesNeeded - storyCount)권 남았어요!"))
+                    .font(.scoreDreamCaption)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
             }
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 25)
     }
     
     private var followStats: some View {
@@ -210,10 +203,9 @@ struct ProfileView: View {
             NavigationLink(destination: FollowersListView(userId: currentUser?.id).environmentObject(followViewModel).environmentObject(userAuthManager)) {
                 VStack(spacing: 4) {
                     Text("\(followViewModel.followersCount)")
-                        .font(.title2)
-                        .fontWeight(.bold)
+                        .font(.scoreDream(.bold, size: .title3))
                     Text("팔로워")
-                        .font(.caption)
+                        .font(.scoreDreamCaption)
                         .foregroundColor(.secondary)
                 }
             }
@@ -232,10 +224,9 @@ struct ProfileView: View {
             ) {
                 VStack(spacing: 4) {
                     Text("\(followViewModel.followingCount)")
-                        .font(.title2)
-                        .fontWeight(.bold)
+                        .font(.scoreDream(.bold, size: .title3))
                     Text("팔로잉")
-                        .font(.caption)
+                        .font(.scoreDreamCaption)
                         .foregroundColor(.secondary)
                 }
             }
@@ -245,19 +236,17 @@ struct ProfileView: View {
             if showFollowButton {
                 VStack(spacing: 4) {
                     Text("\(userViewModel.user?.monthlyReadingGoal ?? 0)")
-                        .font(.title2)
-                        .fontWeight(.bold)
+                        .font(.scoreDream(.bold, size: .title3))
                     Text("독서목표")
-                        .font(.caption)
+                        .font(.scoreDreamCaption)
                         .foregroundColor(.secondary)
                 }
             } else {
                 VStack(spacing: 4) {
                     Text("\(userViewModel.storyCount ?? 0)")
-                        .font(.title2)
-                        .fontWeight(.bold)
+                        .font(.scoreDream(.bold, size: .title3))
                     Text("기록 수")
-                        .font(.caption)
+                        .font(.scoreDreamCaption)
                         .foregroundColor(.secondary)
                 }
             }

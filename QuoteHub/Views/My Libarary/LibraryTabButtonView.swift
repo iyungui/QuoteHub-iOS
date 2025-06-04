@@ -35,11 +35,11 @@ struct CustomTabButton: View {
     var body: some View {
         Button(action: action) {
             Text(title)
-                .fontWeight(isSelected ? .bold : .regular)
+                .font(isSelected ? .scoreDream(.bold, size: .body) : .scoreDreamBody)
                 .padding(.vertical, 10)
                 .padding(.horizontal, 20)
                 .foregroundColor(isSelected ? .white : .secondary)
-                .background(isSelected ? Color.black : Color.clear)
+                .background(isSelected ? Color.appAccent : Color.clear)
                 .frame(minWidth: 70, minHeight: 40)
                 .cornerRadius(4)
         }

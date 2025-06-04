@@ -90,17 +90,12 @@ struct TabBarItem: View {
     
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 4) {
+//            VStack(spacing: 4) {
                 Image(systemName: icon)
                     .font(.title2)
                     .foregroundStyle(isSelected ? Color.appAccent : Color.gray)
                     .scaleEffect(isSelected ? 1.1 : 1.0)
-                
-                Text(label)
-                    .font(.caption2)
-                    .fontWeight(isSelected ? .semibold : .medium)
-                    .foregroundStyle(isSelected ? Color.appAccent : Color.gray)
-            }
+//            }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 8)
             .contentShape(Rectangle())

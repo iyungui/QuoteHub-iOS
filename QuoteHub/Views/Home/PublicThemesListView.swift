@@ -147,9 +147,9 @@ struct ThemeView: View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
                     Text(theme.name)
-                        .font(.title3)
-                        .fontWeight(.bold)
+                        .font(.scoreDream(.bold, size: .title3))
                         .foregroundColor(.white)
+                        .lineLimit(1)
                         .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
                     
                     Spacer()
@@ -161,7 +161,7 @@ struct ThemeView: View {
                 }
                 
                 Text(theme.description)
-                    .font(.caption)
+                    .font(.scoreDreamCaption)
                     .foregroundColor(.white.opacity(0.9))
                     .lineLimit(2)
                     .shadow(color: .black.opacity(0.3), radius: 1, x: 0, y: 1)

@@ -94,13 +94,11 @@ struct FloatingActionItem: View {
                 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)
-                        .font(.headline)
-                        .fontWeight(.semibold)
+                        .font(.scoreDream(.medium, size: .body))
                         .foregroundStyle(.primary)
                     
                     Text(subtitle)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .font(.scoreDreamCaption)
                         .multilineTextAlignment(.leading)
                 }
                 

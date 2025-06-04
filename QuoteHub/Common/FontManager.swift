@@ -88,7 +88,7 @@ extension Font {
     }
     
     static var scoreDreamLargeTitle: Font {
-        ScoreDreamFont.font(.bold, size: .largeTitle)
+        ScoreDreamFont.font(.black, size: .largeTitle)
     }
     
     static func scoreDream(_ weight: ScoreDreamFont.Weight, size: ScoreDreamFont.Size) -> Font {
