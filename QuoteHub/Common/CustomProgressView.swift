@@ -55,19 +55,21 @@ protocol LoadingViewModel: ObservableObject {
 struct ProgressOverlay<VM: LoadingViewModel>: ViewModifier {
     @ObservedObject var viewModel: VM
     let animationName: String
+    let opacity: Bool
     
     func body(content: Content) -> some View {
         content
             // 화면 전체로 확장
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+//            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .overlay(
                 Group {
                     if viewModel.isLoading {
                         ZStack {
-                            // 화면 전체를 덮는 반투명 배경
-                            Color.black.opacity(0.3)
-                                .ignoresSafeArea(.all)
-                            
+                            if opacity {
+                                // 화면 전체를 덮는 반투명 배경
+                                Color.black.opacity(0.3)
+                                    .ignoresSafeArea(.all)
+                            }
                             // Progress View
                             CustomProgressView(
                                 animationName: animationName,
@@ -88,9 +90,10 @@ struct ProgressOverlay<VM: LoadingViewModel>: ViewModifier {
 extension View {
     func progressOverlay<VM: LoadingViewModel>(
         viewModel: VM,
-        animationName: String = "progressLottie"
+        animationName: String = "progressLottie",
+        opacity: Bool
     ) -> some View {
-        self.modifier(ProgressOverlay(viewModel: viewModel, animationName: animationName))
+        self.modifier(ProgressOverlay(viewModel: viewModel, animationName: animationName, opacity: opacity))
     }
 }
 

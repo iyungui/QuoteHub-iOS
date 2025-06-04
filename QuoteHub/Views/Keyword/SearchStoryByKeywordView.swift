@@ -39,9 +39,6 @@ struct SearchStoryByKeywordView: View {
         }
         .padding()
         .navigationBarTitle("키워드 검색", displayMode: .inline)
-        .onAppear {
-            UITextField.appearance().clearButtonMode = .whileEditing
-        }
     }
     
     private func searchWithKeyword() {

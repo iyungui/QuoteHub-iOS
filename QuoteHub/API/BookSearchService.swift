@@ -6,31 +6,56 @@
 //
 
 import Foundation
+import Combine
 import Alamofire
 
 class BookSearchService {
-    func fetchBooks(query: String, page: Int, completion: @escaping (Result<APIResponse<BooksResponse>, Error>) -> Void) {
-        
+    func fetchBooksPublisher(query: String, page: Int) -> AnyPublisher<APIResponse<BooksResponse>, Error> {
         let endpoint = "?query=\(query)&page=\(page)"
         let urlString = APIEndpoint.searchBookURL + endpoint
         
         guard let url = URL(string: urlString) else {
-            completion(.failure(APIError.invalidURL))
-            return
+            return Fail(error: APIError.invalidURL)
+                .eraseToAnyPublisher()
         }
         
-        AF.request(url, method: .get)
-            .validate()
-            .responseDecodable(of: APIResponse<BooksResponse>.self) { response in
-                switch response.result {
-                case .success(let booksResponse):
-                    completion(.success(booksResponse))
-                case .failure(let error):
-                    completion(.failure(error))
+        return Future<APIResponse<BooksResponse>, Error> { promise in
+            AF.request(url, method: .get)
+                .validate()
+                .responseDecodable(of: APIResponse<BooksResponse>.self) { response in
+                    switch response.result {
+                    case .success(let booksResponse):
+                        promise(.success(booksResponse))
+                    case .failure(let error):
+                        promise(.failure(error))
+                    }
                 }
-            }
+        }
+        .eraseToAnyPublisher()
     }
     
+    func fetchBooksAsync(query: String, page: Int) async throws -> APIResponse<BooksResponse> {
+        let endpoint = "?query=\(query)&page=\(page)"
+        let urlString = APIEndpoint.searchBookURL + endpoint
+        
+        guard let url = URL(string: urlString) else {
+            throw APIError.invalidURL
+        }
+        
+        return try await withCheckedThrowingContinuation { continuation in
+            AF.request(url, method: .get)
+                .validate()
+                .responseDecodable(of: APIResponse<BooksResponse>.self) { response in
+                    switch response.result {
+                    case .success(let booksResponse):
+                        continuation.resume(returning: booksResponse)
+                    case .failure(let error):
+                        continuation.resume(throwing: error)
+                    }
+                }
+        }
+    }
+
     func getRandomBooks(completion: @escaping (Result<RandomBooksResponse, AFError>) -> Void) {
         let url = APIEndpoint.recommendBooksURL
         

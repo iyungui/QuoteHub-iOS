@@ -36,9 +36,6 @@ struct UserSearchView: View {
         }
         .padding()
         .navigationBarTitle("사용자 검색", displayMode: .inline)
-        .onAppear {
-            UITextField.appearance().clearButtonMode = .whileEditing
-        }
     }
     
     private func searchWithNickname() {
