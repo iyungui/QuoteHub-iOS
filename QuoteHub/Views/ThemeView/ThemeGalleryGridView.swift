@@ -16,7 +16,7 @@ struct ThemeGalleryGridView: View {
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
     @EnvironmentObject private var userViewModel: UserViewModel
     
-    private let columns = Array(repeating: GridItem(.flexible(), spacing: 4), count: 3)
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 1), count: 3)
 
     var body: some View {
         LazyVStack(spacing: 0) {
@@ -24,7 +24,7 @@ struct ThemeGalleryGridView: View {
                 emptyStateView
                     .padding(.top, 40)
             } else {
-                LazyVGrid(columns: columns, spacing: 0) {
+                LazyVGrid(columns: columns, spacing: 1) {
                     ForEach(storiesViewModel.bookStories(for: loadType), id: \.id) { story in
                         StoryGridCard(story: story, isMy: isMy)
                             .environmentObject(storiesViewModel)

@@ -563,7 +563,6 @@ struct BookStoryDetailView: View {
         }) {
             Image(systemName: "ellipsis")
                 .font(.title3.weight(.medium))
-                .foregroundColor(.brownLeather.opacity(0.8))
         }
     }
     

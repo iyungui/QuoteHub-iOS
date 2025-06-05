@@ -51,7 +51,7 @@ struct ThemeDetailView: View {
                     themeHeaderView
                     
                     // 탭 인디케이터
-                    tabIndicator(height: 5, selectedView: selectedView)
+                    tabIndicator(height: 3, selectedView: selectedView)
                     
                     // 컨텐츠 뷰
                     contentView
@@ -245,7 +245,7 @@ struct ThemeDetailView: View {
             }
             .resizable()
             .aspectRatio(contentMode: .fill)
-            .frame(height: 300)
+            .frame(width: UIScreen.main.bounds.width, height: 300)
             .clipped()
     }
     
