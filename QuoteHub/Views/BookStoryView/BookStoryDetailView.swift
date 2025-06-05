@@ -78,14 +78,18 @@ struct BookStoryDetailView: View {
     // MARK: - BODY
     
     var body: some View {
-        Group {
-            if followViewModel.isBlocked {
-                ContentUnavailableView("차단된 사용자", systemImage: "person.crop.circle.badge.xmark.fill", description: Text("설정의 차단 목록에서 확인해주세요."))
-            } else {
-                mainContent
+        ZStack {
+            backgroundGradient
+            
+            Group {
+                if followViewModel.isBlocked {
+                    ContentUnavailableView("차단된 사용자", systemImage: "person.crop.circle.badge.xmark.fill", description: Text("설정의 차단 목록에서 확인해주세요."))
+                } else {
+                    mainContent
+                }
             }
         }
-        
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 navBarButton
@@ -123,10 +127,23 @@ struct BookStoryDetailView: View {
     
     // MARK: - VIEW COMPONENTS
     
+    private var backgroundGradient: some View {
+        LinearGradient(
+            gradient: Gradient(colors: [
+                Color.softBeige.opacity(0.3),
+                Color.lightPaper.opacity(0.2),
+                Color.paperBeige.opacity(0.1)
+            ]),
+            startPoint: .top,
+            endPoint: .bottom
+        )
+        .ignoresSafeArea()
+    }
+    
     @ViewBuilder
     private var mainContent: some View {
-        ScrollView {
-            VStack {
+        ScrollView(showsIndicators: false) {
+            VStack(spacing: 24) {
                 keywordSection
                 quoteSection
                 storyImagesSection
@@ -134,76 +151,109 @@ struct BookStoryDetailView: View {
                 storyContentSection
                 bookInfoSection
                 
-                Spacer().frame(minHeight: 50)
+                spacer(height: 20)
                 
                 // 스토리 정보 (공개/비공개 정보는 내 스토리에서만)
                 storyInfoSection
                 
                 Divider()
+                    .foregroundStyle(Color.secondaryText.opacity(0.3))
+                    .padding(.horizontal, 20)
                 
                 // 댓글 버튼
                 commentButton
+                
+                spacer(height: 100)
             }
+            .padding(.top, 20)
         }
     }
     
     // 키워드 가로스크롤 섹션
     private var keywordSection: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 10) {
+            HStack(spacing: 12) {
                 ForEach(story.keywords ?? [], id: \.self) { keyword in
                     Text("#\(keyword)")
-                        .font(.scoreDreamBody)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 5)
-                        .background(Color.secondary.opacity(0.1))
-                        .cornerRadius(10)
+                        .font(.scoreDream(.medium, size: .subheadline))
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(
+                            LinearGradient(
+                                gradient: Gradient(colors: [.brownLeather, .antiqueGold]),
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .clipShape(Capsule())
+                        .shadow(color: .brownLeather.opacity(0.3), radius: 4, x: 0, y: 2)
                 }
             }
-            .padding(.leading, 20)
+            .padding(.horizontal, 20)
         }
-        .padding(.top, 10)
     }
     
     /// 문장 인용구 섹션
     private var quoteSection: some View {
-        VStack(alignment: .center, spacing: 10) {
+        VStack(alignment: .center, spacing: 16) {
             HStack {
                 Text("“")
-                    .font(.scoreDreamLargeTitle)
+                    .font(.scoreDream(.black, size: .largeTitle))
+                    .foregroundColor(.brownLeather.opacity(0.8))
                 Spacer()
             }
             
             AnimatedText(.constant(story.quote ?? ""))
-                .font(.scoreDreamBody)
+                .font(.scoreDream(.medium, size: .body))
+                .foregroundColor(.primaryText)
+                .lineSpacing(6)
                 .frame(minHeight: 100)
-                .padding(.horizontal)
+                .padding(.horizontal, 20)
             
             HStack {
                 Spacer()
-                Text("”")
-                    .font(.scoreDreamLargeTitle)
+                Text("“")
+                    .font(.scoreDream(.black, size: .largeTitle))
+                    .foregroundColor(.brownLeather.opacity(0.8))
             }
         }
         .padding(.horizontal, 20)
-        .padding(.vertical, 5)
+        .padding(.vertical, 16)
     }
     
     // 스토리 이미지 섹션
     @ViewBuilder
     private var storyImagesSection: some View {
-        let width: CGFloat = UIScreen.main.bounds.width
-        TabView {
-            ForEach(story.storyImageURLs ?? [], id: \.self) { index in
-                WebImage(url: URL(string: index))
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: width, height: width)
-                    .clipped()
+        if let imageUrls = story.storyImageURLs, !imageUrls.isEmpty {
+            let width: CGFloat = UIScreen.main.bounds.width
+            TabView {
+                ForEach(imageUrls, id: \.self) { imageUrl in
+                    WebImage(url: URL(string: imageUrl))
+                        .placeholder {
+                            Rectangle()
+                                .fill(Color.paperBeige.opacity(0.3))
+                                .overlay(
+                                    VStack(spacing: 12) {
+                                        Image(systemName: "photo")
+                                            .font(.system(size: 40))
+                                            .foregroundColor(.brownLeather.opacity(0.6))
+                                        Text("이미지 로딩 중...")
+                                            .font(.scoreDream(.light, size: .caption))
+                                            .foregroundColor(.secondaryText)
+                                    }
+                                )
+                        }
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: width - 40, height: width - 40)
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                        .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+                }
             }
+            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
+            .frame(width: width, height: width - 20)
         }
-        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
-        .frame(width: width, height: width)
     }
     
     // 프로필 이미지 섹션
@@ -211,37 +261,26 @@ struct BookStoryDetailView: View {
     private var profileSection: some View {
         if isMyStory {
             // 내 스토리 - 내 프로필 정보 표시
-            HStack {
-                if let url = URL(string: userViewModel.user?.profileImage ?? ""), !(userViewModel.user?.profileImage ?? "").isEmpty {
-                    WebImage(url: url)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 80, height: 80)
-                        .clipShape(Circle())
-                        .overlay(Circle().stroke(Color.gray, lineWidth: 1))
-                } else {
-                    Image(systemName: "person.crop.circle.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 80, height: 80)
-                }
+            HStack(spacing: 16) {
+                profileImage(for: userViewModel.user)
                 
-                VStack(alignment: .leading, spacing: 5) {
+                VStack(alignment: .leading, spacing: 6) {
                     Text(userViewModel.user?.nickname ?? "닉네임 없음")
                         .font(.scoreDream(.bold, size: .body))
+                        .foregroundColor(.primaryText)
                         .lineLimit(1)
                         .truncationMode(.tail)
+                    
                     Text(userViewModel.user?.statusMessage ?? "")
                         .font(.scoreDream(.medium, size: .subheadline))
-                        .lineLimit(1)
+                        .foregroundColor(.secondaryText)
+                        .lineLimit(2)
                 }
-                .padding(.leading, 10)
                 
                 Spacer()
             }
-            .padding(.all, 10)
-            .cornerRadius(12)
-            .padding(.horizontal)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 12)
         } else {
             // 친구 스토리 - 친구 프로필 정보 표시 + NavigationLink
             NavigationLink(
@@ -251,58 +290,98 @@ struct BookStoryDetailView: View {
                     .environmentObject(storiesViewModel)
                     .environmentObject(themesViewModel)
             ) {
-                HStack {
-                    if let url = URL(string: story.userId.profileImage), !story.userId.profileImage.isEmpty {
-                        WebImage(url: url)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 80, height: 80)
-                            .clipShape(Circle())
-                            .overlay(Circle().stroke(Color.gray, lineWidth: 1))
-                    } else {
-                        Image(systemName: "person.crop.circle.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 80, height: 80)
-                    }
+                HStack(spacing: 16) {
+                    profileImage(for: story.userId)
                     
-                    VStack(alignment: .leading, spacing: 15) {
+                    VStack(alignment: .leading, spacing: 6) {
                         Text(story.userId.nickname)
                             .font(.scoreDream(.bold, size: .body))
+                            .foregroundColor(.primaryText)
                             .lineLimit(1)
                             .truncationMode(.tail)
                         
                         Text(story.userId.statusMessage ?? "")
                             .font(.scoreDream(.medium, size: .subheadline))
-                            .lineLimit(1)
+                            .foregroundColor(.secondaryText)
+                            .lineLimit(2)
                     }
-                    .padding(.leading, 10)
                     
                     Spacer()
+                    
                     Image(systemName: "chevron.right")
-                        .fontWeight(.medium)
-                        .foregroundColor(.gray)
+                        .font(.caption.weight(.medium))
+                        .foregroundColor(.secondaryText.opacity(0.6))
                 }
-                .padding(.all, 10)
-                .cornerRadius(12)
-                .padding(.horizontal)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 12)
             }
-            .buttonStyle(PlainButtonStyle())
+            .buttonStyle(CardButtonStyle())
+        }
+    }
+    
+    private func profileImage(for user: User?) -> some View {
+        Group {
+            if let url = URL(string: user?.profileImage ?? ""), !(user?.profileImage ?? "").isEmpty {
+                WebImage(url: url)
+                    .placeholder {
+                        Circle()
+                            .fill(Color.paperBeige.opacity(0.5))
+                            .overlay(
+                                Image(systemName: "person.fill")
+                                    .foregroundColor(.brownLeather.opacity(0.7))
+                                    .font(.title2)
+                            )
+                    }
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 60, height: 60)
+                    .clipShape(Circle())
+                    .overlay(Circle().stroke(Color.antiqueGold.opacity(0.3), lineWidth: 2))
+                    .shadow(color: .brownLeather.opacity(0.2), radius: 6, x: 0, y: 3)
+            } else {
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.paperBeige.opacity(0.8), Color.antiqueGold.opacity(0.6)]),
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 60, height: 60)
+                    .overlay(
+                        Image(systemName: "person.fill")
+                            .foregroundColor(.brownLeather.opacity(0.7))
+                            .font(.title2)
+                    )
+                    .shadow(color: .brownLeather.opacity(0.2), radius: 6, x: 0, y: 3)
+            }
         }
     }
     
     // 스토리 컨텐츠 섹션
     private var storyContentSection: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Image(systemName: "brain.head.profile")
+                    .font(.title3.weight(.medium))
+                    .foregroundColor(.brownLeather)
+                
+                Text("나의 생각")
+                    .font(.scoreDream(.bold, size: .body))
+                    .foregroundColor(.primaryText)
+                
+                Spacer()
+            }
+            
             Text(story.content ?? "")
-                .font(.scoreDreamBody)
-                .frame(minHeight: 50)
-                .padding()
+                .font(.scoreDream(.regular, size: .body))
+                .foregroundColor(.primaryText)
+                .lineSpacing(6)
+                .frame(minHeight: 60, alignment: .topLeading)
         }
-        .padding(.horizontal)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 16)
     }
-    
-    // TODO: - 여기서부터 page 2로 만들기 (스크롤뷰 조정)
     
     // 책 정보
     private var bookInfoSection: some View {
@@ -310,94 +389,159 @@ struct BookStoryDetailView: View {
             self.alertType = .link
             self.showAlert = true
         }) {
-            HStack {
+            HStack(spacing: 16) {
                 WebImage(url: URL(string: story.bookId.bookImageURL))
+                    .placeholder {
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.paperBeige.opacity(0.3))
+                            .overlay(
+                                Image(systemName: "book.closed.fill")
+                                    .foregroundColor(.brownLeather.opacity(0.7))
+                                    .font(.title2)
+                            )
+                    }
                     .resizable()
-                    .scaledToFit()
+                    .scaledToFill()
                     .frame(width: 80, height: 100)
-                    .cornerRadius(4)
-                    .shadow(radius: 3)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color.antiqueGold.opacity(0.3), lineWidth: 1)
+                    )
+                    .shadow(color: .brownLeather.opacity(0.2), radius: 6, x: 0, y: 3)
                 
-                VStack(alignment: .leading, spacing: 5) {
+                VStack(alignment: .leading, spacing: 8) {
                     Text(story.bookId.title)
-                        .font(.scoreDream(.bold, size: .body))
-                        .lineLimit(1)
-                        .truncationMode(.tail)
+                        .font(.scoreDream(.bold, size: .subheadline))
+                        .foregroundColor(.primaryText)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
                     
                     Text(story.bookId.author.joined(separator: ", "))
-                        .font(.scoreDream(.medium, size: .subheadline))
-                        .foregroundColor(.secondary)
+                        .font(.scoreDream(.medium, size: .caption))
+                        .foregroundColor(.secondaryText)
+                        .lineLimit(1)
                     
                     Text(story.bookId.publisher)
-                        .font(.scoreDreamCaption)
-                        .foregroundColor(.secondary)
+                        .font(.scoreDream(.light, size: .caption))
+                        .foregroundColor(.secondaryText.opacity(0.8))
+                        .lineLimit(1)
                 }
-                .padding(.leading, 10)
                 
                 Spacer()
                 
-                Image(systemName: "chevron.right")
-                    .fontWeight(.medium)
-                    .foregroundColor(.gray)
-                
+                Image(systemName: "arrow.up.right")
+                    .font(.caption.weight(.medium))
+                    .foregroundColor(.brownLeather.opacity(0.7))
             }
-            .padding(.all, 10)
-            .padding(.horizontal)
+            .padding(16)
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(.ultraThinMaterial)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [
+                                        Color.white.opacity(0.2),
+                                        Color.clear,
+                                        Color.antiqueGold.opacity(0.1)
+                                    ]),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                lineWidth: 1
+                            )
+                    )
+            )
+            .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 4)
+            .padding(.horizontal, 20)
         }
-        .buttonStyle(MyActionButtonStyle())
+        .buttonStyle(CardButtonStyle())
     }
     
     // 스토리 정보 (작성일, 잠금여부)
     private var storyInfoSection: some View {
         HStack {
-            Spacer()
-            
             // 내 스토리에서만 공개/비공개 표시
             if isMyStory {
-                Text(story.isPublic ? "공개" : "비공개")
-                    .font(.scoreDreamCaption)
-                    .foregroundColor(.gray)
-                
-                Image(systemName: story.isPublic ? "lock.open.fill" : "lock.fill")
-                    .font(.caption)
-                    .foregroundColor(.gray)
-                    .padding(.trailing)
+                HStack(spacing: 6) {
+                    Image(systemName: story.isPublic ? "eye.fill" : "eye.slash.fill")
+                        .font(.caption)
+                        .foregroundColor(story.isPublic ? .brownLeather : .secondaryText)
+                    
+                    Text(story.isPublic ? "공개" : "비공개")
+                        .font(.scoreDream(.medium, size: .caption))
+                        .foregroundColor(story.isPublic ? .brownLeather : .secondaryText)
+                }
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .background(
+                    Capsule()
+                        .fill(story.isPublic ? Color.brownLeather.opacity(0.1) : Color.secondaryText.opacity(0.1))
+                )
             }
             
-            Text("작성일: \(story.updatedAt.prefix(10))")
-                .padding(.trailing)
-                .font(.scoreDreamCaption)
-                .foregroundColor(.gray)
+            Spacer()
+            
+            HStack(spacing: 6) {
+                Image(systemName: "calendar")
+                    .font(.caption2)
+                    .foregroundColor(.secondaryText.opacity(0.7))
+                
+                Text("작성일: \(story.updatedAt.prefix(10))")
+                    .font(.scoreDream(.light, size: .caption))
+                    .foregroundColor(.secondaryText.opacity(0.8))
+            }
         }
+        .padding(.horizontal, 20)
     }
     
     // 댓글 버튼
     private var commentButton: some View {
-        
-        VStack {
-            Button(action: {
-                if userAuthManager.isUserAuthenticated {
-                    isExpanded.toggle()
-                } else {
-                    alertType = .loginRequired
-                    showAlert = true
-                }
-            }) {
-                HStack {
-                    Image(systemName: "bubble.left.and.bubble.right.fill")
-                        .resizable()
-                        .frame(width: 20, height: 20)
-                        .foregroundColor(.accentColor)
-                        .padding()
-                    Text("\(commentViewModel.totalCommentCount)")
-                        .font(.scoreDream(.bold, size: .body))
-                    Spacer()
-                }
+        Button(action: {
+            if userAuthManager.isUserAuthenticated {
+                isExpanded.toggle()
+            } else {
+                alertType = .loginRequired
+                showAlert = true
             }
-            .buttonStyle(PlainButtonStyle())
-            .padding(.horizontal)
+        }) {
+            HStack(spacing: 12) {
+                Image(systemName: "bubble.left.and.bubble.right.fill")
+                    .font(.title3.weight(.medium))
+                    .foregroundColor(.brownLeather)
+                
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("댓글")
+                        .font(.scoreDream(.bold, size: .body))
+                        .foregroundColor(.primaryText)
+                    
+                    Text("\(commentViewModel.totalCommentCount)개의 댓글")
+                        .font(.scoreDream(.light, size: .caption))
+                        .foregroundColor(.secondaryText)
+                }
+                
+                Spacer()
+                
+                Image(systemName: "chevron.right")
+                    .font(.caption.weight(.medium))
+                    .foregroundColor(.secondaryText.opacity(0.6))
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 16)
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(.ultraThinMaterial)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(Color.brownLeather.opacity(0.2), lineWidth: 1)
+                    )
+            )
+            .shadow(color: .black.opacity(0.06), radius: 6, x: 0, y: 3)
+            .padding(.horizontal, 20)
         }
-        
+        .buttonStyle(CardButtonStyle())
     }
     
     // MARK: - NAVIGATION & ACTIONS
@@ -407,9 +551,8 @@ struct BookStoryDetailView: View {
             showActionSheet = true
         }) {
             Image(systemName: "ellipsis")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 25, height: 25)
+                .font(.title3.weight(.medium))
+                .foregroundColor(.brownLeather.opacity(0.8))
         }
     }
     
