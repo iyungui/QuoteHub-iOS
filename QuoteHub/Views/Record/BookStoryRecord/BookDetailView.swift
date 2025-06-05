@@ -353,7 +353,7 @@ struct BookDetailView: View {
     
     private var additionalInfoCard: some View {
         VStack(alignment: .leading, spacing: 16) {
-            cardHeader(title: "", icon: "info.square.fill")
+            cardHeader(title: "추가 정보", icon: "info.square.fill")
             
             VStack(spacing: 8) {
                 HStack {

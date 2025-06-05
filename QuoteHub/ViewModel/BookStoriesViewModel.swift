@@ -13,11 +13,13 @@ enum LoadType: Equatable, Hashable {
     case `public`
 }
 
-class BookStoriesViewModel: ObservableObject {
-    // MARK: - PROPERTIES
-    
-    @Published var storiesByType: [LoadType: [BookStory]] = [:]
+class BookStoriesViewModel: ObservableObject, LoadingViewModel {
+    // MARK: - LoadingViewModel Protocol
     @Published var isLoading = false
+    @Published var loadingMessage: String?
+    
+    // MARK: - PROPERTIES
+    @Published var storiesByType: [LoadType: [BookStory]] = [:]
     @Published var isLastPage = false
     @Published var errorMessage: String?
 
@@ -51,17 +53,12 @@ class BookStoriesViewModel: ObservableObject {
         isLastPage = false
         isLoading = false
         
-//        storiesByType.removeAll()
-        
         // 해당 타입의 데이터만 초기화
         storiesByType[type] = []
         loadBookStories(type: type)
     }
     
-    
     // MARK: - LOAD STORIES
-    
-    // TODO: - 단일 북스토리 조회 메서드 추가필요
     
     func loadBookStories(type: LoadType) {
         print(#fileID, #function, #line, "- ")
@@ -81,6 +78,7 @@ class BookStoriesViewModel: ObservableObject {
         }
         
         isLoading = true
+        loadingMessage = "북스토리를 불러오는 중..."
                 
         let completion: (Result<BookStoriesResponse, Error>) -> Void = { [weak self] result in
             guard let self = self else { return }
@@ -95,9 +93,12 @@ class BookStoriesViewModel: ObservableObject {
                     self.isLastPage = response.pagination.currentPage >= response.pagination.totalPages
                     self.currentPage += 1
                     self.isLoading = false
+                    self.loadingMessage = nil
                 case .failure(let error):
                     print("Error loading book stories (\(type)): \(error)")
                     self.isLoading = false
+                    self.loadingMessage = nil
+                    self.errorMessage = "북스토리를 불러오는 중 오류가 발생했습니다."
                 }
             }
         }
@@ -178,37 +179,43 @@ class BookStoriesViewModel: ObservableObject {
         addStoryToTypes(story)
     }
     
-    // 내 북스토리에 해당됨
     // MARK: - CREATE NEW STORY
     
-    // TODO: 이미지 옵셔널로 변경
     func createBookStory(images: [UIImage], bookId: String, quote: String, content: String, isPublic: Bool, keywords: [String], folderIds: [String], completion: @escaping (Bool) -> Void) {
         print(#fileID, #function, #line, "- ")
         
+        isLoading = true
+        loadingMessage = "북스토리를 등록하는 중..."
+        
         service.createBookStory(images: images, bookId: bookId, quote: quote, content: content, isPublic: isPublic, keywords: keywords, folderIds: folderIds) { [weak self] result in
             guard let self = self else { return }
-            self.isLoading = true
 
             DispatchQueue.main.async {
                 switch result {
                 case .success(let bookStoryResponse):
-                    guard let newStory = bookStoryResponse.data else { return }
+                    guard let newStory = bookStoryResponse.data else {
+                        self.isLoading = false
+                        self.loadingMessage = nil
+                        completion(false)
+                        return
+                    }
                     
                     // (my 타입과 공개인 경우 public 타입에 새 스토리 추가하기)
                     self.addStoryToTypes(newStory)
                     
                     self.isLoading = false
+                    self.loadingMessage = nil
                     
                     print("북스토리 생성 완료")
                     completion(true)
                 case .failure(let error):
                     self.isLoading = false
+                    self.loadingMessage = nil
                     
                     print("북스토리 생성 실패 - \(error.localizedDescription)")
                     completion(false)
                 }
             }
-            
         }
     }
     
@@ -217,9 +224,11 @@ class BookStoriesViewModel: ObservableObject {
     func deleteBookStory(storyID: String, completion: @escaping (Bool) -> Void) {
         print(#fileID, #function, #line, "- ")
         
+        isLoading = true
+        loadingMessage = "북스토리를 삭제하는 중..."
+        
         service.deleteBookStory(storyID: storyID) { [weak self] result in
             guard let self = self else { return }
-            self.isLoading = true
             DispatchQueue.main.async {
                 switch result {
                 case .success(_):
@@ -229,10 +238,13 @@ class BookStoriesViewModel: ObservableObject {
                     self.removeStoryFromTypes(storyID: storyID)
                     
                     self.isLoading = false
+                    self.loadingMessage = nil
                     
                     print("북스토리 삭제 성공")
                     completion(true)    // 함수 종료
                 case .failure(let error):
+                    self.isLoading = false
+                    self.loadingMessage = nil
                     self.isLastPage = false
                     
                     print("북스토리 삭제 실패 - \(error.localizedDescription)")
@@ -247,25 +259,34 @@ class BookStoriesViewModel: ObservableObject {
     func updateBookStory(storyID: String, images: [UIImage]?, quote: String?, content: String?, isPublic: Bool, keywords: [String]?, folderIds: [String]?, completion: @escaping (Bool) -> Void) {
         print(#fileID, #function, #line, "- ")
         
+        isLoading = true
+        loadingMessage = "북스토리를 수정하는 중..."
+        
         service.updateBookStory(storyID: storyID, images: images, quote: quote, content: content, isPublic: isPublic, keywords: keywords, folderIds: folderIds) { [weak self] result in
             guard let self = self else { return }
-            self.isLoading = true
             
             DispatchQueue.main.async {
                 switch result {
                 case .success(let updatedStoryResponse):
-                    guard let updatedStory = updatedStoryResponse.data else { return }
+                    guard let updatedStory = updatedStoryResponse.data else {
+                        self.isLoading = false
+                        self.loadingMessage = nil
+                        completion(false)
+                        return
+                    }
                     
                     // 관련된 타입에서 스토리 업데이트
                     self.updateStoryInTypes(updatedStory)
                     
                     self.isLoading = false
+                    self.loadingMessage = nil
                     
                     print("북스토리 업데이트 성공")
                     completion(true)
                     
                 case .failure(let error):
                     self.isLoading = false
+                    self.loadingMessage = nil
                 
                     print("북스토리 업데이트 실패: \(error.localizedDescription)")
                     completion(false)

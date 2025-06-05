@@ -14,9 +14,7 @@ struct RecordView: View {
     // MARK: - PROPERTIES
     
     let book: Book
-
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
-
     @Environment(\.dismiss) private var dismiss
     
     @State private var showAlert: Bool = false
@@ -64,34 +62,54 @@ struct RecordView: View {
     // MARK: - BODY
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                keywordView
-                Divider()
-                quoteView
-                    .padding()
-                Divider()
-                Spacer()
-                inputContentView
-                StoryImagesView(selectedImages: $selectedImages, showingImagePicker: $showingImagePicker)
-                Divider()
-                selectThemaView
-                Divider()
-                publicToggleView
-                Divider()
-                infoBookView
-                
-                VStack(alignment:.center) {
-                    if let message = feedbackMessage, !filledField(quote: quote, content: content, keywords: keywords) {
-                        Text(message)
-                            .font(.footnote)
-                            .foregroundColor(.red)
-                            .padding(.horizontal)
+        ZStack {
+            backgroundGradient
+            
+            ScrollView {
+                VStack(spacing: 24) {
+                    // 책 정보 카드
+                    bookInfoCard
+                    
+                    // 키워드 입력 카드
+                    keywordCard
+                    
+                    // 인용구 입력 카드
+                    quoteCard
+                    
+                    // 생각 입력 카드
+                    thoughtCard
+                    
+                    // 이미지 추가 카드
+                    StoryImagesView(selectedImages: $selectedImages, showingImagePicker: $showingImagePicker)
+                    
+                    // 설정 카드들
+                    VStack(spacing: 16) {
+                        themeSelectionCard
+                        privacyToggleCard
                     }
-                    buttonView
+                    
+                    
+                    // 하단 여백
+                    spacer(height: 100)
                 }
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
             }
         }
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle("북스토리 기록")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                submitButton
+            }
+            ToolbarItem(placement: .bottomBar) {
+                if let message = feedbackMessage, !isFormValid {
+                    feedbackView(message: message)
+                }
+
+            }
+        }
+        .progressOverlay(viewModel: storiesViewModel, animationName: "progressLottie", opacity: true)
         .onTapGesture {
             hideKeyboard()
         }
@@ -103,7 +121,6 @@ struct RecordView: View {
             MultipleImagePicker(selectedImages: self.$selectedImages, selectionLimit: max(0, 10 - selectedImages.count))
                 .ignoresSafeArea(.all)
         }
-        .navigationBarTitle("북스토리 기록", displayMode: .inline)
         .actionSheet(isPresented: $showingImagePicker) {
             ActionSheet(title: Text("이미지 선택"), message: nil, buttons: [
                 .default(Text("카메라")) {
@@ -156,263 +173,498 @@ struct RecordView: View {
         }
     }
     
-    var keywordView: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            if keywords.count < 5 {
-                TextField("", text: $currentInput)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .focused($focusField, equals: .keywords)
-                    .submitLabel(.done)
-                    .onChange(of: currentInput) { _, newValue in
-                        if newValue.count > 8 {
-                            currentInput = String(newValue.prefix(8))
-                        }
+    // MARK: - UI Components
+    
+    private var backgroundGradient: some View {
+        LinearGradient(
+            gradient: Gradient(colors: [
+                Color.softBeige.opacity(0.3),
+                Color.lightPaper.opacity(0.2),
+                Color.paperBeige.opacity(0.1)
+            ]),
+            startPoint: .top,
+            endPoint: .bottom
+        )
+        .ignoresSafeArea()
+    }
+    
+    private var submitButton: some View {
+        Button(action: submitStory) {
+            Image(systemName: "checkmark.circle.fill")
+                .font(.title2.weight(.medium))
+                .foregroundColor(isFormValid ? .brownLeather : .gray)
+                .scaleEffect(isFormValid ? 1.1 : 1.0)
+                .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isFormValid)
+        }
+//        .disabled(!isFormValid)
+    }
+    
+    private var bookInfoCard: some View {
+        VStack(spacing: 16) {
+            cardHeader(title: "선택한 책", icon: "book.fill")
+            
+            HStack(spacing: 16) {
+                WebImage(url: URL(string: book.bookImageURL))
+                    .placeholder {
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.paperBeige.opacity(0.3))
+                            .overlay(
+                                Image(systemName: "book.closed.fill")
+                                    .foregroundColor(.brownLeather.opacity(0.7))
+                                    .font(.title2)
+                            )
                     }
-                    .onSubmit(addKeyword)
-                    .padding(.horizontal)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 80, height: 100)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
                     .overlay(
-                        HStack {
-                            Spacer()
-                            if currentInput.isEmpty {
-                                Text("#키워드를   #입력   #하세요")
-                                    .font(.callout)
-                                    .foregroundColor(.gray)
-                                    .padding(.trailing, 30)
-                                    .allowsHitTesting(false)
-
-                            }
-                        }
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color.antiqueGold.opacity(0.3), lineWidth: 1)
                     )
+                    .shadow(color: .brownLeather.opacity(0.2), radius: 6, x: 0, y: 3)
+                
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(book.title)
+                        .font(.scoreDream(.bold, size: .subheadline))
+                        .foregroundColor(.primaryText)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
+                    
+                    if !book.author.isEmpty {
+                        Text(book.author.joined(separator: ", "))
+                            .font(.scoreDream(.medium, size: .footnote))
+                            .foregroundColor(.secondaryText)
+                            .lineLimit(1)
+                    }
+                    
+                    Text(book.publisher)
+                        .font(.scoreDream(.light, size: .caption))
+                        .foregroundColor(.secondaryText.opacity(0.8))
+                        .lineLimit(1)
+                }
+                
+                Spacer()
+            }
+        }
+        .padding(20)
+        .background(cardBackground)
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 4)
+    }
+    
+    private var keywordCard: some View {
+        VStack(spacing: 16) {
+            cardHeader(title: "키워드", icon: "tag.fill", subtitle: "최대 5개까지 입력 가능")
+            
+            VStack(spacing: 12) {
+                if keywords.count < 5 {
+                    HStack {
+                        Image(systemName: "number")
+                            .font(.body)
+                            .foregroundColor(.brownLeather.opacity(0.7))
+                            .frame(width: 20)
+                        
+                        TextField("키워드 입력", text: $currentInput)
+                            .focused($focusField, equals: .keywords)
+                            .submitLabel(.done)
+                            .onChange(of: currentInput) { _, newValue in
+                                if newValue.count > 8 {
+                                    currentInput = String(newValue.prefix(8))
+                                }
+                            }
+                            .onSubmit(addKeyword)
+                            .font(.scoreDream(.medium, size: .body))
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.paperBeige.opacity(0.3))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(focusField == .keywords ? Color.brownLeather.opacity(0.5) : Color.clear, lineWidth: 2)
+                            )
+                    )
+                    .animation(.easeInOut(duration: 0.2), value: focusField)
+                }
                 
                 if isShowingDuplicateWarning {
-                    Text("중복된 키워드입니다.")
-                        .font(.footnote)
-                        .foregroundColor(.red)
-                        .padding(.horizontal)
-                        .transition(.asymmetric(insertion: .opacity, removal: .slide))
+                    HStack {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundColor(.orange)
+                        Text("중복된 키워드입니다.")
+                            .font(.scoreDream(.medium, size: .caption))
+                            .foregroundColor(.orange)
+                        Spacer()
+                    }
+                    .transition(.asymmetric(insertion: .opacity, removal: .slide))
                 }
+                
+                if !keywords.isEmpty {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 10) {
+                            ForEach(keywords, id: \.self) { keyword in
+                                keywordChip(keyword: keyword)
+                            }
+                        }
+                        .padding(.horizontal, 4)
+                    }
+                }
+                
                 if keywords.isEmpty {
-                    Text("키워드를 입력하시고, 반드시 키보드 위의 '완료'를 눌러주세요.")
-                        .font(.footnote)
-                        .foregroundColor(.gray)
-                        .padding(.horizontal)
+                    Text("키워드를 입력하고 완료 버튼을 눌러주세요.")
+                        .font(.scoreDream(.light, size: .caption))
+                        .foregroundColor(.secondaryText)
+                }
+            }
+        }
+        .padding(20)
+        .background(cardBackground)
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 4)
+    }
+    
+    private func keywordChip(keyword: String) -> some View {
+        HStack(spacing: 6) {
+            Text("#\(keyword)")
+                .font(.scoreDream(.medium, size: .caption))
+                .foregroundColor(.white)
+            
+            Button(action: {
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                    removeKeyword(keyword)
+                }
+            }) {
+                Image(systemName: "xmark")
+                    .font(.caption2.weight(.bold))
+                    .foregroundColor(.white.opacity(0.8))
+            }
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 6)
+        .background(
+            LinearGradient(
+                gradient: Gradient(colors: [.brownLeather, .antiqueGold]),
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+        )
+        .clipShape(Capsule())
+        .shadow(color: .brownLeather.opacity(0.3), radius: 4, x: 0, y: 2)
+    }
+    
+    private var quoteCard: some View {
+        VStack(spacing: 16) {
+            cardHeader(title: "인용구", icon: "quote.opening", subtitle: "마음에 드는 문장을 기록해보세요")
+            
+            ZStack(alignment: .topLeading) {
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color.paperBeige.opacity(0.2))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(focusField == .quote ? Color.brownLeather.opacity(0.5) : Color.clear, lineWidth: 2)
+                    )
+                    .frame(minHeight: 120)
+                    .animation(.easeInOut(duration: 0.2), value: focusField)
+                
+                if quote.isEmpty {
+                    Text(quotePlaceholder)
+                        .font(.scoreDream(.light, size: .body))
+                        .foregroundColor(.secondaryText.opacity(0.7))
+                        .padding(.horizontal, 16)
+                        .padding(.top, 16)
+                        .allowsHitTesting(false)
+                }
+                
+                TextEditor(text: $quote)
+                    .font(.scoreDream(.regular, size: .body))
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 12)
+                    .background(Color.clear)
+                    .focused($focusField, equals: .quote)
+                    .scrollContentBackground(.hidden)
+            }
+        }
+        .padding(20)
+        .background(cardBackground)
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 4)
+    }
+    
+    private var thoughtCard: some View {
+        VStack(spacing: 16) {
+            cardHeader(title: "나의 생각", icon: "brain.head.profile", subtitle: "문장을 읽고 떠오른 생각을 기록해보세요")
+            
+            ZStack(alignment: .topLeading) {
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color.paperBeige.opacity(0.2))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(focusField == .content ? Color.brownLeather.opacity(0.5) : Color.clear, lineWidth: 2)
+                    )
+                    .frame(minHeight: 150)
+                    .animation(.easeInOut(duration: 0.2), value: focusField)
+                
+                if content.isEmpty {
+                    Text(contentPlaceholder)
+                        .font(.scoreDream(.light, size: .body))
+                        .foregroundColor(.secondaryText.opacity(0.7))
+                        .padding(.horizontal, 16)
+                        .padding(.top, 16)
+                        .allowsHitTesting(false)
+                }
+                
+                TextEditor(text: $content)
+                    .font(.scoreDream(.regular, size: .body))
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 12)
+                    .background(Color.clear)
+                    .focused($focusField, equals: .content)
+                    .scrollContentBackground(.hidden)
+            }
+        }
+        .padding(20)
+        .background(cardBackground)
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 4)
+    }
+    
+    private var themeSelectionCard: some View {
+        VStack(spacing: 16) {
+            cardHeader(title: "테마 설정", icon: "folder.fill")
+            
+            NavigationLink(destination: SetThemeView(selectedThemeIds: $themeIds)) {
+                HStack {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.title3)
+                        .foregroundColor(.brownLeather)
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("테마 선택하기")
+                            .font(.scoreDream(.medium, size: .body))
+                            .foregroundColor(.primaryText)
+                        
+                        Text(themeIds.isEmpty ? "테마를 선택해주세요" : "\(themeIds.count)개의 테마 선택됨")
+                            .font(.scoreDream(.light, size: .caption))
+                            .foregroundColor(.secondaryText)
+                    }
+                    
+                    Spacer()
+                    
+                    Image(systemName: "chevron.right")
+                        .font(.caption.weight(.medium))
+                        .foregroundColor(.secondaryText.opacity(0.6))
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.paperBeige.opacity(0.3))
+                )
+            }
+            .buttonStyle(CardButtonStyle())
+        }
+        .padding(20)
+        .background(cardBackground)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .shadow(color: .black.opacity(0.06), radius: 6, x: 0, y: 3)
+    }
+    
+    private var privacyToggleCard: some View {
+        VStack(spacing: 16) {
+            cardHeader(title: "공개 설정", icon: "eye.fill")
+            
+            HStack {
+                Text(isPublic ? "다른 사용자들도\n볼 수 있습니다" : "나만 볼 수 있습니다")
+                    .font(.scoreDream(.light, size: isPublic ? .caption2 : .caption))
+                    .foregroundColor(.secondaryText)
+                    .multilineTextAlignment(.leading)
+                
+                Spacer()
+                
+                Toggle("", isOn: $isPublic)
+                    .toggleStyle(SwitchToggleStyle())
+                    .scaleEffect(0.9)
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color.paperBeige.opacity(0.3))
+            )
+        }
+        .padding(20)
+        .background(cardBackground)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .shadow(color: .black.opacity(0.06), radius: 6, x: 0, y: 3)
+    }
+    
+    private func feedbackView(message: String) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: "exclamationmark.circle.fill")
+                .foregroundColor(.orange)
+                .font(.body)
+            
+            Text(message)
+                .font(.scoreDream(.medium, size: .subheadline))
+                .foregroundColor(.orange)
+            
+            Spacer()
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.orange.opacity(0.1))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.orange.opacity(0.3), lineWidth: 1)
+                )
+        )
+        .transition(.asymmetric(insertion: .opacity, removal: .slide))
+        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: feedbackMessage)
+    }
+    
+    // MARK: - Helper Views
+    
+    private var cardBackground: some View {
+        RoundedRectangle(cornerRadius: 20)
+            .fill(.ultraThinMaterial)
+            .overlay(
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(
+                        LinearGradient(
+                            gradient: Gradient(colors: [
+                                Color.white.opacity(0.2),
+                                Color.clear,
+                                Color.antiqueGold.opacity(0.1)
+                            ]),
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: 1
+                    )
+            )
+    }
+    
+    private func cardHeader(title: String, icon: String, subtitle: String? = nil) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.title3.weight(.medium))
+                .foregroundColor(.brownLeather)
+                .frame(width: 24, height: 24)
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.scoreDream(.bold, size: .body))
+                    .foregroundColor(.primaryText)
+                
+                if let subtitle = subtitle {
+                    Text(subtitle)
+                        .font(.scoreDream(.light, size: .caption))
+                        .foregroundColor(.secondaryText.opacity(0.8))
                 }
             }
             
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 10) {
-                    ForEach(keywords, id: \.self) { keyword in
-                        ZStack(alignment: .trailing) {
-                            Text(keyword)
-                                .padding(.horizontal, 10)
-                                .padding(.vertical, 5)
-                                .background(Color.secondary.opacity(0.1))
-                                .cornerRadius(10)
-                            
-                            Button(action: {
-                                withAnimation { removeKeyword(keyword) }
-                            }) {
-                                Image(systemName: "xmark.circle.fill")
-                                    .padding(4)
-                                    .foregroundColor(.secondary)
-                                    .background(Color.secondary.opacity(0.1).cornerRadius(10))
-                            }
-                            .offset(x: 10, y: 0)
-                        }
-                    }
-                }
-                .padding(.horizontal)
-            }
-            .padding(.top)
+            Spacer()
+            
+            Rectangle()
+                .fill(
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            Color.antiqueGold.opacity(0.8),
+                            Color.clear
+                        ]),
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+                .frame(height: 2)
+                .frame(maxWidth: 60)
         }
-        .padding(.bottom)
     }
-
+    
+    // MARK: - Computed Properties
+    
+    private var isFormValid: Bool {
+        !quote.isEmpty && !content.isEmpty && !keywords.isEmpty
+    }
+    
+    // MARK: - Methods
+    
     private func addKeyword() {
         let trimmedKeyword = currentInput.trimmingCharacters(in: .whitespacesAndNewlines)
         if !trimmedKeyword.isEmpty && keywords.count < 5 {
             if keywords.contains(trimmedKeyword) {
-                isShowingDuplicateWarning = true
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                    isShowingDuplicateWarning = true
+                }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                    isShowingDuplicateWarning = false
+                    withAnimation {
+                        isShowingDuplicateWarning = false
+                    }
                 }
             } else {
-                keywords.append(trimmedKeyword)
-                currentInput = ""
-                focusField = .keywords
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                    keywords.append(trimmedKeyword)
+                    currentInput = ""
+                    focusField = .keywords
+                }
             }
         }
     }
     
-    // 키워드를 삭제하는 함수
     private func removeKeyword(_ keyword: String) {
         if let index = keywords.firstIndex(of: keyword) {
             keywords.remove(at: index)
         }
     }
     
-    var quoteView: some View {
-        VStack(alignment: .leading) {
-            Text("Quote").font(.headline).foregroundColor(.secondary)
-            ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
-                TextEditor(text: $quote)
-                    .font(.body)
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 8).strokeBorder(Color.secondary, lineWidth: 1))
-                if quote.isEmpty {
-                    Text(quotePlaceholder)
-                        .foregroundColor(.gray)
-                        .padding()
-                        .padding(.leading, 12)
-                        .padding(.top, 5)
-                        .allowsHitTesting(false)
-                }
-            }
-            .onTapGesture {
-                self.focusField = .quote
-            }
-            .frame(minHeight: 100)
+    private func submitStory() {
+        guard isFormValid else {
+            updateFeedbackMessage()
+            return
         }
-    }
-    
-    var inputContentView: some View {
-        VStack(alignment: .leading) {
-            Text("Your Thoughts").font(.headline).foregroundColor(.secondary)
-            ZStack(alignment: Alignment(horizontal: .leading, vertical: .top)) {
-
-                TextEditor(text: $content)
-                    .font(.body)
-                    .padding(10)
-                    .background(RoundedRectangle(cornerRadius: 8).strokeBorder(Color.secondary, lineWidth: 1))
-                    .frame(minHeight: 150)
-                if content.isEmpty {
-                    Text(contentPlaceholder)
-                        .foregroundColor(.gray)
-                        .padding(.all, 10)
-                        .padding(.leading, 12)
-                        .padding(.top, 5)
-                        .allowsHitTesting(false)
-                }
-            }
-            .onTapGesture {
-                self.focusField = .content
-            }
-        }
-        .padding(.horizontal)
-    }
-
-    
-    var selectThemaView: some View {
-        HStack {
-            NavigationLink(destination: SetThemeView(selectedThemeIds: $themeIds)) {
-                Text("테마 선택하기")
-                    .font(.callout)
-                    .fontWeight(.semibold)
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .font(.callout)
-            }
-        }
-        .padding(.horizontal, 20)
-    }
-    
-    var publicToggleView: some View {
-        Toggle(isOn: $isPublic, label: {
-            Text("내 북스토리 나만 보기")
-                .font(.callout)
-                .fontWeight(.semibold)
-            Image(systemName: "lock.fill")
-                .font(.callout)
-        })
-        .padding(.horizontal, 20)
-        .toggleStyle(CheckboxStyle())
-    }
-    
-    var infoBookView: some View {
-        HStack {
-            WebImage(url: URL(string: book.bookImageURL))
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 80, height: 80)
-                .cornerRadius(10)
-                .shadow(radius: 3)
-            
-            VStack(alignment: .leading, spacing: 5) {
-                Text(book.title)
-                    .font(.headline)
-                    .fontWeight(.bold)
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-                
-                Text(book.author.joined(separator: ", "))
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                
-                Text(book.publisher)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            .padding(.leading, 10)
-            
-            Spacer()
-        }
-        .padding(.all, 10)
-        .background(Color(.systemBackground))
-        .cornerRadius(12)
-        .shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.1), radius: 5, x: 0, y: 2)
-        .padding(.horizontal)
-    }
-
-    // MARK: - BUTTON
-    
-    var buttonView: some View {
-        Button(action: {
-            if filledField(quote: quote, content: content, keywords: keywords) {
-                storiesViewModel.createBookStory(images: selectedImages, bookId: book.id, quote: quote, content: content, isPublic: isPublic, keywords: keywords, folderIds: themeIds) { isSuccess in
-                    if isSuccess {
-                        alertType = .make
-                        alertMessage = "북스토리가 성공적으로 등록되었어요!"
-                        showAlert = true
-                    } else {
-                        alertType = .make
-                        alertMessage = "북스토리 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
-                        showAlert = true
-                    }
-                }
+        
+        storiesViewModel.createBookStory(
+            images: selectedImages,
+            bookId: book.id,
+            quote: quote,
+            content: content,
+            isPublic: isPublic,
+            keywords: keywords,
+            folderIds: themeIds
+        ) { isSuccess in
+            if isSuccess {
+                alertType = .make
+                alertMessage = "북스토리가 성공적으로 등록되었어요!"
+                showAlert = true
             } else {
-                updateFeedbackMessage()
+                alertType = .make
+                alertMessage = "북스토리 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+                showAlert = true
             }
-        }) {
-            Text("등록하기")
-                .font(.headline)
-                .foregroundColor(.white)
-                .padding()
-                .frame(maxWidth: .infinity)
-                .background(filledField(quote: quote, content: content, keywords: keywords) ? Color.appAccent : Color.gray)
-                .cornerRadius(6)
         }
-        .padding(.horizontal, 30)
-        .buttonStyle(PlainButtonStyle())
     }
-
-    private func filledField(quote: String, content: String, keywords: [String]) -> Bool {
-        return !quote.isEmpty && !content.isEmpty && !keywords.isEmpty
-    }
-
+    
     private func updateFeedbackMessage() {
-        if keywords.isEmpty {
-            feedbackMessage = "키워드를 입력해주세요."
-        } else if quote.isEmpty {
-            feedbackMessage = "인용문을 입력해주세요."
-        } else if content.isEmpty {
-            feedbackMessage = "내용을 입력해주세요."
-        } else {
-            feedbackMessage = nil
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+            if keywords.isEmpty {
+                feedbackMessage = "키워드를 입력해주세요."
+            } else if quote.isEmpty {
+                feedbackMessage = "인용문을 입력해주세요."
+            } else if content.isEmpty {
+                feedbackMessage = "내용을 입력해주세요."
+            } else {
+                feedbackMessage = nil
+            }
         }
     }
 }
 
-// only iOS
+// MARK: - Extensions
+
 #if canImport(UIKit)
 extension View {
     func hideKeyboard() {
@@ -420,68 +672,3 @@ extension View {
     }
 }
 #endif
-
-
-struct StoryImagesView: View {
-    @Binding var selectedImages: [UIImage]
-    @Binding var showingImagePicker: Bool
-
-    var body: some View {
-        VStack {
-            ScrollView(.horizontal, showsIndicators: false) {
-                LazyHGrid(rows: [GridItem(.fixed(100))], spacing: 10) {
-                    addButton
-                    ForEach(Array(selectedImages.enumerated()), id: \.element) { index, image in
-                        imageCell(for: image, at: index)
-                    }
-                }
-                .padding(.horizontal)
-            }
-        }
-    }
-
-    var addButton: some View {
-        Button(action: {
-            if selectedImages.count < 10 {
-                showingImagePicker = true
-            }
-        }) {
-            VStack {
-                Image(systemName: "plus.circle").foregroundColor(.gray)
-                Text("사진추가\n\(selectedImages.count)/10")
-                    .font(.caption)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(.gray)
-            }
-            .frame(width: 100, height: 100)
-            .background(
-                RoundedRectangle(cornerRadius: 4)
-                    .strokeBorder(.gray, lineWidth: 1)
-            )
-        }
-        .accessibilityLabel("Add photo")
-    }
-
-    func imageCell(for image: UIImage, at index: Int) -> some View {
-        ZStack(alignment: .topTrailing) {
-            Image(uiImage: image)
-                .resizable()
-                .scaledToFill()
-                .frame(width: 100, height: 100)
-                .cornerRadius(4)
-                .clipped()
-            
-            Button(action: {
-                selectedImages.remove(at: index)
-            }) {
-                Image(systemName: "xmark.circle.fill")
-                    .foregroundColor(.gray)
-                    .background(Color.white.opacity(0.6))
-                    .clipShape(Circle())
-            }
-            .padding(2)
-        }
-        .accessibilityLabel("Photo \(index + 1)")
-    }
-}
-

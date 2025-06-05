@@ -98,6 +98,7 @@
 		CE8C48E12DF04BD8003188ED /* CustomProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48E02DF04BD8003188ED /* CustomProgressView.swift */; };
 		CE8C48E42DF05290003188ED /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = CE8C48E32DF05290003188ED /* Lottie */; };
 		CE8C48ED2DF1134C003188ED /* RandomBooksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48EC2DF1134C003188ED /* RandomBooksViewModel.swift */; };
+		CE8C48EF2DF1294E003188ED /* StoryImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48EE2DF1294E003188ED /* StoryImagesView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -190,6 +191,7 @@
 		CE8C488F2DEC96B6003188ED /* PhotoPickerAlertType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerAlertType.swift; sourceTree = "<group>"; };
 		CE8C48E02DF04BD8003188ED /* CustomProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressView.swift; sourceTree = "<group>"; };
 		CE8C48EC2DF1134C003188ED /* RandomBooksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomBooksViewModel.swift; sourceTree = "<group>"; };
+		CE8C48EE2DF1294E003188ED /* StoryImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryImagesView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -488,6 +490,7 @@
 				CE8C487C2DEBF39D003188ED /* SearchBookView.swift */,
 				CE8C487A2DEBF39D003188ED /* BookDetailView.swift */,
 				CE8C487B2DEBF39D003188ED /* RecordView.swift */,
+				CE8C48EE2DF1294E003188ED /* StoryImagesView.swift */,
 				CE8C487D2DEBF39D003188ED /* SetThemeView.swift */,
 			);
 			path = BookStoryRecord;
@@ -663,6 +666,7 @@
 				C6691C5A2B0619C10083C678 /* UserSearchViewModel.swift in Sources */,
 				CE8C486F2DEB2E39003188ED /* LibraryTabButtonView.swift in Sources */,
 				CE8C477F2DEA8D84003188ED /* LoginView.swift in Sources */,
+				CE8C48EF2DF1294E003188ED /* StoryImagesView.swift in Sources */,
 				CE8C47802DEA8D84003188ED /* OnboardingView.swift in Sources */,
 				CE8C47812DEA8D84003188ED /* SignInWithAppleView.swift in Sources */,
 				CE8C47822DEA8D84003188ED /* KeyChain.swift in Sources */,
