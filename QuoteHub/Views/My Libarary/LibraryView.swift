@@ -59,9 +59,6 @@ struct LibraryView: View {
     @State private var reportReason = ""
     @State private var showReportSheet = false
     @State private var showActionSheet = false
-    
-    /// 탭 전환 시 스크롤 위치를 리셋하기 위해 (iOS 18+)
-//    @State private var scrollPosition = ScrollPosition()
 
     // MARK: - BODY
     
