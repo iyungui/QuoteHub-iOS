@@ -23,6 +23,8 @@ struct RecordView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
     
+    @State private var showThemeListView: Bool = false
+    
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
     @State private var draftManager: DraftManager?
@@ -171,6 +173,9 @@ struct RecordView: View {
         .onChange(of: themeIds) { _, _ in triggerAutoSave() }
         .onTapGesture {
             hideKeyboard()
+        }
+        .fullScreenCover(isPresented: $showThemeListView) {
+            SetThemeView(selectedThemeIds: $themeIds)
         }
         .sheet(isPresented: $showingCamera) {
             ImagePicker(selectedImages: self.$selectedImages, sourceType: self.sourceType)
@@ -681,7 +686,9 @@ struct RecordView: View {
         VStack(spacing: 16) {
             cardHeader(title: "테마 설정", icon: "folder.fill")
             
-            NavigationLink(destination: SetThemeView(selectedThemeIds: $themeIds)) {
+            Button(action: {
+                showThemeListView = true
+            }) {
                 HStack {
                     Image(systemName: "plus.circle.fill")
                         .font(.title3)

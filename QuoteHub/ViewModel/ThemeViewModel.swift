@@ -8,11 +8,12 @@
 import Foundation
 import SwiftUI
 
-class ThemesViewModel: ObservableObject {
+class ThemesViewModel: ObservableObject, LoadingViewModel {
     
     @Published var themesByType: [LoadType: [Theme]] = [:]
     
     @Published var isLoading = false
+    @Published var loadingMessage: String?
     @Published var isLastPage = false
     @Published var errorMessage: String?
     
@@ -53,6 +54,7 @@ class ThemesViewModel: ObservableObject {
         guard !isLoading && !isLastPage else { return }
         
         isLoading = true
+        loadingMessage = "테마를 불러오는 중..."
         
         let completion: (Result<ThemesListResponse, Error>) -> Void = { [weak self] result in
             guard let self = self else { return }
@@ -70,10 +72,12 @@ class ThemesViewModel: ObservableObject {
                     self.isLastPage = response.pagination.currentPage >= response.pagination.totalPages
                     self.currentPage += 1
                     self.isLoading = false
+                    self.loadingMessage = nil
                 case .failure(let error):
                     print("Error loading Themes List: (\(type)): \(error)")
                     self.isLoading = false
-                    
+                    self.loadingMessage = nil
+                    self.errorMessage = "테마를 불러오는 중 오류가 발생했습니다."
                 }
             }
         }
@@ -133,11 +137,12 @@ class ThemesViewModel: ObservableObject {
     func createTheme(image: UIImage?, name: String, description: String?, isPublic: Bool, completion: @escaping (Bool) -> Void) {
         print(#fileID, #function, #line, "- ")
         
+        isLoading = true
+        loadingMessage = "테마를 생성하는 중..."
+        
         service.createFolder(image: image, name: name, description: description, isPublic: isPublic) { [weak self] result in
             guard let self = self else { return }
-            
-            self.isLoading = true
-            
+
             DispatchQueue.main.async {
                 switch result {
                 case .success(let themeResponse):
@@ -146,12 +151,14 @@ class ThemesViewModel: ObservableObject {
                     self.addThemeToTypes(newTheme)
                     
                     self.isLoading = false
+                    self.loadingMessage = nil
                     
                     print("테마 생성 완료")
                     completion(true)
                     
                 case .failure(let error as NSError):
                     self.isLoading = false
+                    self.loadingMessage = nil
                     
                     print("테마 생성 실패: \(error.localizedDescription)")
                     if error.code == 409 {
@@ -171,9 +178,11 @@ class ThemesViewModel: ObservableObject {
     func updateTheme(folderId: String, image: UIImage?, name: String, description: String?, isPublic: Bool, completion: @escaping (Bool) -> Void) {
         print(#fileID, #function, #line, "- ")
         
+        isLoading = true
+        loadingMessage = "테마를 수정하는 중..."
+        
         service.updateFolder(folderId: folderId, image: image, name: name, description: description, isPublic: isPublic) { [weak self] result in
             guard let self = self else { return }
-            self.isLoading = true
             
             DispatchQueue.main.async {
                 switch result {
@@ -184,12 +193,14 @@ class ThemesViewModel: ObservableObject {
                     self.updateThemeInTypes(updatedTheme)
 
                     self.isLoading = false
+                    self.loadingMessage = nil
                     
                     print("테마 업데이트 완료")
                     completion(true)
                     
                 case .failure(let error as NSError):
                     self.isLoading = false
+                    self.loadingMessage = nil
                     
                     print("테마 업데이트 실패: \(error.localizedDescription)")
                     
@@ -210,9 +221,11 @@ class ThemesViewModel: ObservableObject {
     func deleteFolder(folderId: String, completion: @escaping (Bool) -> Void) {
         print(#fileID, #function, #line, "- ")
         
+        isLoading = true
+        loadingMessage = "테마를 삭제하는 중..."
+        
         service.deleteFolder(folderId: folderId) { [weak self] result in
             guard let self = self else { return }
-            self.isLoading = true
             
             DispatchQueue.main.async {
                 switch result {
@@ -220,14 +233,17 @@ class ThemesViewModel: ObservableObject {
                     self.removeThemeFromTypes(themeID: folderId)
                     
                     self.isLoading = false
+                    self.loadingMessage = nil
                     
                     print("테마 삭제 완료")
                     completion(true)
                     
                 case .failure(let error):
                     self.isLoading = false
+                    self.loadingMessage = nil
                     
                     print("테마 삭제 실패 - \(error.localizedDescription)")
+                    self.errorMessage = "테마 삭제 중 오류가 발생했습니다."
                     completion(false)
                 }
             }

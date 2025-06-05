@@ -24,18 +24,20 @@ struct SetThemeView: View {
     // MARK: - BODY
     
     var body: some View {
-        ScrollView {
-            VStack {
-                linkMakeThemeView
-                Divider()
-                listThemeView
+        NavigationStack {
+            ScrollView {
+                VStack {
+                    linkMakeThemeView
+                    Divider()
+                    listThemeView
+                }
             }
+            .navigationBarTitle("테마 선택하기", displayMode: .inline)
+            .navigationBarItems(trailing: Button("완료") {
+                selectedThemeIds = Array(selectedSet)
+                dismiss()
+            })
         }
-        .navigationBarTitle("테마 선택하기", displayMode: .inline)
-        .navigationBarItems(trailing: Button("완료") {
-            selectedThemeIds = Array(selectedSet)
-            dismiss()
-        })
     }
     
     // 테마 만들기
