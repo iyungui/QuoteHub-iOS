@@ -10,7 +10,6 @@ import SDWebImageSwiftUI
 
 enum StoryAlertType {
     case loginRequired  // 게스트 로그인 시 로그인 알림
-    case link   // 책 상세 페이지로 이동 전 알림
     case blocked    // 현재 북스토리 올린 상대방이 차단 상태인지 확인
 }
 
@@ -49,7 +48,7 @@ struct BookStoryDetailView: View {
     
     // 알림 관련
     @State private var showAlert: Bool = false
-    @State private var alertType: StoryAlertType = .link
+    @State private var alertType: StoryAlertType = .loginRequired
     @State private var alertMessage = ""
     
     // 신고, 차단 sheet on off
@@ -396,9 +395,10 @@ struct BookStoryDetailView: View {
     
     // 책 정보
     private var bookInfoSection: some View {
-        Button(action: {
-            self.alertType = .link
-            self.showAlert = true
+        NavigationLink(destination: {
+            BookDetailView(book: story.bookId)
+                .environmentObject(storiesViewModel)
+                .environmentObject(userViewModel)
         }) {
             HStack(spacing: 16) {
                 WebImage(url: URL(string: story.bookId.bookImageURL))
@@ -600,17 +600,6 @@ struct BookStoryDetailView: View {
                 title: Text("로그인 필요"),
                 message: Text("이 기능을 사용하려면 로그인이 필요합니다."),
                 dismissButton: .default(Text("확인"))
-            )
-        case .link:
-            return Alert(
-                title: Text("외부 사이트로 이동"),
-                message: Text("이 책에 대한 추가 정보를 외부 사이트에서 제공합니다. 외부 링크를 통해 해당 정보를 보시겠습니까?"),
-                primaryButton: .default(Text("확인")) {
-                    if let url = URL(string: story.bookId.bookLink) {
-                        UIApplication.shared.open(url)
-                    }
-                },
-                secondaryButton: .cancel()
             )
         case .blocked:
             return Alert(
