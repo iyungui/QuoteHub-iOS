@@ -103,6 +103,8 @@
 		CE8C491B2DF1601C003188ED /* DraftManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C491A2DF1601C003188ED /* DraftManager.swift */; };
 		CE8C49452DF18B69003188ED /* ThemeGalleryGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C49442DF18B68003188ED /* ThemeGalleryGridView.swift */; };
 		CE8C49472DF18B89003188ED /* ThemeGalleryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C49462DF18B89003188ED /* ThemeGalleryListView.swift */; };
+		CE8C49712DF19111003188ED /* StoryGridCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C49702DF19111003188ED /* StoryGridCard.swift */; };
+		CE8C49732DF19133003188ED /* StoryListCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C49722DF19133003188ED /* StoryListCard.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -200,6 +202,8 @@
 		CE8C491A2DF1601C003188ED /* DraftManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftManager.swift; sourceTree = "<group>"; };
 		CE8C49442DF18B68003188ED /* ThemeGalleryGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeGalleryGridView.swift; sourceTree = "<group>"; };
 		CE8C49462DF18B89003188ED /* ThemeGalleryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeGalleryListView.swift; sourceTree = "<group>"; };
+		CE8C49702DF19111003188ED /* StoryGridCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryGridCard.swift; sourceTree = "<group>"; };
+		CE8C49722DF19133003188ED /* StoryListCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryListCard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -458,7 +462,9 @@
 			children = (
 				CE8C48152DEA8DAE003188ED /* ThemeDetailView.swift */,
 				CE8C49442DF18B68003188ED /* ThemeGalleryGridView.swift */,
+				CE8C49702DF19111003188ED /* StoryGridCard.swift */,
 				CE8C49462DF18B89003188ED /* ThemeGalleryListView.swift */,
+				CE8C49722DF19133003188ED /* StoryListCard.swift */,
 				CE8C48162DEA8DAE003188ED /* UpdateThemaView.swift */,
 			);
 			path = ThemeView;
@@ -640,6 +646,7 @@
 				CE8C48202DEA8DAE003188ED /* SearchStoryByKeywordView.swift in Sources */,
 				CE8C49452DF18B69003188ED /* ThemeGalleryGridView.swift in Sources */,
 				CE8C48222DEA8DAE003188ED /* MainView.swift in Sources */,
+				CE8C49712DF19111003188ED /* StoryGridCard.swift in Sources */,
 				CE8C48232DEA8DAE003188ED /* FollowersListView.swift in Sources */,
 				CE8C486D2DEB2A62003188ED /* LaunchScreenView.swift in Sources */,
 				CE8C48242DEA8DAE003188ED /* FollowingListView.swift in Sources */,
@@ -682,6 +689,7 @@
 				C6691C5A2B0619C10083C678 /* UserSearchViewModel.swift in Sources */,
 				CE8C486F2DEB2E39003188ED /* LibraryTabButtonView.swift in Sources */,
 				CE8C477F2DEA8D84003188ED /* LoginView.swift in Sources */,
+				CE8C49732DF19133003188ED /* StoryListCard.swift in Sources */,
 				CE8C48EF2DF1294E003188ED /* StoryImagesView.swift in Sources */,
 				CE8C47802DEA8D84003188ED /* OnboardingView.swift in Sources */,
 				CE8C47812DEA8D84003188ED /* SignInWithAppleView.swift in Sources */,
