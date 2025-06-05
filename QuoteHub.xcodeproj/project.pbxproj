@@ -497,7 +497,6 @@
 				CE8C487A2DEBF39D003188ED /* BookDetailView.swift */,
 				CE8C487B2DEBF39D003188ED /* RecordView.swift */,
 				CE8C48EE2DF1294E003188ED /* StoryImagesView.swift */,
-				CE8C487D2DEBF39D003188ED /* SetThemeView.swift */,
 			);
 			path = BookStoryRecord;
 			sourceTree = "<group>";
@@ -506,6 +505,7 @@
 			isa = PBXGroup;
 			children = (
 				CE8C48832DEBF39F003188ED /* CreateThemeView.swift */,
+				CE8C487D2DEBF39D003188ED /* SetThemeView.swift */,
 			);
 			path = ThemeRecord;
 			sourceTree = "<group>";

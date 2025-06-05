@@ -134,7 +134,7 @@ struct HomeView: View {
                 .font(.scoreDream(.bold, size: .title3))
                 .foregroundStyle(Color.brown)
 
-            Text("마음에 드는 구절들을 깊이 간직해보세요")
+            Text("마음에 드는 문장들을 깊이 간직해보세요")
                 .font(.scoreDream(.regular, size: .subheadline))
                 .foregroundStyle(Color.secondaryText)
                 .multilineTextAlignment(.center)
