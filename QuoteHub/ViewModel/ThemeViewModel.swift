@@ -71,6 +71,7 @@ class ThemesViewModel: ObservableObject, LoadingViewModel {
                     
                     self.isLastPage = response.pagination.currentPage >= response.pagination.totalPages
                     self.currentPage += 1
+                    sleep(1)
                     self.isLoading = false
                     self.loadingMessage = nil
                 case .failure(let error):

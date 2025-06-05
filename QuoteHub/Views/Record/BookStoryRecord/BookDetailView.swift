@@ -347,8 +347,8 @@ struct BookDetailView: View {
                     .background(
                         LinearGradient(
                             gradient: Gradient(colors: [
-                                Color.blue.opacity(0.8),
-                                Color.blue.opacity(0.6)
+                                Color.appAccent.opacity(0.8),
+                                Color.appAccent.opacity(0.6)
                             ]),
                             startPoint: .leading,
                             endPoint: .trailing
