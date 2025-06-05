@@ -99,9 +99,7 @@ struct LibraryView: View {
             await refreshContent(type: loadType)
         }
         .onAppear {
-            userViewModel.getProfile(userId: user?.id)
-            storiesViewModel.loadBookStories(type: loadType)
-            themesViewModel.loadThemes(type: loadType)
+            onAppear(type: loadType)
         }
         // 여러 ViewModel 의 로딩 상태를 동시에 추적하고 로딩뷰 표시하는 모디파이어
         .progressOverlay(
@@ -232,8 +230,8 @@ struct LibraryView: View {
         followViewModel.setUserId(userViewModel.user?.id)
         followViewModel.loadFollowCounts()
         
-        storiesViewModel.refreshBookStories(type: type)
-        themesViewModel.refreshThemes(type: type)
+        storiesViewModel.loadBookStories(type: type)
+        themesViewModel.loadThemes(type: type)
     }
     
     private var alertView: Alert {
