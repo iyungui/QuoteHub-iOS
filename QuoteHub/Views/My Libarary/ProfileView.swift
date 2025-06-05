@@ -16,8 +16,7 @@ enum AlertType {
 
 /// 라이브러리에서 보이는 프로필 뷰
 struct ProfileView: View {
-    @StateObject private var followViewModel = FollowViewModel()
-
+    @EnvironmentObject private var followViewModel: FollowViewModel
     @EnvironmentObject private var userViewModel: UserViewModel
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
     @EnvironmentObject private var themesViewModel: ThemesViewModel
@@ -58,15 +57,6 @@ struct ProfileView: View {
             ReadingProgressSection(storyCount: userViewModel.storyCount ?? 0)
             
             followStats
-        }
-        .onAppear {
-            followViewModel.setUserId(currentUser?.id)
-            followViewModel.loadFollowCounts()
-            
-            // 친구 프로필인 경우 팔로우 상태 업데이트
-            if let friend = user {
-                followViewModel.updateFollowStatus(userId: friend.id)
-            }
         }
         .alert(isPresented: $showAlert) { alertView }
     }
@@ -135,7 +125,13 @@ struct ProfileView: View {
     private var followStats: some View {
         HStack(spacing: 40) {
             // 팔로워
-            NavigationLink(destination: FollowersListView(userId: currentUser?.id).environmentObject(followViewModel).environmentObject(userAuthManager)) {
+            NavigationLink(destination: FollowListView(userId: currentUser?.id, type: .followers)
+                .environmentObject(followViewModel)
+                .environmentObject(userAuthManager)
+                .environmentObject(storiesViewModel)
+                .environmentObject(themesViewModel)
+                .environmentObject(userViewModel)
+            ) {
                 VStack(spacing: 4) {
                     Text("\(followViewModel.followersCount)")
                         .font(.scoreDream(.bold, size: .title3))
@@ -147,13 +143,12 @@ struct ProfileView: View {
             .buttonStyle(PlainButtonStyle())
             
             // 팔로잉
-            NavigationLink(
-                destination: FollowingListView(userId: currentUser?.id)
-                    .environmentObject(followViewModel)
-                    .environmentObject(userAuthManager)
-                    .environmentObject(userViewModel)
-                    .environmentObject(storiesViewModel)
-                    .environmentObject(themesViewModel)
+            NavigationLink(destination: FollowListView(userId: currentUser?.id, type: .following)
+                .environmentObject(followViewModel)
+                .environmentObject(userAuthManager)
+                .environmentObject(storiesViewModel)
+                .environmentObject(themesViewModel)
+                .environmentObject(userViewModel)
             ) {
                 VStack(spacing: 4) {
                     Text("\(followViewModel.followingCount)")

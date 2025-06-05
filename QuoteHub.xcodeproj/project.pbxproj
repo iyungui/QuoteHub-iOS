@@ -58,7 +58,7 @@
 		CE8C481E2DEA8DAE003188ED /* UserSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47F32DEA8DAE003188ED /* UserSearchView.swift */; };
 		CE8C48202DEA8DAE003188ED /* SearchStoryByKeywordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47F62DEA8DAE003188ED /* SearchStoryByKeywordView.swift */; };
 		CE8C48222DEA8DAE003188ED /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47F92DEA8DAE003188ED /* MainView.swift */; };
-		CE8C48232DEA8DAE003188ED /* FollowersListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47FB2DEA8DAE003188ED /* FollowersListView.swift */; };
+		CE8C48232DEA8DAE003188ED /* FollowListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47FB2DEA8DAE003188ED /* FollowListView.swift */; };
 		CE8C48242DEA8DAE003188ED /* FollowingListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47FC2DEA8DAE003188ED /* FollowingListView.swift */; };
 		CE8C48262DEA8DAE003188ED /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47FE2DEA8DAE003188ED /* LibraryView.swift */; };
 		CE8C482D2DEA8DAE003188ED /* BlockedListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48072DEA8DAE003188ED /* BlockedListView.swift */; };
@@ -163,7 +163,7 @@
 		CE8C47F32DEA8DAE003188ED /* UserSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchView.swift; sourceTree = "<group>"; };
 		CE8C47F62DEA8DAE003188ED /* SearchStoryByKeywordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchStoryByKeywordView.swift; sourceTree = "<group>"; };
 		CE8C47F92DEA8DAE003188ED /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
-		CE8C47FB2DEA8DAE003188ED /* FollowersListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowersListView.swift; sourceTree = "<group>"; };
+		CE8C47FB2DEA8DAE003188ED /* FollowListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowListView.swift; sourceTree = "<group>"; };
 		CE8C47FC2DEA8DAE003188ED /* FollowingListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowingListView.swift; sourceTree = "<group>"; };
 		CE8C47FE2DEA8DAE003188ED /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
 		CE8C48072DEA8DAE003188ED /* BlockedListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedListView.swift; sourceTree = "<group>"; };
@@ -424,7 +424,7 @@
 		CE8C47FF2DEA8DAE003188ED /* My Libarary */ = {
 			isa = PBXGroup;
 			children = (
-				CE8C47FB2DEA8DAE003188ED /* FollowersListView.swift */,
+				CE8C47FB2DEA8DAE003188ED /* FollowListView.swift */,
 				CE8C47FC2DEA8DAE003188ED /* FollowingListView.swift */,
 				CE8C486E2DEB2E39003188ED /* LibraryTabButtonView.swift */,
 				CE8C47FE2DEA8DAE003188ED /* LibraryView.swift */,
@@ -663,7 +663,7 @@
 				CE8C49452DF18B69003188ED /* ThemeGalleryGridView.swift in Sources */,
 				CE8C48222DEA8DAE003188ED /* MainView.swift in Sources */,
 				CE8C49712DF19111003188ED /* StoryGridCard.swift in Sources */,
-				CE8C48232DEA8DAE003188ED /* FollowersListView.swift in Sources */,
+				CE8C48232DEA8DAE003188ED /* FollowListView.swift in Sources */,
 				CE8C486D2DEB2A62003188ED /* LaunchScreenView.swift in Sources */,
 				CE8C48242DEA8DAE003188ED /* FollowingListView.swift in Sources */,
 				CE8C48262DEA8DAE003188ED /* LibraryView.swift in Sources */,

@@ -22,6 +22,10 @@ struct LibraryView: View {
         return user == nil
     }   // friendId 가 nil 이면, 내 라이브러리
     
+    private var currentUser: User? {
+        return user ?? userViewModel.user
+    }
+
     var loadType: LoadType {
         if !isMyLibaray {
             guard let userId = user?.id else { return LoadType.my }
@@ -118,6 +122,7 @@ struct LibraryView: View {
                 VStack(spacing: 20) {
                     if let friend = user {   // 친구 프로필
                         ProfileView(user: friend)
+                            .environmentObject(followViewModel)
                             .environmentObject(userAuthManager)
                             .environmentObject(userViewModel)
                             .environmentObject(storiesViewModel)
@@ -125,6 +130,7 @@ struct LibraryView: View {
 
                     } else {    // 내 프로필
                         ProfileView()
+                            .environmentObject(followViewModel)
                             .environmentObject(userAuthManager)
                             .environmentObject(userViewModel)
                             .environmentObject(storiesViewModel)
@@ -221,24 +227,33 @@ struct LibraryView: View {
     }
     
     private func refreshContent(type: LoadType) async {
-        userViewModel.getProfile(userId: user?.id)
-        userViewModel.loadStoryCount(userId: user?.id)
-        
+        userViewModel.getProfile(userId: currentUser?.id)
+        userViewModel.loadStoryCount(userId: currentUser?.id)
+        followViewModel.setUserId(currentUser?.id)
+        followViewModel.loadFollowCounts()
+
         storiesViewModel.refreshBookStories(type: type)
         themesViewModel.refreshThemes(type: type)
-        
-        followViewModel.setUserId(userViewModel.user?.id)
-        followViewModel.loadFollowCounts()
+                
+        // 친구 프로필인 경우 팔로우 상태 업데이트
+        if let friend = user {
+            followViewModel.updateFollowStatus(userId: friend.id)
+        }
     }
     
     private func onAppear(type: LoadType) {
-        userViewModel.getProfile(userId: user?.id)
-        userViewModel.loadStoryCount(userId: user?.id)
-        followViewModel.setUserId(userViewModel.user?.id)
+        userViewModel.getProfile(userId: currentUser?.id)
+        userViewModel.loadStoryCount(userId: currentUser?.id)
+        followViewModel.setUserId(currentUser?.id)
         followViewModel.loadFollowCounts()
         
         storiesViewModel.loadBookStories(type: type)
         themesViewModel.loadThemes(type: type)
+        
+        // 친구 프로필인 경우 팔로우 상태 업데이트
+        if let friend = user {
+            followViewModel.updateFollowStatus(userId: friend.id)
+        }
     }
     
     private var alertView: Alert {

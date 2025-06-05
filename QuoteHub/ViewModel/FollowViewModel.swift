@@ -7,10 +7,14 @@
 
 import Foundation
 
-class FollowViewModel: ObservableObject {
+class FollowViewModel: ObservableObject, LoadingViewModel {
     @Published var followers = [User]()
     @Published var following = [User]()
+    
+    // LoadingViewModel 프로토콜 준수
     @Published var isLoading = false
+    @Published var loadingMessage: String?
+    
     @Published var errorMessage: String?
     @Published var isLastPage = false
     @Published var isBlocked: Bool = false
@@ -40,6 +44,7 @@ class FollowViewModel: ObservableObject {
         following.removeAll()
         isLoading = false
         isLastPage = false
+        loadingMessage = nil
     }
 
     
@@ -93,10 +98,14 @@ class FollowViewModel: ObservableObject {
     // 팔로우
     func followUser(userId: String) {
         isLoading = true
+        loadingMessage = "팔로우 중..."
+        
         print("Attempting to follow user: \(userId)")
         service.followUser(userId: userId) { [weak self] result in
             DispatchQueue.main.async {
                 self?.isLoading = false
+                self?.loadingMessage = nil
+                
                 switch result {
                 case .success(let response):
                     print("Follow response: \(response)")
@@ -123,10 +132,14 @@ class FollowViewModel: ObservableObject {
     // 언팔로우
     func unfollowUser(userId: String) {
         isLoading = true
+        loadingMessage = "언팔로우 중..."
+        
         print("Attempting to unfollow user: \(userId)")
         service.unfolllowUser(userId: userId) { [weak self] result in
             DispatchQueue.main.async {
                 self?.isLoading = false
+                self?.loadingMessage = nil
+                
                 switch result {
                 case .success(let response):
                     print("Unfollow response: \(response)")
@@ -153,10 +166,14 @@ class FollowViewModel: ObservableObject {
         }
         
         isLoading = true
+        loadingMessage = "팔로워 목록 불러오는 중..."
         
         print("팔로워 로드 시작: userId = \(userId), currentPage = \(currentPage)")
         service.getFollowers(userId: userId, page: currentPage, pageSize: pageSize) { [weak self] result in
             DispatchQueue.main.async {
+                self?.isLoading = false
+                self?.loadingMessage = nil
+                
                 switch result {
                 case .success(let response):
                     print("팔로워 로드 성공: \(response.data.count) 명")
@@ -165,9 +182,9 @@ class FollowViewModel: ObservableObject {
                     self?.isLastPage = response.pagination.currentPage >= response.pagination.totalPages
                     
                     self?.currentPage += 1
-                    self?.isLoading = false
                 case .failure(let error):
                     print("Error loading Followers List: \(error)")
+                    self?.errorMessage = "팔로워 목록을 불러오는 중 오류가 발생했습니다."
                 }
             }
         }
@@ -180,59 +197,60 @@ class FollowViewModel: ObservableObject {
             return
         }
         
-        print("팔로잉 로드 시작: userId = \(userId), currentPage = \(currentPage)")
         isLoading = true
+        loadingMessage = "팔로잉 목록 불러오는 중..."
+        
+        print("팔로잉 로드 시작: userId = \(userId), currentPage = \(currentPage)")
 
         service.getFollowing(userId: userId, page: currentPage, pageSize: pageSize) { [weak self] result in
             DispatchQueue.main.async {
+                self?.isLoading = false
+                self?.loadingMessage = nil
+                
                 switch result {
                 case .success(let response):
                     print("팔로잉 로드 성공: \(response.data.count) 명")
                     self?.following.append(contentsOf: response.data)
                     self?.isLastPage = response.pagination.currentPage >= response.pagination.totalPages
                     self?.currentPage += 1
-                    self?.isLoading = false
                 case .failure(let error):
                     print("Error loading Following List: \(error)")
+                    self?.errorMessage = "팔로잉 목록을 불러오는 중 오류가 발생했습니다."
                 }
             }
         }
     }
     
-    func FollowersloadMoreIfNeeded(currentItem item: User?) {
+    func loadMoreIfNeeded(currentItem item: User?, type: FollowListType) {
         guard let item = item, let userId = self.userId else {
             print("필요한 정보가 없습니다.")
             return
         }
 
-        print("더 많은 팔로워 로드가 필요할 수도 있습니다: currentItem = \(String(describing: item))")
-        if item == followers.last {
-            loadFollowers(userId: userId)
+        switch type {
+        case .followers:
+            if item == followers.last {
+                loadFollowers(userId: userId)
+            }
+        case .following:
+            if item == following.last {
+                loadFollowing(userId: userId)
+            }
         }
     }
-    
-    func FollowingsloadMoreIfNeeded(currentItem item: User?) {
-        guard let item = item, let userId = self.userId else {
-            print("필요한 정보가 없습니다.")
-            return
-        }
-
-        print("더 많은 팔로잉 로드가 필요할 수도 있습니다: currentItem = \(String(describing: item))")
-        if item == following.last {
-            loadFollowing(userId: userId)
-        }
-    }
-
-    // 친구 차단 혹은 차단 해제
-
 }
 
 extension FollowViewModel {
-
     // Update follow status (block or unblock a friend)
     func updateFollowStatus(forUserId userId: String, withStatus status: Follow.Status, completion: @escaping (Bool, String?) -> Void) {
+        isLoading = true
+        loadingMessage = "상태 업데이트 중..."
+        
         service.updateFollowStatus(userId: userId, status: status.rawValue) { result in
             DispatchQueue.main.async {
+                self.isLoading = false
+                self.loadingMessage = nil
+                
                 switch result {
                 case .success(let response):
                     // Handle the success case, update UI or model as needed
