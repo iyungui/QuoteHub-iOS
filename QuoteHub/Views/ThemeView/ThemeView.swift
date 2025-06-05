@@ -8,16 +8,28 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
-// MARK: - THEME VIEW
+// MARK: - THEME VIEW (범용)
 
 struct ThemeView: View {
     let theme: Theme
     let index: Int
+    let isCompact: Bool  // 컴팩트 모드 (그리드용)
+    let cardWidth: CGFloat
+    let cardHeight: CGFloat
+    
+    // 기본값으로 PublicThemesListView와 동일하게 설정
+    init(theme: Theme, index: Int = 0, isCompact: Bool = false, cardWidth: CGFloat = 240, cardHeight: CGFloat = 180) {
+        self.theme = theme
+        self.index = index
+        self.isCompact = isCompact
+        self.cardWidth = cardWidth
+        self.cardHeight = cardHeight
+    }
     
     @EnvironmentObject private var themesViewModel: ThemesViewModel
     @EnvironmentObject private var userViewModel: UserViewModel
-    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
-    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
+//    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
+//    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
 
     private var themeGradient: [Color] {
         let gradients: [[Color]] = [
@@ -43,9 +55,8 @@ struct ThemeView: View {
                 // 컨텐츠
                 contentView
             }
-            .frame(width: 240, height: 180)
+            .frame(width: cardWidth, height: cardHeight)
             .clipShape(RoundedRectangle(cornerRadius: 20))
-
         }
         .buttonStyle(CardButtonStyle())
     }
@@ -64,7 +75,7 @@ struct ThemeView: View {
             }
             .resizable()
             .aspectRatio(contentMode: .fill)
-            .frame(width: 240, height: 180)
+            .frame(width: cardWidth, height: cardHeight)
     }
     
     private var gradientOverlay: some View {
@@ -82,15 +93,17 @@ struct ThemeView: View {
     
     private var contentView: some View {
         VStack {
-            // 상단 아이콘과 사용자 정보
-            HStack {
-                Spacer()
-                
-                // 사용자 프로필
-                userProfileView
+            // 상단 사용자 정보 (컴팩트 모드에서는 숨김)
+            if !isCompact {
+                HStack {
+                    Spacer()
+                    userProfileView
+                }
+                .padding(.top, 16)
+                .padding(.horizontal, 16)
+            } else {
+                Spacer().frame(height: 16) // 상단 여백 유지
             }
-            .padding(.top, 16)
-            .padding(.horizontal, 16)
             
             Spacer()
             
@@ -98,7 +111,7 @@ struct ThemeView: View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
                     Text(theme.name)
-                        .font(.scoreDream(.bold, size: .body))
+                        .font(.scoreDream(.bold, size: isCompact ? .subheadline : .body))
                         .foregroundColor(.white)
                         .lineLimit(1)
                         .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
@@ -107,12 +120,12 @@ struct ThemeView: View {
                     
                     // 화살표 아이콘
                     Image(systemName: "arrow.right.circle.fill")
-                        .font(.system(size: 20))
+                        .font(.system(size: isCompact ? 16 : 20))
                         .foregroundColor(.white.opacity(0.8))
                 }
                 
                 Text(theme.description)
-                    .font(.scoreDreamCaption)
+                    .font(.scoreDream(.light, size: isCompact ? .footnote : .caption))
                     .foregroundColor(.white.opacity(0.9))
                     .lineLimit(2)
                     .shadow(color: .black.opacity(0.3), radius: 1, x: 0, y: 1)
@@ -121,7 +134,7 @@ struct ThemeView: View {
                     Spacer()
                     
                     Text(theme.createdAt.prefix(10))
-                        .font(.scoreDream(.light, size: .footnote))
+                        .font(.scoreDream(.light, size: isCompact ? .caption2 : .footnote))
                         .foregroundColor(.white.opacity(0.7))
                 }
             }
@@ -129,8 +142,6 @@ struct ThemeView: View {
             .padding(.horizontal, 16)
         }
     }
-    
-    // TODO: - userProfile View 구조체로 변경하기
     
     private var userProfileView: some View {
         HStack(spacing: 8) {
@@ -154,7 +165,7 @@ struct ThemeView: View {
                         Circle()
                             .stroke(Color.white.opacity(0.5), lineWidth: 1)
                     )
-            } else {    // 이미지 없을 때
+            } else {
                 Circle()
                     .fill(Color.white.opacity(0.3))
                     .frame(width: 24, height: 24)
@@ -176,13 +187,13 @@ struct ThemeView: View {
     
     private var destinationView: some View {
         if theme.userId.id == userViewModel.user?.id {
-            return AnyView(ThemeDetailView(theme: theme, isMy: true))
+            return AnyView(ThemeDetailView(theme: theme, isMy: true)
                 .environmentObject(themesViewModel)
-                .environmentObject(userViewModel)
+                .environmentObject(userViewModel))
         } else {
-            return AnyView(ThemeDetailView(theme: theme, isMy: false))
+            return AnyView(ThemeDetailView(theme: theme, isMy: false)
                 .environmentObject(themesViewModel)
-                .environmentObject(userViewModel)
+                .environmentObject(userViewModel))
         }
     }
 }

@@ -24,7 +24,6 @@ struct LibraryStoriesListView: View {
     private let spacing: CGFloat = 16
     private let horizontalPadding: CGFloat = 20
     
-    // UIScreen 방법 - GeometryReader 없이 화면 크기 계산
     private var cardSize: CGFloat {
         let screenWidth = UIScreen.main.bounds.width
         let availableWidth = screenWidth - (horizontalPadding * 2) - spacing

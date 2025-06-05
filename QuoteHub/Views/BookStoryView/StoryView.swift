@@ -1,14 +1,14 @@
 //
-//  StoryView.swift (범용)
+//  StoryView.swift
 //  QuoteHub
 //
-//  Created by 이융의 on 11/9/23.
+//  Created by 이융의 on 6/5/25.
 //
 
 import SwiftUI
 import SDWebImageSwiftUI
 
-// MARK: - STORY VIEW (범용)
+// MARK: - STORY VIEW
 
 struct StoryView: View {
     let story: BookStory

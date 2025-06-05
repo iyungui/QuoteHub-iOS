@@ -138,7 +138,7 @@ struct LibraryView: View {
                 
                 contentSection
                 
-                Spacer().frame(height: 50)
+                Spacer().frame(height: 100)
             }
             .padding(.top, 10)
         }

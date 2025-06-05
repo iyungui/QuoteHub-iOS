@@ -18,27 +18,40 @@ struct LibraryThemesListView: View {
         GridItem(.flexible(), spacing: 16)
     ]
     private let spacing: CGFloat = 16
+    private let horizontalPadding: CGFloat = 20
+    
+    // UIScreen 방법 - GeometryReader 없이 화면 크기 계산
+    private var cardSize: CGFloat {
+        let screenWidth = UIScreen.main.bounds.width
+        let availableWidth = screenWidth - (horizontalPadding * 2) - spacing
+        return availableWidth / 2 // 2열 그리드, 정사각형
+    }
     
     @EnvironmentObject private var themesViewModel: ThemesViewModel
     @EnvironmentObject private var userViewModel: UserViewModel
+//    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
+//    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
 
     var body: some View {
         LazyVGrid(columns: columns, spacing: spacing) {
-            ForEach(themesViewModel.themes(for: loadType), id: \.id) { theme in
-                NavigationLink(
-                    destination: ThemeDetailView(theme: theme, isMy: isMy)
-                        .environmentObject(themesViewModel)
-                        .environmentObject(userViewModel)
-                ) {
-                    LibThemeCard(theme: theme)
-                }
-                .buttonStyle(CardButtonStyle())
+            ForEach(Array(themesViewModel.themes(for: loadType).enumerated()), id: \.element.id) { index, theme in
+                ThemeView(
+                    theme: theme,
+                    index: index,
+                    isCompact: true, // 컴팩트 모드 (유저정보 숨김 + 폰트 작게)
+                    cardWidth: cardSize,
+                    cardHeight: cardSize // 정사각형
+                )
+                .environmentObject(themesViewModel)
+                .environmentObject(userViewModel)
+//                .environmentObject(storiesViewModel)
+//                .environmentObject(userAuthManager)
             }
             
             // 더 로딩할 테마가 있을 때 로딩 인디케이터
             if !themesViewModel.isLastPage {
                 ForEach(0..<2, id: \.self) { _ in
-                    loadingThemeCard
+                    loadingThemeCard(size: cardSize)
                 }
                 .onAppear {
                     themesViewModel.loadMoreIfNeeded(
@@ -48,237 +61,79 @@ struct LibraryThemesListView: View {
                 }
             }
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, horizontalPadding)
         .padding(.top, 8)
     }
     
-    /// loadMoreIfNeeded 호출 시 보여질 로딩  카드 (테마)
-    private var loadingThemeCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            // 이미지 placeholder
-            HStack {
-                Spacer()
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.paperBeige.opacity(0.3))
-                    .frame(width: 140, height: 140) // 실제 이미지와 동일한 크기
-                    .overlay(
-                        ProgressView()
-                            .scaleEffect(0.8)
-                            .tint(.brownLeather)
-                    )
-                Spacer()
-            }
-            
-            // 텍스트 placeholder
-            VStack(alignment: .leading, spacing: 6) {
-                RoundedRectangle(cornerRadius: 6)
-                    .fill(Color.paperBeige.opacity(0.3))
-                    .frame(height: 16)
-                
-                RoundedRectangle(cornerRadius: 6)
-                    .fill(Color.paperBeige.opacity(0.2))
-                    .frame(height: 12)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .frame(height: 80) // 정보 영역과 동일한 높이
-            .padding(.horizontal, 4)
-        }
-        .frame(maxWidth: .infinity) // 그리드 공간을 균등하게 차지
-        .frame(height: 260) // 실제 카드와 동일한 높이
-        .padding(12)
-        .background(cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 20))
-    }
-    
-    private var cardBackground: some View {
-        RoundedRectangle(cornerRadius: 20)
-            .fill(.ultraThinMaterial)
-            .overlay(
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(
-                        LinearGradient(
-                            gradient: Gradient(colors: [
-                                Color.white.opacity(0.2),
-                                Color.clear,
-                                Color.antiqueGold.opacity(0.1)
-                            ]),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: 1
-                    )
-            )
-    }
-}
-
-// MARK: - THEME CARD
-
-struct LibThemeCard: View {
-    let theme: Theme
-    
-    private var themeGradient: [Color] {
-        let gradients: [[Color]] = [
-            [.paperBeige, .brownLeather],
-            [.antiqueGold, .paperBeige],
-            [.brownLeather, Color.purple.opacity(0.7)],
-            [Color.orange.opacity(0.8), Color.red.opacity(0.7)],
-            [Color.teal.opacity(0.8), .antiqueGold],
-            [.brownLeather, .antiqueGold]
-        ]
-        return gradients[abs(theme.id.hashValue) % gradients.count]
-    }
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            // 테마 이미지
-            HStack {
-                Spacer()
-                themeImageView
-                Spacer()
-            }
-            
-            // 테마 정보
-            themeInfoView
-        }
-        .frame(maxWidth: .infinity) // 그리드 공간을 균등하게 차지
-        .frame(height: 260) // 고정 높이 설정
-        .padding(12)
-        .background(cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 20))
-        .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 4)
-    }
-    
-    private var themeImageView: some View {
+    /// loadMoreIfNeeded 호출 시 보여질 로딩 카드 (테마)
+    private func loadingThemeCard(size: CGFloat) -> some View {
         ZStack {
-            // 배경 이미지
-            WebImage(url: URL(string: theme.themeImageURL))
-                .placeholder {
-                    Rectangle()
-                        .fill(
-                            LinearGradient(
-                                gradient: Gradient(colors: themeGradient),
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                        .overlay(
-                            VStack(spacing: 8) {
-                                Image(systemName: "folder.fill")
-                                    .font(.title2)
-                                    .foregroundColor(.white.opacity(0.8))
-                                
-                                Text("테마")
-                                    .font(.scoreDream(.medium, size: .caption))
-                                    .foregroundColor(.white.opacity(0.8))
-                            }
-                        )
-                }
-                .resizable()
-                .scaledToFill()
-                .frame(width: 140, height: 140) // 고정 크기 설정
-                .clipShape(RoundedRectangle(cornerRadius: 16))
+            // 배경 placeholder
+            RoundedRectangle(cornerRadius: 20)
+                .fill(
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            Color.paperBeige.opacity(0.3),
+                            Color.antiqueGold.opacity(0.2),
+                            Color.brownLeather.opacity(0.3)
+                        ]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .overlay(
+                    ProgressView()
+                        .scaleEffect(1.2)
+                        .tint(.brownLeather)
+                )
             
-            // 그라데이션 오버레이
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    Color.clear,
-                    Color.clear,
-                    Color.black.opacity(0.3)
-                ]),
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .frame(width: 140, height: 140) // 동일한 크기
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-            
-            // 공개/비공개 배지
+            // 하단 텍스트 placeholder 오버레이
             VStack {
-                HStack {
-                    Spacer()
-                    
-                    HStack(spacing: 4) {
-                        Image(systemName: theme.isPublic ? "eye.fill" : "eye.slash.fill")
-                            .font(.caption2)
-                        Text(theme.isPublic ? "공개" : "비공개")
-                            .font(.scoreDream(.medium, size: .caption2))
+                Spacer()
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        RoundedRectangle(cornerRadius: 3)
+                            .fill(Color.white.opacity(0.8))
+                            .frame(height: 12)
+                            .frame(maxWidth: size * 0.7, alignment: .leading)
+                        
+                        Spacer()
+                        
+                        Circle()
+                            .fill(Color.white.opacity(0.6))
+                            .frame(width: 12, height: 12)
                     }
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(
-                        Capsule()
-                            .fill(Color.black.opacity(0.4))
-                    )
-                    .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
+                    
+                    RoundedRectangle(cornerRadius: 3)
+                        .fill(Color.white.opacity(0.6))
+                        .frame(height: 8)
+                        .frame(maxWidth: size * 0.5, alignment: .leading)
+                    
+                    HStack {
+                        Spacer()
+                        RoundedRectangle(cornerRadius: 2)
+                            .fill(Color.white.opacity(0.5))
+                            .frame(height: 6)
+                            .frame(maxWidth: size * 0.3, alignment: .trailing)
+                    }
                 }
-                .padding(.top, 8)
-                .padding(.trailing, 8)
-                
-                Spacer()
-            }
-        }
-        .frame(width: 140, height: 140) // 전체 이미지 뷰 크기 고정
-    }
-    
-    private var themeInfoView: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            // 테마 이름
-            Text(theme.name)
-                .font(.scoreDream(.bold, size: .subheadline))
-                .foregroundColor(.primaryText)
-                .lineLimit(1)
-                .frame(height: 20, alignment: .leading) // 고정 높이
-            
-            // 테마 설명
-            Text(theme.description.isEmpty ? " " : theme.description) // 빈 공간 유지
-                .font(.scoreDream(.light, size: .caption))
-                .foregroundColor(.secondaryText)
-                .lineLimit(2)
-                .multilineTextAlignment(.leading)
-                .frame(height: 32, alignment: .top) // 고정 높이 (2줄)
-            
-            Spacer() // 남은 공간 채우기
-            
-            // 생성일
-            HStack {
-                Image(systemName: "calendar")
-                    .font(.caption2)
-                    .foregroundColor(.brownLeather.opacity(0.7))
-                
-                Text(theme.createdAt.prefix(10))
-                    .font(.scoreDream(.light, size: .caption2))
-                    .foregroundColor(.secondaryText.opacity(0.8))
-                
-                Spacer()
-                
-                // 화살표 아이콘
-                Image(systemName: "arrow.right.circle.fill")
-                    .font(.caption)
-                    .foregroundColor(.brownLeather.opacity(0.6))
-            }
-            .frame(height: 16) // 고정 높이
-        }
-        .frame(height: 80) // 전체 정보 영역 고정 높이
-        .padding(.horizontal, 4)
-    }
-    
-    private var cardBackground: some View {
-        RoundedRectangle(cornerRadius: 20)
-            .fill(.ultraThinMaterial)
-            .overlay(
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(
-                        LinearGradient(
-                            gradient: Gradient(colors: [
-                                Color.white.opacity(0.2),
-                                Color.clear,
-                                Color.antiqueGold.opacity(0.1)
-                            ]),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: 1
+                .padding(.horizontal, 16)
+                .padding(.bottom, 16)
+                .background(
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            Color.clear,
+                            Color.black.opacity(0.3),
+                            Color.black.opacity(0.7)
+                        ]),
+                        startPoint: .top,
+                        endPoint: .bottom
                     )
-            )
+                )
+            }
+        }
+        .frame(width: size, height: size) // 정사각형
+        .clipShape(RoundedRectangle(cornerRadius: 20))
     }
 }

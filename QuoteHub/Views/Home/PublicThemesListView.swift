@@ -19,12 +19,12 @@ struct PublicThemesListView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 20) {
                 ForEach(Array(themesViewModel.themes(for: .public).enumerated()), id: \.element.id) { index, theme in
-                    // TODO: - index 파라미터 지우기
-                    ThemeView(theme: theme, index: index)
-                        .environmentObject(themesViewModel)
-                        .environmentObject(userViewModel)
-                        .environmentObject(storiesViewModel)
-                        .environmentObject(userAuthManager)
+                    ThemeView(
+                        theme: theme,
+                        index: index
+                    )
+                    .environmentObject(themesViewModel)
+                    .environmentObject(userViewModel)
                 }
                 
                 if !themesViewModel.isLastPage {
