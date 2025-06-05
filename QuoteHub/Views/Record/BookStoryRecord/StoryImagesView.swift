@@ -10,7 +10,6 @@ import SwiftUI
 struct StoryImagesView: View {
     @Binding var selectedImages: [UIImage]
     @Binding var showingImagePicker: Bool
-    @State private var animatedImages: [Bool] = []
 
     var body: some View {
         VStack(spacing: 16) {
@@ -33,20 +32,12 @@ struct StoryImagesView: View {
         .background(cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 4)
-        .onAppear {
-            setupAnimations()
-        }
-        .onChange(of: selectedImages.count) { _, _ in
-            setupAnimations()
-        }
     }
     
     private var addPhotoButton: some View {
         Button(action: {
             if selectedImages.count < 10 {
-                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                    showingImagePicker = true
-                }
+                showingImagePicker = true
             }
         }) {
             VStack(spacing: 12) {
@@ -54,17 +45,14 @@ struct StoryImagesView: View {
                     Circle()
                         .fill(Color.brownLeather)
                         .frame(width: 60, height: 60)
-                        .shadow(color: .brownLeather.opacity(0.3), radius: 8, x: 0, y: 4)
                     
                     Image(systemName: selectedImages.count >= 10 ? "checkmark" : "plus")
                         .font(.title3.weight(.bold))
                         .foregroundColor(.white)
-                        .scaleEffect(selectedImages.count >= 10 ? 1.2 : 1.0)
-                        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: selectedImages.count >= 10)
                 }
                 
                 VStack(spacing: 4) {
-                    Text(selectedImages.count >= 10 ? "이미지 가득참" : "사진 추가")
+                    Text(selectedImages.count >= 10 ? "이미지 가득함" : "사진 추가")
                         .font(.scoreDream(.medium, size: .subheadline))
                         .foregroundColor(.primaryText)
                     
@@ -96,7 +84,6 @@ struct StoryImagesView: View {
         .buttonStyle(CardButtonStyle())
         .disabled(selectedImages.count >= 10)
         .opacity(selectedImages.count >= 10 ? 0.7 : 1.0)
-        .animation(.easeInOut(duration: 0.2), value: selectedImages.count >= 10)
     }
     
     private var imageGrid: some View {
@@ -110,13 +97,6 @@ struct StoryImagesView: View {
         ) {
             ForEach(Array(selectedImages.enumerated()), id: \.offset) { index, image in
                 imageCell(for: image, at: index)
-                    .scaleEffect(animatedImages.indices.contains(index) && animatedImages[index] ? 1.0 : 0.8)
-                    .opacity(animatedImages.indices.contains(index) && animatedImages[index] ? 1.0 : 0.0)
-                    .animation(
-                        .spring(response: 0.4, dampingFraction: 0.7)
-                        .delay(Double(index) * 0.1),
-                        value: animatedImages.indices.contains(index) ? animatedImages[index] : false
-                    )
             }
         }
     }
@@ -138,7 +118,6 @@ struct StoryImagesView: View {
             // 삭제 버튼
             Button(action: {
                 selectedImages.remove(at: index)
-                
             }) {
                 Image(systemName: "xmark.circle.fill")
                     .font(.title3)
@@ -238,17 +217,4 @@ struct StoryImagesView: View {
                 .frame(maxWidth: 60)
         }
     }
-    
-    private func setupAnimations() {
-        animatedImages = Array(repeating: false, count: selectedImages.count)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            withAnimation {
-                for i in 0..<animatedImages.count {
-                    animatedImages[i] = true
-                }
-            }
-        }
-    }
 }
-
