@@ -99,20 +99,23 @@ struct BookDetailView: View {
             }
             
             Spacer()
-            NavigationLink(
-                destination: RecordView(book: book)
-                    .environmentObject(storiesViewModel)
-            ) {
-                Image(systemName: "highlighter")
-                    .font(.title2.weight(.medium))
-                    .foregroundColor(.white)
-                    .frame(width: 44, height: 44)
-                    .background(
-                        Circle()
-                            .fill(.ultraThinMaterial)
-                            .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
-                    )
-
+            
+            if userAuthManager.isUserAuthenticated {
+                NavigationLink(
+                    destination: RecordView(book: book)
+                        .environmentObject(storiesViewModel)
+                ) {
+                    Image(systemName: "highlighter")
+                        .font(.title2.weight(.medium))
+                        .foregroundColor(.white)
+                        .frame(width: 44, height: 44)
+                        .background(
+                            Circle()
+                                .fill(.ultraThinMaterial)
+                                .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+                        )
+                    
+                }
             }
         }
         .padding(.horizontal, 20)

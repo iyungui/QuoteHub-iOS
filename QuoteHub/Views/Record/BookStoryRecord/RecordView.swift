@@ -32,6 +32,11 @@ struct RecordView: View {
     @State private var isShowingDuplicateWarning = false
     @State private var feedbackMessage: String? = nil
 
+    // 글자수 제한 상수
+    private let keywordMaxLength = 8
+    private let quoteMaxLength = 500
+    private let contentMaxLength = 1000
+
     // placeholder
     let quotePlaceholder: String = "간직하고 싶은 문장을 기록해보세요."
     let contentPlaceholder: String = "문장을 읽고 떠오른 생각을 기록해보세요."
@@ -259,34 +264,44 @@ struct RecordView: View {
             
             VStack(spacing: 12) {
                 if keywords.count < 5 {
-                    HStack {
-                        Image(systemName: "number")
-                            .font(.body)
-                            .foregroundColor(.brownLeather.opacity(0.7))
-                            .frame(width: 20)
-                        
-                        TextField("키워드 입력", text: $currentInput)
-                            .focused($focusField, equals: .keywords)
-                            .submitLabel(.done)
-                            .onChange(of: currentInput) { _, newValue in
-                                if newValue.count > 8 {
-                                    currentInput = String(newValue.prefix(8))
+                    VStack(spacing: 8) {
+                        HStack {
+                            Image(systemName: "number")
+                                .font(.body)
+                                .foregroundColor(.brownLeather.opacity(0.7))
+                                .frame(width: 20)
+                            
+                            TextField("키워드 입력", text: $currentInput)
+                                .focused($focusField, equals: .keywords)
+                                .submitLabel(.done)
+                                .onChange(of: currentInput) { _, newValue in
+                                    if newValue.count > keywordMaxLength {
+                                        currentInput = String(newValue.prefix(keywordMaxLength))
+                                    }
                                 }
-                            }
-                            .onSubmit(addKeyword)
-                            .font(.scoreDream(.medium, size: .body))
+                                .onSubmit(addKeyword)
+                                .font(.scoreDream(.medium, size: .body))
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(Color.paperBeige.opacity(0.3))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(focusField == .keywords ? Color.brownLeather.opacity(0.5) : Color.clear, lineWidth: 2)
+                                )
+                        )
+                        .animation(.easeInOut(duration: 0.2), value: focusField)
+                        
+                        // 글자수 표시
+                        HStack {
+                            Spacer()
+                            Text("\(currentInput.count)/\(keywordMaxLength)")
+                                .font(.scoreDream(.light, size: .caption2))
+                                .foregroundColor(currentInput.count >= keywordMaxLength ? .orange : .secondaryText)
+                        }
                     }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.paperBeige.opacity(0.3))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(focusField == .keywords ? Color.brownLeather.opacity(0.5) : Color.clear, lineWidth: 2)
-                            )
-                    )
-                    .animation(.easeInOut(duration: 0.2), value: focusField)
                 }
                 
                 if isShowingDuplicateWarning {
@@ -298,7 +313,7 @@ struct RecordView: View {
                             .foregroundColor(.orange)
                         Spacer()
                     }
-                    .transition(.asymmetric(insertion: .opacity, removal: .slide))
+                    .transition(.asymmetric(insertion: .opacity, removal: .opacity))
                 }
                 
                 if !keywords.isEmpty {
@@ -358,32 +373,47 @@ struct RecordView: View {
         VStack(spacing: 16) {
             cardHeader(title: "인용구", icon: "quote.opening", subtitle: "마음에 드는 문장을 기록해보세요")
             
-            ZStack(alignment: .topLeading) {
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.paperBeige.opacity(0.2))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(focusField == .quote ? Color.brownLeather.opacity(0.5) : Color.clear, lineWidth: 2)
-                    )
-                    .frame(minHeight: 120)
-                    .animation(.easeInOut(duration: 0.2), value: focusField)
-                
-                if quote.isEmpty {
-                    Text(quotePlaceholder)
-                        .font(.scoreDream(.light, size: .body))
-                        .foregroundColor(.secondaryText.opacity(0.7))
-                        .padding(.horizontal, 16)
-                        .padding(.top, 16)
-                        .allowsHitTesting(false)
+            VStack(spacing: 8) {
+                ZStack(alignment: .topLeading) {
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(Color.paperBeige.opacity(0.2))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(focusField == .quote ? Color.brownLeather.opacity(0.5) : Color.clear, lineWidth: 2)
+                        )
+                        .frame(minHeight: 120)
+                        .animation(.easeInOut(duration: 0.2), value: focusField)
+                    
+                    if quote.isEmpty {
+                        Text(quotePlaceholder)
+                            .font(.scoreDream(.light, size: .body))
+                            .foregroundColor(.secondaryText.opacity(0.7))
+                            .padding(.horizontal, 16)
+                            .padding(.top, 16)
+                            .allowsHitTesting(false)
+                    }
+                    
+                    TextEditor(text: $quote)
+                        .font(.scoreDream(.regular, size: .body))
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 12)
+                        .background(Color.clear)
+                        .focused($focusField, equals: .quote)
+                        .scrollContentBackground(.hidden)
+                        .onChange(of: quote) { _, newValue in
+                            if newValue.count > quoteMaxLength {
+                                quote = String(newValue.prefix(quoteMaxLength))
+                            }
+                        }
                 }
                 
-                TextEditor(text: $quote)
-                    .font(.scoreDream(.regular, size: .body))
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 12)
-                    .background(Color.clear)
-                    .focused($focusField, equals: .quote)
-                    .scrollContentBackground(.hidden)
+                // 글자수 표시
+                HStack {
+                    Spacer()
+                    Text("\(quote.count)/\(quoteMaxLength)")
+                        .font(.scoreDream(.light, size: .caption2))
+                        .foregroundColor(quote.count >= quoteMaxLength ? .orange : .secondaryText)
+                }
             }
         }
         .padding(20)
@@ -396,32 +426,47 @@ struct RecordView: View {
         VStack(spacing: 16) {
             cardHeader(title: "나의 생각", icon: "brain.head.profile", subtitle: "문장을 읽고 떠오른 생각을 기록해보세요")
             
-            ZStack(alignment: .topLeading) {
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.paperBeige.opacity(0.2))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(focusField == .content ? Color.brownLeather.opacity(0.5) : Color.clear, lineWidth: 2)
-                    )
-                    .frame(minHeight: 150)
-                    .animation(.easeInOut(duration: 0.2), value: focusField)
-                
-                if content.isEmpty {
-                    Text(contentPlaceholder)
-                        .font(.scoreDream(.light, size: .body))
-                        .foregroundColor(.secondaryText.opacity(0.7))
-                        .padding(.horizontal, 16)
-                        .padding(.top, 16)
-                        .allowsHitTesting(false)
+            VStack(spacing: 8) {
+                ZStack(alignment: .topLeading) {
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(Color.paperBeige.opacity(0.2))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(focusField == .content ? Color.brownLeather.opacity(0.5) : Color.clear, lineWidth: 2)
+                        )
+                        .frame(minHeight: 150)
+                        .animation(.easeInOut(duration: 0.2), value: focusField)
+                    
+                    if content.isEmpty {
+                        Text(contentPlaceholder)
+                            .font(.scoreDream(.light, size: .body))
+                            .foregroundColor(.secondaryText.opacity(0.7))
+                            .padding(.horizontal, 16)
+                            .padding(.top, 16)
+                            .allowsHitTesting(false)
+                    }
+                    
+                    TextEditor(text: $content)
+                        .font(.scoreDream(.regular, size: .body))
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 12)
+                        .background(Color.clear)
+                        .focused($focusField, equals: .content)
+                        .scrollContentBackground(.hidden)
+                        .onChange(of: content) { _, newValue in
+                            if newValue.count > contentMaxLength {
+                                content = String(newValue.prefix(contentMaxLength))
+                            }
+                        }
                 }
                 
-                TextEditor(text: $content)
-                    .font(.scoreDream(.regular, size: .body))
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 12)
-                    .background(Color.clear)
-                    .focused($focusField, equals: .content)
-                    .scrollContentBackground(.hidden)
+                // 글자수 표시
+                HStack {
+                    Spacer()
+                    Text("\(content.count)/\(contentMaxLength)")
+                        .font(.scoreDream(.light, size: .caption2))
+                        .foregroundColor(content.count >= contentMaxLength ? .orange : .secondaryText)
+                }
             }
         }
         .padding(20)
