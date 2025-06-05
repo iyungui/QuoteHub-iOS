@@ -101,6 +101,8 @@
 		CE8C48EF2DF1294E003188ED /* StoryImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48EE2DF1294E003188ED /* StoryImagesView.swift */; };
 		CE8C49192DF15FF9003188ED /* DraftStory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C49182DF15FF9003188ED /* DraftStory.swift */; };
 		CE8C491B2DF1601C003188ED /* DraftManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C491A2DF1601C003188ED /* DraftManager.swift */; };
+		CE8C49452DF18B69003188ED /* ThemeGalleryGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C49442DF18B68003188ED /* ThemeGalleryGridView.swift */; };
+		CE8C49472DF18B89003188ED /* ThemeGalleryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C49462DF18B89003188ED /* ThemeGalleryListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -196,6 +198,8 @@
 		CE8C48EE2DF1294E003188ED /* StoryImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryImagesView.swift; sourceTree = "<group>"; };
 		CE8C49182DF15FF9003188ED /* DraftStory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftStory.swift; sourceTree = "<group>"; };
 		CE8C491A2DF1601C003188ED /* DraftManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftManager.swift; sourceTree = "<group>"; };
+		CE8C49442DF18B68003188ED /* ThemeGalleryGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeGalleryGridView.swift; sourceTree = "<group>"; };
+		CE8C49462DF18B89003188ED /* ThemeGalleryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeGalleryListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -453,6 +457,8 @@
 			isa = PBXGroup;
 			children = (
 				CE8C48152DEA8DAE003188ED /* ThemeDetailView.swift */,
+				CE8C49442DF18B68003188ED /* ThemeGalleryGridView.swift */,
+				CE8C49462DF18B89003188ED /* ThemeGalleryListView.swift */,
 				CE8C48162DEA8DAE003188ED /* UpdateThemaView.swift */,
 			);
 			path = ThemeView;
@@ -632,6 +638,7 @@
 				CE8C481D2DEA8DAE003188ED /* PublicThemesListView.swift in Sources */,
 				CE8C481E2DEA8DAE003188ED /* UserSearchView.swift in Sources */,
 				CE8C48202DEA8DAE003188ED /* SearchStoryByKeywordView.swift in Sources */,
+				CE8C49452DF18B69003188ED /* ThemeGalleryGridView.swift in Sources */,
 				CE8C48222DEA8DAE003188ED /* MainView.swift in Sources */,
 				CE8C48232DEA8DAE003188ED /* FollowersListView.swift in Sources */,
 				CE8C486D2DEB2A62003188ED /* LaunchScreenView.swift in Sources */,
@@ -653,6 +660,7 @@
 				CE8C48712DEB5190003188ED /* ProfileView.swift in Sources */,
 				CE8C48342DEA8DAE003188ED /* BookStoryDetailView.swift in Sources */,
 				CE8C487F2DEBF39D003188ED /* BookDetailView.swift in Sources */,
+				CE8C49472DF18B89003188ED /* ThemeGalleryListView.swift in Sources */,
 				CE8C48802DEBF39D003188ED /* RecordView.swift in Sources */,
 				CE8C48812DEBF39D003188ED /* SearchBookView.swift in Sources */,
 				CE8C491B2DF1601C003188ED /* DraftManager.swift in Sources */,
