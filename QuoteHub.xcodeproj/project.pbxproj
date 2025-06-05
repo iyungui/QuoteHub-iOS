@@ -107,6 +107,8 @@
 		CE8C49732DF19133003188ED /* StoryListCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C49722DF19133003188ED /* StoryListCard.swift */; };
 		CE8C49772DF1D132003188ED /* StoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C49762DF1D132003188ED /* StoryView.swift */; };
 		CE8C49792DF1DB4E003188ED /* ThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C49782DF1DB4E003188ED /* ThemeView.swift */; };
+		CE8C497B2DF1E548003188ED /* ReadingLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C497A2DF1E548003188ED /* ReadingLevel.swift */; };
+		CE8C497D2DF1E575003188ED /* ReadingLevelSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C497C2DF1E575003188ED /* ReadingLevelSection.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -208,6 +210,8 @@
 		CE8C49722DF19133003188ED /* StoryListCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryListCard.swift; sourceTree = "<group>"; };
 		CE8C49762DF1D132003188ED /* StoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryView.swift; sourceTree = "<group>"; };
 		CE8C49782DF1DB4E003188ED /* ThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeView.swift; sourceTree = "<group>"; };
+		CE8C497A2DF1E548003188ED /* ReadingLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingLevel.swift; sourceTree = "<group>"; };
+		CE8C497C2DF1E575003188ED /* ReadingLevelSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingLevelSection.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -504,6 +508,8 @@
 				CE8C48662DEB0F53003188ED /* CardButtonStyle.swift */,
 				CE8C48642DEAE2A9003188ED /* FontManager.swift */,
 				CE8C488F2DEC96B6003188ED /* PhotoPickerAlertType.swift */,
+				CE8C497A2DF1E548003188ED /* ReadingLevel.swift */,
+				CE8C497C2DF1E575003188ED /* ReadingLevelSection.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -671,6 +677,7 @@
 				CE8C48322DEA8DAE003188ED /* VersionInfoView.swift in Sources */,
 				CE8C48332DEA8DAE003188ED /* CommentView.swift in Sources */,
 				CE8C48E12DF04BD8003188ED /* CustomProgressView.swift in Sources */,
+				CE8C497D2DF1E575003188ED /* ReadingLevelSection.swift in Sources */,
 				CE8C48712DEB5190003188ED /* ProfileView.swift in Sources */,
 				CE8C48342DEA8DAE003188ED /* BookStoryDetailView.swift in Sources */,
 				CE8C487F2DEBF39D003188ED /* BookDetailView.swift in Sources */,
@@ -715,6 +722,7 @@
 				CE8C48862DEBF39F003188ED /* CreateThemeView.swift in Sources */,
 				CE8C48902DEC96B6003188ED /* PhotoPickerAlertType.swift in Sources */,
 				CE8C49792DF1DB4E003188ED /* ThemeView.swift in Sources */,
+				CE8C497B2DF1E548003188ED /* ReadingLevel.swift in Sources */,
 				C6336CF32AAF1AA0007355EC /* ImagePicker.swift in Sources */,
 				C627C8CC2AE25831004D867B /* ColorExtension.swift in Sources */,
 				C6691C522B04DA8C0083C678 /* FollowViewModel.swift in Sources */,

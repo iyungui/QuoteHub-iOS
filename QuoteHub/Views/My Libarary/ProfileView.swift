@@ -50,8 +50,13 @@ struct ProfileView: View {
                 followButton
             }
             userStatusMessage
-            readingLevelSection
-            readingProgressSection
+            
+            // 레벨 섹션
+            ReadingLevelSection(storyCount: userViewModel.storyCount ?? 0)
+            
+            // 프로그레스 섹션
+            ReadingProgressSection(storyCount: userViewModel.storyCount ?? 0)
+            
             followStats
         }
         .onAppear {
@@ -65,6 +70,8 @@ struct ProfileView: View {
         }
         .alert(isPresented: $showAlert) { alertView }
     }
+    
+    // MARK: - UI Components
     
     private var userImage: some View {
         Group {
@@ -101,7 +108,6 @@ struct ProfileView: View {
                     followViewModel.followUser(userId: friend.id)
                 }
             } else {
-                // TODO: 로그인 필요 알림 처리
                 alertType = .loginRequired
                 showAlert = true
             }
@@ -126,77 +132,6 @@ struct ProfileView: View {
             .foregroundColor(.secondary)
     }
     
-    private var readingLevelSection: some View {
-        let level = calculateReadingLevel(storyCount: userViewModel.storyCount ?? 0)
-        
-        return VStack(spacing: 8) {
-            HStack(spacing: 8) {
-                Text(level.icon)
-                    .font(.title2)
-                Text(level.title)
-                    .font(.scoreDream(.medium, size: .body))
-                Text("Lv.\(level.level)")
-                    .font(.scoreDreamCaption)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(Color.appAccent.opacity(0.1))
-                    .foregroundColor(.blue)
-                    .cornerRadius(8)
-            }
-        }
-    }
-    
-    private var readingProgressSection: some View {
-        let storyCount = userViewModel.storyCount ?? 0
-        let currentLevel = calculateReadingLevel(storyCount: storyCount)
-        let nextLevelInfo = getNextLevelInfo(currentLevel: currentLevel.level)
-        let currentLevelMinStories = getLevelMinStories(level: currentLevel.level)
-        let progress = nextLevelInfo.isMaxLevel ? 1.0 : Double(storyCount - currentLevelMinStories) / Double(nextLevelInfo.storiesNeeded - currentLevelMinStories)
-        
-        return VStack(spacing: 12) {
-            // 프로그레스 바
-            VStack(spacing: 6) {
-                HStack {
-                    Text("다음 레벨까지")
-                        .font(.scoreDream(.medium, size: .subheadline))
-
-                    Spacer()
-                    
-                    if nextLevelInfo.isMaxLevel {
-                        Text("최고 레벨 달성!")
-                            .font(.scoreDream(.medium, size: .subheadline))
-                            .foregroundColor(.appAccent)
-                    } else {
-                        Text("\(storyCount)/\(nextLevelInfo.storiesNeeded)")
-                            .font(.scoreDream(.medium, size: .subheadline))
-                            .foregroundColor(.primary)
-                    }
-                }
-                
-                ProgressView(value: progress)
-                    .progressViewStyle(LinearProgressViewStyle(tint: nextLevelInfo.isMaxLevel ? .appAccent : .appAccent.opacity(0.8)))
-                    .scaleEffect(x: 1, y: 2, anchor: .center)
-            }
-            
-            // 동기부여 메시지
-            if nextLevelInfo.isMaxLevel {
-                Text("🌟 최고 레벨 달성! 코스모스만큼 광활한 지식을 쌓으셨어요!")
-                    .font(.scoreDreamCaption)
-                    .foregroundColor(.appAccent)
-                    .multilineTextAlignment(.center)
-            } else {
-                (Text(nextLevelInfo.nextLevelTitle)
-                    .font(.scoreDream(.medium, size: .caption))
-                    .foregroundColor(.blue) +
-                 Text(" 레벨까지 \(nextLevelInfo.storiesNeeded - storyCount)권 남았어요!"))
-                    .font(.scoreDreamCaption)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-            }
-        }
-        .padding(.horizontal, 25)
-    }
-    
     private var followStats: some View {
         HStack(spacing: 40) {
             // 팔로워
@@ -217,10 +152,8 @@ struct ProfileView: View {
                     .environmentObject(followViewModel)
                     .environmentObject(userAuthManager)
                     .environmentObject(userViewModel)
-                
                     .environmentObject(storiesViewModel)
                     .environmentObject(themesViewModel)
-
             ) {
                 VStack(spacing: 4) {
                     Text("\(followViewModel.followingCount)")
@@ -253,98 +186,7 @@ struct ProfileView: View {
         }
     }
     
-    // 레벨 계산 함수
-    private func calculateReadingLevel(storyCount: Int) -> (level: Int, title: String, icon: String) {
-        switch storyCount {
-        case 0..<3:
-            return (1, "운석", "☄️")
-        case 3..<6:
-            return (2, "소행성", "🪨")
-        case 6..<10:
-            return (3, "달", "🌕")
-        case 10..<15:
-            return (4, "화성", "🔴")
-        case 15..<20:
-            return (5, "지구", "🌍")
-        case 20..<30:
-            return (6, "목성", "🪐")
-        case 30..<60:
-            return (7, "태양", "☀️")
-        case 60..<100:
-            return (8, "성운", "🌫️")
-        case 100..<150:
-            return (9, "은하", "🌌")
-        case 150..<200:
-            return (10, "은하단", "🌀")
-        case 200..<300:
-            return (11, "초은하단", "🔭")
-        default:
-            return (12, "코스모스", "💫")
-        }
-    }
-    
-    // 다음 레벨 정보 가져오기
-    private func getNextLevelInfo(currentLevel: Int) -> (storiesNeeded: Int, nextLevelTitle: String, isMaxLevel: Bool) {
-        switch currentLevel {
-        case 1:
-            return (3, "소행성", false)
-        case 2:
-            return (6, "달", false)
-        case 3:
-            return (10, "화성", false)
-        case 4:
-            return (15, "지구", false)
-        case 5:
-            return (20, "목성", false)
-        case 6:
-            return (30, "태양", false)
-        case 7:
-            return (60, "성운", false)
-        case 8:
-            return (100, "은하", false)
-        case 9:
-            return (150, "은하단", false)
-        case 10:
-            return (200, "초은하단", false)
-        case 11:
-            return (300, "코스모스", false)
-        default:
-            return (0, "", true) // 최고 레벨
-        }
-    }
-    
-    // 현재 레벨의 최소 스토리 수 가져오기
-    private func getLevelMinStories(level: Int) -> Int {
-        switch level {
-        case 1:
-            return 0
-        case 2:
-            return 3
-        case 3:
-            return 6
-        case 4:
-            return 10
-        case 5:
-            return 15
-        case 6:
-            return 20
-        case 7:
-            return 30
-        case 8:
-            return 60
-        case 9:
-            return 100
-        case 10:
-            return 150
-        case 11:
-            return 200
-        case 12:
-            return 300
-        default:
-            return 0
-        }
-    }
-    
+    // MARK: - Alert View
     
     private var alertView: Alert {
         switch alertType {
@@ -364,4 +206,14 @@ struct ProfileView: View {
             return Alert(title: Text("알림"), dismissButton: .cancel())
         }
     }
+}
+
+// MARK: - Preview
+
+#Preview {
+    ProfileView()
+        .environmentObject(UserViewModel())
+        .environmentObject(BookStoriesViewModel())
+        .environmentObject(ThemesViewModel())
+        .environmentObject(UserAuthenticationManager())
 }
