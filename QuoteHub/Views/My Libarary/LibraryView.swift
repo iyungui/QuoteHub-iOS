@@ -17,7 +17,7 @@ struct LibraryView: View {
     // 친구 프로필인지 구분하는 프로퍼티
     let user: User?
     
-    // 내 라이브러리인지 친구 라이브러리인지 구분
+    /// 내 라이브러리인지 친구 라이브러리인지 구분
     var isMyLibaray: Bool {
         return user == nil
     }   // friendId 가 nil 이면, 내 라이브러리
@@ -64,27 +64,27 @@ struct LibraryView: View {
     
     var body: some View {
         Group {
-            /// 친구의 라이브러리이고 해당 친구가 차단된 사용자일 때
+            // 친구의 라이브러리이고 해당 친구가 차단된 사용자일 때
             if !isMyLibaray && followViewModel.isBlocked {
                 ContentUnavailableView("차단된 사용자", systemImage: "person.crop.circle.badge.xmark.fill", description: Text("설정의 차단 목록을 확인해주세요."))
             } else {
                 mainContent
             }
         }
-        /// 툴바
+        // 툴바
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 currentNavBarItems
             }
         }
         
-        /// 알림창 (비로그인, 오류, 블럭?)
+        // 알림창 (비로그인, 오류, 블럭?)
         .alert(isPresented: $showAlert) { alertView }
         
-        /// 차단, 신고하기 버튼 시트
+        // 차단, 신고하기 버튼 시트
         .confirmationDialog(Text(""), isPresented: $showActionSheet) { actionSheetView }
         
-        /// 유저 신고하기 창
+        // 유저 신고하기 창
         .sheet(isPresented: $showReportSheet) {
             if let friend = user {
                 UserReportSheetView(
@@ -94,7 +94,7 @@ struct LibraryView: View {
             }
         }
         
-        /// 새로 고침
+        // 새로 고침
         .refreshable {
             await refreshContent(type: loadType)
         }
@@ -103,6 +103,11 @@ struct LibraryView: View {
             storiesViewModel.loadBookStories(type: loadType)
             themesViewModel.loadThemes(type: loadType)
         }
+        // 여러 ViewModel 의 로딩 상태를 동시에 추적하고 로딩뷰 표시하는 모디파이어
+        .progressOverlay(
+            viewModels: userViewModel, storiesViewModel, themesViewModel,
+            opacity: true
+        )
         .navigationBarTitleDisplayMode(.inline)
     }
     

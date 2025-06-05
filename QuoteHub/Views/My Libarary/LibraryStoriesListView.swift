@@ -17,27 +17,40 @@ struct LibraryStoriesListView: View {
     @EnvironmentObject private var userAuthManager: UserAuthenticationManager
     
     private let columns: [GridItem] = [
-        GridItem(.flexible()),
-        GridItem(.flexible())
+        GridItem(.flexible(), spacing: 16),
+        GridItem(.flexible(), spacing: 16)
     ]
     
-    private let spacing: CGFloat = 20
+    private let spacing: CGFloat = 16
+    private let horizontalPadding: CGFloat = 20
+    
+    // UIScreen 방법 - GeometryReader 없이 화면 크기 계산
+    private var cardSize: CGFloat {
+        let screenWidth = UIScreen.main.bounds.width
+        let availableWidth = screenWidth - (horizontalPadding * 2) - spacing
+        return availableWidth / 2 // 2열 그리드, 정사각형
+    }
     
     var body: some View {
         LazyVGrid(columns: columns, spacing: spacing) {
             ForEach(storiesViewModel.bookStories(for: loadType), id: \.id) { story in
-                NavigationLink(
-                    destination: BookStoryDetailView(story: story, isMyStory: isMy)
-                        .environmentObject(storiesViewModel)
-                        .environmentObject(userViewModel)
-                        .environmentObject(userAuthManager)
-                ) {
-                    LibStoryRowView(story: story)
-                }
+                StoryView(
+                    story: story,
+                    isCompact: true, // 그리드 모드는 컴팩트
+                    cardWidth: cardSize,
+                    cardHeight: cardSize // 정사각형
+                )
+                .environmentObject(storiesViewModel)
+                .environmentObject(userViewModel)
+                .environmentObject(userAuthManager)
             }
             
+            // 더 로딩할 스토리가 있을 때 로딩 인디케이터
             if !storiesViewModel.isLastPage {
-                ProgressView().onAppear {
+                ForEach(0..<2, id: \.self) { _ in
+                    loadingStoryCard(size: cardSize)
+                }
+                .onAppear {
                     storiesViewModel.loadMoreIfNeeded(
                         currentItem: storiesViewModel.bookStories(for: loadType).last,
                         type: loadType
@@ -45,43 +58,84 @@ struct LibraryStoriesListView: View {
                 }
             }
         }
-        .padding(.all, 20)
+        .padding(.horizontal, horizontalPadding)
+        .padding(.top, 8)
     }
-}
-
-
-struct LibStoryRowView: View {
-    let story: BookStory
     
-    var body: some View {
-        
-        VStack(alignment: .leading, spacing: 10) {
-            WebImage(url: URL(string: story.storyImageURLs?.first ?? ""))
-                .resizable()
-                .scaledToFill()
-                .frame(width: (UIScreen.main.bounds.width / 2) - 60, height: (UIScreen.main.bounds.width / 2) - 20)
-                .cornerRadius(4)
-                .clipped()
-                .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.gray.opacity(0.25), lineWidth: 1))
+    private func loadingStoryCard(size: CGFloat) -> some View {
+        ZStack {
+            // 배경 placeholder
+            RoundedRectangle(cornerRadius: 0)
+                .fill(Color.paperBeige.opacity(0.3))
+                .overlay(
+                    ProgressView()
+                        .scaleEffect(1.2)
+                        .tint(.brownLeather)
+                )
             
-            Text(story.quote ?? "")
-                .font(.headline)
-                .fontWeight(.bold)
-            
-            Text(story.content ?? "")
-                .font(.subheadline)
-            
-            Text(story.keywords?.prefix(2).map { "#\($0)" }.joined(separator: " ") ?? "")
-                .font(.caption)
-                .foregroundColor(.blue)
-                .lineLimit(2) // 텍스트 줄 수 제한
+            // 하단 정보 placeholder 오버레이
+            VStack {
+                Spacer()
+                
+                VStack(alignment: .leading, spacing: 6) {
+                    // 인용문 placeholder
+                    HStack(spacing: 4) {
+                        RoundedRectangle(cornerRadius: 3)
+                            .fill(Color.white.opacity(0.6))
+                            .frame(width: 8, height: 8)
+                        
+                        VStack(alignment: .leading, spacing: 3) {
+                            RoundedRectangle(cornerRadius: 3)
+                                .fill(Color.white.opacity(0.8))
+                                .frame(height: 8)
+                            
+                            RoundedRectangle(cornerRadius: 3)
+                                .fill(Color.white.opacity(0.6))
+                                .frame(height: 6)
+                                .frame(maxWidth: size * 0.6, alignment: .leading)
+                        }
+                    }
+                    
+                    // 책 제목과 날짜 placeholder
+                    HStack {
+                        VStack(alignment: .leading, spacing: 3) {
+                            HStack(spacing: 3) {
+                                RoundedRectangle(cornerRadius: 2)
+                                    .fill(Color.white.opacity(0.6))
+                                    .frame(width: 6, height: 6)
+                                
+                                RoundedRectangle(cornerRadius: 3)
+                                    .fill(Color.white.opacity(0.7))
+                                    .frame(height: 6)
+                                    .frame(maxWidth: size * 0.4, alignment: .leading)
+                            }
+                            
+                            RoundedRectangle(cornerRadius: 2)
+                                .fill(Color.white.opacity(0.5))
+                                .frame(height: 5)
+                                .frame(maxWidth: size * 0.3, alignment: .leading)
+                        }
+                        
+                        Spacer()
+                    }
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 12)
+                .background(
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            Color.clear,
+                            Color.black.opacity(0.3),
+                            Color.black.opacity(0.7)
+                        ]),
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+            }
         }
-        .frame(width: (UIScreen.main.bounds.width / 2) - 60, height: 250)
-        .padding(.all, 15)
-        .background(Color(.systemBackground))
-        .cornerRadius(4)
-        .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.gray.opacity(0.3), lineWidth: 1))
-        .buttonStyle(PlainButtonStyle())
-
+        .frame(width: size, height: size) // 정사각형
+        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 4)
     }
 }

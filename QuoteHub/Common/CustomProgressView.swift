@@ -8,6 +8,8 @@
 import SwiftUI
 import Lottie
 
+// MARK: - VIEW
+
 struct CustomProgressView: View {
     let animationName: String
     let message: String?
@@ -45,13 +47,16 @@ struct CustomProgressView: View {
     }
 }
 
-// MARK: - Protocol
+// MARK: - PROTOCOL
 
 protocol LoadingViewModel: ObservableObject {
     var isLoading: Bool { get }
     var loadingMessage: String? { get }
 }
 
+// MARK: - VIEW MODIFIER
+
+/// 하나의 뷰모델 사용하는 로딩뷰 모디파이어
 struct ProgressOverlay<VM: LoadingViewModel>: ViewModifier {
     @ObservedObject var viewModel: VM
     let animationName: String
@@ -85,9 +90,52 @@ struct ProgressOverlay<VM: LoadingViewModel>: ViewModifier {
     }
 }
 
-// MARK: - View Extension
+/// 여러 뷰모델을 사용하는 로딩뷰 모디파이어
+struct MultipleProgressOverlay: ViewModifier {
+    let loadingViewModels: [any LoadingViewModel]
+    let animationName: String
+    let opacity: Bool
+    
+    // 하나라도 로딩 중이면 true
+    private var isLoading: Bool {
+        loadingViewModels.contains { $0.isLoading }
+    }
+    
+    // 로딩 메시지
+    private var loadingMessage: String? {
+        "로딩 중..."
+    }
+    
+    func body(content: Content) -> some View {
+        content
+            .overlay {
+                Group {
+                    if isLoading {
+                        ZStack {
+                            if opacity {
+                                Color.black.opacity(0.3)
+                                    .ignoresSafeArea(.all)
+                            }
+                            
+                            CustomProgressView(
+                                animationName: animationName,
+                                message: loadingMessage,
+                                size: CGSize(width: 100, height: 100)
+                            )
+                        }
+                        .transition(.opacity)
+                        .animation(.easeInOut(duration: 0.3), value: isLoading)
+                    }
+                }
+            }
+    }
+}
+
+// MARK: - VIEW EXTENSION
 
 extension View {
+    
+    /// 단일 ViewModel 에서의 로딩뷰
     func progressOverlay<VM: LoadingViewModel>(
         viewModel: VM,
         animationName: String = "progressLottie",
@@ -95,7 +143,21 @@ extension View {
     ) -> some View {
         self.modifier(ProgressOverlay(viewModel: viewModel, animationName: animationName, opacity: opacity))
     }
+    
+    /// 여러 ViewModel 에서의 로딩뷰
+    func progressOverlay(
+        viewModels: any LoadingViewModel...,
+        animationName: String = "progressLottie",
+        opacity: Bool
+    ) -> some View {
+        self.modifier(MultipleProgressOverlay(
+            loadingViewModels: viewModels,
+            animationName: animationName,
+            opacity: opacity
+        ))
+    }
 }
+
 
 
 /*

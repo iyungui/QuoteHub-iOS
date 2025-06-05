@@ -105,6 +105,7 @@
 		CE8C49472DF18B89003188ED /* ThemeGalleryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C49462DF18B89003188ED /* ThemeGalleryListView.swift */; };
 		CE8C49712DF19111003188ED /* StoryGridCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C49702DF19111003188ED /* StoryGridCard.swift */; };
 		CE8C49732DF19133003188ED /* StoryListCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C49722DF19133003188ED /* StoryListCard.swift */; };
+		CE8C49772DF1D132003188ED /* StoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C49762DF1D132003188ED /* StoryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -204,6 +205,7 @@
 		CE8C49462DF18B89003188ED /* ThemeGalleryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeGalleryListView.swift; sourceTree = "<group>"; };
 		CE8C49702DF19111003188ED /* StoryGridCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryGridCard.swift; sourceTree = "<group>"; };
 		CE8C49722DF19133003188ED /* StoryListCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryListCard.swift; sourceTree = "<group>"; };
+		CE8C49762DF1D132003188ED /* StoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -451,6 +453,7 @@
 			isa = PBXGroup;
 			children = (
 				CE8C480E2DEA8DAE003188ED /* CommentView.swift */,
+				CE8C49762DF1D132003188ED /* StoryView.swift */,
 				CE8C480F2DEA8DAE003188ED /* BookStoryDetailView.swift */,
 				CE8C48112DEA8DAE003188ED /* UpdateStoryView.swift */,
 			);
@@ -622,6 +625,7 @@
 				C63DB3B02B118C280026B668 /* ReportViewModel.swift in Sources */,
 				C65330352B02540300E6B283 /* FollowService.swift in Sources */,
 				C667E97E2AC9DE7F006EE7A9 /* BookStoriesViewModel.swift in Sources */,
+				CE8C49772DF1D132003188ED /* StoryView.swift in Sources */,
 				C6B56FDF2AA8B60B003905C3 /* ContentView.swift in Sources */,
 				C6DE7F512AF76B480020F5CB /* StoryCommentService.swift in Sources */,
 				CE8C478E2DEA8D93003188ED /* APIResponse.swift in Sources */,
