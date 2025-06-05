@@ -105,8 +105,10 @@ struct MainView: View {
                 .environmentObject(storiesViewModel)
                 .environmentObject(userAuthManager)
         case .theme:
-            CreateThemeView(mode: .fullScreenSheet)
-                .environmentObject(themesViewModel)
+            NavigationStack {
+                CreateThemeView(mode: .fullScreenSheet)
+                    .environmentObject(themesViewModel)
+            }
         }
     }
     
