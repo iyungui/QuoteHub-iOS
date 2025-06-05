@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var versionManager = AppVersionManager()
+
     @EnvironmentObject private var authManager: UserAuthenticationManager
     @State private var isSplashView = true  // 런치스크린 표시
     
@@ -18,17 +20,12 @@ struct ContentView: View {
     var body: some View {
         if isSplashView {
             LaunchScreenView()
-                // TODO: 비동기 Task 추가 - 앱 시작할 때 미리 데이터 로드
+            // TODO: 비동기 Task 추가 - 앱 시작할 때 미리 데이터 로드
                 .onAppear {
                     DispatchQueue.main.async {
                         authManager.validateToken()
+                        versionManager.checkVersionFromAppStore()
                     }
-                    
-//                    DispatchQueue.global().async {
-//                        if authManager.isUserAuthenticated {
-//                            loadData()
-//                        }
-//                    }
                     
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                         withAnimation {
@@ -48,13 +45,15 @@ struct ContentView: View {
                     OnboardingView().environmentObject(authManager)
                 }
             }
+            .alert("업데이트 필요", isPresented: $versionManager.showUpdateAlert) {
+                Button("업데이트") {
+                    versionManager.goUpdate()
+                    versionManager.closeApp()
+                }
+            } message: {
+                Text("새 버전 \(versionManager.latestVersion)이 출시되었습니다.\n앱을 계속 사용하려면 업데이트해주세요.")
+            }
         }
-    }
-    
-    private func loadData() {
-//        userViewModel.getProfile(userId: nil)   // 내 프로필 정보 가져오기
-//        storiesViewModel.loadBookStories(type: .public) // 홈뷰에서 표시되는 북스토리 미리 가져오기
-//        themesViewModel.loadThemes(type: .public)   // 홈뷰에서 표시되는 테마 미리 가져오기
     }
 }
 

@@ -109,6 +109,7 @@
 		CE8C49792DF1DB4E003188ED /* ThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C49782DF1DB4E003188ED /* ThemeView.swift */; };
 		CE8C497B2DF1E548003188ED /* ReadingLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C497A2DF1E548003188ED /* ReadingLevel.swift */; };
 		CE8C497D2DF1E575003188ED /* ReadingLevelSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C497C2DF1E575003188ED /* ReadingLevelSection.swift */; };
+		CE8C497F2DF1E874003188ED /* AppVersionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C497E2DF1E874003188ED /* AppVersionManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -212,6 +213,7 @@
 		CE8C49782DF1DB4E003188ED /* ThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeView.swift; sourceTree = "<group>"; };
 		CE8C497A2DF1E548003188ED /* ReadingLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingLevel.swift; sourceTree = "<group>"; };
 		CE8C497C2DF1E575003188ED /* ReadingLevelSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingLevelSection.swift; sourceTree = "<group>"; };
+		CE8C497E2DF1E874003188ED /* AppVersionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -510,6 +512,7 @@
 				CE8C488F2DEC96B6003188ED /* PhotoPickerAlertType.swift */,
 				CE8C497A2DF1E548003188ED /* ReadingLevel.swift */,
 				CE8C497C2DF1E575003188ED /* ReadingLevelSection.swift */,
+				CE8C497E2DF1E874003188ED /* AppVersionManager.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -697,6 +700,7 @@
 				CE8C48672DEB0F53003188ED /* CardButtonStyle.swift in Sources */,
 				CE8C48752DEBECED003188ED /* navBarLogo.swift in Sources */,
 				C6B56FDD2AA8B60B003905C3 /* QuoteHubApp.swift in Sources */,
+				CE8C497F2DF1E874003188ED /* AppVersionManager.swift in Sources */,
 				C63DB3AC2B1188C50026B668 /* ReportService.swift in Sources */,
 				C6D78A0A2AD03B2900F03FB8 /* APIEndpoint.swift in Sources */,
 				CE8C488E2DEC46E9003188ED /* tabIndicator.swift in Sources */,
