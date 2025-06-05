@@ -227,35 +227,46 @@ struct BookStoryDetailView: View {
     private var storyImagesSection: some View {
         if let imageUrls = story.storyImageURLs, !imageUrls.isEmpty {
             let width: CGFloat = UIScreen.main.bounds.width
-            TabView {
-                ForEach(imageUrls, id: \.self) { imageUrl in
-                    WebImage(url: URL(string: imageUrl))
-                        .placeholder {
-                            Rectangle()
-                                .fill(Color.paperBeige.opacity(0.3))
-                                .overlay(
-                                    VStack(spacing: 12) {
-                                        Image(systemName: "photo")
-                                            .font(.system(size: 40))
-                                            .foregroundColor(.brownLeather.opacity(0.6))
-                                        Text("이미지 로딩 중...")
-                                            .font(.scoreDream(.light, size: .caption))
-                                            .foregroundColor(.secondaryText)
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(spacing: 16) {
+                    ForEach(Array(imageUrls.enumerated()), id: \.offset) { index, imageUrl in
+                        VStack {
+                            ZStack {
+                                WebImage(url: URL(string: imageUrl))
+                                    .placeholder {
+                                        Rectangle()
+                                            .fill(Color.paperBeige.opacity(0.3))
+                                            .overlay(
+                                                VStack(spacing: 12) {
+                                                    Image(systemName: "photo")
+                                                        .font(.system(size: 40))
+                                                        .foregroundColor(.brownLeather.opacity(0.6))
+                                                    Text("이미지 로딩 중...")
+                                                        .font(.scoreDream(.light, size: .caption))
+                                                        .foregroundColor(.secondaryText)
+                                                }
+                                            )
                                     }
-                                )
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(height: width - 50)
+                                    .scrollTransition(axis: .horizontal) { content, phase in
+                                        content
+                                            .offset(x: phase.isIdentity ? 0 : phase.value * -200)
+                                    }
+                            }
+                            .containerRelativeFrame(.horizontal)
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
                         }
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: width - 40, height: width - 40)
-                        .clipShape(RoundedRectangle(cornerRadius: 16))
-                        .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+                    }
                 }
             }
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .automatic))
-            .frame(width: width, height: width - 20)
+            .contentMargins(32)
+            .scrollTargetBehavior(.paging)
+            .frame(height: width - 30) // 전체 높이 설정
         }
     }
-    
     // 프로필 이미지 섹션
     @ViewBuilder
     private var profileSection: some View {
