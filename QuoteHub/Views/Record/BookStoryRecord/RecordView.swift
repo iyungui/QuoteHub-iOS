@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 import SDWebImageSwiftUI
 
 /// 북스토리 기록 3: 북스토리 기록 뷰
@@ -14,11 +15,30 @@ struct RecordView: View {
     // MARK: - PROPERTIES
     
     let book: Book
+    let preloadedDraft: DraftStory? // 이어서 작성하기 선택한 경우 nil이 아님
+    let shouldClearDraft: Bool  // 새로 작성하기 선택한 경우
+
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.scenePhase) private var scenePhase
     
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
+    @State private var draftManager: DraftManager?
+    
+    // 임시저장 관련
+    @State private var shouldLoadDraft: Bool = true
+    @State private var showDraftAlert: Bool = false
+    @State private var currentDraft: DraftStory?
+    
+    // MARK: - INIT
+    
+    init(book: Book, preloadedDraft: DraftStory? = nil, shouldClearDraft: Bool = false) {
+        self.book = book
+        self.preloadedDraft = preloadedDraft
+        self.shouldClearDraft = shouldClearDraft
+    }
         
     // 키워드 입력
     @State private var keywords: [String] = []
@@ -64,6 +84,19 @@ struct RecordView: View {
     
     @State private var alertType: PhotoPickerAlertType = .authorized
     
+    /// 모든 입력 필드가 비어있는지 확인. 임시(자동) 저장 전에 사용
+    private var isEmpty: Bool {
+        keywords.isEmpty &&
+        quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+        content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+        selectedImages.isEmpty
+    }
+    
+    /// 북스토리 생성 호출 요건 충족 확인
+    private var isFormValid: Bool {
+        !quote.isEmpty && !content.isEmpty && !keywords.isEmpty
+    }
+
     // MARK: - BODY
     
     var body: some View {
@@ -104,17 +137,35 @@ struct RecordView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle("북스토리 기록")
         .toolbar {
+            // 임시저장 버튼
             ToolbarItem(placement: .topBarTrailing) {
+                draftSaveButton
+            }
+            // 등록 버튼
+            ToolbarItem(placement: .primaryAction) {
                 submitButton
             }
+            // 피드백 메시지
             ToolbarItem(placement: .bottomBar) {
                 if let message = feedbackMessage, !isFormValid {
                     feedbackView(message: message)
                 }
-
             }
         }
         .progressOverlay(viewModel: storiesViewModel, animationName: "progressLottie", opacity: true)
+        .onAppear {
+            setupDraftManager()
+            handlePreloadedDraft()
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            handleScenePhaseChange(newPhase)
+        }
+        .onChange(of: keywords) { _, _ in triggerAutoSave() }
+        .onChange(of: quote) { _, _ in triggerAutoSave() }
+        .onChange(of: content) { _, _ in triggerAutoSave() }
+        .onChange(of: selectedImages) { _, _ in triggerAutoSave() }
+        .onChange(of: isPublic) { _, _ in triggerAutoSave() }
+        .onChange(of: themeIds) { _, _ in triggerAutoSave() }
         .onTapGesture {
             hideKeyboard()
         }
@@ -172,13 +223,152 @@ struct RecordView: View {
                 return Alert(
                     title: Text("알림"),
                     message: Text(alertMessage),
-                    dismissButton: .default(Text("확인"), action: { dismiss() })
+                    dismissButton: .default(Text("확인"), action: {
+                        if alertMessage.contains("성공적으로") {
+                            draftManager?.clearDraft()
+                            dismiss()
+                        }
+                    })
                 )
             }
         }
     }
     
+    // MARK: - Draft Management
+    
+    private func setupDraftManager() {
+        draftManager = DraftManager(modelContext: modelContext)
+    }
+    
+    private func handlePreloadedDraft() {
+        if shouldClearDraft {
+            // 새로 작성하기 선택한 경우
+            draftManager?.clearDraft()
+            currentDraft = draftManager?.createDraftFromBook(book)
+            resetForm()
+        } else if let preloadedDraft = preloadedDraft {
+            // 이어서 작성하기 선택한 경우
+            currentDraft = preloadedDraft
+            loadDraftData(preloadedDraft)
+        } else {
+            // 일반적인 경우 (다른 뷰에서 직접 접근)
+            checkForExistingDraft()
+        }
+        shouldLoadDraft = false
+    }
+    
+    private func checkForExistingDraft() {
+        guard shouldLoadDraft, let draftManager = draftManager else { return }
+        
+        if draftManager.hasDraft() {
+            currentDraft = draftManager.loadDraft()
+            
+            // 현재 책과 같은 책의 임시저장인 경우에만 로드
+            if let draft = currentDraft, draft.bookId == book.id {
+                loadDraftData(draft)
+            } else {
+                // 다른 책의 임시저장이 있으면 새로 시작
+                createNewDraft()
+            }
+        }
+//        shouldLoadDraft = false
+    }
+    
+    private func createNewDraft() {
+        draftManager?.clearDraft()
+        currentDraft = draftManager?.createDraftFromBook(book)
+        resetForm()
+    }
+    
+    /// 임시저장 데이터 가져오기
+    private func loadDraftData(_ draft: DraftStory) {
+        keywords = draft.keywords
+        quote = draft.quote
+        content = draft.content
+        isPublic = draft.isPublic
+        themeIds = draft.themeIds
+        
+        // 이미지 데이터를 UIImage로 변환
+        if !draft.imageData.isEmpty {
+            selectedImages = draftManager?.convertDataToImages(draft.imageData) ?? []
+        }
+        
+        print("임시저장 데이터 로드 완료 - 키워드: \(keywords.count), 이미지: \(selectedImages.count)")
+    }
+    
+    /// 데이터 초기화
+    private func resetForm() {
+        keywords = []
+        quote = ""
+        content = ""
+        selectedImages = []
+        isPublic = true
+        themeIds = []
+        currentInput = ""
+    }
+    
+    /// 자동 저장 함수
+    private func triggerAutoSave() {
+        print(#fileID, #function, #line, "- ")
+        guard !isEmpty else { return }
+        
+        draftManager?.startAutoSave(
+            bookId: book.id,
+            bookTitle: book.title,
+            bookAuthor: book.author.joined(separator: ", "),
+            bookImageURL: book.bookImageURL,
+            keywords: keywords,
+            quote: quote,
+            content: content,
+            isPublic: isPublic,
+            themeIds: themeIds,
+            images: selectedImages
+        )
+    }
+    
+    /// app life cycle에 따라 즉시 저장 로직 실행
+    private func handleScenePhaseChange(_ phase: ScenePhase) {
+        switch phase {
+        case .background, .inactive:
+            // 백그라운드 진입시 즉시 저장
+            if !isEmpty {
+                saveDraftImmediately()
+            }
+        case .active:
+            break
+        @unknown default:
+            break
+        }
+    }
+    
+    /// 수동으로 임시저장 버튼 누르거나, 앱이 백그라운드로 들어갈 때 실행됨
+    private func saveDraftImmediately() {
+        draftManager?.stopAutoSave()
+        draftManager?.saveDraft(
+            bookId: book.id,
+            bookTitle: book.title,
+            bookAuthor: book.author.joined(separator: ", "),
+            bookImageURL: book.bookImageURL,
+            keywords: keywords,
+            quote: quote,
+            content: content,
+            isPublic: isPublic,
+            themeIds: themeIds,
+            images: selectedImages
+        )
+    }
+    
     // MARK: - UI Components
+    
+    private var draftSaveButton: some View {
+        Button(action: saveDraftImmediately) {
+            Image(systemName: "square.and.arrow.down")
+                .fontWeight(.medium)
+                .foregroundColor(isEmpty ? .gray : .appAccent)
+        }
+        .opacity(isEmpty ? 0.5 : 1.0)
+        .disabled(isEmpty)
+    }
     
     private var backgroundGradient: some View {
         LinearGradient(
@@ -195,13 +385,18 @@ struct RecordView: View {
     
     private var submitButton: some View {
         Button(action: submitStory) {
-            Image(systemName: "checkmark.circle.fill")
-                .font(.title2.weight(.medium))
-                .foregroundColor(isFormValid ? .brownLeather : .gray)
-                .scaleEffect(isFormValid ? 1.1 : 1.0)
-                .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isFormValid)
+            HStack {
+                Image(systemName: "checkmark.circle.fill")
+                    .foregroundColor(isFormValid ? .appAccent : .gray)
+                    .scaleEffect(isFormValid ? 1.1 : 1.0)
+                    .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isFormValid)
+                if isFormValid {
+                    Text("등록")
+                        .fontWeight(.medium)
+                        .foregroundStyle(Color.appAccent)
+                }
+            }
         }
-//        .disabled(!isFormValid)
     }
     
     private var bookInfoCard: some View {
@@ -628,12 +823,6 @@ struct RecordView: View {
                 .frame(height: 2)
                 .frame(maxWidth: 60)
         }
-    }
-    
-    // MARK: - Computed Properties
-    
-    private var isFormValid: Bool {
-        !quote.isEmpty && !content.isEmpty && !keywords.isEmpty
     }
     
     // MARK: - Methods
