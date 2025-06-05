@@ -31,6 +31,7 @@ struct RecordView: View {
     @State private var shouldLoadDraft: Bool = true
     @State private var showDraftAlert: Bool = false
     @State private var currentDraft: DraftStory?
+    @State private var saveDraftSuccessPrompt: Bool = false
     
     // MARK: - INIT
     
@@ -147,7 +148,7 @@ struct RecordView: View {
             }
             // 피드백 메시지
             ToolbarItem(placement: .bottomBar) {
-                if let message = feedbackMessage, !isFormValid {
+                if let message = feedbackMessage {
                     feedbackView(message: message)
                 }
             }
@@ -361,10 +362,14 @@ struct RecordView: View {
     // MARK: - UI Components
     
     private var draftSaveButton: some View {
-        Button(action: saveDraftImmediately) {
+        Button(action: {
+            saveDraftImmediately()
+            showPrompt()
+        }) {
             Image(systemName: "square.and.arrow.down")
                 .fontWeight(.medium)
                 .foregroundColor(isEmpty ? .gray : .appAccent)
+                .offset(y: -2)
         }
         .opacity(isEmpty ? 0.5 : 1.0)
         .disabled(isEmpty)
@@ -742,24 +747,24 @@ struct RecordView: View {
     
     private func feedbackView(message: String) -> some View {
         HStack(spacing: 12) {
-            Image(systemName: "exclamationmark.circle.fill")
-                .foregroundColor(.orange)
+            Image(systemName: saveDraftSuccessPrompt ? "checkmark.circle.fill" : "exclamationmark.circle.fill")
+                .foregroundColor(saveDraftSuccessPrompt ? .green : .orange)
                 .font(.body)
             
             Text(message)
                 .font(.scoreDream(.medium, size: .subheadline))
-                .foregroundColor(.orange)
-            
+                .foregroundColor(saveDraftSuccessPrompt ? .green : .orange)
+
             Spacer()
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color.orange.opacity(0.1))
+                .fill((saveDraftSuccessPrompt ? Color.green : Color.orange).opacity(0.1))
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.orange.opacity(0.3), lineWidth: 1)
+                        .stroke((saveDraftSuccessPrompt ? Color.green : Color.orange).opacity(0.3), lineWidth: 1)
                 )
         )
         .transition(.asymmetric(insertion: .opacity, removal: .slide))
@@ -884,6 +889,7 @@ struct RecordView: View {
     
     private func updateFeedbackMessage() {
         withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+            saveDraftSuccessPrompt = false  // 에러메시지에는 임시저장 성공 알림 프롬프트 비활성화
             if keywords.isEmpty {
                 feedbackMessage = "키워드를 입력해주세요."
             } else if quote.isEmpty {
@@ -892,6 +898,21 @@ struct RecordView: View {
                 feedbackMessage = "내용을 입력해주세요."
             } else {
                 feedbackMessage = nil
+            }
+        }
+    }
+    
+    private func showPrompt() {
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+            saveDraftSuccessPrompt = true
+            feedbackMessage = "임시저장 완료!"
+        }
+        
+        // 2초 후 자동으로 사라지도록
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                feedbackMessage = nil
+                saveDraftSuccessPrompt = false
             }
         }
     }
