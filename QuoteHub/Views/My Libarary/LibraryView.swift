@@ -61,7 +61,7 @@ struct LibraryView: View {
     @State private var showActionSheet = false
     
     /// 탭 전환 시 스크롤 위치를 리셋하기 위해 (iOS 18+)
-    @State private var scrollPosition = ScrollPosition()
+//    @State private var scrollPosition = ScrollPosition()
 
     // MARK: - BODY
     
@@ -116,36 +116,40 @@ struct LibraryView: View {
     
     /// main 컨텐츠
     private var mainContent: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(spacing: 20) {
-                if let friend = user {   // 친구 프로필
-                    ProfileView(user: friend)
-                        .environmentObject(userAuthManager)
-                        .environmentObject(userViewModel)
-                        .environmentObject(storiesViewModel)
-                        .environmentObject(themesViewModel)
+        ScrollViewReader { proxy in
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 20) {
+                    if let friend = user {   // 친구 프로필
+                        ProfileView(user: friend)
+                            .environmentObject(userAuthManager)
+                            .environmentObject(userViewModel)
+                            .environmentObject(storiesViewModel)
+                            .environmentObject(themesViewModel)
 
-                } else {    // 내 프로필
-                    ProfileView()
-                        .environmentObject(userAuthManager)
-                        .environmentObject(userViewModel)
-                        .environmentObject(storiesViewModel)
-                        .environmentObject(themesViewModel)
+                    } else {    // 내 프로필
+                        ProfileView()
+                            .environmentObject(userAuthManager)
+                            .environmentObject(userViewModel)
+                            .environmentObject(storiesViewModel)
+                            .environmentObject(themesViewModel)
+                    }
+                    
+                    LibraryTabButtonView(selectedView: $selectedView)
+                        .id("tabSection")
+                    
+                    tabIndicator(height: 2, selectedView: selectedView)
+                    
+                    contentSection
+                    
+                    Spacer().frame(height: 100)
                 }
-                
-                LibraryTabButtonView(selectedView: $selectedView)
-                
-                tabIndicator(height: 2, selectedView: selectedView)
-                
-                contentSection
-                
-                Spacer().frame(height: 100)
+                .padding(.top, 10)
             }
-            .padding(.top, 10)
-        }
-        .scrollPosition($scrollPosition)
-        .onChange(of: selectedView) { _, _ in
-            withAnimation(.easeInOut(duration: 0.3)) { scrollPosition.scrollTo(y: 0) }
+            .onChange(of: selectedView) { _, _ in
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    proxy.scrollTo("tabSection", anchor: .top)
+                }
+            }
         }
     }
     
