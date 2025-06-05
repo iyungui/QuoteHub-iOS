@@ -148,7 +148,9 @@ struct RecordView: View {
             }
             // 피드백 메시지
             ToolbarItem(placement: .bottomBar) {
-                if let message = feedbackMessage {
+                // 북스토리 생성가능해지면(isFormValid) 자동으로 피드백메시지 사라지도록
+                // 그리고 임시저장 기능 메시지 활성화 시에도 피드백메시지 보이도록
+                if let message = feedbackMessage, (!isFormValid || saveDraftSuccessPrompt) {
                     feedbackView(message: message)
                 }
             }
