@@ -39,6 +39,7 @@ struct ScoreDreamFont {
     
     // MARK: - 폰트 Size 정의
     enum Size: CGFloat, CaseIterable {
+        case caption2 = 11
         case caption = 12
         case footnote = 13
         case subheadline = 15

@@ -97,6 +97,7 @@
 		CE8C48902DEC96B6003188ED /* PhotoPickerAlertType.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C488F2DEC96B6003188ED /* PhotoPickerAlertType.swift */; };
 		CE8C48E12DF04BD8003188ED /* CustomProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48E02DF04BD8003188ED /* CustomProgressView.swift */; };
 		CE8C48E42DF05290003188ED /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = CE8C48E32DF05290003188ED /* Lottie */; };
+		CE8C48ED2DF1134C003188ED /* RandomBooksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48EC2DF1134C003188ED /* RandomBooksViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -188,6 +189,7 @@
 		CE8C488D2DEC46E9003188ED /* tabIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tabIndicator.swift; sourceTree = "<group>"; };
 		CE8C488F2DEC96B6003188ED /* PhotoPickerAlertType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerAlertType.swift; sourceTree = "<group>"; };
 		CE8C48E02DF04BD8003188ED /* CustomProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressView.swift; sourceTree = "<group>"; };
+		CE8C48EC2DF1134C003188ED /* RandomBooksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomBooksViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -232,6 +234,7 @@
 				C6DE7F602AF7C2940020F5CB /* CommentViewModel.swift */,
 				C6691C512B04DA8C0083C678 /* FollowViewModel.swift */,
 				C63DB3AF2B118C280026B668 /* ReportViewModel.swift */,
+				CE8C48EC2DF1134C003188ED /* RandomBooksViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -606,6 +609,7 @@
 				CE8C47912DEA8D93003188ED /* BookStoryComment.swift in Sources */,
 				CE8C47922DEA8D93003188ED /* Theme.swift in Sources */,
 				CE8C48652DEAE2A9003188ED /* FontManager.swift in Sources */,
+				CE8C48ED2DF1134C003188ED /* RandomBooksViewModel.swift in Sources */,
 				CE8C47932DEA8D93003188ED /* Follow.swift in Sources */,
 				CE8C488C2DEC3E73003188ED /* LibraryStoriesListView.swift in Sources */,
 				CE8C47942DEA8D93003188ED /* ReportDataModel.swift in Sources */,

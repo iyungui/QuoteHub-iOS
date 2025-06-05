@@ -98,7 +98,7 @@ struct SearchBookView: View {
                     booksViewModel.performSearch()
                 }
             }) {
-                Image(systemName: searchText.isEmpty ? "text.cursor" : "arrow.right")
+                Image(systemName: "arrow.right")
                     .foregroundColor(.white)
                     .font(.subheadline.weight(.medium))
                     .frame(width: 44, height: 44)
@@ -156,8 +156,8 @@ struct SearchBookView: View {
     
     private var emptyStateView: some View {
         VStack(spacing: 20) {
-            Image(systemName: "book.vertical.fill")
-                .font(.system(size: 60))
+            Image(systemName: "books.vertical.fill")
+                .font(.system(size: 30))
                 .foregroundStyle(Color.secondaryText.opacity(0.6))
             
             VStack(spacing: 6) {
@@ -225,7 +225,7 @@ struct BookRowView: View {
             .clipShape(RoundedRectangle(cornerRadius: 16))
             .adaptiveShadow(radius: 6, y: 3)
         }
-        .buttonStyle(PlainButtonStyle())
+        .buttonStyle(CardButtonStyle())
     }
     
     private var bookImageView: some View {
