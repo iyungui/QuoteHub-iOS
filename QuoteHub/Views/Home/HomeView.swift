@@ -200,15 +200,17 @@ struct HomeView: View {
                 }
             }
             
-            NavigationLink(destination: SearchStoryByKeywordView(type: .public)
-                .environmentObject(userViewModel)
-//                .environmentObject(storiesViewModel)
-                .environmentObject(userAuthManager)
-            ) {
-                Image(systemName: "magnifyingglass")
-                    .foregroundColor(.brownLeather)
-                    .font(.system(size: 16, weight: .medium))
-            }
+            
+            // TODO: - 홈뷰에서 키워드뷰
+//            NavigationLink(destination: KeywordGroupedStoriesView(isMy: false, loadType: .public)
+//                .environmentObject(userViewModel)
+////                .environmentObject(storiesViewModel)
+//                .environmentObject(userAuthManager)
+//            ) {
+//                Image(systemName: "magnifyingglass")
+//                    .foregroundColor(.brownLeather)
+//                    .font(.system(size: 16, weight: .medium))
+//            }
         }
     }
 }

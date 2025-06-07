@@ -47,7 +47,7 @@ struct ThemeView: View {
                 // 배경 이미지
                 backgroundImage
                 
-                // 어둡게 처리 (그라데이션 없음)
+                // 어둡게 처리
                 darkOverlay
                 
                 // 컨텐츠

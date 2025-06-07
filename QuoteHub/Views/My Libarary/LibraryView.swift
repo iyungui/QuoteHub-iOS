@@ -155,7 +155,7 @@ struct LibraryView: View {
                     LibraryTabButtonView(selectedView: $selectedView)
                         .id("tabSection")
                     
-                    tabIndicator(height: 2, selectedView: selectedView)
+                    tabIndicator(height: 2, selectedView: selectedView, tabCount: 3)
                     contentSection
                     
                     Spacer().frame(height: 100)
@@ -191,7 +191,9 @@ struct LibraryView: View {
                     .environmentObject(userViewModel)
             }
         } else if selectedView == 2 {   // 키워드별 북스토리 기록
-            Text("키워드별 북스토리 기록")
+            KeywordGroupedStoriesView(isMy: isMyLibaray, loadType: loadType)
+                .environmentObject(storiesViewModel)
+                .environmentObject(userViewModel)
         }
     }
     

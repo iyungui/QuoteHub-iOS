@@ -51,7 +51,7 @@ struct ThemeDetailView: View {
                     themeHeaderView
                     
                     // 탭 인디케이터
-                    tabIndicator(height: 3, selectedView: selectedView)
+                    tabIndicator(height: 3, selectedView: selectedView, tabCount: 2)
                     
                     // 컨텐츠 뷰
                     contentView
