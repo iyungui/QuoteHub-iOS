@@ -13,7 +13,7 @@ struct LibraryTabButtonView: View {
 
     var body: some View {
         HStack {
-            CustomTabButton(title: "북스토리", isSelected: selectedView == 0) {
+            CustomTabButton(title: "스토리", isSelected: selectedView == 0) {
                 selectedView = 0
             }
 

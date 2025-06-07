@@ -78,7 +78,7 @@ struct LibraryView: View {
         // 툴바
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                currentNavBarItems
+                navBarItems
             }
         }
         
@@ -141,7 +141,6 @@ struct LibraryView: View {
                         .id("tabSection")
                     
                     tabIndicator(height: 2, selectedView: selectedView)
-                    
                     contentSection
                     
                     Spacer().frame(height: 100)
@@ -182,7 +181,7 @@ struct LibraryView: View {
     }
     
     @ViewBuilder
-    private var currentNavBarItems: some View {
+    private var navBarItems: some View {
         if isMyLibaray {
             myLibraryNavBarItems
         } else {
@@ -192,25 +191,17 @@ struct LibraryView: View {
     
     private var myLibraryNavBarItems: some View {
         /// 내 라이브러리에는 '내 기록을 키워드로 찾을 수 있는 뷰와, 설정' 버튼
-        HStack {
-            NavigationLink(
-                destination: SearchStoryByKeywordView(type: loadType)
-                    .environmentObject(storiesViewModel)
-                    .environmentObject(userViewModel)
-            ) {
-                Image(systemName: "magnifyingglass")
-                    .foregroundColor(Color(.systemGray))
-                    .frame(width: 25, height: 25)
-            }
-            
+        HStack(spacing: 15) {
+            ThemeToggleButton()
+
             NavigationLink(
                 destination: SettingView()
                     .environmentObject(userViewModel)
                     .environmentObject(userAuthManager)
             ) {
                 Image(systemName: "gearshape.fill")
-                    .foregroundColor(Color(.systemGray))
-                    .frame(width: 25, height: 25)
+                    .foregroundColor(.brownLeather)
+                    .font(.system(size: 16, weight: .medium))
             }
         }
     }
@@ -221,9 +212,8 @@ struct LibraryView: View {
             showActionSheet = true
         }) {
             Image(systemName: "ellipsis")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 25, height: 25)
+                .foregroundColor(.brownLeather)
+                .font(.system(size: 16, weight: .medium))
         }
     }
     

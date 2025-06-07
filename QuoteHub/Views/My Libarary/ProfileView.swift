@@ -42,21 +42,14 @@ struct ProfileView: View {
     }
     
     var body: some View {
-        VStack(alignment: .center, spacing: 20) {
-            userImage
-            userName
-            if showFollowButton {
-                followButton
+        VStack(spacing: 20) {
+            HStack(spacing: 20) {
+                userImage
+                userInfo
             }
-            userStatusMessage
+            .padding(25)
             
-            // 레벨 섹션
-            ReadingLevelSection(storyCount: userViewModel.storyCount ?? 0)
-            
-            // 프로그레스 섹션
             ReadingProgressSection(storyCount: userViewModel.storyCount ?? 0)
-            
-            followStats
         }
         .alert(isPresented: $showAlert) { alertView }
     }
@@ -64,12 +57,12 @@ struct ProfileView: View {
     // MARK: - UI Components
     
     private var userImage: some View {
-        Group {
+        VStack {
             if let url = URL(string: currentUser?.profileImage ?? "") {
                 WebImage(url: url)
                     .resizable()
                     .scaledToFill()
-                    .frame(width: 100, height: 100)
+                    .frame(width: 60, height: 60)
                     .clipShape(Circle())
                     .overlay(Circle().stroke(Color.gray.opacity(0.5), lineWidth: 1))
                     .shadow(radius: 4)
@@ -77,108 +70,34 @@ struct ProfileView: View {
                 Image(systemName: "person.crop.circle.fill")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 100, height: 100)
+                    .foregroundStyle(.gray)
+                    .frame(width: 60, height: 60)
             }
+        }
+    }
+    
+    private var userInfo: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                userName
+                CompactReadingLevelBadge(storyCount: userViewModel.storyCount ?? 0)
+                Spacer()
+            }
+            userStatusMessage
         }
     }
     
     private var userName: some View {
-        Text(currentUser?.nickname ?? "")
-            .font(.scoreDream(.bold, size: .title2))
-    }
-    
-    private var followButton: some View {
-        Button(action: {
-            guard let friend = user else { return }
-            
-            if userAuthManager.isUserAuthenticated {
-                if followViewModel.isFollowing {
-                    followViewModel.unfollowUser(userId: friend.id)
-                } else {
-                    followViewModel.followUser(userId: friend.id)
-                }
-            } else {
-                alertType = .loginRequired
-                showAlert = true
-            }
-        }) {
-            Text(followViewModel.isFollowing ? "팔로잉" : "+ 팔로우")
-                .font(.scoreDream(.bold, size: .callout))
-                .foregroundColor(followViewModel.isFollowing ? (colorScheme == .dark ? .white : .black) : (colorScheme == .dark ? .black : .white))
-                .frame(width: 100, height: 30)
-                .background(followViewModel.isFollowing ? Color.clear : (colorScheme == .dark ? .white : .black))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 15)
-                        .stroke(followViewModel.isFollowing ? (colorScheme == .dark ? .white : .black) : Color.clear, lineWidth: 1)
-                )
-                .cornerRadius(15)
-        }
-        .buttonStyle(PlainButtonStyle())
+        Text(currentUser?.nickname ?? "닉네임")
+            .font(.scoreDream(.bold, size: .title3))
+            .lineLimit(1)
     }
     
     private var userStatusMessage: some View {
-        Text(currentUser?.statusMessage ?? "")
+        Text(currentUser?.statusMessage ?? "상태메시지")
             .font(.scoreDream(.regular, size: .subheadline))
+            .lineLimit(2)
             .foregroundColor(.secondary)
-    }
-    
-    private var followStats: some View {
-        HStack(spacing: 40) {
-            // 팔로워
-            NavigationLink(destination: FollowListView(userId: currentUser?.id, type: .followers)
-                .environmentObject(followViewModel)
-                .environmentObject(userAuthManager)
-                .environmentObject(storiesViewModel)
-                .environmentObject(themesViewModel)
-                .environmentObject(userViewModel)
-            ) {
-                VStack(spacing: 4) {
-                    Text("\(followViewModel.followersCount)")
-                        .font(.scoreDream(.bold, size: .title3))
-                    Text("팔로워")
-                        .font(.scoreDreamCaption)
-                        .foregroundColor(.secondary)
-                }
-            }
-            .buttonStyle(PlainButtonStyle())
-            
-            // 팔로잉
-            NavigationLink(destination: FollowListView(userId: currentUser?.id, type: .following)
-                .environmentObject(followViewModel)
-                .environmentObject(userAuthManager)
-                .environmentObject(storiesViewModel)
-                .environmentObject(themesViewModel)
-                .environmentObject(userViewModel)
-            ) {
-                VStack(spacing: 4) {
-                    Text("\(followViewModel.followingCount)")
-                        .font(.scoreDream(.bold, size: .title3))
-                    Text("팔로잉")
-                        .font(.scoreDreamCaption)
-                        .foregroundColor(.secondary)
-                }
-            }
-            .buttonStyle(PlainButtonStyle())
-            
-            // 총 기록 수 또는 독서 목표 (친구 프로필인 경우)
-            if showFollowButton {
-                VStack(spacing: 4) {
-                    Text("\(userViewModel.user?.monthlyReadingGoal ?? 0)")
-                        .font(.scoreDream(.bold, size: .title3))
-                    Text("독서목표")
-                        .font(.scoreDreamCaption)
-                        .foregroundColor(.secondary)
-                }
-            } else {
-                VStack(spacing: 4) {
-                    Text("\(userViewModel.storyCount ?? 0)")
-                        .font(.scoreDream(.bold, size: .title3))
-                    Text("기록 수")
-                        .font(.scoreDreamCaption)
-                        .foregroundColor(.secondary)
-                }
-            }
-        }
     }
     
     // MARK: - Alert View
@@ -208,6 +127,7 @@ struct ProfileView: View {
 #Preview {
     ProfileView()
         .environmentObject(UserViewModel())
+        .environmentObject(FollowViewModel())
         .environmentObject(BookStoriesViewModel())
         .environmentObject(ThemesViewModel())
         .environmentObject(UserAuthenticationManager())

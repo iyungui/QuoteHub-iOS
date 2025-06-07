@@ -391,7 +391,6 @@
 			children = (
 				CE8C47F02DEA8DAE003188ED /* HomeView.swift */,
 				CE8C48762DEBEDE0003188ED /* RandomBookListView.swift */,
-				CE8C48682DEB1972003188ED /* ThemeToggleButton.swift */,
 				CE8C47F12DEA8DAE003188ED /* PublicStoriesListView.swift */,
 				CE8C47F22DEA8DAE003188ED /* PublicThemesListView.swift */,
 				CE8C47F32DEA8DAE003188ED /* UserSearchView.swift */,
@@ -508,6 +507,7 @@
 				CE8C497A2DF1E548003188ED /* ReadingLevel.swift */,
 				CE8C497C2DF1E575003188ED /* ReadingLevelSection.swift */,
 				CE8C497E2DF1E874003188ED /* AppVersionManager.swift */,
+				CE8C48682DEB1972003188ED /* ThemeToggleButton.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
