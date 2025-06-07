@@ -75,14 +75,19 @@ struct FollowListView: View {
                             .padding(.top, 60)
                     } else {
                         ForEach(currentUsers, id: \.id) { user in
-                            UserCard(user: user)
-                                .environmentObject(userAuthManager)
-                                .environmentObject(userViewModel)
-                                .environmentObject(storiesViewModel)
-                                .environmentObject(themesViewModel)
-                                .onAppear {
-                                    followViewModel.loadMoreIfNeeded(currentItem: user, type: type)
-                                }
+                            NavigationLink(
+                                destination: LibraryView(user: user)
+                                    .environmentObject(userAuthManager)
+                                    .environmentObject(userViewModel)
+                                    .environmentObject(storiesViewModel)
+                                    .environmentObject(themesViewModel)
+                            ) {
+                                UserRow(user: user)
+                            }
+                            .buttonStyle(CardButtonStyle())
+                            .onAppear {
+                                followViewModel.loadMoreIfNeeded(currentItem: user, type: type)
+                            }
                         }
                         
                         // 더 로딩할 데이터가 있을 때 로딩 인디케이터
@@ -193,42 +198,29 @@ struct FollowListView: View {
 
 // MARK: - User Card Component
 
-struct UserCard: View {
+struct UserRow: View {
     let user: User
     
-    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
-    @EnvironmentObject private var userViewModel: UserViewModel
-    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
-    @EnvironmentObject private var themesViewModel: ThemesViewModel
-    
     var body: some View {
-        NavigationLink(
-            destination: LibraryView(user: user)
-                .environmentObject(userAuthManager)
-                .environmentObject(userViewModel)
-                .environmentObject(storiesViewModel)
-                .environmentObject(themesViewModel)
-        ) {
-            HStack(spacing: 16) {
-                // 프로필 이미지
-                profileImageView
-                
-                // 사용자 정보
-                userInfoView
-                
-                Spacer()
-                
-                // 화살표 아이콘
-                Image(systemName: "chevron.right")
-                    .font(.caption.weight(.medium))
-                    .foregroundColor(.secondaryText.opacity(0.6))
-            }
-            .padding(20)
-            .background(cardBackground)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-            .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 4)
+        
+        HStack(spacing: 16) {
+            // 프로필 이미지
+            profileImageView
+            
+            // 사용자 정보
+            userInfoView
+            
+            Spacer()
+            
+            // 화살표 아이콘
+            Image(systemName: "chevron.right")
+                .font(.caption.weight(.medium))
+                .foregroundColor(.secondaryText.opacity(0.6))
         }
-        .buttonStyle(CardButtonStyle())
+        .padding(20)
+        .background(cardBackground)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 4)
     }
     
     // MARK: - User Card Components
