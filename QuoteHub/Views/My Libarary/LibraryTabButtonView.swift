@@ -13,19 +13,20 @@ struct LibraryTabButtonView: View {
 
     var body: some View {
         HStack {
-            CustomTabButton(title: "테마", isSelected: selectedView == 0) {
+            CustomTabButton(title: "북스토리", isSelected: selectedView == 0) {
                 selectedView = 0
             }
 
-            CustomTabButton(title: "스토리", isSelected: selectedView == 1) {
+            CustomTabButton(title: "테마", isSelected: selectedView == 1) {
                 selectedView = 1
             }
-
+            CustomTabButton(title: "키워드", isSelected: selectedView == 2) {
+                selectedView = 2
+            }
         }
         .padding()
     }
 }
-
 
 struct CustomTabButton: View {
     let title: String
@@ -47,7 +48,6 @@ struct CustomTabButton: View {
         .padding(10)
     }
 }
-
 
 #Preview {
     LibraryTabButtonView(selectedView: .constant(0))

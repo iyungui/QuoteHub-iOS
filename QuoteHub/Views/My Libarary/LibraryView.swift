@@ -160,16 +160,7 @@ struct LibraryView: View {
     
     @ViewBuilder
     private var contentSection: some View {
-        if selectedView == 0 {  // 테마 기록
-            if themesViewModel.themes(for: loadType).isEmpty {
-                ContentUnavailableView("아직 기록이 없어요", systemImage: "tray", description: Text("지금 바로 나만의 문장을 기록해보세요"))
-            } else {
-                LibraryThemesListView(isMy: isMyLibaray, loadType: loadType)
-                    .environmentObject(themesViewModel)
-                    .environmentObject(userViewModel)
-            }
-            
-        } else {    // 스토리 기록
+        if selectedView == 0 {  // 북스토리 기록
             if storiesViewModel.bookStories(for: loadType).isEmpty {
                 ContentUnavailableView("아직 기록이 없어요", systemImage: "tray", description: Text("지금 바로 나만의 문장을 기록해보세요"))
             } else {
@@ -177,6 +168,16 @@ struct LibraryView: View {
                     .environmentObject(storiesViewModel)
                     .environmentObject(userAuthManager)
             }
+        } else if selectedView == 1 {    // 테마 기록
+            if themesViewModel.themes(for: loadType).isEmpty {
+                ContentUnavailableView("아직 기록이 없어요", systemImage: "tray", description: Text("지금 바로 나만의 문장을 기록해보세요"))
+            } else {
+                LibraryThemesListView(isMy: isMyLibaray, loadType: loadType)
+                    .environmentObject(themesViewModel)
+                    .environmentObject(userViewModel)
+            }
+        } else if selectedView == 2 {   // 키워드별 북스토리 기록
+            Text("키워드별 북스토리 기록")
         }
     }
     
