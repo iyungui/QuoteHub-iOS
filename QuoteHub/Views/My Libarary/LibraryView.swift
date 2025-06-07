@@ -67,7 +67,9 @@ struct LibraryView: View {
     // MARK: - BODY
     
     var body: some View {
-        Group {
+        ZStack {
+            backgroundColor
+            
             // 친구의 라이브러리이고 해당 친구가 차단된 사용자일 때
             if !isMyLibaray && followViewModel.isBlocked {
                 ContentUnavailableView("차단된 사용자", systemImage: "person.crop.circle.badge.xmark.fill", description: Text("설정의 차단 목록을 확인해주세요."))
@@ -115,6 +117,19 @@ struct LibraryView: View {
     
     // MARK: - Private Views
     
+    private var backgroundColor: some View {
+        LinearGradient(
+            gradient: Gradient(colors: [
+                Color.softBeige.opacity(0.3),
+                Color.lightPaper.opacity(0.3),
+                Color.paperBeige.opacity(0.1)
+            ]),
+            startPoint: .top,
+            endPoint: .bottom
+        )
+        .ignoresSafeArea()
+    }
+
     /// main 컨텐츠
     private var mainContent: some View {
         ScrollViewReader { proxy in

@@ -9,9 +9,43 @@ import Foundation
 import SwiftUI
 
 extension Color {
+    // MARK: - Theme Card Colors (갈색/베이지 계열)
+    static let warmBeige = Color(
+        light: Color(hex: "#D4C4A8"),
+        dark: Color(hex: "#4A3F32")
+    )
+    
+    static let dustyBrown = Color(
+        light: Color(hex: "#A68B5B"),
+        dark: Color(hex: "#6B5B47")
+    )
+    
+    static let softTan = Color(
+        light: Color(hex: "#C9B99B"),
+        dark: Color(hex: "#3F3529")
+    )
+    
+    static let mutedCoffee = Color(
+        light: Color(hex: "#8F7A65"),
+        dark: Color(hex: "#5C4A3A")
+    )
+    
+    static let paleOchre = Color(
+        light: Color(hex: "#B8A082"),
+        dark: Color(hex: "#473C2F")
+    )
+    
+    static let subtleGray = Color(
+        light: Color(hex: "#9B8F85"),
+        dark: Color(hex: "#4A453F")
+    )
+}
+
+// MARK: - Color Extensions
+extension Color {
     static let appAccent = Color("mainColor")
     
-    // MARK: - Book Theme Colors with Dark Mode Support
+    // MARK: - Book Background Colors
     static let paperBeige = Color(
         light: Color(hex: "#E8D5B7"),
         dark: Color(hex: "#3C3328")
@@ -40,7 +74,7 @@ extension Color {
     
     static let inkBrown = Color(
         light: Color(hex: "#6B5B47"),  // 책의 잉크 색상
-        dark: Color(hex: "#9B8B77")
+        dark: Color(hex: "#A69080")
     )
     
     // MARK: - UI Element Colors

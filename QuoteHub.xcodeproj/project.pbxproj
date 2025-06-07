@@ -33,6 +33,7 @@
 		C6DE7F562AF76EA30020F5CB /* TabBar in Frameworks */ = {isa = PBXBuildFile; productRef = C6DE7F552AF76EA30020F5CB /* TabBar */; };
 		C6DE7F612AF7C2940020F5CB /* CommentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6DE7F602AF7C2940020F5CB /* CommentViewModel.swift */; };
 		C6E465582ADEAB66002F5FA0 /* CheckboxStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E465572ADEAB66002F5FA0 /* CheckboxStyle.swift */; };
+		CE62C8BC2DF459B200C69397 /* BookCaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE62C8BB2DF459B200C69397 /* BookCaseView.swift */; };
 		CE8C477F2DEA8D84003188ED /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47782DEA8D84003188ED /* LoginView.swift */; };
 		CE8C47802DEA8D84003188ED /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47792DEA8D84003188ED /* OnboardingView.swift */; };
 		CE8C47812DEA8D84003188ED /* SignInWithAppleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C477A2DEA8D84003188ED /* SignInWithAppleView.swift */; };
@@ -137,6 +138,7 @@
 		C6DE7F502AF76B480020F5CB /* StoryCommentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCommentService.swift; sourceTree = "<group>"; };
 		C6DE7F602AF7C2940020F5CB /* CommentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewModel.swift; sourceTree = "<group>"; };
 		C6E465572ADEAB66002F5FA0 /* CheckboxStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxStyle.swift; sourceTree = "<group>"; };
+		CE62C8BB2DF459B200C69397 /* BookCaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCaseView.swift; sourceTree = "<group>"; };
 		CE8C47782DEA8D84003188ED /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		CE8C47792DEA8D84003188ED /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		CE8C477A2DEA8D84003188ED /* SignInWithAppleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleView.swift; sourceTree = "<group>"; };
@@ -497,6 +499,7 @@
 			isa = PBXGroup;
 			children = (
 				CE8C483F2DEAB3FE003188ED /* AnimatedText.swift */,
+				CE62C8BB2DF459B200C69397 /* BookCaseView.swift */,
 				CE8C488D2DEC46E9003188ED /* tabIndicator.swift */,
 				CE8C48E02DF04BD8003188ED /* CustomProgressView.swift */,
 				CE8C48722DEBECAC003188ED /* Spacer.swift */,
@@ -686,6 +689,7 @@
 				CE8C48392DEA8DAE003188ED /* ThemeDetailView.swift in Sources */,
 				CE8C483A2DEA8DAE003188ED /* UpdateThemaView.swift in Sources */,
 				CE8C483B2DEA8DAE003188ED /* ReportSheetView.swift in Sources */,
+				CE62C8BC2DF459B200C69397 /* BookCaseView.swift in Sources */,
 				CE8C483C2DEA8DAE003188ED /* WebView.swift in Sources */,
 				C67AA3C92AE3839F00490DDE /* BookSearchService.swift in Sources */,
 				C6DE7F612AF7C2940020F5CB /* CommentViewModel.swift in Sources */,

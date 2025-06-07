@@ -28,19 +28,17 @@ struct ThemeView: View {
     
     @EnvironmentObject private var themesViewModel: ThemesViewModel
     @EnvironmentObject private var userViewModel: UserViewModel
-//    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
-//    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
 
-    private var themeGradient: [Color] {
-        let gradients: [[Color]] = [
-            [.paperBeige, .brownLeather],
-            [.antiqueGold, .paperBeige],
-            [.brownLeather, Color.purple.opacity(0.7)],
-            [Color.orange.opacity(0.8), Color.red.opacity(0.7)],
-            [Color.teal.opacity(0.8), .antiqueGold],
-            [.brownLeather, .antiqueGold]
+    private var themeColors: [Color] {
+        let colors: [Color] = [
+            Color.warmBeige,
+            Color.dustyBrown,
+            Color.softTan,
+            Color.mutedCoffee,
+            Color.paleOchre,
+            Color.subtleGray
         ]
-        return gradients[index % gradients.count]
+        return [colors[index % colors.count]]
     }
     
     var body: some View {
@@ -49,8 +47,8 @@ struct ThemeView: View {
                 // 배경 이미지
                 backgroundImage
                 
-                // 그라데이션 오버레이
-                gradientOverlay
+                // 어둡게 처리 (그라데이션 없음)
+                darkOverlay
                 
                 // 컨텐츠
                 contentView
@@ -65,30 +63,17 @@ struct ThemeView: View {
         WebImage(url: URL(string: theme.themeImageURL))
             .placeholder {
                 Rectangle()
-                    .fill(
-                        LinearGradient(
-                            gradient: Gradient(colors: themeGradient),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
+                    .fill(themeColors[0])
             }
             .resizable()
             .aspectRatio(contentMode: .fill)
             .frame(width: cardWidth, height: cardHeight)
     }
     
-    private var gradientOverlay: some View {
-        LinearGradient(
-            gradient: Gradient(colors: [
-                Color.clear,
-                Color.clear,
-                themeGradient[0].opacity(0.7),
-                themeGradient[1].opacity(0.8)
-            ]),
-            startPoint: .top,
-            endPoint: .bottom
-        )
+    private var darkOverlay: some View {
+        // 이미지가 있을 때만 어둡게 처리
+        Rectangle()
+            .fill(Color.black.opacity(0.4))
     }
     
     private var contentView: some View {
@@ -114,28 +99,30 @@ struct ThemeView: View {
                         .font(.scoreDream(.bold, size: isCompact ? .subheadline : .body))
                         .foregroundColor(.white)
                         .lineLimit(1)
-                        .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
+                        .shadow(color: .black.opacity(0.5), radius: 3, x: 0, y: 2)
                     
                     Spacer()
                     
                     // 화살표 아이콘
                     Image(systemName: "arrow.right.circle.fill")
                         .font(.system(size: isCompact ? 16 : 20))
-                        .foregroundColor(.white.opacity(0.8))
+                        .foregroundColor(.white.opacity(0.9))
+                        .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
                 }
                 
                 Text(theme.description)
                     .font(.scoreDream(.light, size: isCompact ? .footnote : .caption))
-                    .foregroundColor(.white.opacity(0.9))
+                    .foregroundColor(.white.opacity(0.95))
                     .lineLimit(2)
-                    .shadow(color: .black.opacity(0.3), radius: 1, x: 0, y: 1)
+                    .shadow(color: .black.opacity(0.5), radius: 2, x: 0, y: 1)
                 
                 HStack {
                     Spacer()
                     
                     Text(theme.createdAt.prefix(10))
                         .font(.scoreDream(.light, size: isCompact ? .caption2 : .footnote))
-                        .foregroundColor(.white.opacity(0.7))
+                        .foregroundColor(.white.opacity(0.8))
+                        .shadow(color: .black.opacity(0.4), radius: 1, x: 0, y: 1)
                 }
             }
             .padding(.bottom, 16)
@@ -163,7 +150,7 @@ struct ThemeView: View {
                     .clipShape(Circle())
                     .overlay(
                         Circle()
-                            .stroke(Color.white.opacity(0.5), lineWidth: 1)
+                            .stroke(Color.white.opacity(0.6), lineWidth: 1)
                     )
             } else {
                 Circle()
@@ -179,9 +166,9 @@ struct ThemeView: View {
             Text(theme.userId.nickname)
                 .font(.scoreDream(.medium, size: .caption))
                 .fontWeight(.medium)
-                .foregroundColor(.white.opacity(0.9))
+                .foregroundColor(.white)
                 .lineLimit(1)
-                .shadow(color: .black.opacity(0.3), radius: 1, x: 0, y: 1)
+                .shadow(color: .black.opacity(0.5), radius: 2, x: 0, y: 1)
         }
     }
     
