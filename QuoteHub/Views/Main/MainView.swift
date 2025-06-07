@@ -19,7 +19,7 @@ enum ActiveSheet: Identifiable {
 }
 
 struct MainView: View {
-    @State private var selectedTab: Int = 0
+    @State private var selectedTab: Int = 2
     @State private var showAlert: Bool = false
     @State private var showActionButtons: Bool = false
     @State private var activeSheet: ActiveSheet?
@@ -88,9 +88,9 @@ struct MainView: View {
     private var mainContent: some View {
         switch selectedTab {
         case 0:
-            HomeView()
-        case 2:
             LibraryView(user: nil)
+        case 2:
+            HomeView()
         default:
             EmptyView()
         }
@@ -119,6 +119,7 @@ struct MainView: View {
     // TODO: - onAppear 없애기
     private func onAppear() {
         if userAuthManager.isUserAuthenticated {
+            selectedTab = 0
             userViewModel.getProfile(userId: nil)
         }
     }

@@ -21,13 +21,17 @@ struct CustomTabbar: View {
             
             // 실제 탭바 콘텐츠
             HStack(spacing: 0) {
-                // 홈 탭
+                // 내 서재 탭
                 TabBarItem(
-                    icon: "house.fill",
-                    label: "홈",
+                    icon: "books.vertical",
+                    label: "내 서재",
                     isSelected: selectedTab == 0
                 ) {
-                    selectedTab = 0
+                    if userAuthManager.isUserAuthenticated {
+                        selectedTab = 0
+                    } else {
+                        showAlert()
+                    }
                 }
                 
                 Spacer()
@@ -43,17 +47,13 @@ struct CustomTabbar: View {
                 
                 Spacer()
                 
-                // 내 서재 탭
+                // 홈 탭
                 TabBarItem(
-                    icon: "books.vertical.fill",
-                    label: "내 서재",
+                    icon: "network",
+                    label: "홈",
                     isSelected: selectedTab == 2
                 ) {
-                    if userAuthManager.isUserAuthenticated {
-                        selectedTab = 2
-                    } else {
-                        showAlert()
-                    }
+                    selectedTab = 2
                 }
             }
             .padding(.horizontal, 20)
