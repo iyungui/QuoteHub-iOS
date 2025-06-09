@@ -109,6 +109,13 @@
 		CE8C497B2DF1E548003188ED /* ReadingLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C497A2DF1E548003188ED /* ReadingLevel.swift */; };
 		CE8C497D2DF1E575003188ED /* ReadingLevelSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C497C2DF1E575003188ED /* ReadingLevelSection.swift */; };
 		CE8C497F2DF1E874003188ED /* AppVersionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C497E2DF1E874003188ED /* AppVersionManager.swift */; };
+		CEF1A46D2DF72E7E001EC484 /* BookInfoCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF1A46C2DF72E7E001EC484 /* BookInfoCard.swift */; };
+		CEF1A46F2DF72F99001EC484 /* KeywordInputCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF1A46E2DF72F99001EC484 /* KeywordInputCard.swift */; };
+		CEF1A4712DF73702001EC484 /* QuotesInputCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF1A4702DF73702001EC484 /* QuotesInputCard.swift */; };
+		CEF1A4732DF73A1E001EC484 /* ThoughtInputCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF1A4722DF73A1E001EC484 /* ThoughtInputCard.swift */; };
+		CEF1A4752DF73CF8001EC484 /* ThemeSelectionCard + PrivacyToggleCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF1A4742DF73CF8001EC484 /* ThemeSelectionCard + PrivacyToggleCard.swift */; };
+		CEF1A4772DF73EF6001EC484 /* CreateStoryUIComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF1A4762DF73EF6001EC484 /* CreateStoryUIComponents.swift */; };
+		CEF1A4792DF74204001EC484 /* hideKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF1A4782DF74204001EC484 /* hideKeyboard.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -212,6 +219,13 @@
 		CE8C497A2DF1E548003188ED /* ReadingLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingLevel.swift; sourceTree = "<group>"; };
 		CE8C497C2DF1E575003188ED /* ReadingLevelSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingLevelSection.swift; sourceTree = "<group>"; };
 		CE8C497E2DF1E874003188ED /* AppVersionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionManager.swift; sourceTree = "<group>"; };
+		CEF1A46C2DF72E7E001EC484 /* BookInfoCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookInfoCard.swift; sourceTree = "<group>"; };
+		CEF1A46E2DF72F99001EC484 /* KeywordInputCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordInputCard.swift; sourceTree = "<group>"; };
+		CEF1A4702DF73702001EC484 /* QuotesInputCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuotesInputCard.swift; sourceTree = "<group>"; };
+		CEF1A4722DF73A1E001EC484 /* ThoughtInputCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThoughtInputCard.swift; sourceTree = "<group>"; };
+		CEF1A4742DF73CF8001EC484 /* ThemeSelectionCard + PrivacyToggleCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ThemeSelectionCard + PrivacyToggleCard.swift"; sourceTree = "<group>"; };
+		CEF1A4762DF73EF6001EC484 /* CreateStoryUIComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateStoryUIComponents.swift; sourceTree = "<group>"; };
+		CEF1A4782DF74204001EC484 /* hideKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hideKeyboard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -433,6 +447,8 @@
 		CE8C48062DEA8DAE003188ED /* Record */ = {
 			isa = PBXGroup;
 			children = (
+				CE8C487C2DEBF39D003188ED /* SearchBookView.swift */,
+				CE8C487A2DEBF39D003188ED /* BookDetailView.swift */,
 				CEF1A4692DF710D1001EC484 /* ViewModel */,
 				CE8C487E2DEBF39D003188ED /* BookStoryRecord */,
 				CE8C48852DEBF39F003188ED /* ThemeRecord */,
@@ -510,6 +526,7 @@
 				CE8C497C2DF1E575003188ED /* ReadingLevelSection.swift */,
 				CE8C497E2DF1E874003188ED /* AppVersionManager.swift */,
 				CE8C48682DEB1972003188ED /* ThemeToggleButton.swift */,
+				CEF1A4782DF74204001EC484 /* hideKeyboard.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -517,10 +534,14 @@
 		CE8C487E2DEBF39D003188ED /* BookStoryRecord */ = {
 			isa = PBXGroup;
 			children = (
-				CE8C487C2DEBF39D003188ED /* SearchBookView.swift */,
-				CE8C487A2DEBF39D003188ED /* BookDetailView.swift */,
 				CE8C487B2DEBF39D003188ED /* RecordView.swift */,
+				CEF1A4762DF73EF6001EC484 /* CreateStoryUIComponents.swift */,
+				CEF1A46C2DF72E7E001EC484 /* BookInfoCard.swift */,
+				CEF1A4702DF73702001EC484 /* QuotesInputCard.swift */,
+				CEF1A4722DF73A1E001EC484 /* ThoughtInputCard.swift */,
 				CE8C48EE2DF1294E003188ED /* StoryImagesView.swift */,
+				CEF1A4742DF73CF8001EC484 /* ThemeSelectionCard + PrivacyToggleCard.swift */,
+				CEF1A46E2DF72F99001EC484 /* KeywordInputCard.swift */,
 			);
 			path = BookStoryRecord;
 			sourceTree = "<group>";
@@ -650,6 +671,7 @@
 				CE8C47942DEA8D93003188ED /* ReportDataModel.swift in Sources */,
 				CE8C47952DEA8D93003188ED /* User.swift in Sources */,
 				C67AA3CB2AE389F500490DDE /* BooksViewModel.swift in Sources */,
+				CEF1A4772DF73EF6001EC484 /* CreateStoryUIComponents.swift in Sources */,
 				C694A2ED2AC5778400574D20 /* UserService.swift in Sources */,
 				C60700CF2AFE14F1009D202A /* ThemeViewModel.swift in Sources */,
 				CE8C481B2DEA8DAE003188ED /* HomeView.swift in Sources */,
@@ -672,6 +694,7 @@
 				CE8C482F2DEA8DAE003188ED /* ReportListView.swift in Sources */,
 				CE8C48462DEAD67D003188ED /* FloatingActionOverlay.swift in Sources */,
 				CE8C48302DEA8DAE003188ED /* SettingView.swift in Sources */,
+				CEF1A46D2DF72E7E001EC484 /* BookInfoCard.swift in Sources */,
 				CE8C48312DEA8DAE003188ED /* UserProfileView.swift in Sources */,
 				CE8C48322DEA8DAE003188ED /* VersionInfoView.swift in Sources */,
 				CE8C48332DEA8DAE003188ED /* CommentView.swift in Sources */,
@@ -701,6 +724,7 @@
 				C6D78A0A2AD03B2900F03FB8 /* APIEndpoint.swift in Sources */,
 				CE8C488E2DEC46E9003188ED /* tabIndicator.swift in Sources */,
 				C6691C5A2B0619C10083C678 /* UserSearchViewModel.swift in Sources */,
+				CEF1A4752DF73CF8001EC484 /* ThemeSelectionCard + PrivacyToggleCard.swift in Sources */,
 				CE8C486F2DEB2E39003188ED /* LibraryTabButtonView.swift in Sources */,
 				CE8C477F2DEA8D84003188ED /* LoginView.swift in Sources */,
 				CE8C49732DF19133003188ED /* StoryListCard.swift in Sources */,
@@ -717,16 +741,20 @@
 				CE8C47A02DEA8D97003188ED /* EndpointProtocol.swift in Sources */,
 				CE8C47A12DEA8D97003188ED /* NetworkError.swift in Sources */,
 				CE8C47A22DEA8D97003188ED /* UserEndpoints.swift in Sources */,
+				CEF1A46F2DF72F99001EC484 /* KeywordInputCard.swift in Sources */,
 				C60700CD2AFE05D9009D202A /* FolderService.swift in Sources */,
 				C667E9802ACA388C006EE7A9 /* UserViewModel.swift in Sources */,
 				CE8C48862DEBF39F003188ED /* CreateThemeView.swift in Sources */,
 				CE8C48902DEC96B6003188ED /* PhotoPickerAlertType.swift in Sources */,
 				CE8C49792DF1DB4E003188ED /* ThemeView.swift in Sources */,
+				CEF1A4792DF74204001EC484 /* hideKeyboard.swift in Sources */,
 				CE8C497B2DF1E548003188ED /* ReadingLevel.swift in Sources */,
 				C6336CF32AAF1AA0007355EC /* ImagePicker.swift in Sources */,
 				C627C8CC2AE25831004D867B /* ColorExtension.swift in Sources */,
 				C6691C522B04DA8C0083C678 /* FollowViewModel.swift in Sources */,
+				CEF1A4732DF73A1E001EC484 /* ThoughtInputCard.swift in Sources */,
 				C6E465582ADEAB66002F5FA0 /* CheckboxStyle.swift in Sources */,
+				CEF1A4712DF73702001EC484 /* QuotesInputCard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

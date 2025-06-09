@@ -11,9 +11,13 @@ struct StoryImagesView: View {
     @Binding var selectedImages: [UIImage]
     @Binding var showingImagePicker: Bool
 
+    private var guideMessage: String {
+        selectedImages.isEmpty ? "이미지를 추가하여 북스토리를 더욱 풍성하게 만들어보세요." : "이미지를 길게 눌러서 순서를 변경할 수 있습니다."
+    }
+    
     var body: some View {
         VStack(spacing: 16) {
-            cardHeader(title: "이미지 추가", icon: "photo.fill", subtitle: "최대 10장까지 추가 가능")
+            CardHeader(title: "이미지 추가", icon: "photo.fill", subtitle: "최대 10장까지 추가 가능")
             
             VStack(spacing: 16) {
                 // 이미지 추가 버튼
@@ -25,11 +29,11 @@ struct StoryImagesView: View {
                 }
                 
                 // 이미지 개수 안내
-                imageCountInfo
+                StoryCreateGuideSection(message: guideMessage)
             }
         }
         .padding(20)
-        .background(cardBackground)
+        .background(CardBackground())
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 4)
     }
@@ -152,69 +156,5 @@ struct StoryImagesView: View {
             }
         }
         .accessibilityLabel("Photo \(index + 1)")
-    }
-    
-    private var imageCountInfo: some View {
-        Text(selectedImages.isEmpty ? "이미지를 추가하여 북스토리를 더욱 풍성하게 만들어보세요." : "이미지를 길게 눌러서 순서를 변경할 수 있습니다.")
-            .font(.scoreDream(.light, size: .caption))
-            .foregroundColor(.secondaryText.opacity(0.8))
-            .padding(.horizontal, 4)
-    }
-    
-    private var cardBackground: some View {
-        RoundedRectangle(cornerRadius: 20)
-            .fill(.ultraThinMaterial)
-            .overlay(
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(
-                        LinearGradient(
-                            gradient: Gradient(colors: [
-                                Color.white.opacity(0.2),
-                                Color.clear,
-                                Color.antiqueGold.opacity(0.1)
-                            ]),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: 1
-                    )
-            )
-    }
-    
-    private func cardHeader(title: String, icon: String, subtitle: String? = nil) -> some View {
-        HStack(spacing: 12) {
-            Image(systemName: icon)
-                .font(.title3.weight(.medium))
-                .foregroundColor(.brownLeather)
-                .frame(width: 24, height: 24)
-            
-            VStack(alignment: .leading, spacing: 2) {
-                Text(title)
-                    .font(.scoreDream(.bold, size: .body))
-                    .foregroundColor(.primaryText)
-                
-                if let subtitle = subtitle {
-                    Text(subtitle)
-                        .font(.scoreDream(.light, size: .caption))
-                        .foregroundColor(.secondaryText.opacity(0.8))
-                }
-            }
-            
-            Spacer()
-            
-            Rectangle()
-                .fill(
-                    LinearGradient(
-                        gradient: Gradient(colors: [
-                            Color.antiqueGold.opacity(0.8),
-                            Color.clear
-                        ]),
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                )
-                .frame(height: 2)
-                .frame(maxWidth: 60)
-        }
     }
 }
