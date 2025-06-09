@@ -331,3 +331,42 @@ class BookStoriesViewModel: ObservableObject, LoadingViewModel {
         }
     }
 }
+
+extension BookStoriesViewModel {
+    
+    // MARK: - FETCH SPECIFIC STORY
+    
+    func fetchSpecificBookStory(storyId: String, completion: @escaping (Result<BookStory, Error>) -> Void) {
+        print(#fileID, #function, #line, "- ")
+        
+        isLoading = true
+        loadingMessage = "북스토리를 불러오는 중..."
+        
+        service.fetchSpecificBookStory(storyId: storyId) { [weak self] result in
+            guard let self = self else { return }
+            
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let bookStoryResponse):
+                    self.isLoading = false
+                    self.loadingMessage = nil
+                    
+                    if let story = bookStoryResponse.data {
+                        print("북스토리 로드 성공")
+                        completion(.success(story))
+                    } else {
+                        let error = NSError(domain: "BookStoriesViewModel", code: -1, userInfo: [NSLocalizedDescriptionKey: "Story data not found"])
+                        completion(.failure(error))
+                    }
+                    
+                case .failure(let error):
+                    self.isLoading = false
+                    self.loadingMessage = nil
+                    
+                    print("북스토리 로드 실패: \(error.localizedDescription)")
+                    completion(.failure(error))
+                }
+            }
+        }
+    }
+}

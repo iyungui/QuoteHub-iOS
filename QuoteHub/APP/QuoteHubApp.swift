@@ -6,39 +6,39 @@
 //
 
 import SwiftUI
-import SwiftData
+//import SwiftData
 
 @main
 struct QuoteHubApp: App {
     @StateObject var userAuthManager = UserAuthenticationManager()
 
     // SwiftData ModelContainer 설정
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            DraftStory.self
-        ])
-        
-        let modelConfiguration = ModelConfiguration(
-            schema: schema,
-            isStoredInMemoryOnly: false
-        )
-        
-        do {
-            return try ModelContainer(
-                for: schema,
-                configurations: [modelConfiguration]
-            )
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
+//    var sharedModelContainer: ModelContainer = {
+//        let schema = Schema([
+//            DraftStory.self
+//        ])
+//        
+//        let modelConfiguration = ModelConfiguration(
+//            schema: schema,
+//            isStoredInMemoryOnly: false
+//        )
+//        
+//        do {
+//            return try ModelContainer(
+//                for: schema,
+//                configurations: [modelConfiguration]
+//            )
+//        } catch {
+//            fatalError("Could not create ModelContainer: \(error)")
+//        }
+//    }()
     
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(userAuthManager)            
         }
-        .modelContainer(sharedModelContainer)
+//        .modelContainer(sharedModelContainer)
     }
 }
 

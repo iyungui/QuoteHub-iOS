@@ -614,8 +614,10 @@ struct BookStoryDetailView: View {
     private var actionSheetView: some View {
         if isMyStory {
             // 내 스토리 - 편집/삭제
-            Button("수정하기") {
-                // TODO: - UpdateStoryView 네비게이션 로직
+            NavigationLink {
+                UpdateStoryView(storyId: story.id)
+            } label: {
+                Text("수정하기")
             }
             
             Button("삭제하기", role: .destructive) {

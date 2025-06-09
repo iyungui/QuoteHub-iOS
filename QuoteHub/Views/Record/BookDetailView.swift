@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import SwiftData
+//import SwiftData
 import SDWebImageSwiftUI
 
 /// 북스토리 기록 2: 책 상세 뷰
@@ -16,17 +16,17 @@ struct BookDetailView: View {
     @State private var isImageLoaded: Bool = false
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
-    @Environment(\.modelContext) private var modelContext
+//    @Environment(\.modelContext) private var modelContext
     
     @EnvironmentObject private var userAuthManager: UserAuthenticationManager
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
     
     // 임시저장 관련
-    @State private var draftManager: DraftManager?
-    @State private var showDraftAlert: Bool = false
-    @State private var currentDraft: DraftStory?
+//    @State private var draftManager: DraftManager?
+//    @State private var showDraftAlert: Bool = false
+//    @State private var currentDraft: DraftStory?
     @State private var shouldNavigateToRecord: Bool = false
-    @State private var shouldLoadDraft: Bool = false    // 임시저장 데이터 불러올지 말지 결정
+//    @State private var shouldLoadDraft: Bool = false    // 임시저장 데이터 불러올지 말지 결정
 
     // MARK: - BODY
     
@@ -58,7 +58,7 @@ struct BookDetailView: View {
                 .padding(.bottom, 100) // Bottom spacing
             }
         }
-        .navigationDestination(isPresented: $shouldNavigateToRecord) {
+        .sheet(isPresented: $shouldNavigateToRecord) {
             // shouldLoadDraft가 true이면, 임시저장 데이터 불러온다는 뜻
 //            RecordView(book: book, preloadedDraft: shouldLoadDraft ? currentDraft : nil, shouldClearDraft: !shouldLoadDraft)
             RecordView(book: book)
@@ -68,20 +68,20 @@ struct BookDetailView: View {
         .background(backgroundGradient)
         .ignoresSafeArea(.container, edges: .top)
         .navigationBarHidden(true)
-        .onAppear {
-            setupDraftManager()
-        }
-        .alert("알림", isPresented: $showDraftAlert) {
-            Button("새로 작성하기") {
-                navigateToRecord(loadDraft: false)
-            }
-            Button("이어서 작성하기") {
-                navigateToRecord(loadDraft: true)
-            }
-            Button("취소", role: .cancel) { }
-        } message: {
-            Text("이 책에 대한 임시저장된 글이 있습니다.")
-        }
+//        .onAppear {
+//            setupDraftManager()
+//        }
+//        .alert("알림", isPresented: $showDraftAlert) {
+//            Button("새로 작성하기") {
+//                navigateToRecord(loadDraft: false)
+//            }
+//            Button("이어서 작성하기") {
+//                navigateToRecord(loadDraft: true)
+//            }
+//            Button("취소", role: .cancel) { }
+//        } message: {
+//            Text("이 책에 대한 임시저장된 글이 있습니다.")
+//        }
         .alert("외부 사이트로 이동", isPresented: $showAlert) {
             Button("확인") {
                 if let url = URL(string: book.bookLink) {
@@ -100,28 +100,28 @@ struct BookDetailView: View {
     }
     
     // MARK: - Draft Management
-    
-    private func setupDraftManager() {
-        draftManager = DraftManager(modelContext: modelContext)
-    }
-    
-    /// 북스토리 기록하기 버튼 누를 때 활성화됨. 임시저장된 스토리를 불러올지(alert을 띄울지) 아니면 바로 RecordView로 이동시킬지 결정
-    private func checkForCurrentBookDraft() {
-        guard let draftManager = draftManager else { return }
-        
-        if let draft = draftManager.loadDraft(), draft.bookId == book.id {
-            currentDraft = draft
-            showDraftAlert = true
-        } else {
-            // 임시저장이 없거나 다른 책이면 바로 RecordView로 이동
-            navigateToRecord(loadDraft: false)
-        }
-    }
-    
-    private func navigateToRecord(loadDraft: Bool) {
-        shouldLoadDraft = loadDraft
-        shouldNavigateToRecord = true
-    }
+//    
+//    private func setupDraftManager() {
+//        draftManager = DraftManager(modelContext: modelContext)
+//    }
+//    
+//    /// 북스토리 기록하기 버튼 누를 때 활성화됨. 임시저장된 스토리를 불러올지(alert을 띄울지) 아니면 바로 RecordView로 이동시킬지 결정
+//    private func checkForCurrentBookDraft() {
+//        guard let draftManager = draftManager else { return }
+//        
+//        if let draft = draftManager.loadDraft(), draft.bookId == book.id {
+//            currentDraft = draft
+//            showDraftAlert = true
+//        } else {
+//            // 임시저장이 없거나 다른 책이면 바로 RecordView로 이동
+//            navigateToRecord(loadDraft: false)
+//        }
+//    }
+//    
+//    private func navigateToRecord(loadDraft: Bool) {
+//        shouldLoadDraft = loadDraft
+//        shouldNavigateToRecord = true
+//    }
     
     // MARK: - UI COMPONENTS
     
@@ -154,7 +154,12 @@ struct BookDetailView: View {
             
             Spacer()
             
-            Button(action: checkForCurrentBookDraft) {
+            Button {
+                guard !shouldNavigateToRecord else { return }
+                
+                shouldNavigateToRecord = true
+                print("shouldNavigateToRecord: \(shouldNavigateToRecord)")
+            } label: {
                 Image(systemName: "highlighter")
                     .font(.title2.weight(.medium))
                     .foregroundColor(.white)
@@ -360,7 +365,10 @@ struct BookDetailView: View {
                 .buttonStyle(CardButtonStyle())
                 
                 // Record Button
-                Button(action: checkForCurrentBookDraft) {
+                Button {
+                    shouldNavigateToRecord = true
+                    print("shouldNavigateToRecord: \(shouldNavigateToRecord)")
+                } label: {
                     HStack(spacing: 10) {
                         Image(systemName: "highlighter")
                             .font(.body.weight(.medium))
