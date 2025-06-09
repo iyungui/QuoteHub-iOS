@@ -60,7 +60,8 @@ struct BookDetailView: View {
         }
         .navigationDestination(isPresented: $shouldNavigateToRecord) {
             // shouldLoadDraft가 true이면, 임시저장 데이터 불러온다는 뜻
-            RecordView(book: book, preloadedDraft: shouldLoadDraft ? currentDraft : nil, shouldClearDraft: !shouldLoadDraft)
+//            RecordView(book: book, preloadedDraft: shouldLoadDraft ? currentDraft : nil, shouldClearDraft: !shouldLoadDraft)
+            RecordView(book: book)
                 .environmentObject(storiesViewModel)
         }
         

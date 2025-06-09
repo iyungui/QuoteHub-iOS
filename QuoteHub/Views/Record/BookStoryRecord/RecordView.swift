@@ -15,39 +15,43 @@ struct RecordView: View {
     // MARK: - PROPERTIES
     
     let book: Book
-    let preloadedDraft: DraftStory? // 이어서 작성하기 선택한 경우 nil이 아님
-    let shouldClearDraft: Bool  // 새로 작성하기 선택한 경우
+//    let preloadedDraft: DraftStory? // 이어서 작성하기 선택한 경우 nil이 아님
+//    let shouldClearDraft: Bool  // 새로 작성하기 선택한 경우
 
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.modelContext) private var modelContext
-    @Environment(\.scenePhase) private var scenePhase
+//    @Environment(\.modelContext) private var modelContext
+//    @Environment(\.scenePhase) private var scenePhase
     
     @State private var showThemeListView: Bool = false
     
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
-    @State private var draftManager: DraftManager?
     
     // 임시저장 관련
+//    @State private var draftManager: DraftManager?
     @State private var shouldLoadDraft: Bool = true
     @State private var showDraftAlert: Bool = false
-    @State private var currentDraft: DraftStory?
+//    @State private var currentDraft: DraftStory?
     @State private var saveDraftSuccessPrompt: Bool = false
     
     // MARK: - INIT
     
-    init(book: Book, preloadedDraft: DraftStory? = nil, shouldClearDraft: Bool = false) {
+    init(book: Book/*, preloadedDraft: DraftStory? = nil, shouldClearDraft: Bool = false*/) {
         self.book = book
-        self.preloadedDraft = preloadedDraft
-        self.shouldClearDraft = shouldClearDraft
+//        self.preloadedDraft = preloadedDraft
+//        self.shouldClearDraft = shouldClearDraft
     }
 
-    // 키워드 입력
+    // 키워드 입력 - option
     @State private var keywords: [String] = []
-    // 인용구 입력
-    @State private var quote: String = ""
-    // 컨텐츠 (느낀점, 생각) 입력
+    
+    // 인용구 입력 - required
+    @State private var quotes: [Quote] = []
+    @State private var currentQuoteText: String = ""
+    @State private var currentQuotePage: String = ""
+    
+    // 컨텐츠 (느낀점, 생각) 입력 - option
     @State private var content: String = ""
 
     // 텍스트 인풋 관련
@@ -64,25 +68,27 @@ struct RecordView: View {
     let quotePlaceholder: String = "간직하고 싶은 문장을 기록해보세요."
     let contentPlaceholder: String = "문장을 읽고 떠오른 생각을 기록해보세요."
 
-    // 이미지 피커
+    // 이미지 피커 - option
     @State private var showingImagePicker = false
     @State private var showingCamera = false
     @State private var showingGallery = false
     @State private var selectedImages: [UIImage] = []
     @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
     
-    // 북스토리 공개 여부 토글
+    // 북스토리 공개 여부 토글 - required (default: true)
     @State private var isPublic: Bool = true
     
-    // 어느 테마에 북스토리 올릴 것인지
+    // 어느 테마에 북스토리 올릴 것인지 - option
     @State private var themeIds: [String] = []
     
     // focus state
     enum Field: Hashable {
         case keywords
-        case quote
+        case quotePage
+        case quoteText
         case content
     }
+    
     @FocusState private var focusField: Field?
     
     @State private var alertType: PhotoPickerAlertType = .authorized
@@ -90,14 +96,15 @@ struct RecordView: View {
     /// 모든 입력 필드가 비어있는지 확인. 임시(자동) 저장 전에 사용
     private var isEmpty: Bool {
         keywords.isEmpty &&
-        quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+        quotes.isEmpty &&
         content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
         selectedImages.isEmpty
     }
     
-    /// 북스토리 생성 호출 요건 충족 확인
-    private var isFormValid: Bool {
-        !quote.isEmpty && !content.isEmpty && !keywords.isEmpty
+    /// 북스토리 생성 호출 요건(quotes 중 quote가 채워져있는지) 충족 확인
+    private var isQuotesFill: Bool {
+        !quotes.isEmpty
+//        && quotes.allSatisfy { $0.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
     }
 
     // MARK: - BODY
@@ -107,15 +114,12 @@ struct RecordView: View {
             backgroundGradient
             
             ScrollView {
-                VStack(spacing: 24) {
+                VStack(spacing: 30) {
                     // 책 정보 카드
                     bookInfoCard
                     
-                    // 키워드 입력 카드
-                    keywordCard
-                    
                     // 인용구 입력 카드
-                    quoteCard
+                    quotesCard
                     
                     // 생각 입력 카드
                     thoughtCard
@@ -129,6 +133,8 @@ struct RecordView: View {
                         privacyToggleCard
                     }
                     
+                    // 키워드 입력 카드
+                    keywordCard
                     
                     // 하단 여백
                     spacer(height: 100)
@@ -141,42 +147,52 @@ struct RecordView: View {
         .navigationTitle("북스토리 기록")
         .toolbar {
             // 임시저장 버튼
-            ToolbarItem(placement: .topBarTrailing) {
-                draftSaveButton
-            }
+//            ToolbarItem(placement: .topBarTrailing) {
+//                draftSaveButton
+//            }
             // 등록 버튼
             ToolbarItem(placement: .primaryAction) {
                 submitButton
             }
             // 피드백 메시지
-            ToolbarItem(placement: .bottomBar) {
-                // 북스토리 생성가능해지면(isFormValid) 자동으로 피드백메시지 사라지도록
+            ToolbarItem(placement: .navigation) {
+                // 북스토리 생성가능해지면(isQuotesFill) 자동으로 피드백메시지 사라지도록
                 // 그리고 임시저장 기능 메시지 활성화 시에도 피드백메시지 보이도록
-                if let message = feedbackMessage, (!isFormValid || saveDraftSuccessPrompt) {
+                if let message = feedbackMessage, (!isQuotesFill || saveDraftSuccessPrompt) {
                     feedbackView(message: message)
                 }
             }
         }
         .progressOverlay(viewModel: storiesViewModel, animationName: "progressLottie", opacity: true)
-        .onAppear {
-            setupDraftManager()
-            handlePreloadedDraft()
-        }
-        .onChange(of: scenePhase) { _, newPhase in
-            handleScenePhaseChange(newPhase)
-        }
-        .onChange(of: keywords) { _, _ in triggerAutoSave() }
-        .onChange(of: quote) { _, _ in triggerAutoSave() }
-        .onChange(of: content) { _, _ in triggerAutoSave() }
-        .onChange(of: selectedImages) { _, _ in triggerAutoSave() }
-        .onChange(of: isPublic) { _, _ in triggerAutoSave() }
-        .onChange(of: themeIds) { _, _ in triggerAutoSave() }
-        .onTapGesture {
-            hideKeyboard()
-        }
+        
+        // 임시저장 관련 로직
+//        .onAppear {
+//            setupDraftManager()
+//            handlePreloadedDraft()
+//        }
+//        .onChange(of: scenePhase) { _, newPhase in
+//            handleScenePhaseChange(newPhase)
+//        }
+//        
+//        // 아래 필드가 변화가 생기면 자동저장 시도
+//        .onChange(of: keywords) { _, _ in triggerAutoSave() }
+//        .onChange(of: quotes) { _, _ in triggerAutoSave() }
+//        .onChange(of: content) { _, _ in triggerAutoSave() }
+//        .onChange(of: selectedImages) { _, _ in triggerAutoSave() }
+//        .onChange(of: isPublic) { _, _ in triggerAutoSave() }
+//        .onChange(of: themeIds) { _, _ in triggerAutoSave() }
+//        
+//        // 키보드 숨기기
+//        .onTapGesture {
+//            hideKeyboard()
+//        }
+        
+        // 테마 선택 시트
         .fullScreenCover(isPresented: $showThemeListView) {
             SetThemeView(selectedThemeIds: $themeIds)
         }
+        
+        // 이미지 피커 관련 시트
         .sheet(isPresented: $showingCamera) {
             ImagePicker(selectedImages: self.$selectedImages, sourceType: self.sourceType)
                 .ignoresSafeArea(.all)
@@ -214,6 +230,7 @@ struct RecordView: View {
                 .cancel()
             ])
         }
+        
         .alert(isPresented: $showAlert) {
             switch alertType {
             case .authorized:
@@ -233,7 +250,7 @@ struct RecordView: View {
                     message: Text(alertMessage),
                     dismissButton: .default(Text("확인"), action: {
                         if alertMessage.contains("성공적으로") {
-                            draftManager?.clearDraft()
+//                            draftManager?.clearDraft()
                             dismiss()
                         }
                     })
@@ -244,143 +261,148 @@ struct RecordView: View {
     
     // MARK: - Draft Management
     
-    private func setupDraftManager() {
-        draftManager = DraftManager(modelContext: modelContext)
-    }
-    
-    private func handlePreloadedDraft() {
-        if shouldClearDraft {
-            // 새로 작성하기 선택한 경우
-            draftManager?.clearDraft()
-            currentDraft = draftManager?.createDraftFromBook(book)
-            resetForm()
-        } else if let preloadedDraft = preloadedDraft {
-            // 이어서 작성하기 선택한 경우
-            currentDraft = preloadedDraft
-            loadDraftData(preloadedDraft)
-        } else {
-            // 일반적인 경우 (다른 뷰에서 직접 접근)
-            checkForExistingDraft()
-        }
-        shouldLoadDraft = false
-    }
-    
-    private func checkForExistingDraft() {
-        guard shouldLoadDraft, let draftManager = draftManager else { return }
-        
-        if draftManager.hasDraft() {
-            currentDraft = draftManager.loadDraft()
-            
-            // 현재 책과 같은 책의 임시저장인 경우에만 로드
-            if let draft = currentDraft, draft.bookId == book.id {
-                loadDraftData(draft)
-            } else {
-                // 다른 책의 임시저장이 있으면 새로 시작
-                createNewDraft()
-            }
-        }
+//    private func setupDraftManager() {
+//        draftManager = DraftManager(modelContext: modelContext)
+//    }
+//    
+//    private func handlePreloadedDraft() {
+//        if shouldClearDraft {
+//            // 새로 작성하기 선택한 경우
+//            draftManager?.clearDraft()
+//            currentDraft = draftManager?.createDraftFromBook(book)
+//            resetForm()
+//        } else if let preloadedDraft = preloadedDraft {
+//            // 이어서 작성하기 선택한 경우
+//            currentDraft = preloadedDraft
+//            loadDraftData(preloadedDraft)
+//        } else {
+//            // 일반적인 경우 (다른 뷰에서 직접 접근)
+//            checkForExistingDraft()
+//        }
 //        shouldLoadDraft = false
-    }
-    
-    private func createNewDraft() {
-        draftManager?.clearDraft()
-        currentDraft = draftManager?.createDraftFromBook(book)
-        resetForm()
-    }
-    
-    /// 임시저장 데이터 가져오기
-    private func loadDraftData(_ draft: DraftStory) {
-        keywords = draft.keywords
-        quote = draft.quote
-        content = draft.content
-        isPublic = draft.isPublic
-        themeIds = draft.themeIds
-        
-        // 이미지 데이터를 UIImage로 변환
-        if !draft.imageData.isEmpty {
-            selectedImages = draftManager?.convertDataToImages(draft.imageData) ?? []
-        }
-        
-        print("임시저장 데이터 로드 완료 - 키워드: \(keywords.count), 이미지: \(selectedImages.count)")
-    }
-    
-    /// 데이터 초기화
-    private func resetForm() {
-        keywords = []
-        quote = ""
-        content = ""
-        selectedImages = []
-        isPublic = true
-        themeIds = []
-        currentInput = ""
-    }
-    
-    /// 자동 저장 함수
-    private func triggerAutoSave() {
-        print(#fileID, #function, #line, "- ")
-        guard !isEmpty else { return }
-        
-        draftManager?.startAutoSave(
-            bookId: book.id,
-            bookTitle: book.title,
-            bookAuthor: book.author.joined(separator: ", "),
-            bookImageURL: book.bookImageURL,
-            keywords: keywords,
-            quote: quote,
-            content: content,
-            isPublic: isPublic,
-            themeIds: themeIds,
-            images: selectedImages
-        )
-    }
-    
-    /// app life cycle에 따라 즉시 저장 로직 실행
-    private func handleScenePhaseChange(_ phase: ScenePhase) {
-        switch phase {
-        case .background, .inactive:
-            // 백그라운드 진입시 즉시 저장
-            if !isEmpty {
-                saveDraftImmediately()
-            }
-        case .active:
-            break
-        @unknown default:
-            break
-        }
-    }
-    
-    /// 수동으로 임시저장 버튼 누르거나, 앱이 백그라운드로 들어갈 때 실행됨
-    private func saveDraftImmediately() {
-        draftManager?.stopAutoSave()
-        draftManager?.saveDraft(
-            bookId: book.id,
-            bookTitle: book.title,
-            bookAuthor: book.author.joined(separator: ", "),
-            bookImageURL: book.bookImageURL,
-            keywords: keywords,
-            quote: quote,
-            content: content,
-            isPublic: isPublic,
-            themeIds: themeIds,
-            images: selectedImages
-        )
-    }
-    
-    // MARK: - UI Components
-    
-    private var draftSaveButton: some View {
-        Button(action: {
-            saveDraftImmediately()
-            showPrompt()
-        }) {
-            Image(systemName: "square.and.arrow.down")
-                .fontWeight(.medium)
-                .foregroundColor(isEmpty ? .gray : .appAccent)
-                .offset(y: -2)
-        }
-        .opacity(isEmpty ? 0.5 : 1.0)
-        .disabled(isEmpty)
-    }
+//    }
+//    
+//    private func checkForExistingDraft() {
+//        guard shouldLoadDraft, let draftManager = draftManager else { return }
+//        
+//        if draftManager.hasDraft() {
+//            currentDraft = draftManager.loadDraft()
+//            
+//            // 현재 책과 같은 책의 임시저장인 경우에만 로드
+//            if let draft = currentDraft, draft.bookId == book.id {
+//                loadDraftData(draft)
+//            } else {
+//                // 다른 책의 임시저장이 있으면 새로 시작
+//                createNewDraft()
+//            }
+//        }
+////        shouldLoadDraft = false
+//    }
+//    
+//    private func createNewDraft() {
+//        draftManager?.clearDraft()
+//        currentDraft = draftManager?.createDraftFromBook(book)
+//        resetForm()
+//    }
+//    
+//    /// 임시저장 데이터 가져오기
+//    private func loadDraftData(_ draft: DraftStory) {
+//        keywords = draft.keywords
+//        quotes = draft.quotes
+//        content = draft.content
+//        isPublic = draft.isPublic
+//        themeIds = draft.themeIds
+//        
+//        // 이미지 데이터를 UIImage로 변환
+//        if !draft.imageData.isEmpty {
+//            selectedImages = draftManager?.convertDataToImages(draft.imageData) ?? []
+//        }
+//        
+//        print("임시저장 데이터 로드 완료 - 키워드: \(keywords.count), 이미지: \(selectedImages.count)")
+//    }
+//    
+//    /// 데이터 초기화
+//    private func resetForm() {
+//        keywords = []
+//        
+//        // quote
+//        quotes = []
+//        currentQuoteText = ""
+//        currentQuotePage = ""
+//        
+//        content = ""
+//        selectedImages = []
+//        isPublic = true
+//        themeIds = []
+//        currentInput = ""
+//    }
+//    
+//    /// 자동 저장 함수
+//    private func triggerAutoSave() {
+//        print(#fileID, #function, #line, "- ")
+//        guard !isEmpty else { return }
+//        
+//        draftManager?.startAutoSave(
+//            bookId: book.id,
+//            bookTitle: book.title,
+//            bookAuthor: book.author.joined(separator: ", "),
+//            bookImageURL: book.bookImageURL,
+//            keywords: keywords,
+//            quotes: quotes,
+//            content: content,
+//            isPublic: isPublic,
+//            themeIds: themeIds,
+//            images: selectedImages
+//        )
+//    }
+//    
+//    /// app life cycle에 따라 즉시 저장 로직 실행
+//    private func handleScenePhaseChange(_ phase: ScenePhase) {
+//        switch phase {
+//        case .background, .inactive:
+//            // 백그라운드 진입시 즉시 저장
+//            if !isEmpty {
+//                saveDraftImmediately()
+//            }
+//        case .active:
+//            break
+//        @unknown default:
+//            break
+//        }
+//    }
+//    
+//    /// 수동으로 임시저장 버튼 누르거나, 앱이 백그라운드로 들어갈 때 실행됨
+//    private func saveDraftImmediately() {
+//        draftManager?.stopAutoSave()
+//        draftManager?.saveDraft(
+//            bookId: book.id,
+//            bookTitle: book.title,
+//            bookAuthor: book.author.joined(separator: ", "),
+//            bookImageURL: book.bookImageURL,
+//            keywords: keywords,
+//            quotes: quotes,
+//            content: content,
+//            isPublic: isPublic,
+//            themeIds: themeIds,
+//            images: selectedImages
+//        )
+//    }
+//    
+//    // MARK: - UI Components
+//    
+//    private var draftSaveButton: some View {
+//        Button(action: {
+//            saveDraftImmediately()
+//            showPrompt()
+//        }) {
+//            Image(systemName: "square.and.arrow.down")
+//                .fontWeight(.medium)
+//                .foregroundColor(isEmpty ? .gray : .appAccent)
+//                .offset(y: -2)
+//        }
+//        .opacity(isEmpty ? 0.5 : 1.0)
+//        .disabled(isEmpty)
+//    }
     
     private var backgroundGradient: some View {
         LinearGradient(
@@ -399,10 +421,10 @@ struct RecordView: View {
         Button(action: submitStory) {
             HStack {
                 Image(systemName: "checkmark.circle.fill")
-                    .foregroundColor(isFormValid ? .appAccent : .gray)
-                    .scaleEffect(isFormValid ? 1.1 : 1.0)
-                    .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isFormValid)
-                if isFormValid {
+                    .foregroundColor(isQuotesFill ? .appAccent : .gray)
+                    .scaleEffect(isQuotesFill ? 1.1 : 1.0)
+                    .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isQuotesFill)
+                if isQuotesFill {
                     Text("등록")
                         .fontWeight(.medium)
                         .foregroundStyle(Color.appAccent)
@@ -576,57 +598,152 @@ struct RecordView: View {
         .shadow(color: .brownLeather.opacity(0.3), radius: 4, x: 0, y: 2)
     }
     
-    private var quoteCard: some View {
+    private var quotesCard: some View {
         VStack(spacing: 16) {
-            cardHeader(title: "인용구", icon: "quote.opening", subtitle: "마음에 드는 문장을 기록해보세요")
+            cardHeader(title: "인용구(필수)", icon: "quote.opening", subtitle: "마음에 드는 문장을 기록해보세요")
             
-            VStack(spacing: 8) {
-                ZStack(alignment: .topLeading) {
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(Color.paperBeige.opacity(0.2))
+            // 인용구 목록 vstack
+            VStack(spacing: 12) {
+                ForEach(Array(quotes.enumerated()), id: \.offset) { index, quote in
+                    quoteItemView(curQuote: quote, index: index)
+                }
+            }
+            
+            // 인용구 추가 섹션
+            VStack(spacing: 12) {
+                
+                // 페이지 번호 입력
+                HStack {
+                    TextField("페이지 입력 (선택)", text: $currentQuotePage)
+                        .focused($focusField, equals: .quotePage)
+                        .keyboardType(.numberPad)
+                        .font(.scoreDream(.medium, size: .body))
+                    Spacer()
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 12)
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.paperBeige.opacity(0.3))
                         .overlay(
-                            RoundedRectangle(cornerRadius: 16)
-                                .stroke(focusField == .quote ? Color.brownLeather.opacity(0.5) : Color.clear, lineWidth: 2)
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(focusField == .quotePage ? Color.brownLeather.opacity(0.5) : Color.clear, lineWidth: 2)
                         )
-                        .frame(minHeight: 120)
-                        .animation(.easeInOut(duration: 0.2), value: focusField)
-                    
-                    if quote.isEmpty {
-                        Text(quotePlaceholder)
-                            .font(.scoreDream(.light, size: .body))
-                            .foregroundColor(.secondaryText.opacity(0.7))
-                            .padding(.horizontal, 16)
-                            .padding(.top, 16)
-                            .allowsHitTesting(false)
+                )
+                .animation(.easeInOut(duration: 0.2), value: focusField)
+                
+                
+                // 인용구 텍스트 입력
+                VStack(spacing: 8) {
+                    ZStack(alignment: .topLeading) {
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(Color.paperBeige.opacity(0.2))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .stroke(focusField == .quoteText ? Color.brownLeather.opacity(0.5) : Color.clear, lineWidth: 2)
+                            )
+                            .frame(minHeight: 80)
+                            .animation(.easeInOut(duration: 0.2), value: focusField)
+                        
+                        if currentQuoteText.isEmpty {
+                            Text(quotePlaceholder)
+                                .font(.scoreDream(.light, size: .body))
+                                .foregroundStyle(Color.secondaryText.opacity(0.7))
+                                .padding(.horizontal, 16)
+                                .padding(.top, 16)
+                                .allowsHitTesting(false)
+                        }
+                        
+                        TextEditor(text: $currentQuoteText)
+                            .font(.scoreDream(.regular, size: .body))
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 12)
+                            .background(Color.clear)
+                            .focused($focusField, equals: .quoteText)
+                            .scrollContentBackground(.hidden)
+                            .onChange(of: currentQuoteText) { _, newValue in
+                                if newValue.count > quoteMaxLength {
+                                    currentQuoteText = String(newValue.prefix(quoteMaxLength))
+                                }
+                            }
                     }
                     
-                    TextEditor(text: $quote)
-                        .font(.scoreDream(.regular, size: .body))
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 12)
-                        .background(Color.clear)
-                        .focused($focusField, equals: .quote)
-                        .scrollContentBackground(.hidden)
-                        .onChange(of: quote) { _, newValue in
-                            if newValue.count > quoteMaxLength {
-                                quote = String(newValue.prefix(quoteMaxLength))
-                            }
-                        }
+                    HStack {
+                        Spacer()
+                        Text("\(currentQuoteText.count)/\(quoteMaxLength)")
+                            .font(.scoreDream(.light, size: .caption2))
+                            .foregroundColor(currentQuoteText.count >= quoteMaxLength ? .orange : .secondaryText)
+                    }
                 }
                 
-                // 글자수 표시
-                HStack {
-                    Spacer()
-                    Text("\(quote.count)/\(quoteMaxLength)")
-                        .font(.scoreDream(.light, size: .caption2))
-                        .foregroundColor(quote.count >= quoteMaxLength ? .orange : .secondaryText)
+                // 인용구 추가 버튼
+                Button(action: addQuote) {
+                    HStack {
+                        Image(systemName: "plus.circle.fill")
+                            .foregroundColor(.brownLeather)
+                        Text("인용구 추가")
+                            .font(.scoreDream(.medium, size: .body))
+                            .foregroundColor(.primaryText)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.antiqueGold.opacity(0.2))
+                    )
                 }
+                .disabled(currentQuoteText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                .opacity(currentQuoteText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? 0.5 : 1.0)
+            }
+            
+            // guide text
+            if quotes.isEmpty {
+                Text("최소 하나의 인용구를 입력해주세요.")
+                    .font(.scoreDream(.light, size: .caption))
+                    .foregroundColor(.secondaryText)
             }
         }
         .padding(20)
         .background(cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 4)
+    }
+    
+    private func quoteItemView(curQuote: Quote, index: Int) -> some View {
+        HStack(alignment: .top, spacing: 12) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(curQuote.quote)
+                    .font(.scoreDream(.regular, size: .body))
+                    .foregroundColor(.primaryText)
+                
+                if let page = curQuote.page {
+                    Text("p. \(page)")
+                        .font(.scoreDream(.light, size: .caption))
+                        .foregroundColor(.secondaryText)
+                }
+            }
+            
+            Spacer()
+            
+            Button {
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                    removeQuote(at: index)
+                }
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .foregroundColor(.red)
+                    .font(.title3)
+            }
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.antiqueGold.opacity(0.1))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.antiqueGold.opacity(0.3), lineWidth: 1)
+                )
+        )
     }
     
     private var thoughtCard: some View {
@@ -869,48 +986,78 @@ struct RecordView: View {
         }
     }
     
-    private func submitStory() {
-        guard isFormValid else {
-            updateFeedbackMessage()
-            return
-        }
+    private func addQuote() {
+        let trimmedQuote = currentQuoteText.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        storiesViewModel.createBookStory(
-            images: selectedImages,
-            bookId: book.id,
-            quote: quote,
-            content: content,
-            isPublic: isPublic,
-            keywords: keywords,
-            folderIds: themeIds
-        ) { isSuccess in
-            if isSuccess {
-                alertType = .make
-                alertMessage = "북스토리가 성공적으로 등록되었어요!"
-                showAlert = true
-            } else {
-                alertType = .make
-                alertMessage = "북스토리 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
-                showAlert = true
-            }
+        guard !trimmedQuote.isEmpty else { return }
+        
+        let pageNumber = Int(currentQuotePage.trimmingCharacters(in: .whitespacesAndNewlines))
+        let newQuote = Quote(quote: trimmedQuote, page: pageNumber)
+        
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+            quotes.append(newQuote)
+            currentQuoteText = ""
+            currentQuotePage = ""
+            focusField = .quoteText
         }
     }
     
+    private func removeQuote(at index: Int) {
+        quotes.remove(at: index)
+    }
+    
+    /// 북스토리 생성 액션
+    private func submitStory() {
+        
+        guard isQuotesFill else {
+            updateFeedbackMessage()
+            
+            // quote가 채워져 있지 않다면 피드백 메시지와 함께 return
+            return
+        }
+        
+        // 옵셔널 처리
+        let retContent = content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : content
+        let retImages = selectedImages.isEmpty ? nil : selectedImages
+        let retKeywords = keywords.isEmpty ? nil : keywords
+        let retThemeIds = themeIds.isEmpty ? nil : themeIds
+        
+        
+        storiesViewModel.createBookStory(
+            bookId: book.id,
+            quotes: quotes,
+            images: retImages,
+            content: retContent,
+            isPublic: isPublic,
+            keywords: retKeywords,
+            themeIds: retThemeIds) { isSuccess in
+                if isSuccess {
+                    alertType = .make
+                    alertMessage = "북스토리가 성공적으로 등록되었어요!"
+                    showAlert = true
+                } else {
+                    alertType = .make
+                    alertMessage = "북스토리 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+                    showAlert = true
+                }
+            }
+    }
+    
+    /// 피드백 메시지 업데이트
     private func updateFeedbackMessage() {
         withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
             saveDraftSuccessPrompt = false  // 에러메시지에는 임시저장 성공 알림 프롬프트 비활성화
-            if keywords.isEmpty {
-                feedbackMessage = "키워드를 입력해주세요."
-            } else if quote.isEmpty {
-                feedbackMessage = "인용문을 입력해주세요."
-            } else if content.isEmpty {
-                feedbackMessage = "내용을 입력해주세요."
+            if quotes.isEmpty {
+                feedbackMessage = "인용문을 최소 하나 입력해주세요."
+            } else if quotes.contains(where: { $0.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }) {
+                feedbackMessage = "빈 인용구가 있습니다. 내용을 입력해주세요."
             } else {
                 feedbackMessage = nil
             }
         }
     }
     
+    /// 임시저장 시 피드백 메시지 보여주기
     private func showPrompt() {
         withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
             saveDraftSuccessPrompt = true

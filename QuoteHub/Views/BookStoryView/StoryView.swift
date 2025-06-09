@@ -194,7 +194,7 @@ struct StoryView: View {
                         .foregroundColor(.white.opacity(0.9))
                         .padding(.top, 2)
                     
-                    Text(story.quote ?? "")
+                    Text(story.firstQuoteText)
                         .font(.scoreDream(.medium, size: isCompact ? .footnote : .subheadline))
                         .lineLimit(isCompact ? 2 : 3)
                         .foregroundColor(.white)

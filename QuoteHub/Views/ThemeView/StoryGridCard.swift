@@ -54,13 +54,12 @@ struct StoryGridCard: View {
                     Spacer()
                     
                     VStack(alignment: .leading, spacing: 2) {
-                        if let quote = story.quote, !quote.isEmpty {
-                            Text(quote)
-                                .font(.scoreDream(.medium, size: .caption2))
-                                .foregroundColor(.white)
-                                .lineLimit(2)
-                                .shadow(color: .black.opacity(0.5), radius: 2, x: 0, y: 1)
-                        }
+                        
+                        Text(story.firstQuoteText)
+                            .font(.scoreDream(.medium, size: .caption2))
+                            .foregroundColor(.white)
+                            .lineLimit(2)
+                            .shadow(color: .black.opacity(0.5), radius: 2, x: 0, y: 1)
                         
                         Text(story.bookId.title)
                             .font(.scoreDream(.light, size: .caption2))

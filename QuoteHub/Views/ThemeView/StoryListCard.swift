@@ -29,13 +29,11 @@ struct StoryListCard: View {
                 // 컨텐츠
                 VStack(alignment: .leading, spacing: 8) {
                     // 인용문
-                    if let quote = story.quote, !quote.isEmpty {
-                        Text(quote)
-                            .font(.scoreDream(.medium, size: .footnote))
-                            .foregroundColor(.primaryText)
-                            .lineLimit(2)
-                            .multilineTextAlignment(.leading)
-                    }
+                    Text(story.firstQuoteText)
+                        .font(.scoreDream(.medium, size: .footnote))
+                        .foregroundColor(.primaryText)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
                     
                     // 책 제목
                     HStack(spacing: 6) {

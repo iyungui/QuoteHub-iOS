@@ -203,7 +203,8 @@ struct BookStoryDetailView: View {
                 Spacer()
             }
             
-            AnimatedText(.constant(story.quote ?? ""))
+            
+            AnimatedText(.constant(story.firstQuoteText))
                 .font(.scoreDream(.medium, size: .body))
                 .foregroundColor(.primaryText)
                 .lineSpacing(6)

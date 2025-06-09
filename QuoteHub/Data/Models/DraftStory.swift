@@ -15,7 +15,7 @@ class DraftStory {
     var bookAuthor: String
     var bookImageURL: String
     var keywords: [String]
-    var quote: String
+    var quotes: [Quote]
     var content: String
     var isPublic: Bool
     var themeIds: [String]
@@ -29,7 +29,7 @@ class DraftStory {
         bookAuthor: String = "",
         bookImageURL: String = "",
         keywords: [String] = [],
-        quote: String = "",
+        quotes: [Quote] = [],
         content: String = "",
         isPublic: Bool = true,
         themeIds: [String] = [],
@@ -40,7 +40,7 @@ class DraftStory {
         self.bookAuthor = bookAuthor
         self.bookImageURL = bookImageURL
         self.keywords = keywords
-        self.quote = quote
+        self.quotes = quotes
         self.content = content
         self.isPublic = isPublic
         self.themeIds = themeIds
@@ -62,16 +62,16 @@ class DraftStory {
     // 빈 상태인지 확인
     var isEmpty: Bool {
         return keywords.isEmpty &&
-               quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
-               content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
-               imageData.isEmpty
+        quotes.isEmpty &&
+        content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+        imageData.isEmpty
     }
     
     // 유효한 데이터인지 확인 (최소 조건)
     var isValid: Bool {
         return !keywords.isEmpty ||
-               !quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
-               !content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
-               !imageData.isEmpty
+        !quotes.isEmpty ||
+        !content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
+        !imageData.isEmpty
     }
 }

@@ -301,9 +301,10 @@ struct StoryCardWithUserLevel: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             // 스토리 내용
-            Text(story.quote ?? "")
+            Text(story.firstQuoteText)
                 .font(.scoreDream(.medium, size: .body))
                 .lineLimit(3)
+            
             
             // 작성자 정보 + 레벨
             HStack {

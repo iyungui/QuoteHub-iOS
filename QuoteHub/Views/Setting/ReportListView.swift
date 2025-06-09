@@ -89,9 +89,6 @@ struct ReportListView: View {
                                         .shadow(radius: 3)
                                     
                                     VStack(alignment: .leading) {
-                                        // Displaying the nickname and report reason
-                                        Text(story.targetId.quote ?? "")
-                                            .font(.headline)
                                         Text("신고 상태: \(story.status.rawValue)")
                                             .font(.subheadline)
                                     }

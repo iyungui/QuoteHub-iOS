@@ -48,8 +48,11 @@ struct BookStory: Codable, Identifiable, Equatable {
 
 extension BookStory {
     /// 첫 번째 인용구 텍스트
-    var firstQuoteText: String? {
-        return quotes.first?.quote
+    var firstQuoteText: String {
+        if let quote = quotes.first, !quote.quote.isEmpty {
+            return quote.quote
+        }
+        return ""
     }
     
     /// 총 인용구 개수

@@ -36,9 +36,7 @@ struct QuoteHubApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(userAuthManager)
-            
-//            BookCaseView()
+                .environmentObject(userAuthManager)            
         }
         .modelContainer(sharedModelContainer)
     }
