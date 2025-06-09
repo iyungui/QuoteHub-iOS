@@ -183,13 +183,30 @@ class BookStoriesViewModel: ObservableObject, LoadingViewModel {
     
     // MARK: - CREATE NEW STORY
     
-    func createBookStory(images: [UIImage], bookId: String, quote: String, content: String, isPublic: Bool, keywords: [String], folderIds: [String], completion: @escaping (Bool) -> Void) {
+    func createBookStory(
+        bookId: String,
+        quotes: [Quote],
+        images: [UIImage]?,
+        content: String?,
+        isPublic: Bool,
+        keywords: [String]?,
+        themeIds: [String]?,
+        completion: @escaping (Bool) -> Void
+    ) {
         print(#fileID, #function, #line, "- ")
         
         isLoading = true
         loadingMessage = "북스토리를 등록하는 중..."
         
-        service.createBookStory(images: images, bookId: bookId, quote: quote, content: content, isPublic: isPublic, keywords: keywords, folderIds: folderIds) { [weak self] result in
+        service.createBookStory(
+            images: images,
+            bookId: bookId,
+            quotes: quotes,
+            content: content,
+            isPublic: isPublic,
+            keywords: keywords,
+            themeIds: themeIds
+        ) { [weak self] result in
             guard let self = self else { return }
 
             DispatchQueue.main.async {
@@ -258,13 +275,30 @@ class BookStoriesViewModel: ObservableObject, LoadingViewModel {
     
     // MARK: - UPDATE MY STORY
     
-    func updateBookStory(storyID: String, images: [UIImage]?, quote: String?, content: String?, isPublic: Bool, keywords: [String]?, folderIds: [String]?, completion: @escaping (Bool) -> Void) {
+    func updateBookStory(
+        storyID: String,
+        images: [UIImage]?,
+        quotes: [Quote]?,
+        content: String?,
+        isPublic: Bool,
+        keywords: [String]?,
+        themeIds: [String]?,
+        completion: @escaping (Bool) -> Void
+    ) {
         print(#fileID, #function, #line, "- ")
         
         isLoading = true
         loadingMessage = "북스토리를 수정하는 중..."
         
-        service.updateBookStory(storyID: storyID, images: images, quote: quote, content: content, isPublic: isPublic, keywords: keywords, folderIds: folderIds) { [weak self] result in
+        service.updateBookStory(
+            storyID: storyID,
+            images: images,
+            quotes: quotes,
+            content: content,
+            isPublic: isPublic,
+            keywords: keywords,
+            themeIds: themeIds
+        ) { [weak self] result in
             guard let self = self else { return }
             
             DispatchQueue.main.async {

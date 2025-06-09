@@ -8,19 +8,24 @@
 import Foundation
 import SwiftUI
 
+struct Quote: Codable {
+    let quote: String
+    let page: Int?
+}
+
 struct BookStory: Codable, Identifiable, Equatable {
     var id: String { _id }
-    var _id: String
-    var userId: User
-    var bookId: Book
-    var quote: String?
-    var content: String?
-    var storyImageURLs: [String]?
-    var isPublic: Bool
-    var createdAt: String
-    var updatedAt: String
-    var keywords: [String]?
-    var themesIds: [String]?
+    let _id: String
+    let userId: User
+    let bookId: Book
+    let quotes: [Quote]
+    let content: String?
+    let storyImageURLs: [String]?
+    let isPublic: Bool
+    let createdAt: String
+    let updatedAt: String
+    let keywords: [String]?
+    let themeIds: [String]?
 
     static func ==(lhs: BookStory, rhs: BookStory) -> Bool {
         return lhs.id == rhs.id
@@ -30,14 +35,25 @@ struct BookStory: Codable, Identifiable, Equatable {
         case _id
         case userId
         case bookId
-        case quote
+        case quotes
         case content
         case storyImageURLs
         case isPublic
         case createdAt
         case updatedAt
         case keywords
-        case themesIds = "folderIds"
+        case themeIds = "folderIds"
     }
 }
+
+extension BookStory {
+    /// 첫 번째 인용구 텍스트
+    var firstQuoteText: String? {
+        return quotes.first?.quote
+    }
+    
+    /// 총 인용구 개수
+    var quotesCount: Int { return quotes.count }
+}
+
 

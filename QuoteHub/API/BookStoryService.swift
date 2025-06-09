@@ -14,7 +14,16 @@ class BookStoryService {
     
     // MARK: -  BookStory 생성
     
-    func createBookStory(images: [UIImage]?, bookId: String, quote: String?, content: String?, isPublic: Bool, keywords: [String]?, folderIds: [String]?, completion: @escaping (Result<BookStoryResponse, Error>) -> Void) {
+    func createBookStory(
+        images: [UIImage]? = nil,
+        bookId: String,
+        quotes: [Quote],
+        content: String? = nil,
+        isPublic: Bool = false,
+        keywords: [String]? = nil,
+        themeIds: [String]? = nil,
+        completion: @escaping (Result<BookStoryResponse, Error>) -> Void
+    ) {
         
         guard let url = URL(string: APIEndpoint.createStoryURL) else {
             let error = NSError(domain: "BookStoryService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL for creating book story"])
@@ -30,19 +39,33 @@ class BookStoryService {
             return
         }
         
-        let parameters: [String: Any] = [
+        guard !quotes.isEmpty else {
+            let error = NSError(domain: "BookStoryService", code: -7, userInfo: [NSLocalizedDescriptionKey : "At least one quote is required"])
+            completion(.failure(error))
+            return
+        }
+        
+        var parameters: [String: Any] = [
             "bookId": bookId,
-            "quote": quote ?? "",
-            "content": content ?? "",
             "isPublic": isPublic,
-            "keywords": keywords ?? [],
-            "folderIds": folderIds ?? []
         ]
+        
+        if let content = content, !content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            parameters["content"] = content
+        }
+        
+        if let keywords = keywords, !keywords.isEmpty {
+            parameters["keywords"] = keywords
+        }
+        
+        if let themeIds = themeIds, !themeIds.isEmpty {
+            parameters["folderIds"] = themeIds
+        }
 
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-
+        
         AF.upload(multipartFormData: { (multipartFormData) in
-            if let actualImages = images {
+            if let actualImages = images, !actualImages.isEmpty {
                 for (index, actualImage) in actualImages.enumerated() {
                     if let resizedImage = actualImage.resizeWithWidth(width: 400),
                        let imageData = resizedImage.jpegData(compressionQuality: 0.9) {
@@ -50,7 +73,7 @@ class BookStoryService {
                     }
                 }
             }
-
+            
             for (key, value) in parameters {
                 if let val = value as? String, !val.isEmpty {
                     multipartFormData.append(val.data(using: .utf8)!, withName: key)
@@ -59,13 +82,21 @@ class BookStoryService {
                 }
             }
             
-            // Append keywords and folderIds separately
+            // quotes 배열을 JSON으로 인코딩해서 추가
+            do {
+                let quotesData = try JSONEncoder().encode(quotes)
+                multipartFormData.append(quotesData, withName: "quotes")
+            } catch {
+                print("Error encoding quotes: \(error)")
+            }
+            
+            // Append keywords and themeIds(folderIds) separately
             keywords?.forEach { keyword in
                 multipartFormData.append(keyword.data(using: .utf8)!, withName: "keywords")
             }
             
-            folderIds?.forEach { folderId in
-                multipartFormData.append(folderId.data(using: .utf8)!, withName: "folderIds")
+            themeIds?.forEach { themeId in
+                multipartFormData.append(themeId.data(using: .utf8)!, withName: "folderIds")
             }
             
         }, to: url, method: .post, headers: headers)
@@ -78,7 +109,7 @@ class BookStoryService {
                 if response.response?.statusCode == 401 {
                     UserAuthenticationManager().renewAccessToken { success in
                         if success {
-                            self.createBookStory(images: images, bookId: bookId, quote: quote, content: content, isPublic: isPublic, keywords: keywords, folderIds: folderIds, completion: completion)
+                            self.createBookStory(images: images, bookId: bookId, quotes: quotes, content: content, isPublic: isPublic, keywords: keywords, themeIds: themeIds, completion: completion)
                         } else {
                             let renewalError = NSError(domain: "BookStoryService", code: -3, userInfo: [NSLocalizedDescriptionKey: "Token renewal failed"])
                             completion(.failure(renewalError))
@@ -271,7 +302,16 @@ class BookStoryService {
     
     // MARK: -  BookStory 수정
     
-    func updateBookStory(storyID: String, images: [UIImage]?, quote: String?, content: String?, isPublic: Bool, keywords: [String]?, folderIds: [String]?, completion: @escaping (Result<BookStoryResponse, Error>) -> Void) {
+    func updateBookStory(
+        storyID: String,
+        images: [UIImage]? = nil,
+        quotes: [Quote]? = nil,
+        content: String? = nil,
+        isPublic: Bool? = false,
+        keywords: [String]? = nil,
+        themeIds: [String]? = nil,
+        completion: @escaping (Result<BookStoryResponse, Error>) -> Void
+    ) {
 
         guard let token = KeyChain.read(key: "JWTAccessToken") else {
             completion(.failure(NSError(domain: "BookStoryService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])))
@@ -289,16 +329,46 @@ class BookStoryService {
             return
         }
         
-        let parameters: [String: Any] = [
-            "quote": quote ?? "",
-            "content": content ?? "",
-            "isPublic": isPublic,
-            "keywords": keywords ?? [],
-            "folderIds": folderIds ?? []
-        ]
+        if let quotes = quotes {
+            guard !quotes.isEmpty else {
+                let error = NSError(domain: "BookStoryService", code: -7, userInfo: [NSLocalizedDescriptionKey: "At least one quote is required"])
+                completion(.failure(error))
+                return
+            }
+            
+            // 각 quote의 유효성 검증
+            for quote in quotes {
+                guard !quote.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                    let error = NSError(domain: "BookStoryService", code: -8, userInfo: [NSLocalizedDescriptionKey: "Quote text cannot be empty"])
+                    completion(.failure(error))
+                    return
+                }
+            }
+        }
+        
+        // 업데이트할 파라미터만 포함 (모든 필드 선택적)
+        var parameters: [String: Any] = [:]
+        
+        if let content = content {
+            parameters["content"] = content
+        }
+        
+        if let isPublic = isPublic {
+            parameters["isPublic"] = isPublic
+        }
+        
+        if let keywords = keywords {
+            parameters["keywords"] = keywords
+        }
+        
+        if let themeIds = themeIds {
+            parameters["folderIds"] = themeIds
+        }
+
         
         AF.upload(multipartFormData: { (multipartFormData) in
-            if let actualImages = images {
+            // 이미지 추가 (선택)
+            if let actualImages = images, !actualImages.isEmpty {
                 for (index, actualImage) in actualImages.enumerated() {
                     if let resizedImage = actualImage.resizeWithWidth(width: 400),
                        let imageData = resizedImage.jpegData(compressionQuality: 0.9) {
@@ -307,21 +377,32 @@ class BookStoryService {
                 }
             }
 
+            // 일반 파라미터들 추가
             for (key, value) in parameters {
-                if let val = value as? String, !val.isEmpty {
+                if let val = value as? String {
                     multipartFormData.append(val.data(using: .utf8)!, withName: key)
                 } else if let val = value as? Bool {
                     multipartFormData.append("\(val)".data(using: .utf8)!, withName: key)
                 }
             }
             
-            // Append keywords and folderIds separately
+            // quotes 배열이 제공된 경우에만 추가
+            if let quotes = quotes {
+                do {
+                    let quotesData = try JSONEncoder().encode(quotes)
+                    multipartFormData.append(quotesData, withName: "quotes")
+                } catch {
+                    print("Error encoding quotes: \(error)")
+                }
+            }
+            
+            // keywords와 themeIds를 개별적으로 추가 (제공된 경우에만)
             keywords?.forEach { keyword in
                 multipartFormData.append(keyword.data(using: .utf8)!, withName: "keywords")
             }
             
-            folderIds?.forEach { folderId in
-                multipartFormData.append(folderId.data(using: .utf8)!, withName: "folderIds")
+            themeIds?.forEach { themeId in
+                multipartFormData.append(themeId.data(using: .utf8)!, withName: "folderIds")
             }
             
         }, to: url, method: .put, headers: headers)
@@ -336,7 +417,7 @@ class BookStoryService {
                     case 401:
                         UserAuthenticationManager().renewAccessToken { success in
                             if success {
-                                self.updateBookStory(storyID: storyID, images: images, quote: quote, content: content, isPublic: isPublic, keywords: keywords, folderIds: folderIds, completion: completion)
+                                self.updateBookStory(storyID: storyID, images: images, quotes: quotes, content: content, isPublic: isPublic, keywords: keywords, themeIds: themeIds, completion: completion)
                             } else {
                                 let renewalError = NSError(domain: "BookStoryService", code: -3, userInfo: [NSLocalizedDescriptionKey: "Token renewal failed"])
                                 print("Error: \(renewalError.localizedDescription)")
@@ -357,7 +438,7 @@ class BookStoryService {
             }
         }
     }
-    
+
     // MARK: - 특정 북스토리 하나 조회
     
     func fetchSpecificBookStory(storyId: String, completion: @escaping (Result<BookStoryResponse, Error>) -> Void) {

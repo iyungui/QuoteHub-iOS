@@ -42,7 +42,7 @@ struct RecordView: View {
         self.preloadedDraft = preloadedDraft
         self.shouldClearDraft = shouldClearDraft
     }
-        
+
     // 키워드 입력
     @State private var keywords: [String] = []
     // 인용구 입력
