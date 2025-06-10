@@ -10,8 +10,8 @@ import SwiftUI
 /// 북스토리 기록 - 느낀점 입력 카드
 struct ThoughtInputCard: View {
     @Bindable var viewModel: StoryFormViewModel
-    @FocusState private var isContentFocused: Bool
-    
+    var contentFocused: FocusState<BookStoryFormField?>.Binding
+
     var body: some View {
         VStack(spacing: 16) {
             CardHeader(title: "나의 생각", icon: "brain.head.profile", subtitle: "문장을 읽고 떠오른 생각을 기록해보세요")
@@ -22,9 +22,9 @@ struct ThoughtInputCard: View {
                     placeholder: viewModel.contentPlaceholder,
                     minHeight: 150,
                     maxLength: viewModel.contentMaxLength,
-                    isFocused: isContentFocused
+                    isFocused: (contentFocused.wrappedValue == .content)
                 )
-                .focused($isContentFocused)
+                .focused(contentFocused, equals: .content)
                 
                 StoryCharacterCountView(currentInputCount: viewModel.content.count, maxCount: viewModel.contentMaxLength)
             }
@@ -33,5 +33,7 @@ struct ThoughtInputCard: View {
 }
 
 #Preview {
-    ThoughtInputCard(viewModel: StoryFormViewModel())
+    @FocusState var focusField: BookStoryFormField?
+
+    ThoughtInputCard(viewModel: StoryFormViewModel(), contentFocused: $focusField)
 }

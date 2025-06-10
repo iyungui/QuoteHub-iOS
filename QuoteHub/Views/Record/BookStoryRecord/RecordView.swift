@@ -11,14 +11,25 @@ import SDWebImageSwiftUI
 
 /// 북스토리 기록 3: 북스토리 기록 뷰
 
+enum BookStoryFormField: Hashable {
+    case quotePage
+    case quoteText
+    case content
+    case keyword
+}
+
+
 struct RecordView: View {
     let book: Book
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
     @Environment(\.dismiss) private var dismiss
     
+    // 텍스트 포커스 필드
+    @FocusState private var focusedField: BookStoryFormField?
+    
     // ✅ 옵셔널로 변경하고 nil로 시작
     @State private var formViewModel: StoryFormViewModel?
-
+    
     var body: some View {
         ZStack {
             StoryBackgroundGradient()
@@ -65,18 +76,30 @@ struct RecordView: View {
             VStack(spacing: 40) {
                 BookInfoCard(book: book)
                 Divider()
-                QuotesInputCard(viewModel: viewModel)
+        
+                QuotesInputCard(
+                    viewModel: viewModel,
+                    quotePageAndTextFocused: $focusedField
+                )
                 Divider()
 
-                ThoughtInputCard(viewModel: viewModel)
+                ThoughtInputCard(
+                    viewModel: viewModel,
+                    contentFocused: $focusedField
+                )
                 Divider()
 
-                StoryImagesView(selectedImages: $viewModel.selectedImages, showingImagePicker: $viewModel.showingImagePicker)
+                StoryImagesView(
+                    selectedImages: $viewModel.selectedImages,
+                    showingImagePicker: $viewModel.showingImagePicker)
                 Divider()
                 
                 ThemeSelectionCard(viewModel: viewModel)
                 PrivacyToggleCard(viewModel: viewModel)
-                KeywordInputCard(viewModel: viewModel)
+                KeywordInputCard(
+                    viewModel: viewModel,
+                    keywordFocused: $focusedField
+                )
                 spacer(height: 30)
             }
             .padding(.horizontal, 20)
@@ -89,6 +112,17 @@ struct RecordView: View {
             ToolbarItem(placement: .navigation) {
                 if let message = viewModel.feedbackMessage, !viewModel.isQuotesFilled {
                     FeedbackView(message: message)
+                }
+            }
+            ToolbarItem(placement: .keyboard) {
+                HStack {
+                    Spacer()
+                    
+                    Button {
+                        focusedField = nil
+                    } label: {
+                        Image(systemName: "keyboard.chevron.compact.down")
+                    }
                 }
             }
         }

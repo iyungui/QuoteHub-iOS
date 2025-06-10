@@ -11,13 +11,7 @@ import SwiftUI
 struct QuotesInputCard: View {
 
     @Bindable var viewModel: StoryFormViewModel
-    
-    private enum Field: Hashable {
-        case quotePage
-        case quoteText
-    }
-    
-    @FocusState private var focusField: Field?
+    var quotePageAndTextFocused: FocusState<BookStoryFormField?>.Binding
     
     private var quoteTextIsEmpty: Bool {
         viewModel.currentQuoteText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
@@ -50,7 +44,7 @@ struct QuotesInputCard: View {
             // 페이지 번호 입력
             HStack {
                 TextField("페이지 입력 (선택)", text: $viewModel.currentQuotePage)
-                    .focused($focusField, equals: .quotePage)
+                    .focused(quotePageAndTextFocused, equals: .quotePage)
                     .keyboardType(.numberPad)
                     .font(.scoreDream(.medium, size: .body))
                 Spacer()
@@ -62,10 +56,10 @@ struct QuotesInputCard: View {
                     .fill(Color.paperBeige.opacity(0.3))
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)
-                            .stroke(focusField == .quotePage ? Color.brownLeather.opacity(0.5) : Color.clear, lineWidth: 2)
+                            .stroke(quotePageAndTextFocused.wrappedValue == .quotePage ? Color.brownLeather.opacity(0.5) : Color.clear, lineWidth: 2)
                     )
             )
-            .animation(.easeInOut(duration: 0.2), value: focusField)
+            .animation(.easeInOut(duration: 0.2), value: quotePageAndTextFocused.wrappedValue)
 
             // 문장 텍스트 입력
             VStack(spacing: 8) {
@@ -74,9 +68,10 @@ struct QuotesInputCard: View {
                     placeholder: viewModel.quotePlaceholder,
                     minHeight: 80,
                     maxLength: viewModel.quoteMaxLength,
-                    isFocused: focusField == .quoteText
+                    isFocused: quotePageAndTextFocused.wrappedValue == .quoteText
                 )
-                
+                .focused(quotePageAndTextFocused, equals: .quoteText)
+
                 StoryCharacterCountView(currentInputCount: viewModel.currentQuoteText.count, maxCount: viewModel.quoteMaxLength)
             }
             
@@ -151,5 +146,6 @@ struct QuoteItemView: View {
 // MARK: - Preview
 
 #Preview {
-    QuotesInputCard(viewModel: StoryFormViewModel())
+    @FocusState var focusField: BookStoryFormField?
+    QuotesInputCard(viewModel: StoryFormViewModel(), quotePageAndTextFocused: $focusField)
 }

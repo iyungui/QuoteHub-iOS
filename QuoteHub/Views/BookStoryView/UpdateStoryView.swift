@@ -23,6 +23,9 @@ struct UpdateStoryView: View {
     @State private var isInitialLoading = true
     @State private var loadError: String?
     
+    // 텍스트 포커스 필드
+    @FocusState private var focusedField: BookStoryFormField?
+    
     // MARK: - BODY
     
     var body: some View {
@@ -90,8 +93,14 @@ struct UpdateStoryView: View {
         ScrollView {
             VStack(spacing: 30) {
                 BookInfoCard(book: story.bookId)
-                QuotesInputCard(viewModel: formViewModel)
-                ThoughtInputCard(viewModel: formViewModel)
+                QuotesInputCard(
+                    viewModel: formViewModel,
+                    quotePageAndTextFocused: $focusedField
+                )
+                ThoughtInputCard(
+                    viewModel: formViewModel,
+                    contentFocused: $focusedField
+                )
                 StoryImagesView(selectedImages: $formViewModel.selectedImages, showingImagePicker: $formViewModel.showingImagePicker)
                 
                 VStack(spacing: 16) {
@@ -99,7 +108,10 @@ struct UpdateStoryView: View {
                     PrivacyToggleCard(viewModel: formViewModel)
                 }
                 
-                KeywordInputCard(viewModel: formViewModel)
+                KeywordInputCard(
+                    viewModel: formViewModel,
+                    keywordFocused: $focusedField
+                )
                 
                 // 하단 여백
                 Spacer()
@@ -115,6 +127,13 @@ struct UpdateStoryView: View {
             ToolbarItem(placement: .navigation) {
                 if let message = formViewModel.feedbackMessage, !formViewModel.isQuotesFilled {
                     FeedbackView(message: message)
+                }
+            }
+            ToolbarItem(placement: .keyboard) {
+                Button {
+                    focusedField = nil
+                } label: {
+                    Image(systemName: "keyboard.chevron.compact.down")
                 }
             }
         }

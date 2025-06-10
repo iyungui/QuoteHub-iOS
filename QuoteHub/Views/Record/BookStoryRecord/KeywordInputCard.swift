@@ -9,8 +9,8 @@ import SwiftUI
 
 struct KeywordInputCard: View {
     @Bindable var viewModel: StoryFormViewModel
-    @FocusState private var isInputFocused: Bool
-    
+    var keywordFocused: FocusState<BookStoryFormField?>.Binding
+
     var body: some View {
         VStack(spacing: 16) {
             CardHeader(title: "키워드", icon: "tag.fill", subtitle: "최대 5개까지 입력 가능")
@@ -52,7 +52,7 @@ struct KeywordInputCard: View {
                     .frame(width: 20)
                 
                 TextField("키워드 입력", text: $viewModel.currentKeywordInput)
-                    .focused($isInputFocused)
+                    .focused(keywordFocused, equals: .keyword)
                     .submitLabel(.done)
                     .onChange(of: viewModel.currentKeywordInput) { _, newValue in
                         // keyword 최대 글자수를 넘어가면, 최대글자수로 재설정
@@ -70,10 +70,10 @@ struct KeywordInputCard: View {
                     .fill(Color.paperBeige.opacity(0.3))
                     .overlay(
                         RoundedRectangle(cornerRadius: 12)
-                            .stroke(isInputFocused ? Color.brownLeather.opacity(0.5) : Color.clear, lineWidth: 2)
+                            .stroke(keywordFocused.wrappedValue == .keyword ? Color.brownLeather.opacity(0.5) : Color.clear, lineWidth: 2)
                     )
             )
-            .animation(.easeInOut(duration: 0.2), value: isInputFocused)
+            .animation(.easeInOut(duration: 0.2), value: keywordFocused.wrappedValue)
 
             // 글자수 표시
             StoryCharacterCountView(currentInputCount: viewModel.currentKeywordInput.count, maxCount: viewModel.keywordMaxLength)
@@ -141,5 +141,7 @@ struct KeywordChip: View {
 
 
 #Preview {
-    KeywordInputCard(viewModel: StoryFormViewModel())
+    @FocusState var focusField: BookStoryFormField?
+
+    KeywordInputCard(viewModel: StoryFormViewModel(), keywordFocused: $focusField)
 }

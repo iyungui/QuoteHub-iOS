@@ -7,87 +7,8 @@
 
 import SwiftUI
 
-enum BookStoryFormField: Hashable, CaseIterable {
-    case quotePage
-    case quoteText
-    case content
-    case keyword
-    
-    var title: String {
-        switch self {
-        case .quotePage: return "페이지 번호"
-        case .quoteText: return "문장"
-        case .content: return "나의 생각"
-        case .keyword: return "키워드"
-        }
-    }
-}
-
 @Observable
 class StoryFormViewModel {
-    
-    @FocusState var focusedField: BookStoryFormField?
-    
-    
-    var isFirstField: Bool { focusedField == BookStoryFormField.allCases.first }
-    var isLastField: Bool { focusedField == BookStoryFormField.allCases.last }
-    
-//    /// 다음 입력 필드가 있는지 없는지
-//    var hasNextField: Bool {
-//        // 현재 포커스된 필드가 존재하고, 해당 필드 인덱스를 안전하게 반환
-//        guard let currentField = focusedField,
-//              let currentIndex = BookStoryFormField.allCases.firstIndex(of: currentField) else {
-//            return false
-//        }
-//        // 마지막 필드가 아니면 다음 필드가 존재하므로 true (현재 인덱스가 마지막 인덱스이면 false)
-//        return currentIndex < BookStoryFormField.allCases.count - 1
-//    }
-//    
-//    /// 이전 입력 필드가 있는지 없는지
-//    var hasPreviousField: Bool {
-//        guard let currentField = focusedField,
-//              let currentIndex = BookStoryFormField.allCases.firstIndex(of: currentField) else {
-//            return false
-//        }
-//        return currentIndex > 0
-//    }
-    
-    // Keyboard navigation methods
-    /// 키보드 내리기
-    func dismissKeyboard() { focusedField = nil }
-    
-    /// 다음 텍스트필드로 이동
-    func moveToNextField() {
-        
-        // 현재 포커스된 필드가 존재하고, 해당 필드 인덱스를 안전하게 반환
-        guard let currentField = focusedField,
-              let currentIndex = BookStoryFormField.allCases.firstIndex(of: currentField),
-        // 마지막 필드가 아니면 다음 필드가 존재하므로 true (현재 인덱스가 마지막 인덱스이면 false)
-              currentIndex < BookStoryFormField.allCases.count - 1 else {
-            
-        // 다음 필드가 없다면 키보드 내리고 리턴
-            dismissKeyboard()
-            return
-        }
-        
-        focusedField = BookStoryFormField.allCases[currentIndex + 1]
-    }
-    
-    /// 이전 텍스트필드로 이동
-    func moveToPreviousField() {
-        guard let currentField = focusedField,
-              let currentIndex = BookStoryFormField.allCases.firstIndex(of: currentField),
-              currentIndex > 0 else {
-            return
-        }
-        
-        focusedField = BookStoryFormField.allCases[currentIndex - 1]
-    }
-    
-    func focusField(_ field: BookStoryFormField) {
-        focusedField = field
-    }
-    
     // 키워드 입력
     var keywords: [String] = []
     
