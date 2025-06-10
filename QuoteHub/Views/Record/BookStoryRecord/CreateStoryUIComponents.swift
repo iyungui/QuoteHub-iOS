@@ -52,6 +52,8 @@ struct CustomTextEditor: View {
     }
 }
 
+// MARK: - CARD HEADER
+
 struct CardHeader: View {
     let title: String
     let icon: String
@@ -101,6 +103,8 @@ struct CardHeader: View {
     }
 }
 
+// MARK: - CARD BACKGROUND
+
 struct CardBackground: View {
     var body: some View {
         RoundedRectangle(cornerRadius: 20)
@@ -123,8 +127,9 @@ struct CardBackground: View {
     }
 }
 
-/// 입력한 글자수 보여주는 뷰
-struct CountCharView: View {
+// MARK: - COUNT CHAR VIEW
+/// 북스토리 입력 - 입력한 글자수 보여주는 뷰
+struct StoryCharacterCountView: View {
     let currentInputCount: Int
     let maxCount: Int
     var textColor: Color {
@@ -141,6 +146,8 @@ struct CountCharView: View {
     }
 }
 
+// MARK: - STORY CREATE GUIDE SECTION
+
 /// 북스토리 생성 가이드 메시지
 struct StoryCreateGuideSection: View {
     let message: String
@@ -151,6 +158,8 @@ struct StoryCreateGuideSection: View {
             .foregroundColor(.secondaryText)
     }
 }
+
+// MARK: - FEED BACK VIEW
 
 struct FeedbackView: View {
     let message: String
@@ -187,7 +196,8 @@ struct FeedbackView: View {
     }
 }
 
-// MARK: - Background Gradient
+// MARK: - BACKGROUND GRADIENT
+
 struct StoryBackgroundGradient: View {
     var body: some View {
         LinearGradient(

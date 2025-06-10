@@ -26,7 +26,7 @@ struct ThoughtInputCard: View {
                 )
                 .focused($isContentFocused)
                 
-                CountCharView(currentInputCount: viewModel.content.count, maxCount: viewModel.contentMaxLength)
+                StoryCharacterCountView(currentInputCount: viewModel.content.count, maxCount: viewModel.contentMaxLength)
             }
         }
     }

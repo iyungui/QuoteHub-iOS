@@ -16,14 +16,22 @@ struct KeywordInputCard: View {
             CardHeader(title: "키워드", icon: "tag.fill", subtitle: "최대 5개까지 입력 가능")
             
             VStack(spacing: 12) {
+                // 키워드 배열이 5개 미만일 때 입력 필드 보여주기
                 if viewModel.keywords.count < 5 {
                     inputKeywordSection
                 }
                 
+                // 공백 키워드를 입력 시도하거나, 키워드 개수가 5개를 초과하거나 중복된 키워드가 있을 때 경고표시
                 if viewModel.isShowingDuplicateWarning {
                     showWarningSection
                 }
                 
+                // 입력한 키워드가 하나라도 있을 때
+                if !viewModel.keywords.isEmpty {
+                    keywordListSection
+                }
+                
+                // 입력한 키워드가 하나도 없을 때
                 if viewModel.keywords.isEmpty {
                     StoryCreateGuideSection(message: "키워드를 입력하고 완료 버튼을 눌러주세요.")
                 }
@@ -43,13 +51,13 @@ struct KeywordInputCard: View {
                     .foregroundStyle(Color.brownLeather.opacity(0.7))
                     .frame(width: 20)
                 
-                TextField("키워드 입력", text: $viewModel.currentInput)
+                TextField("키워드 입력", text: $viewModel.currentKeywordInput)
                     .focused($isInputFocused)
                     .submitLabel(.done)
-                    .onChange(of: viewModel.currentInput) { _, newValue in
+                    .onChange(of: viewModel.currentKeywordInput) { _, newValue in
                         // keyword 최대 글자수를 넘어가면, 최대글자수로 재설정
                         if newValue.count > viewModel.keywordMaxLength {
-                            viewModel.currentInput = String(newValue.prefix(viewModel.keywordMaxLength))
+                            viewModel.currentKeywordInput = String(newValue.prefix(viewModel.keywordMaxLength))
                         }
                     }
                     .onSubmit(viewModel.addKeyword)
@@ -68,7 +76,7 @@ struct KeywordInputCard: View {
             .animation(.easeInOut(duration: 0.2), value: isInputFocused)
 
             // 글자수 표시
-            CountCharView(currentInputCount: viewModel.currentInput.count, maxCount: viewModel.keywordMaxLength)
+            StoryCharacterCountView(currentInputCount: viewModel.currentKeywordInput.count, maxCount: viewModel.keywordMaxLength)
         }
     }
     
@@ -82,6 +90,21 @@ struct KeywordInputCard: View {
             Spacer()
         }
         .transition(.asymmetric(insertion: .opacity, removal: .opacity))
+    }
+    
+    private var keywordListSection: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 10) {
+                ForEach(viewModel.keywords, id: \.self) { keyword in
+                    KeywordChip(keyword: keyword) {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                            viewModel.removeKeyword(keyword)
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal, 4)
+        }
     }
 }
 

@@ -25,7 +25,7 @@ struct BookDetailView: View {
 //    @State private var draftManager: DraftManager?
 //    @State private var showDraftAlert: Bool = false
 //    @State private var currentDraft: DraftStory?
-    @State private var shouldNavigateToRecord: Bool = false
+//    @State private var shouldNavigateToRecord: Bool = false
 //    @State private var shouldLoadDraft: Bool = false    // 임시저장 데이터 불러올지 말지 결정
 
     // MARK: - BODY
@@ -58,13 +58,6 @@ struct BookDetailView: View {
                 .padding(.bottom, 100) // Bottom spacing
             }
         }
-        .sheet(isPresented: $shouldNavigateToRecord) {
-            // shouldLoadDraft가 true이면, 임시저장 데이터 불러온다는 뜻
-//            RecordView(book: book, preloadedDraft: shouldLoadDraft ? currentDraft : nil, shouldClearDraft: !shouldLoadDraft)
-            RecordView(book: book)
-                .environmentObject(storiesViewModel)
-        }
-        
         .background(backgroundGradient)
         .ignoresSafeArea(.container, edges: .top)
         .navigationBarHidden(true)
@@ -154,21 +147,12 @@ struct BookDetailView: View {
             
             Spacer()
             
-            Button {
-                guard !shouldNavigateToRecord else { return }
-                
-                shouldNavigateToRecord = true
-                print("shouldNavigateToRecord: \(shouldNavigateToRecord)")
-            } label: {
+            NavigationLink(destination: RecordView(book: book).environmentObject(storiesViewModel)) {
                 Image(systemName: "highlighter")
                     .font(.title2.weight(.medium))
                     .foregroundColor(.white)
                     .frame(width: 44, height: 44)
-                    .background(
-                        Circle()
-                            .fill(.ultraThinMaterial)
-                            .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
-                    )
+                    .background(Circle().fill(.ultraThinMaterial))
             }
         }
         .padding(.horizontal, 20)
@@ -365,24 +349,12 @@ struct BookDetailView: View {
                 .buttonStyle(CardButtonStyle())
                 
                 // Record Button
-                Button {
-                    shouldNavigateToRecord = true
-                    print("shouldNavigateToRecord: \(shouldNavigateToRecord)")
-                } label: {
+                NavigationLink(destination: RecordView(book: book).environmentObject(storiesViewModel)) {
                     HStack(spacing: 10) {
                         Image(systemName: "highlighter")
-                            .font(.body.weight(.medium))
-                            .foregroundColor(.white)
-                        
                         Text("북스토리 기록")
-                            .font(.scoreDream(.medium, size: .subheadline))
-                            .foregroundColor(.white)
-                        
                         Spacer()
-                        
                         Image(systemName: "arrow.right")
-                            .font(.caption2.weight(.bold))
-                            .foregroundColor(.white.opacity(0.8))
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)

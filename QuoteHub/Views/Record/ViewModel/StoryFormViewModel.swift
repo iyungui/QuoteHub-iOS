@@ -20,17 +20,18 @@ class StoryFormViewModel {
     // 컨텐츠 입력
     var content: String = ""
     
-    // 텍스트 인풋 관련
-    var currentInput: String = ""
-    var isShowingDuplicateWarning = false
-    var feedbackMessage: String? = nil
-    
     // 이미지 피커
     var showingImagePicker = false
     var showingCamera = false
     var showingGallery = false
     var selectedImages: [UIImage] = []
     var sourceType: UIImagePickerController.SourceType = .photoLibrary
+    
+    // 키워드 텍스트 인풋 관련
+    var currentKeywordInput: String = ""
+    /// 공백 키워드를 입력 시도하거나, 키워드 개수가 5개를 초과하거나 중복된 키워드가 있을 때 경고표시
+    var isShowingDuplicateWarning = false
+    var feedbackMessage: String? = nil
     
     // 공개 여부 및 테마
     var isPublic: Bool = true
@@ -68,23 +69,26 @@ class StoryFormViewModel {
     // MARK: - Methods
     
     func addKeyword() {
-        let trimmedKeyword = currentInput.trimmingCharacters(in: .whitespacesAndNewlines)
-        if !trimmedKeyword.isEmpty && keywords.count < 5 {
-            if keywords.contains(trimmedKeyword) {
-                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                    isShowingDuplicateWarning = true
+        // 키워드 입력란의 앞뒤 공백과 줄바꿈 문자를 제거
+        let trimmedKeyword = currentKeywordInput.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        // 공백 키워드를 입력 시도하거나, 키워드 개수가 5개를 초과하거나 중복된 키워드가 있을 때 경고표시
+        if trimmedKeyword.isEmpty || keywords.count >= 5 || keywords.contains(trimmedKeyword) {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                isShowingDuplicateWarning = true
+            }
+            // 3초 후 경고 숨김
+            // 화면을 빠르게 뒤로 나가면 클로저에서 강하게 캡쳐하여 순환참조가 발생하므로, 약하게 캡쳐
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
+                guard let self = self else { return }
+                withAnimation {
+                    self.isShowingDuplicateWarning = false
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
-                    guard let self = self else { return }
-                    withAnimation {
-                        self.isShowingDuplicateWarning = false
-                    }
-                }
-            } else {
-                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                    keywords.append(trimmedKeyword)
-                    currentInput = ""
-                }
+            }
+        } else {    // 유효한 키워드인 경우
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                keywords.append(trimmedKeyword)
+                currentKeywordInput = ""
             }
         }
     }
@@ -135,7 +139,7 @@ class StoryFormViewModel {
         selectedImages = []
         isPublic = true
         themeIds = []
-        currentInput = ""
+        currentKeywordInput = ""
         feedbackMessage = nil
     }
     

@@ -77,7 +77,7 @@ struct QuotesInputCard: View {
                     isFocused: focusField == .quoteText
                 )
                 
-                CountCharView(currentInputCount: viewModel.currentQuoteText.count, maxCount: viewModel.quoteMaxLength)
+                StoryCharacterCountView(currentInputCount: viewModel.currentQuoteText.count, maxCount: viewModel.quoteMaxLength)
             }
             
             // 인용구 추가 버튼

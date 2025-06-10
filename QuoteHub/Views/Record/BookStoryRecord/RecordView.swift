@@ -10,89 +10,98 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 /// 북스토리 기록 3: 북스토리 기록 뷰
+
 struct RecordView: View {
-    
-    // MARK: - PROPERTIES
-    
     let book: Book
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
     @Environment(\.dismiss) private var dismiss
     
-    @State private var formViewModel = StoryFormViewModel()
+    // ✅ 옵셔널로 변경하고 nil로 시작
+    @State private var formViewModel: StoryFormViewModel?
 
-    // MARK: - BODY
-    
     var body: some View {
         ZStack {
             StoryBackgroundGradient()
             
-            ScrollView {
-                VStack(spacing: 30) {
-                    // 책 정보 카드
-                    BookInfoCard(book: book)
-                    
-                    // 인용구 입력 카드
-                    QuotesInputCard(viewModel: formViewModel)
-                    
-                    // 생각 입력 카드
-                    ThoughtInputCard(viewModel: formViewModel)
-                    
-                    // 이미지 추가 카드
-                    StoryImagesView(selectedImages: $formViewModel.selectedImages, showingImagePicker: $formViewModel.showingImagePicker)
-                    
-                    // 설정 카드들
-                    VStack(spacing: 16) {
-                        ThemeSelectionCard(viewModel: formViewModel)
-                        PrivacyToggleCard(viewModel: formViewModel)
-                    }
-                    
-                    // 키워드 입력 카드
-                    KeywordInputCard(viewModel: formViewModel)
-                    
-                    // 하단 여백
-                    spacer(height: 100)
+            if let viewModel = formViewModel {
+                // ✅ 뷰모델이 준비된 후에만 렌더링
+                contentView(viewModel: viewModel)
+            } else {
+                // ✅ 로딩 화면
+                VStack(spacing: 20) {
+                    ProgressView()
+                        .scaleEffect(1.5)
+                    Text("북스토리 기록 준비 중...")
+                        .font(.scoreDream(.medium, size: .body))
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 20)
+            }
+        }
+        .onAppear {
+            // ✅ 백그라운드에서 뷰모델 초기화
+            Task {
+                let viewModel = await createViewModelInBackground()
+                await MainActor.run {
+                    self.formViewModel = viewModel
+                }
             }
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle("북스토리 기록")
-        .toolbar {
-            // 임시저장 버튼
-            //            ToolbarItem(placement: .topBarTrailing) {
-            //                draftSaveButton
-            //            }
-            // 등록 버튼
-            ToolbarItem(placement: .primaryAction) {
-                submitButton
+    }
+    
+    // 백그라운드에서 뷰모델 생성
+    private func createViewModelInBackground() async -> StoryFormViewModel {
+        return await withCheckedContinuation { continuation in
+            DispatchQueue.global(qos: .userInitiated).async {
+                let viewModel = StoryFormViewModel()
+                continuation.resume(returning: viewModel)
             }
-            // 피드백 메시지
+        }
+    }
+    
+    // 실제 콘텐츠 (뷰모델이 준비된 후)
+    private func contentView(@Bindable viewModel: StoryFormViewModel) -> some View {
+        ScrollView {
+            VStack(spacing: 30) {
+                BookInfoCard(book: book)
+                QuotesInputCard(viewModel: viewModel)
+                ThoughtInputCard(viewModel: viewModel)
+                StoryImagesView(selectedImages: $viewModel.selectedImages, showingImagePicker: $viewModel.showingImagePicker)
+                
+                VStack(spacing: 16) {
+                    ThemeSelectionCard(viewModel: viewModel)
+                    PrivacyToggleCard(viewModel: viewModel)
+                }
+                
+                KeywordInputCard(viewModel: viewModel)
+                spacer(height: 100)
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 20)
+        }
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                submitButton(viewModel: viewModel)
+            }
             ToolbarItem(placement: .navigation) {
-                // 북스토리 생성가능해지면 자동으로 피드백메시지 사라지도록
-                // 그리고 임시저장 기능 메시지 활성화 시에도 피드백메시지 보이도록
-                if let message = formViewModel.feedbackMessage, (!formViewModel.isQuotesFilled/* || saveDraftSuccessPrompt*/) {
+                if let message = viewModel.feedbackMessage, !viewModel.isQuotesFilled {
                     FeedbackView(message: message)
                 }
             }
         }
         .progressOverlay(viewModel: storiesViewModel, animationName: "progressLottie", opacity: true)
-        .photoPickerSheet(viewModel: formViewModel)
-        .storyFormAlert(viewModel: formViewModel, onSuccess: {
-            dismiss()
-        })
+        .photoPickerSheet(viewModel: viewModel)
+        .storyFormAlert(viewModel: viewModel, onSuccess: { dismiss() })
     }
     
-    // MARK: - UI COMPONENTS
-    
-    private var submitButton: some View {
-        Button(action: submitStory) {
+    private func submitButton(viewModel: StoryFormViewModel) -> some View {
+        Button(action: { submitStory(viewModel: viewModel) }) {
             HStack {
                 Image(systemName: "checkmark.circle.fill")
-                    .foregroundColor(formViewModel.isQuotesFilled ? .appAccent : .gray)
-                    .scaleEffect(formViewModel.isQuotesFilled ? 1.1 : 1.0)
-                    .animation(.spring(response: 0.3, dampingFraction: 0.7), value: formViewModel.isQuotesFilled)
-                if formViewModel.isQuotesFilled {
+                    .foregroundColor(viewModel.isQuotesFilled ? .appAccent : .gray)
+                    .scaleEffect(viewModel.isQuotesFilled ? 1.1 : 1.0)
+                    .animation(.spring(response: 0.3, dampingFraction: 0.7), value: viewModel.isQuotesFilled)
+                if viewModel.isQuotesFilled {
                     Text("등록")
                         .fontWeight(.medium)
                         .foregroundStyle(Color.appAccent)
@@ -100,43 +109,39 @@ struct RecordView: View {
             }
         }
     }
-
-    /// 북스토리 생성 액션
-    private func submitStory() {
-        
-        // quote가 채워져 있지 않다면 피드백 메시지와 함께 return
-        guard formViewModel.isQuotesFilled else {
-            formViewModel.updateFeedbackMessage()
+    
+    private func submitStory(viewModel: StoryFormViewModel) {
+        guard viewModel.isQuotesFilled else {
+            viewModel.updateFeedbackMessage()
             return
         }
-        // 옵셔널 처리
-        let retContent = formViewModel.content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : formViewModel.content
-        let retImages = formViewModel.selectedImages.isEmpty ? nil : formViewModel.selectedImages
-        let retKeywords = formViewModel.keywords.isEmpty ? nil : formViewModel.keywords
-        let retThemeIds = formViewModel.themeIds.isEmpty ? nil : formViewModel.themeIds
+        
+        let retContent = viewModel.content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : viewModel.content
+        let retImages = viewModel.selectedImages.isEmpty ? nil : viewModel.selectedImages
+        let retKeywords = viewModel.keywords.isEmpty ? nil : viewModel.keywords
+        let retThemeIds = viewModel.themeIds.isEmpty ? nil : viewModel.themeIds
 
         storiesViewModel.createBookStory(
             bookId: book.id,
-            quotes: formViewModel.quotes,
+            quotes: viewModel.quotes,
             images: retImages,
             content: retContent,
-            isPublic: formViewModel.isPublic,
+            isPublic: viewModel.isPublic,
             keywords: retKeywords,
             themeIds: retThemeIds
         ) { isSuccess in
             if isSuccess {
-                formViewModel.alertType = .make
-                formViewModel.alertMessage = "북스토리가 성공적으로 등록되었어요!"
-                formViewModel.showAlert = true
+                viewModel.alertType = .make
+                viewModel.alertMessage = "북스토리가 성공적으로 등록되었어요!"
+                viewModel.showAlert = true
             } else {
-                formViewModel.alertType = .make
-                formViewModel.alertMessage = "북스토리 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
-                formViewModel.showAlert = true
+                viewModel.alertType = .make
+                viewModel.alertMessage = "북스토리 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+                viewModel.showAlert = true
             }
         }
     }
 }
-
 
 // MARK: - View Extensions
 
