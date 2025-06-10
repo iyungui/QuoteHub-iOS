@@ -33,7 +33,7 @@ struct CustomTextEditor: View {
                     .font(.scoreDream(.light, size: .body))
                     .foregroundStyle(Color.secondaryText.opacity(0.7))
                     .padding(.horizontal, 16)
-                    .padding(.top, 16)
+                    .padding(.top, 20.5)
                     .allowsHitTesting(false)
             }
             
@@ -211,4 +211,9 @@ struct StoryBackgroundGradient: View {
         )
         .ignoresSafeArea()
     }
+}
+
+
+#Preview {
+    CustomTextEditor(text: .constant(""), placeholder: "텍스트!", minHeight: 200, maxLength: 500, isFocused: true)
 }

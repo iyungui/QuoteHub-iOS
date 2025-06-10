@@ -193,7 +193,7 @@ struct BookStoryDetailView: View {
         }
     }
     
-    /// 문장 인용구 섹션
+    /// 문장 (인용구) 섹션
     private var quoteSection: some View {
         VStack(alignment: .center, spacing: 16) {
             HStack {

@@ -187,7 +187,7 @@ struct StoryView: View {
             Spacer()
             
             VStack(alignment: .leading, spacing: isCompact ? 8 : 12) {
-                // 인용구
+                // 문장
                 HStack(alignment: .top, spacing: isCompact ? 6 : 8) {
                     Image(systemName: "quote.opening")
                         .font(.system(size: isCompact ? 12 : 16, weight: .bold))

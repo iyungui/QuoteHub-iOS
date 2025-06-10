@@ -62,19 +62,22 @@ struct RecordView: View {
     // 실제 콘텐츠 (뷰모델이 준비된 후)
     private func contentView(@Bindable viewModel: StoryFormViewModel) -> some View {
         ScrollView {
-            VStack(spacing: 30) {
+            VStack(spacing: 40) {
                 BookInfoCard(book: book)
+                Divider()
                 QuotesInputCard(viewModel: viewModel)
+                Divider()
+
                 ThoughtInputCard(viewModel: viewModel)
+                Divider()
+
                 StoryImagesView(selectedImages: $viewModel.selectedImages, showingImagePicker: $viewModel.showingImagePicker)
+                Divider()
                 
-                VStack(spacing: 16) {
-                    ThemeSelectionCard(viewModel: viewModel)
-                    PrivacyToggleCard(viewModel: viewModel)
-                }
-                
+                ThemeSelectionCard(viewModel: viewModel)
+                PrivacyToggleCard(viewModel: viewModel)
                 KeywordInputCard(viewModel: viewModel)
-                spacer(height: 100)
+                spacer(height: 30)
             }
             .padding(.horizontal, 20)
             .padding(.top, 20)

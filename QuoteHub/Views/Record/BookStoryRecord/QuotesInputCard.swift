@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-/// 북스토리 기록 - 인용구 입력 카드
+/// 북스토리 기록 - 문장 입력 카드
 struct QuotesInputCard: View {
 
     @Bindable var viewModel: StoryFormViewModel
@@ -25,12 +25,12 @@ struct QuotesInputCard: View {
     
     var body: some View {
         VStack(spacing: 16) {
-            CardHeader(title: "인용구(필수)", icon: "quote.opening", subtitle: "마음에 드는 문장을 기록해보세요")
+            CardHeader(title: "문장(필수)", icon: "quote.opening", subtitle: "마음에 드는 문장을 기록해보세요")
             
-            /// 인용구 목록 섹션
+            /// 문장 목록 섹션
             quoteListSection
             
-            /// 인용구 추가 섹션
+            /// 문장 추가 섹션
             quoteAddSection
         }
     }
@@ -67,7 +67,7 @@ struct QuotesInputCard: View {
             )
             .animation(.easeInOut(duration: 0.2), value: focusField)
 
-            // 인용구 텍스트 입력
+            // 문장 텍스트 입력
             VStack(spacing: 8) {
                 CustomTextEditor(
                     text: $viewModel.currentQuoteText,
@@ -80,12 +80,12 @@ struct QuotesInputCard: View {
                 StoryCharacterCountView(currentInputCount: viewModel.currentQuoteText.count, maxCount: viewModel.quoteMaxLength)
             }
             
-            // 인용구 추가 버튼
+            // 문장 추가 버튼
             Button(action: viewModel.addQuote) {
                 HStack {
                     Image(systemName: "plus.circle.fill")
                         .foregroundStyle(Color.brownLeather)
-                    Text("인용구 추가")
+                    Text("문장 추가")
                         .font(.scoreDream(.medium, size: .body))
                         .foregroundStyle(Color.primaryText)
                 }
@@ -104,7 +104,7 @@ struct QuotesInputCard: View {
 
 // MARK: - Quote Item View
 
-/// 추가된 인용구 row 뷰
+/// 추가된 문장 row 뷰
 struct QuoteItemView: View {
     let quote: Quote
     let index: Int
@@ -132,7 +132,7 @@ struct QuoteItemView: View {
                 }
             } label: {
                 Image(systemName: "xmark.circle.fill")
-                    .foregroundColor(.red)
+                    .foregroundColor(.gray)
                     .font(.title3)
             }
         }

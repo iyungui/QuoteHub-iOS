@@ -33,6 +33,7 @@
 		C6DE7F562AF76EA30020F5CB /* TabBar in Frameworks */ = {isa = PBXBuildFile; productRef = C6DE7F552AF76EA30020F5CB /* TabBar */; };
 		C6DE7F612AF7C2940020F5CB /* CommentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6DE7F602AF7C2940020F5CB /* CommentViewModel.swift */; };
 		C6E465582ADEAB66002F5FA0 /* CheckboxStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E465572ADEAB66002F5FA0 /* CheckboxStyle.swift */; };
+		CE7274182DF8050300B09DC3 /* StoryFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7274162DF8050300B09DC3 /* StoryFormViewModel.swift */; };
 		CE8C477F2DEA8D84003188ED /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47782DEA8D84003188ED /* LoginView.swift */; };
 		CE8C47802DEA8D84003188ED /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47792DEA8D84003188ED /* OnboardingView.swift */; };
 		CE8C47812DEA8D84003188ED /* SignInWithAppleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C477A2DEA8D84003188ED /* SignInWithAppleView.swift */; };
@@ -144,6 +145,7 @@
 		C6DE7F502AF76B480020F5CB /* StoryCommentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCommentService.swift; sourceTree = "<group>"; };
 		C6DE7F602AF7C2940020F5CB /* CommentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewModel.swift; sourceTree = "<group>"; };
 		C6E465572ADEAB66002F5FA0 /* CheckboxStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxStyle.swift; sourceTree = "<group>"; };
+		CE7274162DF8050300B09DC3 /* StoryFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryFormViewModel.swift; sourceTree = "<group>"; };
 		CE8C47782DEA8D84003188ED /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		CE8C47792DEA8D84003188ED /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		CE8C477A2DEA8D84003188ED /* SignInWithAppleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleView.swift; sourceTree = "<group>"; };
@@ -231,7 +233,6 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		CE8C48472DEADAAC003188ED /* Font */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Font; sourceTree = "<group>"; };
 		CE8C48E92DF05884003188ED /* Lottie */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Lottie; sourceTree = "<group>"; };
-		CEF1A4692DF710D1001EC484 /* ViewModel */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ViewModel; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -331,6 +332,14 @@
 				C6B56FE32AA8B60D003905C3 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		CE7274172DF8050300B09DC3 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				CE7274162DF8050300B09DC3 /* StoryFormViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		CE8C47772DEA8D01003188ED /* APP */ = {
@@ -449,7 +458,7 @@
 			children = (
 				CE8C487C2DEBF39D003188ED /* SearchBookView.swift */,
 				CE8C487A2DEBF39D003188ED /* BookDetailView.swift */,
-				CEF1A4692DF710D1001EC484 /* ViewModel */,
+				CE7274172DF8050300B09DC3 /* ViewModel */,
 				CE8C487E2DEBF39D003188ED /* BookStoryRecord */,
 				CE8C48852DEBF39F003188ED /* ThemeRecord */,
 			);
@@ -583,7 +592,6 @@
 			fileSystemSynchronizedGroups = (
 				CE8C48472DEADAAC003188ED /* Font */,
 				CE8C48E92DF05884003188ED /* Lottie */,
-				CEF1A4692DF710D1001EC484 /* ViewModel */,
 			);
 			name = QuoteHub;
 			packageProductDependencies = (
@@ -744,6 +752,7 @@
 				CEF1A46F2DF72F99001EC484 /* KeywordInputCard.swift in Sources */,
 				C60700CD2AFE05D9009D202A /* FolderService.swift in Sources */,
 				C667E9802ACA388C006EE7A9 /* UserViewModel.swift in Sources */,
+				CE7274182DF8050300B09DC3 /* StoryFormViewModel.swift in Sources */,
 				CE8C48862DEBF39F003188ED /* CreateThemeView.swift in Sources */,
 				CE8C48902DEC96B6003188ED /* PhotoPickerAlertType.swift in Sources */,
 				CE8C49792DF1DB4E003188ED /* ThemeView.swift in Sources */,

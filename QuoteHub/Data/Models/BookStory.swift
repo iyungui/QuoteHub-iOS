@@ -47,7 +47,7 @@ struct BookStory: Codable, Identifiable, Equatable {
 }
 
 extension BookStory {
-    /// 첫 번째 인용구 텍스트
+    /// 첫 번째 문장 텍스트
     var firstQuoteText: String {
         if let quote = quotes.first, !quote.quote.isEmpty {
             return quote.quote
@@ -55,7 +55,7 @@ extension BookStory {
         return ""
     }
     
-    /// 총 인용구 개수
+    /// 총 문장 개수
     var quotesCount: Int { return quotes.count }
 }
 
