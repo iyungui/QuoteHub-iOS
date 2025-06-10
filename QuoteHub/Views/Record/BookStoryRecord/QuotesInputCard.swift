@@ -10,7 +10,7 @@ import SwiftUI
 /// 북스토리 기록 - 문장 입력 카드
 struct QuotesInputCard: View {
 
-    @Bindable var viewModel: StoryFormViewModel
+    @EnvironmentObject var viewModel: StoryFormViewModel
     var quotePageAndTextFocused: FocusState<BookStoryFormField?>.Binding
     
     private var quoteTextIsEmpty: Bool {
@@ -147,5 +147,5 @@ struct QuoteItemView: View {
 
 #Preview {
     @FocusState var focusField: BookStoryFormField?
-    QuotesInputCard(viewModel: StoryFormViewModel(), quotePageAndTextFocused: $focusField)
+    QuotesInputCard(quotePageAndTextFocused: $focusField).environmentObject(StoryFormViewModel())
 }

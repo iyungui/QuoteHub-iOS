@@ -615,7 +615,8 @@ struct BookStoryDetailView: View {
         if isMyStory {
             // 내 스토리 - 편집/삭제
             NavigationLink {
-                UpdateStoryView(storyId: story.id)
+//                UpdateStoryView(storyId: story.id)
+                EmptyView()
             } label: {
                 Text("수정하기")
             }

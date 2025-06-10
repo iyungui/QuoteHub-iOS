@@ -7,40 +7,39 @@
 
 import SwiftUI
 
-@Observable
-class StoryFormViewModel {
+class StoryFormViewModel: ObservableObject {
     // 키워드 입력
-    var keywords: [String] = []
+    @Published var keywords: [String] = []
     
     // 문장 입력
-    var quotes: [Quote] = []
-    var currentQuoteText: String = ""
-    var currentQuotePage: String = ""
+    @Published var quotes: [Quote] = []
+    @Published var currentQuoteText: String = ""
+    @Published var currentQuotePage: String = ""
     
     // 컨텐츠 입력
-    var content: String = ""
+    @Published var content: String = ""
     
     // 이미지 피커
-    var showingImagePicker = false
-    var showingCamera = false
-    var showingGallery = false
-    var selectedImages: [UIImage] = []
-    var sourceType: UIImagePickerController.SourceType = .photoLibrary
+    @Published var showingImagePicker = false
+    @Published var showingCamera = false
+    @Published var showingGallery = false
+    @Published var selectedImages: [UIImage] = []
+    @Published var sourceType: UIImagePickerController.SourceType = .photoLibrary
     
     // 키워드 텍스트 인풋 관련
-    var currentKeywordInput: String = ""
+    @Published var currentKeywordInput: String = ""
     /// 공백 키워드를 입력 시도하거나, 키워드 개수가 5개를 초과하거나 중복된 키워드가 있을 때 경고표시
-    var isShowingDuplicateWarning = false
-    var feedbackMessage: String? = nil
+    @Published var isShowingDuplicateWarning = false
+    @Published var feedbackMessage: String? = nil
     
     // 공개 여부 및 테마
-    var isPublic: Bool = true
-    var themeIds: [String] = []
+    @Published var isPublic: Bool = true
+    @Published var themeIds: [String] = []
     
     // 알림 관련
-    var showAlert: Bool = false
-    var alertMessage: String = ""
-    var alertType: PhotoPickerAlertType = .authorized
+    @Published var showAlert: Bool = false
+    @Published var alertMessage: String = ""
+    @Published var alertType: PhotoPickerAlertType = .authorized
     
     // 글자수 제한 상수
     let keywordMaxLength = 8

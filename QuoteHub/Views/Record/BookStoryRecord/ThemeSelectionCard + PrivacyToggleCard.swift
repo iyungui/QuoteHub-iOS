@@ -9,7 +9,7 @@ import SwiftUI
 
 /// 북스토리 기록 - 테마 선택 카드
 struct ThemeSelectionCard: View {
-    @Bindable var viewModel: StoryFormViewModel
+    @EnvironmentObject var viewModel: StoryFormViewModel
     @State private var showThemeListView: Bool = false
     
     var body: some View {
@@ -61,7 +61,7 @@ struct ThemeSelectionCard: View {
 
 /// 북스토리 기록 - 공개 여부 설정 토글
 struct PrivacyToggleCard: View {
-    @Bindable var viewModel: StoryFormViewModel
+    @EnvironmentObject var viewModel: StoryFormViewModel
     
     var body: some View {
         VStack(spacing: 16) {

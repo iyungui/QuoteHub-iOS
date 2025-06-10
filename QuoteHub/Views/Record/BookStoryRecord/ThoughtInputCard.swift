@@ -9,7 +9,7 @@ import SwiftUI
 
 /// 북스토리 기록 - 느낀점 입력 카드
 struct ThoughtInputCard: View {
-    @Bindable var viewModel: StoryFormViewModel
+    @EnvironmentObject var viewModel: StoryFormViewModel
     var contentFocused: FocusState<BookStoryFormField?>.Binding
 
     var body: some View {
@@ -35,5 +35,5 @@ struct ThoughtInputCard: View {
 #Preview {
     @FocusState var focusField: BookStoryFormField?
 
-    ThoughtInputCard(viewModel: StoryFormViewModel(), contentFocused: $focusField)
+    ThoughtInputCard(contentFocused: $focusField).environmentObject(StoryFormViewModel())
 }

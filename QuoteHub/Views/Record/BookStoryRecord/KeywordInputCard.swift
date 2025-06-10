@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct KeywordInputCard: View {
-    @Bindable var viewModel: StoryFormViewModel
+    @EnvironmentObject var viewModel: StoryFormViewModel
     var keywordFocused: FocusState<BookStoryFormField?>.Binding
 
     var body: some View {
@@ -143,5 +143,5 @@ struct KeywordChip: View {
 #Preview {
     @FocusState var focusField: BookStoryFormField?
 
-    KeywordInputCard(viewModel: StoryFormViewModel(), keywordFocused: $focusField)
+    KeywordInputCard(keywordFocused: $focusField).environmentObject(StoryFormViewModel())
 }

@@ -18,121 +18,64 @@ enum BookStoryFormField: Hashable {
     case keyword
 }
 
-
 struct RecordView: View {
     let book: Book
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
     @Environment(\.dismiss) private var dismiss
     
-    // 텍스트 포커스 필드
     @FocusState private var focusedField: BookStoryFormField?
     
-    // ✅ 옵셔널로 변경하고 nil로 시작
-    @State private var formViewModel: StoryFormViewModel?
+    @StateObject private var formViewModel = StoryFormViewModel()
     
     var body: some View {
         ZStack {
             StoryBackgroundGradient()
+            ScrollView {
+                VStack(spacing: 40) {
+                    BookInfoCard(book: book)
+                    Divider()
             
-            if let viewModel = formViewModel {
-                // ✅ 뷰모델이 준비된 후에만 렌더링
-                contentView(viewModel: viewModel)
-            } else {
-                // ✅ 로딩 화면
-                VStack(spacing: 20) {
-                    ProgressView()
-                        .scaleEffect(1.5)
-                    Text("북스토리 기록 준비 중...")
-                        .font(.scoreDream(.medium, size: .body))
+                    QuotesInputCard(
+                        quotePageAndTextFocused: $focusedField
+                    )
+                    Divider()
+
+                    ThoughtInputCard(
+                        contentFocused: $focusedField
+                    )
+                    Divider()
+
+                    StoryImagesView(
+                        selectedImages: $formViewModel.selectedImages,
+                        showingImagePicker: $formViewModel.showingImagePicker)
+                    Divider()
+                    
+                    ThemeSelectionCard()
+                    PrivacyToggleCard()
+                    KeywordInputCard(
+                        keywordFocused: $focusedField
+                    )
+                    spacer(height: 30)
                 }
+                .environmentObject(formViewModel)
+                
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
             }
-        }
-        .onAppear {
-            // ✅ 백그라운드에서 뷰모델 초기화
-            Task {
-                let viewModel = await createViewModelInBackground()
-                await MainActor.run {
-                    self.formViewModel = viewModel
-                }
-            }
+
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle("북스토리 기록")
-    }
-    
-    // 백그라운드에서 뷰모델 생성
-    private func createViewModelInBackground() async -> StoryFormViewModel {
-        return await withCheckedContinuation { continuation in
-            DispatchQueue.global(qos: .userInitiated).async {
-                let viewModel = StoryFormViewModel()
-                continuation.resume(returning: viewModel)
-            }
-        }
-    }
-    
-    // 실제 콘텐츠 (뷰모델이 준비된 후)
-    private func contentView(@Bindable viewModel: StoryFormViewModel) -> some View {
-        ScrollView {
-            VStack(spacing: 40) {
-                BookInfoCard(book: book)
-                Divider()
-        
-                QuotesInputCard(
-                    viewModel: viewModel,
-                    quotePageAndTextFocused: $focusedField
-                )
-                Divider()
-
-                ThoughtInputCard(
-                    viewModel: viewModel,
-                    contentFocused: $focusedField
-                )
-                Divider()
-
-                StoryImagesView(
-                    selectedImages: $viewModel.selectedImages,
-                    showingImagePicker: $viewModel.showingImagePicker)
-                Divider()
-                
-                ThemeSelectionCard(viewModel: viewModel)
-                PrivacyToggleCard(viewModel: viewModel)
-                KeywordInputCard(
-                    viewModel: viewModel,
-                    keywordFocused: $focusedField
-                )
-                spacer(height: 30)
-            }
-            .padding(.horizontal, 20)
-            .padding(.top, 20)
-        }
         .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                submitButton(viewModel: viewModel)
-            }
-            ToolbarItem(placement: .navigation) {
-                if let message = viewModel.feedbackMessage, !viewModel.isQuotesFilled {
-                    FeedbackView(message: message)
-                }
-            }
-            ToolbarItem(placement: .keyboard) {
-                HStack {
-                    Spacer()
-                    
-                    Button {
-                        focusedField = nil
-                    } label: {
-                        Image(systemName: "keyboard.chevron.compact.down")
-                    }
-                }
-            }
+            toolBarItems
         }
         .progressOverlay(viewModel: storiesViewModel, animationName: "progressLottie", opacity: true)
-        .photoPickerSheet(viewModel: viewModel)
-        .storyFormAlert(viewModel: viewModel, onSuccess: { dismiss() })
+        .photoPickerSheet(viewModel: formViewModel)
+        .storyFormAlert(viewModel: formViewModel, onSuccess: { dismiss() })
     }
     
     private func submitButton(viewModel: StoryFormViewModel) -> some View {
-        Button(action: { submitStory(viewModel: viewModel) }) {
+        Button(action: submitStory) {
             HStack {
                 Image(systemName: "checkmark.circle.fill")
                     .foregroundColor(viewModel.isQuotesFilled ? .appAccent : .gray)
@@ -147,34 +90,58 @@ struct RecordView: View {
         }
     }
     
-    private func submitStory(viewModel: StoryFormViewModel) {
-        guard viewModel.isQuotesFilled else {
-            viewModel.updateFeedbackMessage()
+    private func submitStory() {
+        guard formViewModel.isQuotesFilled else {
+            formViewModel.updateFeedbackMessage()
             return
         }
         
-        let retContent = viewModel.content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : viewModel.content
-        let retImages = viewModel.selectedImages.isEmpty ? nil : viewModel.selectedImages
-        let retKeywords = viewModel.keywords.isEmpty ? nil : viewModel.keywords
-        let retThemeIds = viewModel.themeIds.isEmpty ? nil : viewModel.themeIds
+        let retContent = formViewModel.content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : formViewModel.content
+        let retImages = formViewModel.selectedImages.isEmpty ? nil : formViewModel.selectedImages
+        let retKeywords = formViewModel.keywords.isEmpty ? nil : formViewModel.keywords
+        let retThemeIds = formViewModel.themeIds.isEmpty ? nil : formViewModel.themeIds
 
         storiesViewModel.createBookStory(
             bookId: book.id,
-            quotes: viewModel.quotes,
+            quotes: formViewModel.quotes,
             images: retImages,
             content: retContent,
-            isPublic: viewModel.isPublic,
+            isPublic: formViewModel.isPublic,
             keywords: retKeywords,
             themeIds: retThemeIds
         ) { isSuccess in
             if isSuccess {
-                viewModel.alertType = .make
-                viewModel.alertMessage = "북스토리가 성공적으로 등록되었어요!"
-                viewModel.showAlert = true
+                formViewModel.alertType = .make
+                formViewModel.alertMessage = "북스토리가 성공적으로 등록되었어요!"
+                formViewModel.showAlert = true
             } else {
-                viewModel.alertType = .make
-                viewModel.alertMessage = "북스토리 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
-                viewModel.showAlert = true
+                formViewModel.alertType = .make
+                formViewModel.alertMessage = "북스토리 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+                formViewModel.showAlert = true
+            }
+        }
+    }
+    
+    private var toolBarItems: some ToolbarContent {
+        Group {
+            ToolbarItem(placement: .primaryAction) {
+                submitButton(viewModel: formViewModel)
+            }
+            ToolbarItem(placement: .navigation) {
+                if let message = formViewModel.feedbackMessage, !formViewModel.isQuotesFilled {
+                    FeedbackView(message: message)
+                }
+            }
+            ToolbarItem(placement: .keyboard) {
+                HStack {
+                    Spacer()
+                    
+                    Button {
+                        focusedField = nil
+                    } label: {
+                        Image(systemName: "keyboard.chevron.compact.down")
+                    }
+                }
             }
         }
     }
