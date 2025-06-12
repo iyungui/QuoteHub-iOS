@@ -39,6 +39,7 @@
 		CE4FEF5F2DF96DE30072E8B9 /* CarouselQuotesRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF5E2DF96DE30072E8B9 /* CarouselQuotesRecordView.swift */; };
 		CE4FEF612DF96DF60072E8B9 /* ListQuotesRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF602DF96DF60072E8B9 /* ListQuotesRecordView.swift */; };
 		CE4FEF632DF9DAE00072E8B9 /* symbolExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF622DF9DAE00072E8B9 /* symbolExampleView.swift */; };
+		CE4FEF812DFA90D80072E8B9 /* AchievementBadgesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */; };
 		CE7274182DF8050300B09DC3 /* StoryFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7274162DF8050300B09DC3 /* StoryFormViewModel.swift */; };
 		CE8C477F2DEA8D84003188ED /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47782DEA8D84003188ED /* LoginView.swift */; };
 		CE8C47802DEA8D84003188ED /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47792DEA8D84003188ED /* OnboardingView.swift */; };
@@ -157,6 +158,7 @@
 		CE4FEF5E2DF96DE30072E8B9 /* CarouselQuotesRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselQuotesRecordView.swift; sourceTree = "<group>"; };
 		CE4FEF602DF96DF60072E8B9 /* ListQuotesRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListQuotesRecordView.swift; sourceTree = "<group>"; };
 		CE4FEF622DF9DAE00072E8B9 /* symbolExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = symbolExampleView.swift; sourceTree = "<group>"; };
+		CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementBadgesView.swift; sourceTree = "<group>"; };
 		CE7274162DF8050300B09DC3 /* StoryFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryFormViewModel.swift; sourceTree = "<group>"; };
 		CE8C47782DEA8D84003188ED /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		CE8C47792DEA8D84003188ED /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
@@ -458,6 +460,7 @@
 				CE8C47FE2DEA8DAE003188ED /* LibraryView.swift */,
 				CE8C48702DEB5190003188ED /* ProfileView.swift */,
 				CE8C47FB2DEA8DAE003188ED /* FollowListView.swift */,
+				CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */,
 				CE8C486E2DEB2E39003188ED /* LibraryTabButtonView.swift */,
 				CE8C48892DEC3BF2003188ED /* LibraryThemesListView.swift */,
 				CE8C488B2DEC3E73003188ED /* LibraryStoriesListView.swift */,
@@ -752,6 +755,7 @@
 				CE8C497F2DF1E874003188ED /* AppVersionManager.swift in Sources */,
 				C63DB3AC2B1188C50026B668 /* ReportService.swift in Sources */,
 				C6D78A0A2AD03B2900F03FB8 /* APIEndpoint.swift in Sources */,
+				CE4FEF812DFA90D80072E8B9 /* AchievementBadgesView.swift in Sources */,
 				CE8C488E2DEC46E9003188ED /* tabIndicator.swift in Sources */,
 				C6691C5A2B0619C10083C678 /* UserSearchViewModel.swift in Sources */,
 				CEF1A4752DF73CF8001EC484 /* ThemeSelectionCard + PrivacyToggleCard.swift in Sources */,

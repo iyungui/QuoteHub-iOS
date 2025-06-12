@@ -25,11 +25,15 @@ struct ProfileView: View {
     @Environment(\.colorScheme) var colorScheme
     
     @State private var showAlert: Bool = false
+    @State private var showLevelBadgeSheet: Bool = false
     @State private var alertType: AlertType = .loginRequired
-
+    
     // 친구 프로필인지 구분하는 파라미터
     let user: User?
     var showFollowButton: Bool { user != nil }
+    var storyCount: Int {
+        userViewModel.storyCount ?? 1
+    }
     
     // 초기화 메서드
     init(user: User? = nil) {
@@ -43,14 +47,17 @@ struct ProfileView: View {
     
     var body: some View {
         VStack(spacing: 20) {
-            HStack(spacing: 20) {
+            HStack(alignment: .center, spacing: 20) {
                 userImage
                 userInfo
             }
             .padding(25)
             
-            ReadingProgressSection(storyCount: userViewModel.storyCount ?? 0)
+            ReadingProgressSection(storyCount: storyCount)
         }
+        .sheet(isPresented: $showLevelBadgeSheet, content: {
+            AchievementBadgesView(storyCount: storyCount)
+        })
         .alert(isPresented: $showAlert) { alertView }
     }
     
@@ -78,26 +85,25 @@ struct ProfileView: View {
     
     private var userInfo: some View {
         VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                userName
-                CompactReadingLevelBadge(storyCount: userViewModel.storyCount ?? 0)
+            
+            HStack(alignment: .center) {
+                Text(currentUser?.nickname ?? "닉네임")
+                    .font(.scoreDream(.bold, size: .title3))
+                    .lineLimit(1)
+                
+                Button {
+                    showLevelBadgeSheet = true
+                } label: {
+                    HomeUserLevelBadge(storyCount: storyCount)
+                        .offset(y: -2)
+                }
                 Spacer()
             }
-            userStatusMessage
+            Text(currentUser?.statusMessage ?? "상태메시지")
+                .font(.scoreDream(.regular, size: .subheadline))
+                .lineLimit(2)
+                .foregroundColor(.secondary)
         }
-    }
-    
-    private var userName: some View {
-        Text(currentUser?.nickname ?? "닉네임")
-            .font(.scoreDream(.bold, size: .title3))
-            .lineLimit(1)
-    }
-    
-    private var userStatusMessage: some View {
-        Text(currentUser?.statusMessage ?? "상태메시지")
-            .font(.scoreDream(.regular, size: .subheadline))
-            .lineLimit(2)
-            .foregroundColor(.secondary)
     }
     
     // MARK: - Alert View

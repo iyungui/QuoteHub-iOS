@@ -50,20 +50,22 @@ struct ReadingProgressSection: View {
             // 프로그레스 바
             VStack(spacing: 6) {
                 HStack {
-                    Text("다음 레벨까지")
-                        .font(.scoreDream(.medium, size: .subheadline))
-
-                    Spacer()
-                    
                     if nextLevelInfo.isMaxLevel {
                         Text("최고 레벨 달성!")
                             .font(.scoreDream(.medium, size: .subheadline))
                             .foregroundColor(.appAccent)
+                        
+                        
                     } else {
-                        Text("\(storyCount)/\(nextLevelInfo.storiesNeeded)")
+                        Text("다음 레벨까지")
                             .font(.scoreDream(.medium, size: .subheadline))
-                            .foregroundColor(.primary)
+
                     }
+                    Spacer()
+
+                    Text("\(storyCount)/\(nextLevelInfo.storiesNeeded)")
+                        .font(.scoreDream(.medium, size: .subheadline))
+                        .foregroundColor(.primary)
                 }
                 
                 ProgressView(value: progress)
@@ -104,10 +106,12 @@ struct ReadingProgressSection: View {
 struct CompactReadingLevelBadge: View {
     let storyCount: Int
     let showProgress: Bool
-    
-    init(storyCount: Int, showProgress: Bool = false) {
+    let showChevron: Bool
+
+    init(storyCount: Int, showProgress: Bool = false, showChevron: Bool = false) {
         self.storyCount = storyCount
         self.showProgress = showProgress
+        self.showChevron = showChevron
     }
     
     var body: some View {
@@ -138,6 +142,11 @@ struct CompactReadingLevelBadge: View {
                         .frame(width: 40)
                         .scaleEffect(x: 1, y: 0.8, anchor: .center)
                 }
+            }
+            if showChevron {
+                Image(systemName: "chevron.right")
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(Color.appAccent.opacity(0.8))
             }
         }
     }
@@ -278,9 +287,9 @@ struct HomeUserLevelBadge: View {
     let storyCount: Int
     
     var body: some View {
-        CompactReadingLevelBadge(storyCount: storyCount, showProgress: true)
+        CompactReadingLevelBadge(storyCount: storyCount, showProgress: false, showChevron: true)
             .padding(.horizontal, 12)
-            .padding(.vertical, 8)
+            .padding(.vertical, 4)
             .background(
                 RoundedRectangle(cornerRadius: 20)
                     .fill(.ultraThinMaterial)
@@ -384,95 +393,6 @@ struct UserStatsView: View {
     }
 }
 
-// MARK: - 4. 성취 배지 시스템
-
-struct AchievementBadgesView: View {
-    let storyCount: Int
-    
-    var body: some View {
-        let level = ReadingLevelManager.calculateLevel(storyCount: storyCount)
-        
-        VStack(alignment: .leading, spacing: 16) {
-            Text("달성한 배지")
-                .font(.scoreDream(.bold, size: .subheadline))
-            
-            LazyVGrid(columns: [
-                GridItem(.flexible()),
-                GridItem(.flexible()),
-                GridItem(.flexible())
-            ], spacing: 12) {
-                ForEach(1...level.level, id: \.self) { achievedLevel in
-                    if let achievedLevelInfo = getAchievedLevel(level: achievedLevel) {
-                        AchievementBadge(levelInfo: achievedLevelInfo, isUnlocked: true)
-                    }
-                }
-                
-                // 다음 레벨 미리보기 (잠긴 상태)
-                let nextLevelInfo = ReadingLevelManager.getNextLevelInfo(currentLevel: level.level)
-                if !nextLevelInfo.isMaxLevel,
-                   let nextLevel = getAchievedLevel(level: level.level + 1) {
-                    AchievementBadge(levelInfo: nextLevel, isUnlocked: false)
-                }
-            }
-        }
-    }
-    
-    private func getAchievedLevel(level: Int) -> ReadingLevel? {
-        return ReadingLevelManager.calculateLevel(storyCount: getMinStoriesForLevel(level: level))
-    }
-    
-    private func getMinStoriesForLevel(level: Int) -> Int {
-        switch level {
-        case 1: return 0
-        case 2: return 3
-        case 3: return 6
-        case 4: return 10
-        case 5: return 15
-        case 6: return 20
-        case 7: return 30
-        case 8: return 60
-        case 9: return 100
-        case 10: return 150
-        case 11: return 200
-        case 12: return 300
-        default: return 0
-        }
-    }
-}
-
-struct AchievementBadge: View {
-    let levelInfo: ReadingLevel
-    let isUnlocked: Bool
-    
-    var body: some View {
-        VStack(spacing: 6) {
-            Text(levelInfo.icon)
-                .font(.title2)
-                .opacity(isUnlocked ? 1.0 : 0.3)
-            
-            Text(levelInfo.title)
-                .font(.scoreDream(.medium, size: .caption2))
-                .opacity(isUnlocked ? 1.0 : 0.5)
-            
-            if !isUnlocked {
-                Text("잠김")
-                    .font(.scoreDream(.light, size: .caption2))
-                    .foregroundColor(.secondary)
-            }
-        }
-        .padding(8)
-        .background(
-            RoundedRectangle(cornerRadius: 8)
-                .fill(isUnlocked ? Color.appAccent.opacity(0.1) : Color.gray.opacity(0.1))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(isUnlocked ? Color.appAccent.opacity(0.3) : Color.gray.opacity(0.3), lineWidth: 1)
-                )
-        )
-        .scaleEffect(isUnlocked ? 1.0 : 0.9)
-        .animation(.easeInOut(duration: 0.2), value: isUnlocked)
-    }
-}
 
 // MARK: - 5. 전체 예시 뷰
 

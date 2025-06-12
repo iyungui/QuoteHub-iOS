@@ -118,7 +118,7 @@ class ReadingLevelManager {
         let nextLevelInfo = getNextLevelInfo(currentLevel: currentLevel.level)
         
         if nextLevelInfo.isMaxLevel {
-            return "🌟 최고 레벨 달성! 코스모스만큼 광활한 지식을 쌓으셨어요!"
+            return "🌟 코스모스만큼 광활한 지식을 쌓으셨어요!"
         } else {
             let storiesLeft = storiesUntilNextLevel(storyCount: storyCount)
             return "\(nextLevelInfo.nextLevelTitle) 레벨까지 \(storiesLeft)권 남았어요!"
