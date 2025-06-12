@@ -28,7 +28,6 @@ struct StoryImagesView: View {
                     imageGrid
                 }
                 
-                // 이미지 개수 안내
                 StoryCreateGuideSection(message: guideMessage)
             }
         }
@@ -56,10 +55,6 @@ struct StoryImagesView: View {
                 }
                 
                 VStack(spacing: 4) {
-                    Text(selectedImages.count >= 10 ? "이미지 가득함" : "사진 추가")
-                        .font(.scoreDream(.medium, size: .subheadline))
-                        .foregroundColor(.primaryText)
-                    
                     Text("\(selectedImages.count)/10")
                         .font(.scoreDream(.light, size: .caption))
                         .foregroundColor(.secondaryText)

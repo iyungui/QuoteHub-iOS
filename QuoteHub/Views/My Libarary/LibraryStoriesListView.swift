@@ -108,9 +108,9 @@ struct LibraryStoriesListView: View {
                 .fill(
                     LinearGradient(
                         colors: [
-                            Color.brownLeather.opacity(0.25),
-                            Color.brownLeather.opacity(0.15),
-                            Color.brownLeather.opacity(0.08)
+                            Color.brownLeather.opacity(0.5),
+                            Color.brownLeather.opacity(0.3),
+                            Color.brownLeather.opacity(0.1)
                         ],
                         startPoint: .top,
                         endPoint: .bottom
@@ -244,9 +244,9 @@ struct StoryBookView: View {
                 .fill(
                     LinearGradient(
                         colors: [
-                            Color.brownLeather.opacity(0.25),
-                            Color.brownLeather.opacity(0.15),
-                            Color.brownLeather.opacity(0.08)
+                            Color.brownLeather.opacity(0.5),
+                            Color.brownLeather.opacity(0.3),
+                            Color.brownLeather.opacity(0.1)
                         ],
                         startPoint: .top,
                         endPoint: .bottom

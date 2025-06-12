@@ -14,13 +14,13 @@ struct ThemeSelectionCard: View {
     
     var body: some View {
         VStack(spacing: 16) {
-            CardHeader(title: "테마 설정", icon: "folder.fill")
+            StoryCreateGuideSection(message: "테마별로 기록을 분류해 보세요.\n이전보다 책의 내용을 정리하기 쉬워질 거예요.")
             
             Button(action: {
                 showThemeListView = true
             }) {
-                HStack {
-                    Image(systemName: "plus.circle.fill")
+                HStack(spacing: 12) {
+                    Image(systemName: "folder.fill")
                         .font(.title3)
                         .foregroundColor(.brownLeather)
                     
@@ -40,8 +40,8 @@ struct ThemeSelectionCard: View {
                         .font(.caption.weight(.medium))
                         .foregroundColor(.secondaryText.opacity(0.6))
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 16)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
                         .fill(Color.paperBeige.opacity(0.3))
@@ -49,10 +49,6 @@ struct ThemeSelectionCard: View {
             }
             .buttonStyle(CardButtonStyle())
         }
-        .padding(20)
-        .background(CardBackground())
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.06), radius: 6, x: 0, y: 3)
         .fullScreenCover(isPresented: $showThemeListView) {
             SetThemeView(selectedThemeIds: $viewModel.themeIds)
         }
@@ -64,31 +60,63 @@ struct PrivacyToggleCard: View {
     @EnvironmentObject var viewModel: StoryFormViewModel
     
     var body: some View {
-        VStack(spacing: 16) {
-            CardHeader(title: "공개 설정", icon: "eye.fill")
-            
-            HStack {
-                Text(viewModel.isPublic ? "다른 사용자들도\n볼 수 있습니다" : "나만 볼 수 있습니다")
-                    .font(.scoreDream(.light, size: viewModel.isPublic ? .caption2 : .caption))
+        HStack(spacing: 16) {
+            VStack(alignment: .leading, spacing: 4) {
+                Text("공개 설정")
+                    .font(.scoreDream(.medium, size: .body))
+                    .foregroundColor(.primaryText)
+                
+                Text(viewModel.isPublic ? "다른 사용자들도 볼 수 있습니다" : "나만 볼 수 있습니다")
+                    .font(.scoreDream(.light, size: .caption))
                     .foregroundColor(.secondaryText)
                     .multilineTextAlignment(.leading)
-                
-                Spacer()
-                
-                Toggle("", isOn: $viewModel.isPublic)
-                    .toggleStyle(SwitchToggleStyle())
-                    .scaleEffect(0.9)
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.paperBeige.opacity(0.3))
-            )
+            
+            Spacer()
+            
+            Toggle("", isOn: $viewModel.isPublic)
+                .toggleStyle(PrivacyToggleStyle())
         }
-        .padding(20)
-        .background(CardBackground())
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.06), radius: 6, x: 0, y: 3)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 16)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.paperBeige.opacity(0.3))
+        )
     }
 }
+
+// MARK: - Custom Toggle Styles
+
+struct PrivacyToggleStyle: ToggleStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        Button(action: {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                configuration.isOn.toggle()
+            }
+        }) {
+            HStack(spacing: 8) {
+                Image(systemName: configuration.isOn ? "eye.fill" : "eye.slash.fill")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(configuration.isOn ? .blue : .secondaryText)
+                    .frame(width: 20, height: 20)
+                
+                Text(configuration.isOn ? "공개" : "비공개")
+                    .font(.scoreDream(.medium, size: .caption))
+                    .foregroundColor(configuration.isOn ? .blue : .secondaryText)
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(configuration.isOn ? Color.appAccent.opacity(0.1) : Color.secondaryText.opacity(0.1))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(configuration.isOn ? Color.appAccent.opacity(0.3) : Color.secondaryText.opacity(0.3), lineWidth: 1)
+                    )
+            )
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+}
+

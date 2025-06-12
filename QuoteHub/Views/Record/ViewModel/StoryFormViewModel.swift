@@ -8,29 +8,34 @@
 import SwiftUI
 
 class StoryFormViewModel: ObservableObject {
-    // 키워드 입력
+    // 모든 페이지에서 입력 가능
+    /// 키워드 입력
     @Published var keywords: [String] = []
+    @Published var currentKeywordInput: String = ""
+    /// 공백 키워드를 입력 시도하거나, 키워드 개수가 10개를 초과하거나 중복된 키워드가 있을 때 경고표시
+    @Published var isShowingDuplicateWarning = false
+    @Published var feedbackMessage: String? = nil
     
-    // 문장 입력
-    @Published var quotes: [Quote] = []
+    // PAGE 1에서 입력 가능
+    /// 문장 입력
+    @Published var quotes = [Quote(id: UUID(), quote: "", page: nil)]
+    
+    /// true: 캐러셀(카드 디자인), false: (목록 디자인)
+    @Published var isCarouselView: Bool = true
+    
     @Published var currentQuoteText: String = ""
     @Published var currentQuotePage: String = ""
     
-    // 컨텐츠 입력
+    
+    // PAGE 2에서 입력 가능 (페이지 2는 선택 필드)
+    /// 느낀점 입력
+    @Published var showingContentSheet = false
     @Published var content: String = ""
     
-    // 이미지 피커
-    @Published var showingImagePicker = false
     @Published var showingCamera = false
     @Published var showingGallery = false
     @Published var selectedImages: [UIImage] = []
     @Published var sourceType: UIImagePickerController.SourceType = .photoLibrary
-    
-    // 키워드 텍스트 인풋 관련
-    @Published var currentKeywordInput: String = ""
-    /// 공백 키워드를 입력 시도하거나, 키워드 개수가 5개를 초과하거나 중복된 키워드가 있을 때 경고표시
-    @Published var isShowingDuplicateWarning = false
-    @Published var feedbackMessage: String? = nil
     
     // 공개 여부 및 테마
     @Published var isPublic: Bool = true
@@ -62,17 +67,58 @@ class StoryFormViewModel: ObservableObject {
     
     /// 북스토리 생성 요건 충족 확인
     var isQuotesFilled: Bool {
-        !quotes.isEmpty
+        quotes.contains { !$0.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
     }
     
-    // MARK: - Methods
+    // MARK: - Image Methods
+    
+    func removeImage(at index: Int) {
+        guard index >= 0 && index < selectedImages.count else { return }
+        selectedImages.remove(at: index)
+    }
+    
+    func openPhotoLibrary() {
+        sourceType = .photoLibrary
+        PermissionsManager.shared.checkPhotosAuthorization { [weak self] authorized in
+            DispatchQueue.main.async {
+                if authorized {
+                    self?.showingGallery = true
+                } else {
+                    self?.showPermissionAlert(for: .photoLibrary)
+                }
+            }
+        }
+    }
+    
+    func openCamera() {
+        sourceType = .camera
+        PermissionsManager.shared.checkCameraAuthorization { [weak self] authorized in
+            DispatchQueue.main.async {
+                if authorized {
+                    self?.showingCamera = true
+                } else {
+                    self?.showPermissionAlert(for: .camera)
+                }
+            }
+        }
+    }
+    
+    private func showPermissionAlert(for sourceType: UIImagePickerController.SourceType) {
+        alertType = .authorized
+        alertMessage = sourceType == .camera ?
+            "북스토리에 이미지를 업로드하려면 카메라 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요." :
+            "북스토리에 이미지를 업로드하려면 사진 라이브러리 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요."
+        showAlert = true
+    }
+    
+    // MARK: - Keyword Methods
     
     func addKeyword() {
         // 키워드 입력란의 앞뒤 공백과 줄바꿈 문자를 제거
         let trimmedKeyword = currentKeywordInput.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        // 공백 키워드를 입력 시도하거나, 키워드 개수가 5개를 초과하거나 중복된 키워드가 있을 때 경고표시
-        if trimmedKeyword.isEmpty || keywords.count >= 5 || keywords.contains(trimmedKeyword) {
+        // 공백 키워드를 입력 시도하거나, 키워드 개수가 10개를 초과하거나 중복된 키워드가 있을 때 경고표시
+        if trimmedKeyword.isEmpty || keywords.count >= 10 || keywords.contains(trimmedKeyword) {
             withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                 isShowingDuplicateWarning = true
             }
@@ -98,29 +144,83 @@ class StoryFormViewModel: ObservableObject {
         }
     }
     
-    func addQuote() {
-        let trimmedQuote = currentQuoteText.trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        guard !trimmedQuote.isEmpty else { return }
-        
-        let pageNumber = Int(currentQuotePage.trimmingCharacters(in: .whitespacesAndNewlines))
-        let newQuote = Quote(quote: trimmedQuote, page: pageNumber)
+    // MARK: - Quote Methods
+    
+    /// quote 캐러셀 뷰에서 사용 (빈 quote 페이지 생성)
+    func addQuote(at index: Int? = nil) {
+        let newQuote = Quote(id: UUID(), quote: "", page: nil)
         
         withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-            quotes.append(newQuote)
-            currentQuoteText = ""
-            currentQuotePage = ""
+            if let index = index {
+                // 현재 인덱스 바로 뒤에 추가
+                let insertIndex = min(index + 1, quotes.count)
+                quotes.insert(newQuote, at: insertIndex)
+            } else {
+                // 인덱스가 주어지지 않으면 맨 뒤 페이지에 quote 추가
+                quotes.append(newQuote)
+            }
         }
     }
     
+    /// quote 리스트 뷰에서 사용
+    func addCurrentQuote() {
+        let trimmedText = currentQuoteText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedText.isEmpty else { return }
+        
+        let page = currentQuotePage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?
+        nil : Int(currentQuotePage.trimmingCharacters(in: .whitespacesAndNewlines))
+        
+        let newQuote = Quote(id: UUID(), quote: trimmedText, page: page)
+        
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+            // 빈 quote가 있다면 대체, 없다면 추가
+            if let emptyIndex = quotes.firstIndex(where: {
+                $0.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            }) {
+                quotes[emptyIndex] = newQuote
+            } else {
+                quotes.append(newQuote)
+            }
+        }
+        clearQuoteInputField()
+    }
+    
+    private func clearQuoteInputField() {
+        // 입력창 초기화
+        currentQuoteText = ""
+        currentQuotePage = ""
+    }
+    
     func removeQuote(at index: Int) {
+        // 인덱스 범위 유효한지 확인
+        guard index >= 0 && index < quotes.count else { return }
+        
         quotes.remove(at: index)
+    }
+    
+    // 페이지 번호를 String으로 바인딩하기 위한 헬퍼 메서드
+    func pageBinding(for quoteId: UUID) -> Binding<String> {
+        Binding(
+            get: {
+                guard let index = self.quotes.firstIndex(where: { $0.id == quoteId }) else {
+                    return ""
+                }
+                return self.quotes[index].page?.description ?? ""
+            },
+            set: { newValue in
+                guard let index = self.quotes.firstIndex(where: { $0.id == quoteId }) else {
+                    return
+                }
+                let trimmedValue = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                self.quotes[index].page = trimmedValue.isEmpty ? nil : Int(trimmedValue)
+            }
+        )
     }
     
     func updateFeedbackMessage() {
         withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
             if quotes.isEmpty {
-                feedbackMessage = "인용문을 최소 하나 입력해주세요."
+                feedbackMessage = "문장을 최소 하나 입력해주세요."
             } else if quotes.contains(where: { $0.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }) {
                 feedbackMessage = "빈 문장이 있습니다. 내용을 입력해주세요."
             } else {
@@ -129,11 +229,11 @@ class StoryFormViewModel: ObservableObject {
         }
     }
     
+    // MARK: - Form Management
+    
     func resetForm() {
         keywords = []
-        quotes = []
-        currentQuoteText = ""
-        currentQuotePage = ""
+        quotes = [Quote(quote: "", page: nil)]
         content = ""
         selectedImages = []
         isPublic = true
@@ -146,7 +246,7 @@ class StoryFormViewModel: ObservableObject {
     
     func loadFromBookStory(_ story: BookStory) {
         keywords = story.keywords ?? []
-        quotes = story.quotes
+        quotes = story.quotes.isEmpty ? [Quote(quote: "", page: nil)] : story.quotes
         content = story.content ?? ""
         isPublic = story.isPublic
         themeIds = story.themeIds ?? []

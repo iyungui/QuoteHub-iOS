@@ -5,28 +5,27 @@
 //  Created by 이융의 on 10/17/23.
 //
 
-import Foundation
 import SwiftUI
 
 struct CheckboxStyle: ToggleStyle {
-
-    func makeBody(configuration: Self.Configuration) -> some View {
-
-        return HStack {
-
+    func makeBody(configuration: Configuration) -> some View {
+        HStack {
             configuration.label
-
+            
             Spacer()
-
-            Image(systemName: configuration.isOn ? "circle" : "checkmark.circle.fill")
-                .resizable()
-                .frame(width: 24, height: 24)
-//                .foregroundColor(configuration.isOn ? Color.appAccent : Color.appAccent)
-                .font(.system(size: 20, weight: .medium, design: .default))
-                .onTapGesture {
+            
+            Button(action: {
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                     configuration.isOn.toggle()
                 }
+            }) {
+                Image(systemName: configuration.isOn ? "checkmark.circle.fill" : "circle")
+                    .resizable()
+                    .frame(width: 24, height: 24)
+                    .foregroundColor(configuration.isOn ? .appAccent : .secondaryText.opacity(0.6))
+                    .font(.system(size: 20, weight: .medium, design: .default))
+            }
+            .buttonStyle(PlainButtonStyle())
         }
-
     }
 }

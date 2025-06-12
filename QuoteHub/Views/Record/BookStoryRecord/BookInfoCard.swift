@@ -20,7 +20,7 @@ struct BookInfoCard: View {
                 WebImage(url: URL(string: book.bookImageURL))
                     .placeholder {
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.paperBeige.opacity(0.3))
+                            .fill(Color.paperBeige.opacity(0.1))
                             .overlay(
                                 Image(systemName: "book.closed.fill")
                                     .foregroundColor(.brownLeather.opacity(0.7))

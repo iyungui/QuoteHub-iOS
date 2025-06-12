@@ -8,9 +8,37 @@
 import Foundation
 import SwiftUI
 
-struct Quote: Codable {
-    let quote: String
-    let page: Int?
+struct Quote: Codable, Identifiable {
+    let id: UUID
+    var quote: String
+    var page: Int?
+    
+    init(id: UUID = UUID(), quote: String, page: Int?) {
+        self.id = id
+        self.quote = quote
+        self.page = page
+    }
+    
+    // 백엔드와의 호환성을 위해 id는 인코딩/디코딩에서 제외
+    enum CodingKeys: String, CodingKey {
+        case quote
+        case page
+    }
+    
+    // 디코딩 시 새로운 UUID 생성
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = UUID()
+        self.quote = try container.decode(String.self, forKey: .quote)
+        self.page = try container.decodeIfPresent(Int.self, forKey: .page)
+    }
+    
+    // 인코딩 시 id 제외
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(quote, forKey: .quote)
+        try container.encodeIfPresent(page, forKey: .page)
+    }
 }
 
 struct BookStory: Codable, Identifiable, Equatable {

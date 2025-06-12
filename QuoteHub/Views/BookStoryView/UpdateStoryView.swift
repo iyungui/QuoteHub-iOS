@@ -108,7 +108,7 @@
 //                    PrivacyToggleCard(viewModel: formViewModel)
 //                }
 //                
-//                KeywordInputCard(
+//                KeywordBottomInputBar(
 //                    viewModel: formViewModel,
 //                    keywordFocused: $focusedField
 //                )

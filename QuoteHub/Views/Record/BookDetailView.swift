@@ -147,7 +147,7 @@ struct BookDetailView: View {
             
             Spacer()
             
-            NavigationLink(destination: RecordView(book: book).environmentObject(storiesViewModel)) {
+            NavigationLink(destination: StoryQuotesRecordView(book: book).environmentObject(storiesViewModel)) {
                 Image(systemName: "highlighter")
                     .font(.title2.weight(.medium))
                     .foregroundColor(.white)
@@ -349,7 +349,7 @@ struct BookDetailView: View {
                 .buttonStyle(CardButtonStyle())
                 
                 // Record Button
-                NavigationLink(destination: RecordView(book: book).environmentObject(storiesViewModel)) {
+                NavigationLink(destination: StoryQuotesRecordView(book: book).environmentObject(storiesViewModel)) {
                     HStack(spacing: 10) {
                         Image(systemName: "highlighter")
                         Text("북스토리 기록")
