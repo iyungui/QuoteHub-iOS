@@ -11,7 +11,7 @@ import SwiftUI
 struct ThoughtInputCard: View {
     @EnvironmentObject var viewModel: StoryFormViewModel
     @Environment(\.dismiss) var dismiss
-    var contentFocused: FocusState<BookStoryFormField?>.Binding
+    @FocusState private var contentFocused: BookStoryFormField?
     let book: Book
     
     var body: some View {
@@ -36,9 +36,9 @@ struct ThoughtInputCard: View {
                         placeholder: viewModel.contentPlaceholder,
                         minHeight: 150,
                         maxLength: viewModel.contentMaxLength,
-                        isFocused: (contentFocused.wrappedValue == .content)
+                        isFocused: (contentFocused == .content)
                     )
-                    .focused(contentFocused, equals: .content)
+                    .focused($contentFocused, equals: .content)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     
                     
@@ -47,7 +47,7 @@ struct ThoughtInputCard: View {
             }
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-                    contentFocused.wrappedValue = .content
+                    contentFocused = .content
                 }
             }
 //            .photoPickerSheet(viewModel: viewModel)
@@ -109,7 +109,25 @@ struct ThoughtInputCard: View {
                 }
                 
                 ToolbarItem(placement: .keyboard) {
-                    ThoughtInputToolbar(contentFocused: contentFocused)
+                    HStack {
+                        Button(action: viewModel.openPhotoLibrary) {
+                            Image(systemName: "photo.badge.plus")
+                        }
+                        .disabled(viewModel.selectedImages.count >= 10)
+                        
+                        Button(action: viewModel.openCamera) {
+                            Image(systemName: "camera.fill")
+                        }
+                        .disabled(viewModel.selectedImages.count >= 10)
+
+                        Spacer()
+                        
+                        Button {
+                            contentFocused = nil
+                        } label: {
+                            Image(systemName: "keyboard.chevron.compact.down")
+                        }
+                    }
                 }
             }
             .padding()
@@ -196,39 +214,8 @@ struct StoryImageCell: View {
     }
 }
 
-// MARK: - ThoughtInputToolbar
-
-struct ThoughtInputToolbar: View {
-    @EnvironmentObject var viewModel: StoryFormViewModel
-    var contentFocused: FocusState<BookStoryFormField?>.Binding
-    
-    var body: some View {
-        HStack {
-            Button(action: viewModel.openPhotoLibrary) {
-                Image(systemName: "photo.badge.plus")
-            }
-            .disabled(viewModel.selectedImages.count >= 10)
-            
-            Button(action: viewModel.openCamera) {
-                Image(systemName: "camera.fill")
-            }
-            .disabled(viewModel.selectedImages.count >= 10)
-
-            Spacer()
-            
-            Button {
-                contentFocused.wrappedValue = nil
-            } label: {
-                Image(systemName: "keyboard.chevron.compact.down")
-            }
-        }
-    }
-}
-
 #Preview {
-    @FocusState var focusField: BookStoryFormField?
-
-    ThoughtInputCard(contentFocused: $focusField, book: Book(title: "", author: [], translator: [], introduction: "", publisher: "", publicationDate: "", bookImageURL: "", bookLink: "", ISBN: [], _id: "")).environmentObject(StoryFormViewModel())
+    ThoughtInputCard(book: Book(title: "", author: [], translator: [], introduction: "", publisher: "", publicationDate: "", bookImageURL: "", bookLink: "", ISBN: [], _id: "")).environmentObject(StoryFormViewModel())
 }
 
 // MARK: - View Extensions

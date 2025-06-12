@@ -13,6 +13,8 @@ struct ListQuotesRecordView: View {
     @EnvironmentObject var formViewModel: StoryFormViewModel
     var quotePageAndTextFocused: FocusState<BookStoryFormField?>.Binding
     
+    @State private var scrollPosition: UUID? = nil
+    
     var body: some View {
         VStack(spacing: 0) {
             // 기존 quotes 리스트 (내용이 있는 quote가 하나라도 있을 때만 표시)
@@ -30,15 +32,34 @@ struct ListQuotesRecordView: View {
     // MARK: - Quotes List Section
     
     private var quotesListSection: some View {
-        ScrollView {
-            LazyVStack(spacing: 12) {
-                ForEach(Array(formViewModel.quotes.enumerated()), id: \.element.id) { index, quote in
-                    if !quote.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                        quoteItemCard(quote: quote, index: index)
+        ScrollViewReader { proxy in
+            ScrollView {
+                LazyVStack(spacing: 12) {
+                    ForEach(Array(formViewModel.quotes.enumerated()), id: \.element.id) { index, quote in
+                        if !quote.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                            quoteItemCard(quote: quote, index: index)
+                                .id(quote.id)  // ScrollViewReader용 ID
+                        }
+                    }
+                }
+                .padding(.top, 22)
+            }
+            .scrollPosition(id: $scrollPosition)
+            .onChange(of: formViewModel.quotes.count) { oldCount, newCount in
+                // quote가 추가되거나 삭제되었을 때 마지막 quote로 스크롤
+                if newCount != oldCount {
+                    // 내용이 있는 마지막 quote 찾기
+                    if let lastQuote = formViewModel.quotes.last(where: { !$0.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }) {
+                        scrollPosition = lastQuote.id
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            withAnimation(.easeInOut(duration: 0.5)) {
+                                proxy.scrollTo(lastQuote.id, anchor: .bottom)
+                            }
+                        }
                     }
                 }
             }
-            .padding(.top, 22)
         }
     }
     
@@ -119,7 +140,6 @@ struct ListQuotesRecordView: View {
                 // 문장 추가 버튼
                 Button {
                     formViewModel.addCurrentQuote()
-                    quotePageAndTextFocused.wrappedValue = nil
                 } label: {
                     Text("추가")
                         .font(.scoreDream(.medium, size: .caption))

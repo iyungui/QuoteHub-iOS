@@ -103,10 +103,7 @@ struct StoryQuotesRecordView: View {
     
     private var nextButton: some View {
         NavigationLink {
-            StorySettingRecordView(
-                book: book,
-                focusedField: $focusedField
-            )
+            StorySettingRecordView(book: book)
             .environmentObject(formViewModel)
             .environmentObject(storiesViewModel)
         } label: {

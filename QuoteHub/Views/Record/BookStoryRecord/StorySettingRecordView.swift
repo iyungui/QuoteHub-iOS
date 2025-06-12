@@ -11,7 +11,6 @@ struct StorySettingRecordView: View {
     let book: Book
     @EnvironmentObject var formViewModel: StoryFormViewModel
     @EnvironmentObject var storiesViewModel: BookStoriesViewModel
-    var focusedField: FocusState<BookStoryFormField?>.Binding
     
     var body: some View {
         VStack(spacing: 20) {
@@ -49,7 +48,7 @@ struct StorySettingRecordView: View {
             }
         }
         .sheet(isPresented: $formViewModel.showingContentSheet) {
-            ThoughtInputCard(contentFocused: focusedField, book: book)
+            ThoughtInputCard(book: book)
                 .environmentObject(formViewModel)
         }
     }
@@ -139,12 +138,8 @@ extension StorySettingRecordView {
 }
 
 #Preview {
-    @FocusState var focus: BookStoryFormField?
     return NavigationStack {
-        StorySettingRecordView(
-            book: Book(title: "", author: [], translator: [], introduction: "", publisher: "", publicationDate: "", bookImageURL: "", bookLink: "", ISBN: [], _id: ""),
-            focusedField: $focus
-        )
+        StorySettingRecordView(book: Book(title: "", author: [], translator: [], introduction: "", publisher: "", publicationDate: "", bookImageURL: "", bookLink: "", ISBN: [], _id: ""))
         .environmentObject(StoryFormViewModel())
         .environmentObject(BookStoriesViewModel())
     }
