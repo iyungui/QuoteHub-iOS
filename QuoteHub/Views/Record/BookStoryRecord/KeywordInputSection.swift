@@ -18,7 +18,7 @@ struct KeywordInputSection: View {
                 TextField("#키워드 입력", text: $formViewModel.inlineKeywordInput)
                     .focused(keywordFocused, equals: .keyword)
                     .font(.scoreDream(.medium, size: .callout))
-                    .foregroundColor(.secondary)
+                    .submitLabel(.continue)
                     .onChange(of: formViewModel.inlineKeywordInput) { _, newValue in
                         formViewModel.processInlineKeywordInput(newValue)
                     }

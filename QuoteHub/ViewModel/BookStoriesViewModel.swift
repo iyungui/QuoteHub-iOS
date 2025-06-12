@@ -277,8 +277,8 @@ class BookStoriesViewModel: ObservableObject, LoadingViewModel {
     
     func updateBookStory(
         storyID: String,
+        quotes: [Quote],
         images: [UIImage]?,
-        quotes: [Quote]?,
         content: String?,
         isPublic: Bool,
         keywords: [String]?,
@@ -292,8 +292,8 @@ class BookStoriesViewModel: ObservableObject, LoadingViewModel {
         
         service.updateBookStory(
             storyID: storyID,
-            images: images,
             quotes: quotes,
+            images: images,
             content: content,
             isPublic: isPublic,
             keywords: keywords,

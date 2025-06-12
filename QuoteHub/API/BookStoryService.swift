@@ -304,8 +304,8 @@ class BookStoryService {
     
     func updateBookStory(
         storyID: String,
+        quotes: [Quote],
         images: [UIImage]? = nil,
-        quotes: [Quote]? = nil,
         content: String? = nil,
         isPublic: Bool? = false,
         keywords: [String]? = nil,
@@ -329,20 +329,18 @@ class BookStoryService {
             return
         }
         
-        if let quotes = quotes {
-            guard !quotes.isEmpty else {
-                let error = NSError(domain: "BookStoryService", code: -7, userInfo: [NSLocalizedDescriptionKey: "At least one quote is required"])
+        guard !quotes.isEmpty else {
+            let error = NSError(domain: "BookStoryService", code: -7, userInfo: [NSLocalizedDescriptionKey: "At least one quote is required"])
+            completion(.failure(error))
+            return
+        }
+        
+        // 각 quote의 유효성 검증
+        for quote in quotes {
+            guard !quote.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                let error = NSError(domain: "BookStoryService", code: -8, userInfo: [NSLocalizedDescriptionKey: "Quote text cannot be empty"])
                 completion(.failure(error))
                 return
-            }
-            
-            // 각 quote의 유효성 검증
-            for quote in quotes {
-                guard !quote.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-                    let error = NSError(domain: "BookStoryService", code: -8, userInfo: [NSLocalizedDescriptionKey: "Quote text cannot be empty"])
-                    completion(.failure(error))
-                    return
-                }
             }
         }
         
@@ -387,13 +385,14 @@ class BookStoryService {
             }
             
             // quotes 배열이 제공된 경우에만 추가
-            if let quotes = quotes {
-                do {
-                    let quotesData = try JSONEncoder().encode(quotes)
-                    multipartFormData.append(quotesData, withName: "quotes")
-                } catch {
-                    print("Error encoding quotes: \(error)")
-                }
+            do {
+                let quotesData = try JSONEncoder().encode(quotes)
+                let quotesString = String(data: quotesData, encoding: .utf8) ?? "encoding failed"
+                print("Quotes JSON being sent: \(quotesString)")
+                multipartFormData.append(quotesData, withName: "quotes")
+                print("Quotes successfully encoded and added to multipart data")
+            } catch {
+                print("Error encoding quotes: \(error)")
             }
             
             // keywords와 themeIds를 개별적으로 추가 (제공된 경우에만)
@@ -417,7 +416,7 @@ class BookStoryService {
                     case 401:
                         UserAuthenticationManager().renewAccessToken { success in
                             if success {
-                                self.updateBookStory(storyID: storyID, images: images, quotes: quotes, content: content, isPublic: isPublic, keywords: keywords, themeIds: themeIds, completion: completion)
+                                self.updateBookStory(storyID: storyID, quotes: quotes, images: images, content: content, isPublic: isPublic, keywords: keywords, themeIds: themeIds, completion: completion)
                             } else {
                                 let renewalError = NSError(domain: "BookStoryService", code: -3, userInfo: [NSLocalizedDescriptionKey: "Token renewal failed"])
                                 print("Error: \(renewalError.localizedDescription)")

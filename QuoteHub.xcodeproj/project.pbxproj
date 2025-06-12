@@ -76,7 +76,6 @@
 		CE8C48322DEA8DAE003188ED /* VersionInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C480C2DEA8DAE003188ED /* VersionInfoView.swift */; };
 		CE8C48332DEA8DAE003188ED /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C480E2DEA8DAE003188ED /* CommentView.swift */; };
 		CE8C48342DEA8DAE003188ED /* BookStoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C480F2DEA8DAE003188ED /* BookStoryDetailView.swift */; };
-		CE8C48362DEA8DAE003188ED /* UpdateStoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48112DEA8DAE003188ED /* UpdateStoryView.swift */; };
 		CE8C48392DEA8DAE003188ED /* ThemeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48152DEA8DAE003188ED /* ThemeDetailView.swift */; };
 		CE8C483A2DEA8DAE003188ED /* UpdateThemaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48162DEA8DAE003188ED /* UpdateThemaView.swift */; };
 		CE8C483B2DEA8DAE003188ED /* ReportSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48182DEA8DAE003188ED /* ReportSheetView.swift */; };
@@ -193,7 +192,6 @@
 		CE8C480C2DEA8DAE003188ED /* VersionInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionInfoView.swift; sourceTree = "<group>"; };
 		CE8C480E2DEA8DAE003188ED /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
 		CE8C480F2DEA8DAE003188ED /* BookStoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookStoryDetailView.swift; sourceTree = "<group>"; };
-		CE8C48112DEA8DAE003188ED /* UpdateStoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateStoryView.swift; sourceTree = "<group>"; };
 		CE8C48152DEA8DAE003188ED /* ThemeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeDetailView.swift; sourceTree = "<group>"; };
 		CE8C48162DEA8DAE003188ED /* UpdateThemaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateThemaView.swift; sourceTree = "<group>"; };
 		CE8C48182DEA8DAE003188ED /* ReportSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportSheetView.swift; sourceTree = "<group>"; };
@@ -495,7 +493,6 @@
 				CE8C480F2DEA8DAE003188ED /* BookStoryDetailView.swift */,
 				CE8C480E2DEA8DAE003188ED /* CommentView.swift */,
 				CE8C49762DF1D132003188ED /* StoryView.swift */,
-				CE8C48112DEA8DAE003188ED /* UpdateStoryView.swift */,
 			);
 			path = BookStoryView;
 			sourceTree = "<group>";
@@ -733,7 +730,6 @@
 				CE8C48812DEBF39D003188ED /* SearchBookView.swift in Sources */,
 				CE8C491B2DF1601C003188ED /* DraftManager.swift in Sources */,
 				CE8C48822DEBF39D003188ED /* SetThemeView.swift in Sources */,
-				CE8C48362DEA8DAE003188ED /* UpdateStoryView.swift in Sources */,
 				CE8C48392DEA8DAE003188ED /* ThemeDetailView.swift in Sources */,
 				CE4FEF612DF96DF60072E8B9 /* ListQuotesRecordView.swift in Sources */,
 				CE4FEF632DF9DAE00072E8B9 /* symbolExampleView.swift in Sources */,
