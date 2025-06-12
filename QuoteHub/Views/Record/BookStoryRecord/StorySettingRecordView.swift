@@ -115,7 +115,6 @@ extension StorySettingRecordView {
             formViewModel.updateFeedbackMessage()
             return
         }
-        print("원래 뷰모델 quotes: \(formViewModel.quotes)")
         // quotes 처리 - 빈 quote 제거하고 최소 하나는 보장
         let validQuotes = formViewModel.quotes.filter {
             !$0.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
@@ -133,9 +132,6 @@ extension StorySettingRecordView {
         let retImages = formViewModel.selectedImages.isEmpty ? nil : formViewModel.selectedImages
         let retKeywords = formViewModel.keywords.isEmpty ? nil : formViewModel.keywords
         let retThemeIds = formViewModel.themeIds.isEmpty ? nil : formViewModel.themeIds
-
-        print("📝 Submitting story with \(validQuotes.count) quotes")
-        print("📝 Quotes content: \(validQuotes.map { $0.quote })")
 
         if isEditMode, let storyId = storyId {
             // 수정 모드
@@ -160,7 +156,7 @@ extension StorySettingRecordView {
                 keywords: retKeywords,
                 themeIds: retThemeIds
             ) { isSuccess in
-                handleSubmissionResult(isSuccess: isSuccess, isEdit: true)
+                handleSubmissionResult(isSuccess: isSuccess, isEdit: false)
             }
         }
     }

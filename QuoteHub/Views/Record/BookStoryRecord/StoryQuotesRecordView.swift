@@ -73,7 +73,7 @@ struct StoryQuotesRecordView: View {
         .onAppear {
             loadStoryDataIfNeeded()
         }
-        .progressOverlay(viewModel: storiesViewModel, animationName: "progressLottie", opacity: true)
+        .progressOverlay(viewModel: storiesViewModel, animationName: "progressLottie", opacity: false)
     }
     
     private var toolBarItems: some ToolbarContent {

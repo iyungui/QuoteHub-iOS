@@ -95,7 +95,7 @@ struct ListQuotesRecordView: View {
             // Quote 텍스트
             VStack(alignment: .leading, spacing: 8) {
                 Text(quote.quote)
-                    .font(.scoreDream(.regular, size: .body))
+                    .font(.scoreDream(.light, size: .callout))
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }

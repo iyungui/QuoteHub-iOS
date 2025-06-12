@@ -352,7 +352,6 @@ extension BookStoriesViewModel {
                     self.loadingMessage = nil
                     
                     if let story = bookStoryResponse.data {
-                        print("북스토리 로드 성공")
                         completion(.success(story))
                     } else {
                         let error = NSError(domain: "BookStoriesViewModel", code: -1, userInfo: [NSLocalizedDescriptionKey: "Story data not found"])

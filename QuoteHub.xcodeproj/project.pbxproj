@@ -40,6 +40,10 @@
 		CE4FEF612DF96DF60072E8B9 /* ListQuotesRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF602DF96DF60072E8B9 /* ListQuotesRecordView.swift */; };
 		CE4FEF632DF9DAE00072E8B9 /* symbolExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF622DF9DAE00072E8B9 /* symbolExampleView.swift */; };
 		CE4FEF812DFA90D80072E8B9 /* AchievementBadgesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */; };
+		CE4FEF852DFAF3D20072E8B9 /* BookStoryDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF842DFAF3D20072E8B9 /* BookStoryDetailViewModel.swift */; };
+		CE4FEF872DFB39080072E8B9 /* CarouselStoryQuotesDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF862DFB39080072E8B9 /* CarouselStoryQuotesDisplayView.swift */; };
+		CE4FEF892DFB391F0072E8B9 /* ListStoryQuotesDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF882DFB391F0072E8B9 /* ListStoryQuotesDisplayView.swift */; };
+		CE4FEF8B2DFB3EFC0072E8B9 /* CommonStoryDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF8A2DFB3EFC0072E8B9 /* CommonStoryDisplayView.swift */; };
 		CE7274182DF8050300B09DC3 /* StoryFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7274162DF8050300B09DC3 /* StoryFormViewModel.swift */; };
 		CE8C477F2DEA8D84003188ED /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47782DEA8D84003188ED /* LoginView.swift */; };
 		CE8C47802DEA8D84003188ED /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47792DEA8D84003188ED /* OnboardingView.swift */; };
@@ -156,6 +160,10 @@
 		CE4FEF602DF96DF60072E8B9 /* ListQuotesRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListQuotesRecordView.swift; sourceTree = "<group>"; };
 		CE4FEF622DF9DAE00072E8B9 /* symbolExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = symbolExampleView.swift; sourceTree = "<group>"; };
 		CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementBadgesView.swift; sourceTree = "<group>"; };
+		CE4FEF842DFAF3D20072E8B9 /* BookStoryDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookStoryDetailViewModel.swift; sourceTree = "<group>"; };
+		CE4FEF862DFB39080072E8B9 /* CarouselStoryQuotesDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselStoryQuotesDisplayView.swift; sourceTree = "<group>"; };
+		CE4FEF882DFB391F0072E8B9 /* ListStoryQuotesDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListStoryQuotesDisplayView.swift; sourceTree = "<group>"; };
+		CE4FEF8A2DFB3EFC0072E8B9 /* CommonStoryDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonStoryDisplayView.swift; sourceTree = "<group>"; };
 		CE7274162DF8050300B09DC3 /* StoryFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryFormViewModel.swift; sourceTree = "<group>"; };
 		CE8C47782DEA8D84003188ED /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		CE8C47792DEA8D84003188ED /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
@@ -342,6 +350,14 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		CE4FEF832DFAF3C50072E8B9 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				CE4FEF842DFAF3D20072E8B9 /* BookStoryDetailViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		CE7274172DF8050300B09DC3 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -490,7 +506,11 @@
 		CE8C48122DEA8DAE003188ED /* BookStoryView */ = {
 			isa = PBXGroup;
 			children = (
+				CE4FEF832DFAF3C50072E8B9 /* ViewModel */,
 				CE8C480F2DEA8DAE003188ED /* BookStoryDetailView.swift */,
+				CE4FEF862DFB39080072E8B9 /* CarouselStoryQuotesDisplayView.swift */,
+				CE4FEF882DFB391F0072E8B9 /* ListStoryQuotesDisplayView.swift */,
+				CE4FEF8A2DFB3EFC0072E8B9 /* CommonStoryDisplayView.swift */,
 				CE8C480E2DEA8DAE003188ED /* CommentView.swift */,
 				CE8C49762DF1D132003188ED /* StoryView.swift */,
 			);
@@ -722,6 +742,7 @@
 				CE8C48332DEA8DAE003188ED /* CommentView.swift in Sources */,
 				CE8C48E12DF04BD8003188ED /* CustomProgressView.swift in Sources */,
 				CE8C497D2DF1E575003188ED /* ReadingLevelSection.swift in Sources */,
+				CE4FEF8B2DFB3EFC0072E8B9 /* CommonStoryDisplayView.swift in Sources */,
 				CE8C48712DEB5190003188ED /* ProfileView.swift in Sources */,
 				CE8C48342DEA8DAE003188ED /* BookStoryDetailView.swift in Sources */,
 				CE8C487F2DEBF39D003188ED /* BookDetailView.swift in Sources */,
@@ -740,9 +761,11 @@
 				C6DE7F612AF7C2940020F5CB /* CommentViewModel.swift in Sources */,
 				C697D1002AC9535B00F0111B /* BookStoryService.swift in Sources */,
 				CE8C48672DEB0F53003188ED /* CardButtonStyle.swift in Sources */,
+				CE4FEF872DFB39080072E8B9 /* CarouselStoryQuotesDisplayView.swift in Sources */,
 				CE8C48752DEBECED003188ED /* navBarLogo.swift in Sources */,
 				C6B56FDD2AA8B60B003905C3 /* QuoteHubApp.swift in Sources */,
 				CE8C497F2DF1E874003188ED /* AppVersionManager.swift in Sources */,
+				CE4FEF852DFAF3D20072E8B9 /* BookStoryDetailViewModel.swift in Sources */,
 				C63DB3AC2B1188C50026B668 /* ReportService.swift in Sources */,
 				C6D78A0A2AD03B2900F03FB8 /* APIEndpoint.swift in Sources */,
 				CE4FEF812DFA90D80072E8B9 /* AchievementBadgesView.swift in Sources */,
@@ -757,6 +780,7 @@
 				CE8C47822DEA8D84003188ED /* KeyChain.swift in Sources */,
 				CE4FEF5F2DF96DE30072E8B9 /* CarouselQuotesRecordView.swift in Sources */,
 				CE8C47832DEA8D84003188ED /* UserAuthenticationManager.swift in Sources */,
+				CE4FEF892DFB391F0072E8B9 /* ListStoryQuotesDisplayView.swift in Sources */,
 				CE8C479D2DEA8D97003188ED /* APIClient.swift in Sources */,
 				CE4FEF592DF89A230072E8B9 /* StorySettingRecordView.swift in Sources */,
 				CE8C48402DEAB3FE003188ED /* AnimatedText.swift in Sources */,

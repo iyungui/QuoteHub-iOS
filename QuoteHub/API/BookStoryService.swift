@@ -457,11 +457,8 @@ class BookStoryService {
 
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
 
-        AF.request(urlString, method: .get, headers: headers).response { response in
-            if let data = response.data, let responseString = String(data: data, encoding: .utf8) {
-                print("Raw Server Response: \(responseString)")
-            }}
-                .responseDecodable(of: BookStoryResponse.self) { response in
+        AF.request(urlString, method: .get, headers: headers)
+        .responseDecodable(of: BookStoryResponse.self) { response in
             switch response.result {
             case .success(let data):
                 completion(.success(data))

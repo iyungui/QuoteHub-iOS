@@ -48,6 +48,7 @@ class FollowViewModel: ObservableObject, LoadingViewModel {
     }
 
     
+    // MARK: - TODO: 차단여부만 확인하고 있으므로 해당 함수 제외하고 지우기.
     func updateFollowStatus(userId: String) {
         service.checkFollowStatus(userId: userId) { result in
             DispatchQueue.main.async {
