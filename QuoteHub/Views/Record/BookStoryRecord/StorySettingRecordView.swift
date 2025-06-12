@@ -20,7 +20,6 @@ struct StorySettingRecordView: View {
             
             Spacer()
         }
-        .progressOverlay(viewModel: storiesViewModel, opacity: true)
         .alert("북스토리 완성!", isPresented: $formViewModel.showAlert, actions: {
             Button("확인") {
             }
@@ -51,6 +50,7 @@ struct StorySettingRecordView: View {
             ThoughtInputCard(book: book)
                 .environmentObject(formViewModel)
         }
+        .progressOverlay(viewModel: storiesViewModel, opacity: true)
     }
     
     private var thoughtSheetButton: some View {
