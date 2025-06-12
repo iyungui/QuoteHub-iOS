@@ -615,8 +615,8 @@ struct BookStoryDetailView: View {
         if isMyStory {
             // 내 스토리 - 편집/삭제
             NavigationLink {
-//                UpdateStoryView(storyId: story.id)
-                EmptyView()
+                StoryQuotesRecordView(book: story.bookId, storyId: story.id)
+                    .environmentObject(storiesViewModel)
             } label: {
                 Text("수정하기")
             }

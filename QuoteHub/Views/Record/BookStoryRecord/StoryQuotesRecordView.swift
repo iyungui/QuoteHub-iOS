@@ -20,11 +20,19 @@ enum BookStoryFormField: Hashable {
 
 struct StoryQuotesRecordView: View {
     let book: Book
+    let storyId: String?    // 북스토리 수정 시 사용
+    var isEditMode: Bool { storyId != nil }
+    
+    init(book: Book, storyId: String? = nil) {
+        self.book = book
+        self.storyId = storyId
+    }
+
     @EnvironmentObject var storiesViewModel: BookStoriesViewModel
     @StateObject private var formViewModel = StoryFormViewModel()
     
     @FocusState private var focusedField: BookStoryFormField?
-
+    
     var body: some View {
         VStack {
             if formViewModel.isCarouselView {
@@ -39,7 +47,6 @@ struct StoryQuotesRecordView: View {
             
             Spacer()
         }
-        
         .background(
             LinearGradient(
                 gradient: Gradient(colors: [
@@ -51,11 +58,20 @@ struct StoryQuotesRecordView: View {
                 endPoint: .bottom
             )
         )
+        .alert("알림", isPresented: $formViewModel.showAlert) {
+            Button("확인") {}
+        } message: {
+            Text(formViewModel.alertMessage)
+        }
+        
         .environmentObject(formViewModel)
         .navigationBarTitleDisplayMode(.inline)
-        .navigationTitle("북스토리 기록")
+        .navigationTitle(isEditMode ? "북스토리 수정" : "북스토리 기록")
         .toolbar {
             toolBarItems
+        }
+        .onAppear {
+            loadStoryDataIfNeeded()
         }
         .progressOverlay(viewModel: storiesViewModel, animationName: "progressLottie", opacity: true)
     }
@@ -103,7 +119,7 @@ struct StoryQuotesRecordView: View {
     
     private var nextButton: some View {
         NavigationLink {
-            StorySettingRecordView(book: book)
+            StorySettingRecordView(book: book, storyId: storyId)
             .environmentObject(formViewModel)
             .environmentObject(storiesViewModel)
         } label: {
@@ -112,6 +128,24 @@ struct StoryQuotesRecordView: View {
         }
         .disabled(!formViewModel.isQuotesFilled)
     }
+    
+    private func loadStoryDataIfNeeded() {
+        guard let storyId = storyId else { return }
+        
+        storiesViewModel.fetchSpecificBookStory(storyId: storyId) { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let story):
+                    formViewModel.loadFromBookStory(story)
+                case .failure(let error):
+                    print("Failed to load story data: \(error.localizedDescription)")
+                    formViewModel.alertMessage = "북스토리를 불러오지 못했어요."
+                    formViewModel.showAlert = true
+                }
+            }
+        }
+    }
+
 }
 
 #Preview {

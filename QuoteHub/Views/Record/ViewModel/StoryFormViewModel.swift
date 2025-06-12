@@ -294,7 +294,52 @@ class StoryFormViewModel: ObservableObject {
         isPublic = story.isPublic
         themeIds = story.themeIds ?? []
         
-        // 이미지 URL들을 UIImage로 변환하는 로직이 필요하다면 여기에 추가
-        // selectedImages = ... (서버에서 이미지를 다운로드하는 로직)
+        loadImagesFromLoadedStory(story)
+    }
+    
+    private func loadImagesFromLoadedStory(_ story: BookStory) {
+        guard let imagesURLs = story.storyImageURLs, !imagesURLs.isEmpty else {
+            selectedImages = [] // 이미지 빈배열이거나 없을 때
+            return
+        }
+        
+        var loadedImages: [UIImage] = []
+        
+        // 여러 비동기 작업을 그룹으로 관리
+        let group = DispatchGroup()
+        
+        for urlString in imagesURLs {
+            // 그룹에 작업 시작을 알림 (counter + 1)
+            group.enter()
+            
+            guard let url = URL(string: urlString) else {
+                // URL이 유효하지 않으면 그룹에서 나가기 (카운터 -1)
+                group.leave()
+                continue    // 다음 URL로 건너띔
+            }
+            
+            // URLSession으로 비동기 네트워크 요청 (이미 내부적으로 비동기로 구현되어 있음)
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                // defer - 이 클로저가 끝날 때 반드시 실행됨
+                defer { group.leave() } // 성공과 실패 관계없이 카운터 -1
+                
+                // 데이터 유효성 검사 및 이미지 변환로직
+                guard let data = data,
+                      let image = UIImage(data: data) else {
+                    print("북스토리 이미지를 불러오지 못했습니다. \(urlString)")
+                    return  // 실패 시 defer 가 group.leave() 호출
+                }
+                
+                // 메인 스레드에서 UI 관련 작업 수행
+                DispatchQueue.main.async {
+                    loadedImages.append(image)
+                }
+            }.resume()  // 실제 네트워크 요청 시작.
+        }
+        
+        // 모든 urls 작업이 완료되면 비동기 작업이 완료되었다고 알려줌 (카운터가 0이되면 notify됨)
+        group.notify(queue: .main) {
+            self.selectedImages = loadedImages
+        }
     }
 }
