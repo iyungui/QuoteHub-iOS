@@ -25,11 +25,6 @@ struct ListQuotesRecordView: View {
             // 새로운 quote 입력창
             newQuoteInputSection
         }
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-                quotePageAndTextFocused.wrappedValue = .quotePage
-            }
-        }
     }
     
     // MARK: - Quotes List Section
@@ -43,8 +38,7 @@ struct ListQuotesRecordView: View {
                     }
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.top, 16)
+            .padding(.top, 22)
         }
     }
     
@@ -70,7 +64,7 @@ struct ListQuotesRecordView: View {
                         .font(.caption)
                 }
             }
-            .padding(.horizontal, 16)
+            .padding(.horizontal, 16)   // 안쪽 패딩
             .padding(.vertical, 8)
             .background(
                 Rectangle()
@@ -92,13 +86,14 @@ struct ListQuotesRecordView: View {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color.lightPaper, lineWidth: 1)
         )
+        .padding(.horizontal, 25)   // 바깥쪽 패딩
     }
     
     // MARK: - New Quote Input Section
     
     private var newQuoteInputSection: some View {
         VStack(spacing: 0) {
-            // 페이지 번호 입력
+            // 페이지 번호 입력 & 글자수 표시 & 문장 추가
             HStack {
                 TextField(
                     text: $formViewModel.currentQuotePage,
@@ -120,8 +115,19 @@ struct ListQuotesRecordView: View {
                     currentInputCount: formViewModel.currentQuoteText.count,
                     maxCount: formViewModel.quoteMaxLength
                 )
+                
+                // 문장 추가 버튼
+                Button {
+                    formViewModel.addCurrentQuote()
+                    quotePageAndTextFocused.wrappedValue = nil
+                } label: {
+                    Text("추가")
+                        .font(.scoreDream(.medium, size: .caption))
+                        .foregroundColor(formViewModel.currentQuoteText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? .secondary.opacity(0.5) : .blue)
+                }
+                .disabled(formViewModel.currentQuoteText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             }
-            .padding(.horizontal, 16)
+            .padding(.horizontal, 16)   // 안쪽패딩
             .padding(.vertical, 12)
             .background(
                 Rectangle()
@@ -132,7 +138,8 @@ struct ListQuotesRecordView: View {
                     )
             )
             .cornerRadius(10, corners: [.topLeft, .topRight])
-            
+            .padding(.horizontal, 25)   // 바깥쪽 패딩
+
             // Quote 텍스트 입력
             CustomTextEditor(
                 text: $formViewModel.currentQuoteText,
@@ -143,34 +150,11 @@ struct ListQuotesRecordView: View {
             )
             .focused(quotePageAndTextFocused, equals: .quoteText)
             .cornerRadius(10, corners: [.bottomLeft, .bottomRight])
+            .padding(.horizontal, 25)   // 바깥쪽 패딩
+
             
-            HStack {
-                Spacer()
-                // 추가 버튼
-                Button {
-                    formViewModel.addCurrentQuote()
-                    quotePageAndTextFocused.wrappedValue = nil
-                } label: {
-                    HStack(spacing: 8) {
-                        Text("문장 추가")
-                            .font(.scoreDreamBody)
-                            .foregroundStyle(Color.white)
-                            
-                        Image("custom.pencil.line.badge.plus")
-                            .resizable()
-                            .scaledToFit()
-                            .font(.body)
-                            .frame(height: 24)
-                    }
-                }
-                .disabled(formViewModel.currentQuoteText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-                .padding(8)
-                .background(formViewModel.currentQuoteText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? Color.gray : Color.blue)
-                .opacity(formViewModel.currentQuoteText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? 0.3 : 1.0)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-            }
-            .padding(.top)
+            KeywordInputSection(keywordFocused: quotePageAndTextFocused)
+                .environmentObject(formViewModel)
         }
-        .padding(16)
     }
 }

@@ -12,7 +12,7 @@ struct StorySettingRecordView: View {
     @EnvironmentObject var formViewModel: StoryFormViewModel
     @EnvironmentObject var storiesViewModel: BookStoriesViewModel
     var focusedField: FocusState<BookStoryFormField?>.Binding
-
+    
     var body: some View {
         VStack(spacing: 20) {
             ThemeSelectionCard()

@@ -11,7 +11,9 @@ class StoryFormViewModel: ObservableObject {
     // 모든 페이지에서 입력 가능
     /// 키워드 입력
     @Published var keywords: [String] = []
-    @Published var currentKeywordInput: String = ""
+    @Published var inlineKeywordInput: String = ""
+    @Published var inlineKeywordFeedback: String? = nil
+
     /// 공백 키워드를 입력 시도하거나, 키워드 개수가 10개를 초과하거나 중복된 키워드가 있을 때 경고표시
     @Published var isShowingDuplicateWarning = false
     @Published var feedbackMessage: String? = nil
@@ -113,37 +115,78 @@ class StoryFormViewModel: ObservableObject {
     
     // MARK: - Keyword Methods
     
-    func addKeyword() {
-        // 키워드 입력란의 앞뒤 공백과 줄바꿈 문자를 제거
-        let trimmedKeyword = currentKeywordInput.trimmingCharacters(in: .whitespacesAndNewlines)
+    /// 인라인 키워드 입력 처리 ("#키워드" 형태)
+    func processInlineKeywordInput(_ newValue: String) {
+        // 띄어쓰기나 줄바꿈 감지 시 키워드 추가
+        if newValue.contains(" ") || newValue.contains("\n") {
+            addInlineKeyword(from: newValue)
+        }
+    }
+
+    /// 인라인 입력에서 키워드 추출 및 추가
+    private func addInlineKeyword(from input: String) {
+        let cleanInput = input.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        // 공백 키워드를 입력 시도하거나, 키워드 개수가 10개를 초과하거나 중복된 키워드가 있을 때 경고표시
-        if trimmedKeyword.isEmpty || keywords.count >= 10 || keywords.contains(trimmedKeyword) {
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                isShowingDuplicateWarning = true
-            }
-            // 3초 후 경고 숨김
-            // 화면을 빠르게 뒤로 나가면 클로저에서 강하게 캡쳐하여 순환참조가 발생하므로, 약하게 캡쳐
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
-                guard let self = self else { return }
-                withAnimation {
-                    self.isShowingDuplicateWarning = false
-                }
-            }
-        } else {    // 유효한 키워드인 경우
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                keywords.append(trimmedKeyword)
-                currentKeywordInput = ""
+        // "#" 제거하고 키워드만 추출
+        let keyword = cleanInput.replacingOccurrences(of: "#", with: "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        // 빈 키워드는 조용히 무시
+        guard !keyword.isEmpty else {
+            inlineKeywordInput = ""
+            return
+        }
+        
+        // 유효성 검사 및 피드백 처리
+        if isValidInlineKeyword(keyword) {
+            keywords.append(keyword)
+        } else {
+            showInlineKeywordFeedback(for: keyword)
+        }
+        
+        // 입력 필드 리셋
+        inlineKeywordInput = ""
+    }
+
+    /// 키워드 유효성 검사 (인라인용)
+    private func isValidInlineKeyword(_ keyword: String) -> Bool {
+        return keyword.count <= keywordMaxLength &&
+               !keywords.contains(keyword) &&
+               keywords.count < 10
+    }
+
+    /// 피드백 메시지 표시
+    private func showInlineKeywordFeedback(for keyword: String) {
+        let message: String
+        
+        if keyword.count > keywordMaxLength {
+            message = "키워드는 8자 이내로 입력해주세요"
+        } else if keywords.contains(keyword) {
+            message = "이미 추가된 키워드입니다"
+        } else if keywords.count >= 10 {
+            message = "키워드는 최대 10개까지 추가할 수 있습니다"
+        } else {
+            return // 예상치 못한 경우, 피드백 없음
+        }
+        
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+            inlineKeywordFeedback = message
+        }
+        
+        // 3초 후 피드백 숨김
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
+            guard let self = self else { return }
+            withAnimation {
+                self.inlineKeywordFeedback = nil
             }
         }
     }
-    
-    func removeKeyword(_ keyword: String) {
-        if let index = keywords.firstIndex(of: keyword) {
-            keywords.remove(at: index)
-        }
+
+    /// 키워드 제거 (기존과 동일하지만 명시적)
+    func removeInlineKeyword(_ keyword: String) {
+        keywords.removeAll { $0 == keyword }
     }
-    
+
     // MARK: - Quote Methods
     
     /// quote 캐러셀 뷰에서 사용 (빈 quote 페이지 생성)
@@ -238,7 +281,7 @@ class StoryFormViewModel: ObservableObject {
         selectedImages = []
         isPublic = true
         themeIds = []
-        currentKeywordInput = ""
+        inlineKeywordInput = ""
         feedbackMessage = nil
     }
     

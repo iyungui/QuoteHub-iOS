@@ -29,7 +29,7 @@ struct StoryQuotesRecordView: View {
         VStack {
             if formViewModel.isCarouselView {
                 CarouselQuotesRecordView(
-                    quotePageAndTextFocused: $focusedField
+                    focusFields: $focusedField
                 )
             } else {
                 ListQuotesRecordView(
@@ -38,7 +38,6 @@ struct StoryQuotesRecordView: View {
             }
             
             Spacer()
-//            KeywordBottomInputBar(keywordFocused: $focusedField).ignoresSafeArea(.keyboard)
         }
         
         .background(
