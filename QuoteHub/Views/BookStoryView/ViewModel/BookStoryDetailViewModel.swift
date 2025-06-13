@@ -41,7 +41,6 @@ class BookStoryDetailViewModel: ObservableObject, LoadingViewModel {
         storiesViewModel.fetchSpecificBookStory(storyId: storyId) { [weak self] result in
             DispatchQueue.main.async {
                 guard let self = self else { return }
-//                sleep(1)
 
                 switch result {
                 case .success(let story):
