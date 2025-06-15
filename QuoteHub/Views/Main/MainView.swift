@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// MARK: - for plus button sheet
 enum ActiveSheet: Identifiable {
     case search, theme
     
@@ -17,6 +18,8 @@ enum ActiveSheet: Identifiable {
         }
     }
 }
+
+// MARK: - Main View
 
 struct MainView: View {
     @State private var selectedTab: Int = 2

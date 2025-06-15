@@ -11,14 +11,13 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var versionManager = AppVersionManager()
-
     @EnvironmentObject private var authManager: UserAuthenticationManager
+    @EnvironmentObject private var userViewModel: UserViewModel
+    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
+    @EnvironmentObject private var themesViewModel: ThemesViewModel
+    
     @State private var isSplashView = true  // 런치스크린 표시
-    
-    @StateObject private var userViewModel = UserViewModel()
-    @StateObject private var storiesViewModel = BookStoriesViewModel()
-    @StateObject private var themesViewModel = ThemesViewModel()
-    
+
     var body: some View {
         if isSplashView {
             LaunchScreenView()
@@ -50,10 +49,6 @@ struct ContentView: View {
                     OnboardingView()
                 }
             }
-            .environmentObject(userViewModel)
-            .environmentObject(storiesViewModel)
-            .environmentObject(themesViewModel)
-            
             // 앱 업데이트 필요 시, alert으로 유도
             .alert("업데이트 필요", isPresented: $versionManager.showUpdateAlert) {
                 Button("확인") {

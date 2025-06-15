@@ -184,19 +184,22 @@ struct SettingView: View {
                 }) {
                     HStack {
                         Image(systemName: "xmark.circle")
-                        Text("회원탈퇴")
+                        Text("계정 탈퇴")
                             .foregroundColor(.red)
                     }
                 }
-                .actionSheet(isPresented: $showDeleteUserActionSheet) {
-                    ActionSheet(title: Text("회원 탈퇴"), message: Text("회원 탈퇴를 진행하면 모든 개인 데이터와 정보가 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다. 정말로 계속하시겠습니까?"), buttons: [
-                        .destructive(Text("회원 탈퇴")) {
-                            Task {
-//                                await userAuthManager.revokeAccount() // bool
+                .alert("계정 탈퇴", isPresented: $showDeleteUserActionSheet) {
+                    Button("취소", role: .cancel) {}
+                    Button("탈퇴", role: .destructive) {
+                        Task {
+                            let deletingSuccess = await userAuthManager.revokeAccount()
+                            if !deletingSuccess {
+                                print("계정 탈퇴 실패")
                             }
-                        },
-                        .cancel()
-                    ])
+                        }
+                    }
+                } message: {
+                    Text("회원 탈퇴를 진행하면 모든 개인 데이터와 정보가 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다. 정말로 계속하시겠습니까?")
                 }
             }
         }

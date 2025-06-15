@@ -22,7 +22,7 @@ struct OnboardingView: View {
     @State private var currentPage = 0
     @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject var userAuthManager: UserAuthenticationManager
-
+    
     var body: some View {
         VStack {
             TabView(selection: $currentPage) {
