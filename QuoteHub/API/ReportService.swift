@@ -16,12 +16,9 @@ class ReportService {
             "targetId": targetId,
             "reason": reason
         ]
-        
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            completion(.failure(NSError(domain: "ReportService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])))
+        guard let token = AuthService.shared.validAccessToken else {
             return
         }
-        
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
         
         // Alamofire를 사용한 POST 요청
@@ -41,12 +38,9 @@ class ReportService {
             "targetId": targetId,
             "reason": reason
         ]
-        
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            completion(.failure(NSError(domain: "ReportService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])))
+        guard let token = AuthService.shared.validAccessToken else {
             return
         }
-        
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
 
         AF.request(url, method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).response { response in
@@ -61,12 +55,10 @@ class ReportService {
 
     func getReportUsers(completion: @escaping (Result<[ReportDataModel], Error>) -> Void) {
         let url = APIEndpoint.reportUserURL
-
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            completion(.failure(NSError(domain: "ReportService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])))
+        guard let token = AuthService.shared.validAccessToken else {
             return
         }
-
+        
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
 
         AF.request(url, method: .get, headers: headers).responseDecodable(of: APIResponse<[ReportDataModel]>.self) { response in
@@ -81,12 +73,11 @@ class ReportService {
 
     func getReportStories(completion: @escaping (Result<[StoryReportDataModel], Error>) -> Void) {
         let url = APIEndpoint.reportStoryURL
-
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            completion(.failure(NSError(domain: "ReportService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])))
+        
+        guard let token = AuthService.shared.validAccessToken else {
             return
         }
-
+        
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
 
         AF.request(url, method: .get, headers: headers).responseDecodable(of: APIResponse<[StoryReportDataModel]>.self) { response in

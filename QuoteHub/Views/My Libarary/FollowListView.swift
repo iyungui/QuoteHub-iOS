@@ -280,19 +280,6 @@ struct UserRow: View {
                 .foregroundColor(.secondaryText)
                 .lineLimit(2)
                 .multilineTextAlignment(.leading)
-            
-            // 추가 정보 (가입일 등)
-            if let createdAt = user.createdAt {
-                HStack(spacing: 4) {
-                    Image(systemName: "calendar")
-                        .font(.caption2)
-                        .foregroundColor(.secondaryText.opacity(0.7))
-                    
-                    Text("가입일: \(createdAt.prefix(10))")
-                        .font(.scoreDream(.light, size: .caption))
-                        .foregroundColor(.secondaryText.opacity(0.8))
-                }
-            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }

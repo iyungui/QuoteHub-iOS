@@ -44,11 +44,12 @@
 		CE4FEF872DFB39080072E8B9 /* CarouselStoryQuotesDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF862DFB39080072E8B9 /* CarouselStoryQuotesDisplayView.swift */; };
 		CE4FEF892DFB391F0072E8B9 /* ListStoryQuotesDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF882DFB391F0072E8B9 /* ListStoryQuotesDisplayView.swift */; };
 		CE4FEF8B2DFB3EFC0072E8B9 /* CommonStoryDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF8A2DFB3EFC0072E8B9 /* CommonStoryDisplayView.swift */; };
+		CE4FEFAA2DFDC0350072E8B9 /* TabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEFA92DFDC0350072E8B9 /* TabController.swift */; };
+		CE4FEFAD2DFEABA20072E8B9 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = CE4FEFAC2DFEABA20072E8B9 /* KeychainAccess */; };
 		CE7274182DF8050300B09DC3 /* StoryFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7274162DF8050300B09DC3 /* StoryFormViewModel.swift */; };
 		CE8C477F2DEA8D84003188ED /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47782DEA8D84003188ED /* LoginView.swift */; };
 		CE8C47802DEA8D84003188ED /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47792DEA8D84003188ED /* OnboardingView.swift */; };
-		CE8C47812DEA8D84003188ED /* SignInWithAppleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C477A2DEA8D84003188ED /* SignInWithAppleView.swift */; };
-		CE8C47822DEA8D84003188ED /* KeyChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C477C2DEA8D84003188ED /* KeyChain.swift */; };
+		CE8C47822DEA8D84003188ED /* KeyChainTokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C477C2DEA8D84003188ED /* KeyChainTokenManager.swift */; };
 		CE8C47832DEA8D84003188ED /* UserAuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C477D2DEA8D84003188ED /* UserAuthenticationManager.swift */; };
 		CE8C478E2DEA8D93003188ED /* APIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47842DEA8D93003188ED /* APIResponse.swift */; };
 		CE8C478F2DEA8D93003188ED /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47852DEA8D93003188ED /* Book.swift */; };
@@ -109,7 +110,6 @@
 		CE8C48E42DF05290003188ED /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = CE8C48E32DF05290003188ED /* Lottie */; };
 		CE8C48ED2DF1134C003188ED /* RandomBooksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48EC2DF1134C003188ED /* RandomBooksViewModel.swift */; };
 		CE8C49192DF15FF9003188ED /* DraftStory.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C49182DF15FF9003188ED /* DraftStory.swift */; };
-		CE8C491B2DF1601C003188ED /* DraftManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C491A2DF1601C003188ED /* DraftManager.swift */; };
 		CE8C49452DF18B69003188ED /* ThemeGalleryGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C49442DF18B68003188ED /* ThemeGalleryGridView.swift */; };
 		CE8C49472DF18B89003188ED /* ThemeGalleryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C49462DF18B89003188ED /* ThemeGalleryListView.swift */; };
 		CE8C49712DF19111003188ED /* StoryGridCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C49702DF19111003188ED /* StoryGridCard.swift */; };
@@ -119,6 +119,7 @@
 		CE8C497B2DF1E548003188ED /* ReadingLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C497A2DF1E548003188ED /* ReadingLevel.swift */; };
 		CE8C497D2DF1E575003188ED /* ReadingLevelSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C497C2DF1E575003188ED /* ReadingLevelSection.swift */; };
 		CE8C497F2DF1E874003188ED /* AppVersionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C497E2DF1E874003188ED /* AppVersionManager.swift */; };
+		CED3795D2DFEE902001CE700 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED3795C2DFEE902001CE700 /* AuthService.swift */; };
 		CEF1A46D2DF72E7E001EC484 /* BookInfoCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF1A46C2DF72E7E001EC484 /* BookInfoCard.swift */; };
 		CEF1A46F2DF72F99001EC484 /* KeywordInputSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF1A46E2DF72F99001EC484 /* KeywordInputSection.swift */; };
 		CEF1A4732DF73A1E001EC484 /* ThoughtInputCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF1A4722DF73A1E001EC484 /* ThoughtInputCard.swift */; };
@@ -164,11 +165,11 @@
 		CE4FEF862DFB39080072E8B9 /* CarouselStoryQuotesDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselStoryQuotesDisplayView.swift; sourceTree = "<group>"; };
 		CE4FEF882DFB391F0072E8B9 /* ListStoryQuotesDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListStoryQuotesDisplayView.swift; sourceTree = "<group>"; };
 		CE4FEF8A2DFB3EFC0072E8B9 /* CommonStoryDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonStoryDisplayView.swift; sourceTree = "<group>"; };
+		CE4FEFA92DFDC0350072E8B9 /* TabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabController.swift; sourceTree = "<group>"; };
 		CE7274162DF8050300B09DC3 /* StoryFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryFormViewModel.swift; sourceTree = "<group>"; };
 		CE8C47782DEA8D84003188ED /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		CE8C47792DEA8D84003188ED /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
-		CE8C477A2DEA8D84003188ED /* SignInWithAppleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleView.swift; sourceTree = "<group>"; };
-		CE8C477C2DEA8D84003188ED /* KeyChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChain.swift; sourceTree = "<group>"; };
+		CE8C477C2DEA8D84003188ED /* KeyChainTokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainTokenManager.swift; sourceTree = "<group>"; };
 		CE8C477D2DEA8D84003188ED /* UserAuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuthenticationManager.swift; sourceTree = "<group>"; };
 		CE8C47842DEA8D93003188ED /* APIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIResponse.swift; sourceTree = "<group>"; };
 		CE8C47852DEA8D93003188ED /* Book.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
@@ -228,7 +229,6 @@
 		CE8C48E02DF04BD8003188ED /* CustomProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressView.swift; sourceTree = "<group>"; };
 		CE8C48EC2DF1134C003188ED /* RandomBooksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomBooksViewModel.swift; sourceTree = "<group>"; };
 		CE8C49182DF15FF9003188ED /* DraftStory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftStory.swift; sourceTree = "<group>"; };
-		CE8C491A2DF1601C003188ED /* DraftManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftManager.swift; sourceTree = "<group>"; };
 		CE8C49442DF18B68003188ED /* ThemeGalleryGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeGalleryGridView.swift; sourceTree = "<group>"; };
 		CE8C49462DF18B89003188ED /* ThemeGalleryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeGalleryListView.swift; sourceTree = "<group>"; };
 		CE8C49702DF19111003188ED /* StoryGridCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryGridCard.swift; sourceTree = "<group>"; };
@@ -238,6 +238,7 @@
 		CE8C497A2DF1E548003188ED /* ReadingLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingLevel.swift; sourceTree = "<group>"; };
 		CE8C497C2DF1E575003188ED /* ReadingLevelSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingLevelSection.swift; sourceTree = "<group>"; };
 		CE8C497E2DF1E874003188ED /* AppVersionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionManager.swift; sourceTree = "<group>"; };
+		CED3795C2DFEE902001CE700 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		CEF1A46C2DF72E7E001EC484 /* BookInfoCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookInfoCard.swift; sourceTree = "<group>"; };
 		CEF1A46E2DF72F99001EC484 /* KeywordInputSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordInputSection.swift; sourceTree = "<group>"; };
 		CEF1A4722DF73A1E001EC484 /* ThoughtInputCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThoughtInputCard.swift; sourceTree = "<group>"; };
@@ -247,6 +248,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		CE4FEF8C2DFBDDB20072E8B9 /* Utils */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Utils; sourceTree = "<group>"; };
 		CE8C48472DEADAAC003188ED /* Font */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Font; sourceTree = "<group>"; };
 		CE8C48E92DF05884003188ED /* Lottie */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Lottie; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -260,6 +262,7 @@
 				C697D0F82AC8F64400F0111B /* SDWebImageSwiftUI in Frameworks */,
 				C694A2DF2AC3FFBA00574D20 /* Alamofire in Frameworks */,
 				CE8C48E42DF05290003188ED /* Lottie in Frameworks */,
+				CE4FEFAD2DFEABA20072E8B9 /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,6 +300,7 @@
 			children = (
 				C6D78A092AD03B2900F03FB8 /* APIEndpoint.swift */,
 				C694A2EC2AC5778400574D20 /* UserService.swift */,
+				CED3795C2DFEE902001CE700 /* AuthService.swift */,
 				C697D0FF2AC9535B00F0111B /* BookStoryService.swift */,
 				C6DE7F502AF76B480020F5CB /* StoryCommentService.swift */,
 				C60700CC2AFE05D9009D202A /* FolderService.swift */,
@@ -327,6 +331,7 @@
 			isa = PBXGroup;
 			children = (
 				C6B56FFD2AA8CC1B003905C3 /* QuoteHub.entitlements */,
+				CE4FEF8C2DFBDDB20072E8B9 /* Utils */,
 				CE8C483E2DEAB3EA003188ED /* Common */,
 				CE8C47772DEA8D01003188ED /* APP */,
 				CE8C477E2DEA8D84003188ED /* Auth */,
@@ -370,7 +375,6 @@
 			isa = PBXGroup;
 			children = (
 				C6B56FDC2AA8B60B003905C3 /* QuoteHubApp.swift */,
-				CE8C491A2DF1601C003188ED /* DraftManager.swift */,
 				C6B56FDE2AA8B60B003905C3 /* ContentView.swift */,
 				CE8C486C2DEB2A62003188ED /* LaunchScreenView.swift */,
 			);
@@ -380,9 +384,8 @@
 		CE8C477B2DEA8D84003188ED /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				CE8C47782DEA8D84003188ED /* LoginView.swift */,
 				CE8C47792DEA8D84003188ED /* OnboardingView.swift */,
-				CE8C477A2DEA8D84003188ED /* SignInWithAppleView.swift */,
+				CE8C47782DEA8D84003188ED /* LoginView.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -391,7 +394,7 @@
 			isa = PBXGroup;
 			children = (
 				CE8C477B2DEA8D84003188ED /* Login */,
-				CE8C477C2DEA8D84003188ED /* KeyChain.swift */,
+				CE8C477C2DEA8D84003188ED /* KeyChainTokenManager.swift */,
 				CE8C477D2DEA8D84003188ED /* UserAuthenticationManager.swift */,
 			);
 			path = Auth;
@@ -438,6 +441,7 @@
 			isa = PBXGroup;
 			children = (
 				CE8C47F02DEA8DAE003188ED /* HomeView.swift */,
+				CE4FEFA92DFDC0350072E8B9 /* TabController.swift */,
 				CE8C48762DEBEDE0003188ED /* RandomBookListView.swift */,
 				CE8C47F12DEA8DAE003188ED /* PublicStoriesListView.swift */,
 				CE8C47F22DEA8DAE003188ED /* PublicThemesListView.swift */,
@@ -622,6 +626,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				CE4FEF8C2DFBDDB20072E8B9 /* Utils */,
 				CE8C48472DEADAAC003188ED /* Font */,
 				CE8C48E92DF05884003188ED /* Lottie */,
 			);
@@ -631,6 +636,7 @@
 				C697D0F72AC8F64400F0111B /* SDWebImageSwiftUI */,
 				C6DE7F552AF76EA30020F5CB /* TabBar */,
 				CE8C48E32DF05290003188ED /* Lottie */,
+				CE4FEFAC2DFEABA20072E8B9 /* KeychainAccess */,
 			);
 			productName = QuoteHub;
 			productReference = C6B56FD92AA8B60B003905C3 /* QuoteHub.app */;
@@ -665,6 +671,7 @@
 				C697D0F62AC8F64400F0111B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				C6DE7F542AF76EA30020F5CB /* XCRemoteSwiftPackageReference "TabBar" */,
 				CE8C48E22DF05290003188ED /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				CE4FEFAB2DFEABA20072E8B9 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 			);
 			productRefGroup = C6B56FDA2AA8B60B003905C3 /* Products */;
 			projectDirPath = "";
@@ -741,6 +748,7 @@
 				CE8C48322DEA8DAE003188ED /* VersionInfoView.swift in Sources */,
 				CE8C48332DEA8DAE003188ED /* CommentView.swift in Sources */,
 				CE8C48E12DF04BD8003188ED /* CustomProgressView.swift in Sources */,
+				CE4FEFAA2DFDC0350072E8B9 /* TabController.swift in Sources */,
 				CE8C497D2DF1E575003188ED /* ReadingLevelSection.swift in Sources */,
 				CE4FEF8B2DFB3EFC0072E8B9 /* CommonStoryDisplayView.swift in Sources */,
 				CE8C48712DEB5190003188ED /* ProfileView.swift in Sources */,
@@ -749,7 +757,6 @@
 				CE8C49472DF18B89003188ED /* ThemeGalleryListView.swift in Sources */,
 				CE8C48802DEBF39D003188ED /* StoryQuotesRecordView.swift in Sources */,
 				CE8C48812DEBF39D003188ED /* SearchBookView.swift in Sources */,
-				CE8C491B2DF1601C003188ED /* DraftManager.swift in Sources */,
 				CE8C48822DEBF39D003188ED /* SetThemeView.swift in Sources */,
 				CE8C48392DEA8DAE003188ED /* ThemeDetailView.swift in Sources */,
 				CE4FEF612DF96DF60072E8B9 /* ListQuotesRecordView.swift in Sources */,
@@ -776,8 +783,7 @@
 				CE8C477F2DEA8D84003188ED /* LoginView.swift in Sources */,
 				CE8C49732DF19133003188ED /* StoryListCard.swift in Sources */,
 				CE8C47802DEA8D84003188ED /* OnboardingView.swift in Sources */,
-				CE8C47812DEA8D84003188ED /* SignInWithAppleView.swift in Sources */,
-				CE8C47822DEA8D84003188ED /* KeyChain.swift in Sources */,
+				CE8C47822DEA8D84003188ED /* KeyChainTokenManager.swift in Sources */,
 				CE4FEF5F2DF96DE30072E8B9 /* CarouselQuotesRecordView.swift in Sources */,
 				CE8C47832DEA8D84003188ED /* UserAuthenticationManager.swift in Sources */,
 				CE4FEF892DFB391F0072E8B9 /* ListStoryQuotesDisplayView.swift in Sources */,
@@ -788,6 +794,7 @@
 				CE8C479E2DEA8D97003188ED /* AuthEndpoints.swift in Sources */,
 				CE8C479F2DEA8D97003188ED /* BookEndpoints.swift in Sources */,
 				CE8C47A02DEA8D97003188ED /* EndpointProtocol.swift in Sources */,
+				CED3795D2DFEE902001CE700 /* AuthService.swift in Sources */,
 				CE8C47A12DEA8D97003188ED /* NetworkError.swift in Sources */,
 				CE8C47A22DEA8D97003188ED /* UserEndpoints.swift in Sources */,
 				CEF1A46F2DF72F99001EC484 /* KeywordInputSection.swift in Sources */,
@@ -1069,6 +1076,14 @@
 				minimumVersion = 1.3.0;
 			};
 		};
+		CE4FEFAB2DFEABA20072E8B9 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		CE8C48E22DF05290003188ED /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios";
@@ -1094,6 +1109,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C6DE7F542AF76EA30020F5CB /* XCRemoteSwiftPackageReference "TabBar" */;
 			productName = TabBar;
+		};
+		CE4FEFAC2DFEABA20072E8B9 /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CE4FEFAB2DFEABA20072E8B9 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
 		};
 		CE8C48E32DF05290003188ED /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;

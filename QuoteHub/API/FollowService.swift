@@ -12,13 +12,10 @@ class FollowService {
     
     func followUser(userId: String, completion: @escaping(Result<FollowResponse, Error>) -> Void) {
         
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            let error = NSError(domain: "FolderService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])
-            print("Error: \(error.localizedDescription)")
-            completion(.failure(error))
+
+        guard let token = AuthService.shared.validAccessToken else {
             return
         }
-
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
         
         var urlString = APIEndpoint.followUserURL
@@ -44,13 +41,9 @@ class FollowService {
     // check status
     func checkFollowStatus(userId: String, completion: @escaping (Result<CheckFollowStatus, Error>) -> Void) {
 
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            let error = NSError(domain: "FolderService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])
-            print("Error: \(error.localizedDescription)")
-            completion(.failure(error))
+        guard let token = AuthService.shared.validAccessToken else {
             return
         }
-
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
         
         let urlString = APIEndpoint.checkFollowStatusURL + "/\(userId)"
@@ -140,12 +133,9 @@ class FollowService {
             completion(.failure(NSError(domain: "FollowService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
             return
         }
-        
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            completion(.failure(NSError(domain: "StoryCommentService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])))
+        guard let token = AuthService.shared.validAccessToken else {
             return
         }
-        
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
 
         let parameters: [String: Any] = [
@@ -167,10 +157,7 @@ class FollowService {
     
     func unfolllowUser(userId: String, completion: @escaping(Result<FollowResponse, Error>) -> Void) {
         
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            let error = NSError(domain: "FollowService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])
-            print("Error: \(error.localizedDescription)")
-            completion(.failure(error))
+        guard let token = AuthService.shared.validAccessToken else {
             return
         }
 
@@ -198,14 +185,9 @@ class FollowService {
     
     func getBlockedList(completion: @escaping (Result<[User], Error>) -> Void) {
         let url = APIEndpoint.blockedListURL
-        
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            let error = NSError(domain: "FollowService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])
-            print("Error: \(error.localizedDescription)")
-            completion(.failure(error))
+        guard let token = AuthService.shared.validAccessToken else {
             return
         }
-
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
 
         AF.request(url, method: .get, headers: headers).responseDecodable(of: SearchUserResponse.self) { response in

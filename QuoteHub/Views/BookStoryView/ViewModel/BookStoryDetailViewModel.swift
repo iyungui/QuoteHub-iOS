@@ -32,6 +32,8 @@ class BookStoryDetailViewModel: ObservableObject, LoadingViewModel {
         self.storiesViewModel = storiesViewModel
     }
     
+    private var loadingTask: Task<Void, Never>?
+    
     // MARK: - Methods
     /// 북스토리 id를 통해 서버로부터 해당 최신 북스토리 받아오는 함수
     func loadStoryDetail(storyId: String) {

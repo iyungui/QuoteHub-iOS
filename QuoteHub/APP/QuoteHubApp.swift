@@ -8,9 +8,10 @@
 import SwiftUI
 //import SwiftData
 
+// QuoteHubApp 에서는 SwiftData ModelContainer 설정을 담당
 @main
 struct QuoteHubApp: App {
-    @StateObject var userAuthManager = UserAuthenticationManager()
+    @StateObject var authManager = UserAuthenticationManager()
 
     // SwiftData ModelContainer 설정
 //    var sharedModelContainer: ModelContainer = {
@@ -36,7 +37,7 @@ struct QuoteHubApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(userAuthManager)            
+                .environmentObject(authManager)
         }
 //        .modelContainer(sharedModelContainer)
     }

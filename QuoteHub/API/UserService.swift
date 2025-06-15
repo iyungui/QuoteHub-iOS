@@ -39,7 +39,8 @@ class UserService {
     func getProfile(userId: String?, completion: @escaping (Result<User, Error>) -> Void) {
         
         var headers: HTTPHeaders?
-        if let token = KeyChain.read(key: "JWTAccessToken") {
+        
+        if let token = AuthService.shared.validAccessToken {
             headers = ["Authorization": "Bearer \(token)"]
         }
 
@@ -61,24 +62,13 @@ class UserService {
                     if userResponse.success {
                         completion(.success(userResponse.data!)) // userResponse.data를 반환
                     }
-                case .failure:
-                    if response.response?.statusCode == 401 {
-                        UserAuthenticationManager().renewAccessToken { success in
-                            if success {
-                                print("retry")
-                                self.getProfile(userId: userId, completion: completion)
-                            } else {
-                                completion(.failure(NSError(domain: "UserService", code: -3, userInfo: [NSLocalizedDescriptionKey: "Token renewal failed"])))
-                            }
-                        }
-                    } else {
-                        // 디버깅을 위한 추가 정보
+                case .failure:                        // 디버깅을 위한 추가 정보
                         let statusCode = response.response?.statusCode ?? -1
                         let errorDescription = response.error?.localizedDescription ?? "Unknown error"
                         print("Profile API Error - Status Code: \(statusCode), Error: \(errorDescription)")
                         
                         completion(.failure(NSError(domain: "UserService", code: -4, userInfo: [NSLocalizedDescriptionKey: "API Request Failed with status \(statusCode): \(errorDescription)"])))
-                    }
+                    
                 }
             }
     }
@@ -90,10 +80,8 @@ class UserService {
             return
         }
         
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            completion(.failure(NSError(domain: "UserService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])))
-            return
-        }
+//        AuthService.shared.validateAndRenewToken()
+        let token = AuthService.shared.validAccessToken ?? ""
         
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
         
@@ -133,14 +121,6 @@ class UserService {
                         } else {
                             completion(.failure(NSError(domain: "UserService", code: statusCode, userInfo: [NSLocalizedDescriptionKey: "An error occurred"])))
                         }
-                    case 401:   // Unauthorized
-                        UserAuthenticationManager().renewAccessToken { success in
-                            if success {
-                                self.updateProfile(nickname: nickname, profileImage: profileImage, statusMessage: statusMessage, monthlyReadingGoal: monthlyReadingGoal, completion: completion)    // retry
-                            } else {
-                                completion(.failure(NSError(domain: "UserService", code: -3, userInfo: [NSLocalizedDescriptionKey: "Token renewal failed"])))
-                            }
-                        }
                     default:
                         completion(.failure(NSError(domain: "UserService", code: statusCode, userInfo: [NSLocalizedDescriptionKey: "API Request Failed with status \(statusCode)"])))
                     }
@@ -157,11 +137,9 @@ class UserService {
         
         let parameters = ["nickname": nickname]
         
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            completion(.failure(NSError(domain: "UserService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])))
+        guard let token = AuthService.shared.validAccessToken else {
             return
         }
-        
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
 
         AF.request(url, method: .get, parameters: parameters, headers: headers).responseDecodable(of: SearchUserResponse.self) { response in

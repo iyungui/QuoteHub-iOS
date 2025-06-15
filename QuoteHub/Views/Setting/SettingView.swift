@@ -171,10 +171,8 @@ struct SettingView: View {
                 .actionSheet(isPresented: $showLogoutActionSheet) {
                     ActionSheet(title: Text("로그아웃"), message: Text("정말로 로그아웃 하시겠습니까?"), buttons: [
                         .destructive(Text("로그아웃")) {
-                            userAuthManager.logout { result in
-                                if case .failure(let error) = result {
-                                    print("로그아웃 실패: \(error.localizedDescription)")
-                                }
+                            Task {
+                                await userAuthManager.logout()
                             }
                         },
                         .cancel()
@@ -193,10 +191,8 @@ struct SettingView: View {
                 .actionSheet(isPresented: $showDeleteUserActionSheet) {
                     ActionSheet(title: Text("회원 탈퇴"), message: Text("회원 탈퇴를 진행하면 모든 개인 데이터와 정보가 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다. 정말로 계속하시겠습니까?"), buttons: [
                         .destructive(Text("회원 탈퇴")) {
-                            userAuthManager.revokeUser { result in
-                                if case .failure(let error) = result {
-                                    print("회원 탈퇴 실패: \(error.localizedDescription)")
-                                }
+                            Task {
+//                                await userAuthManager.revokeAccount() // bool
                             }
                         },
                         .cancel()

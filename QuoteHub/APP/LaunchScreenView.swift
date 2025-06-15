@@ -9,7 +9,6 @@ import SwiftUI
 import Lottie
 
 struct LaunchScreenView: View {
-    
     var body: some View {
         VStack(spacing: 25) {
             LottieView(animation: .named("quotehub_logo"))

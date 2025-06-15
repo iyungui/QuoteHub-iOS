@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// ContentView 에서는 앱 화면 분기처리
+
 struct ContentView: View {
     @StateObject private var versionManager = AppVersionManager()
 
@@ -20,33 +22,36 @@ struct ContentView: View {
     var body: some View {
         if isSplashView {
             LaunchScreenView()
-            // TODO: 비동기 Task 추가 - 앱 시작할 때 미리 데이터 로드
+                // LaunchScreenView 나타날 때 토큰 검증 및 앱 버전 체크
                 .onAppear {
-                    DispatchQueue.main.async {
-                        authManager.validateToken()
-                        versionManager.checkVersionFromAppStore()
-                    }
+                    versionManager.checkVersionFromAppStore()
+                }
+                // TODO: - 여기서 .task 로 (유저, 북스토리, 테마) 데이터 모델을 미리 로드하고 전달하기.
+                .task {
+                    await authManager.validateAndRenewTokenNeeded()
                     
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        withAnimation {
-                            isSplashView = false
-                        }
+                    try? await Task.sleep(nanoseconds: 1_000_000_000)
+                    withAnimation {
+                        isSplashView = false
                     }
                 }
         } else {
             Group {
-                if authManager.isUserAuthenticated || authManager.isOnboardingComplete {
+                // 앱을 시작할 때, 인증된 사용자라면 또는 게스트로그인 사용자라면 MainView로 가고,
+                // 둘 다 해당되지 않는다면 OnboardingView 로 이동
+                if authManager.isUserAuthenticated || authManager.isGuestMode {
                     MainView()
-                        .environmentObject(userViewModel)
-                        .environmentObject(authManager)
-                        .environmentObject(storiesViewModel)
-                        .environmentObject(themesViewModel)
                 } else {
-                    OnboardingView().environmentObject(authManager)
+                    OnboardingView()
                 }
             }
+            .environmentObject(userViewModel)
+            .environmentObject(storiesViewModel)
+            .environmentObject(themesViewModel)
+            
+            // 앱 업데이트 필요 시, alert으로 유도
             .alert("업데이트 필요", isPresented: $versionManager.showUpdateAlert) {
-                Button("업데이트") {
+                Button("확인") {
                     versionManager.goUpdate()
                     versionManager.closeApp()
                 }

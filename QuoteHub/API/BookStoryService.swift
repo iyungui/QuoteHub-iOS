@@ -32,10 +32,7 @@ class BookStoryService {
             return
         }
 
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            let error = NSError(domain: "BookStoryService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])
-            print("Error: \(error.localizedDescription)")
-            completion(.failure(error))
+        guard let token = AuthService.shared.validAccessToken else {
             return
         }
         
@@ -106,19 +103,9 @@ class BookStoryService {
             case .success(let data):
                 completion(.success(data))
             case .failure:
-                if response.response?.statusCode == 401 {
-                    UserAuthenticationManager().renewAccessToken { success in
-                        if success {
-                            self.createBookStory(images: images, bookId: bookId, quotes: quotes, content: content, isPublic: isPublic, keywords: keywords, themeIds: themeIds, completion: completion)
-                        } else {
-                            let renewalError = NSError(domain: "BookStoryService", code: -3, userInfo: [NSLocalizedDescriptionKey: "Token renewal failed"])
-                            completion(.failure(renewalError))
-                        }
-                    }
-                } else {
                     let generalError = NSError(domain: "BookStoryService", code: -4, userInfo: [NSLocalizedDescriptionKey: "API Request Failed"])
                     completion(.failure(generalError))
-                }
+                
             }
         }
     }
@@ -140,7 +127,8 @@ class BookStoryService {
         
         // Create headers only if a token exists
         var headers: HTTPHeaders?
-        if let token = KeyChain.read(key: "JWTAccessToken") {
+
+        if let token = AuthService.shared.validAccessToken {
             headers = ["Authorization": "Bearer \(token)"]
         }
         
@@ -182,11 +170,9 @@ class BookStoryService {
             return
         }
         
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            print("No Authorization Token Found for Bookstories")
+        guard let token = AuthService.shared.validAccessToken else {
             return
         }
-
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
 
 
@@ -196,19 +182,8 @@ class BookStoryService {
             case .success(let bookStoriesResponse):
                 completion(.success(bookStoriesResponse))
             case .failure(let error):
-                if response.response?.statusCode == 401 {
-                    UserAuthenticationManager().renewAccessToken { success in
-                        if success {
-                            self.fetchMyBookStories(page: page, pageSize: pageSize, completion: completion)
-                        } else {
-                            let renewalError = NSError(domain: "BookStoryService", code: -3, userInfo: [NSLocalizedDescriptionKey: "Token renewal failed"])
-                            completion(.failure(renewalError))
-                        }
-                    }
-                } else {
                     let generalError = NSError(domain: "BookStoryService", code: -4, userInfo: [NSLocalizedDescriptionKey: "API Request Failed"])
                     completion(.failure(generalError))
-                }
             }
         }
     }
@@ -271,11 +246,9 @@ class BookStoryService {
     func getAllmyStoriesKeyword(keyword: String, page: Int, pageSize: Int, completion: @escaping (Result<BookStoriesResponse, Error>) -> Void) {
         let urlString = APIEndpoint.getMyStoriesKeywordURL + "?keyword=\(keyword)&page=\(page)&pageSize=\(pageSize)"
         
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            completion(.failure(NSError(domain: "BookStoryService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])))
+        guard let token = AuthService.shared.validAccessToken else {
             return
         }
-
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
         
         AF.request(urlString, method: .get, headers: headers).responseDecodable(of: BookStoriesResponse.self) { response in
@@ -283,19 +256,9 @@ class BookStoryService {
             case .success(let bookStoriesResponse):
                 completion(.success(bookStoriesResponse))
             case .failure(let error):
-                if response.response?.statusCode == 401 {
-                    UserAuthenticationManager().renewAccessToken { success in
-                        if success {
-                            self.getAllmyStoriesKeyword(keyword: keyword, page: page, pageSize: pageSize, completion: completion)
-                        } else {
-                            let renewalError = NSError(domain: "BookStoryService", code: -3, userInfo: [NSLocalizedDescriptionKey: "Token renewal failed"])
-                            completion(.failure(renewalError))
-                        }
-                    }
-                } else {
                     let generalError = NSError(domain: "BookStoryService", code: -4, userInfo: [NSLocalizedDescriptionKey: "API Request Failed"])
                     completion(.failure(generalError))
-                }
+                
             }
         }
     }
@@ -313,11 +276,9 @@ class BookStoryService {
         completion: @escaping (Result<BookStoryResponse, Error>) -> Void
     ) {
 
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            completion(.failure(NSError(domain: "BookStoryService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])))
+        guard let token = AuthService.shared.validAccessToken else {
             return
         }
-
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
 
         var urlString = APIEndpoint.updateStoryURL
@@ -413,16 +374,6 @@ class BookStoryService {
             case .failure:
                 if let statusCode = response.response?.statusCode {
                     switch statusCode {
-                    case 401:
-                        UserAuthenticationManager().renewAccessToken { success in
-                            if success {
-                                self.updateBookStory(storyID: storyID, quotes: quotes, images: images, content: content, isPublic: isPublic, keywords: keywords, themeIds: themeIds, completion: completion)
-                            } else {
-                                let renewalError = NSError(domain: "BookStoryService", code: -3, userInfo: [NSLocalizedDescriptionKey: "Token renewal failed"])
-                                print("Error: \(renewalError.localizedDescription)")
-                                completion(.failure(renewalError))
-                            }
-                        }
                     case 404:
                         let notFoundError = NSError(domain: "BookStoryService", code: -5, userInfo: [NSLocalizedDescriptionKey: "Book story not found or access denied"])
                         completion(.failure(notFoundError))
@@ -449,12 +400,9 @@ class BookStoryService {
             completion(.failure(NSError(domain: "BookStoryService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
             return
         }
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            let error = NSError(domain: "BookStoryService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])
-            completion(.failure(error))
+        guard let token = AuthService.shared.validAccessToken else {
             return
         }
-
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
 
         AF.request(urlString, method: .get, headers: headers)
@@ -472,10 +420,7 @@ class BookStoryService {
     
     func deleteBookStory(storyID: String, completion: @escaping (Result<APIResponse<EmptyData>, Error>) -> Void) {
 
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            let error = NSError(domain: "BookStoryService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])
-            print("Error: \(error.localizedDescription)")
-            completion(.failure(error))
+        guard let token = AuthService.shared.validAccessToken else {
             return
         }
 
@@ -495,17 +440,8 @@ class BookStoryService {
             case .success(let deleteResponse):
                 completion(.success(deleteResponse))
             case .failure:
-                if response.response?.statusCode == 401 {
-                    UserAuthenticationManager().renewAccessToken { success in
-                        if success {
-                            self.deleteBookStory(storyID: storyID, completion: completion)
-                        } else {
-                            completion(.failure(NSError(domain: "BookStoryService", code: -3, userInfo: [NSLocalizedDescriptionKey: "Token renewal failed"])))
-                        }
-                    }
-                } else {
                     completion(.failure(NSError(domain: "BookStoryService", code: -4, userInfo: [NSLocalizedDescriptionKey: "API Request Failed"])))
-                }
+                
             }
         }
     }
@@ -541,11 +477,9 @@ class BookStoryService {
     func getMyStoriesByFolder(folderId: String, page: Int, pageSize: Int, completion: @escaping (Result<BookStoriesResponse, Error>) -> Void) {
         let urlString = APIEndpoint.getMyStoriesByFolderURL + "/\(folderId)?page=\(page)&pageSize=\(pageSize)"
         
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            completion(.failure(NSError(domain: "BookStoryService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])))
+        guard let token = AuthService.shared.validAccessToken else {
             return
         }
-        
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
         
         AF.request(urlString, method: .get, headers: headers).responseDecodable(of: BookStoriesResponse.self) { response in

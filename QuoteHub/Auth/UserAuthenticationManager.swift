@@ -6,154 +6,149 @@
 //
 
 import Foundation
-import Alamofire
 
-class UserAuthenticationManager: ObservableObject {
-    @Published var isUserAuthenticated: Bool = KeyChain.read(key: "JWTAccessToken") != nil {
-        didSet {
-            print("UserAuthenticationManager: isUserAuthenticated updated to \(isUserAuthenticated)")
-        }
-    }
-    @Published var isOnboardingComplete: Bool = false {
-        didSet {
-            print("UserAuthenticationManager: isOnboardingComplete updated to \(isOnboardingComplete)")
-        }
-    }
-    @Published var showingLoginView: Bool = false {
-        didSet {
-            print("UserAuthenticationManager: showingLoginView updated to \(showingLoginView)")
-        }
+@MainActor
+final class UserAuthenticationManager: ObservableObject, @preconcurrency LoadingViewModel {
+    @Published var isUserAuthenticated: Bool = false
+    @Published var isGuestMode: Bool = false
+    @Published var showingLoginView: Bool = false
+    @Published var isLoading: Bool = false
+    @Published var loadingMessage: String?
+    
+    private let authService: AuthService
+    
+    init(authService: AuthService = AuthService.shared) {
+        self.authService = authService
     }
     
-    // MARK: -  로그아웃 함수
-//    static let shared = UserAuthenticationManager()
-
-    func logout(completion: @escaping (Result<Bool, Error>) -> Void) {
-        if KeyChain.read(key: "JWTAccessToken") != nil {
-            DispatchQueue.main.async {
-                KeyChain.delete(key: "JWTAccessToken")
-                KeyChain.delete(key: "JWTRefreshToken")
-                self.isUserAuthenticated = false
-                print("UserAuthenticationManager: logout called, tokens deleted")
-            }
-
-            completion(.success(true))
-        } else {
-            completion(.failure(NSError(domain: "LogoutError", code: 500, userInfo: [NSLocalizedDescriptionKey: "No token to delete"])))
-        }
-    }
-    
-    // MARK: - 회원 탈퇴
-    
-    func revokeUser(completion: @escaping (Result<Bool, Error>) -> Void) {
-        let url = APIEndpoint.revokeTokenURL
+    /// 애플 로그인 시 응답처리(토큰저장 및 상태 업데이트)
+    func handleAppleLogin(authCode: String) async {
+        isLoading = true
         
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            completion(.failure(NSError(domain: "UserService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])))
+        do {
+            // 서버로 Apple 로그인 요청
+            let response = try await authService.signInWithApple(authCode: authCode)
+            
+            guard response.success, let loginData = response.data else {
+                print("Apple 로그인 실패: \(response.message)")
+                return
+            }
+            
+            // 토큰 저장
+            try authService.saveTokens(loginData)
+            
+            isUserAuthenticated = true
+            showingLoginView = false
+            
+            print("Apple 로그인 성공: \(loginData.user.nickname)")
+
+        } catch {
+            print("Apple 로그인 에러: \(error.localizedDescription)")
+        }
+        
+        isLoading = false
+    }
+    
+    /// 토큰 검증 및 토큰 재발급 (자동 로그인)
+    // TODO: 하나의 메서드로 하기 보다는 기능 나누기
+    func validateAndRenewTokenNeeded() async {
+        // 저장된 액세스 토큰이 있는지 먼저 확인
+        guard authService.hasValidToken else {
+            isUserAuthenticated = false
             return
         }
         
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-
-        AF.request(url, method: .post, headers: headers).responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                if let json = value as? [String: Any], let success = json["success"] as? Bool, success {
-                    if KeyChain.read(key: "JWTAccessToken") != nil {
-                        KeyChain.delete(key: "JWTAccessToken")
-                        KeyChain.delete(key: "JWTRefreshToken")
-                        self.isUserAuthenticated = false
-                    }
-                    
-                    completion(.success(true))
-                } else {
-                    let error = NSError(domain: "RevokeError", code: 500, userInfo: [NSLocalizedDescriptionKey: "Failed to revoke user data and token"])
-                    completion(.failure(error))
-                }
-            case .failure(let error):
-                completion(.failure(error))
+        // 저장된 액세스 토큰이 있어도 서버 통신을 통해 액세스토큰이 유효한지 확인
+        do {
+            // 네트워크 요청
+            let response = try await authService.validateAndRenewToken()
+            
+            guard response.success, let validationData = response.data else {
+                // 토큰 검증 실패
+                isUserAuthenticated = false
+                showingLoginView = true
+                return
             }
-        }
-    }
-
-
-    // MARK: -  auto-login
-    
-    func validateToken() {
-        let accessToken = KeyChain.read(key: "JWTAccessToken")
-        let refreshToken = KeyChain.read(key: "JWTRefreshToken")
-        
-        guard let accessToken = accessToken, let refreshToken = refreshToken else {
-            DispatchQueue.main.async { [weak self] in self?.isUserAuthenticated = false }
-            return
-        }
-        
-        let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(accessToken)",
-            "x-refresh-token": refreshToken
-        ]
-        
-        let url = APIEndpoint.validateTokenURL
-        
-        AF.request(url, method: .post, headers: headers).validate().responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                if let json = value as? [String: Any], let valid = json["valid"] as? Bool {
-                    if valid {
-                        self.isUserAuthenticated = true
-                    } else if let newAccessToken = json["newAccessToken"] as? String,
-                              let newRefreshToken = json["newRefreshToken"] as? String {
-                        KeyChain.create(key: "JWTAccessToken", token: newAccessToken)
-                        KeyChain.create(key: "JWTRefreshToken", token: newRefreshToken)
-                        self.isUserAuthenticated = true
-                    } else {
-                        self.isUserAuthenticated = false
-                        self.showingLoginView = true
-                    }
-                }
-            case .failure:
-                self.isUserAuthenticated = false
-                self.showingLoginView = true
+            
+            // 토큰이 이미 유효함 (토큰 갱신 필요없음 -> 바로 로그인)
+            if validationData.valid {
+                isUserAuthenticated = true
+                print("토큰 유효 - 자동 로그인 성공")
+                
+            // 액세스 토큰이 만료되었지만 리프레시 토큰을 통해 토큰 재발급에 성공하였다면
+            } else if let newAccessToken = validationData.accessToken,
+                    let newRefreshToken = validationData.refreshToken {
+                // 새 토큰 Keychain에 업데이트
+                try authService.updateBothTokens(
+                    newAccessToken: newAccessToken,
+                    newRefreshToken: newRefreshToken
+                )
+                
+                isUserAuthenticated = true
+                print("새 토큰 발급 - 자동 로그인 성공")
+            } else {
+                // 액세스토큰도 만료되었고, validateAndRenewToken 요청을 했지만 리프레시 토큰도 만료되었을 때 -> 토큰 갱신 실패
+                isUserAuthenticated = false
+                showingLoginView = true
+                print("토큰 갱신 실패 - 재로그인 필요")
             }
+        } catch {
+            print("토큰 검증 에러: \(error.localizedDescription)")
+            isUserAuthenticated = false
+            showingLoginView = true
         }
     }
     
-    // retry
-    func renewAccessToken(completion: @escaping (Bool) -> Void) {
-        guard let token = KeyChain.read(key: "JWTRefreshToken") else {
-            self.handleTokenExpiry()
-            completion(false)
-            return
+    /// 로그아웃
+    func logout() async {
+        isLoading = true
+        
+        do {
+            try authService.clearAllTokens()
+            
+            // 상태 초기화 (온보딩뷰로 이동)
+            goToOnboardingView()
+            
+            print("로그아웃 성공")
+        } catch {
+            print("로그아웃 실패: \(error.localizedDescription)")
         }
-        
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        
-        let renewTokenURL = APIEndpoint.JWTRefreshURL
-
-        AF.request(renewTokenURL, method: .post, headers: headers)
-            .responseDecodable(of: AccessTokenResponse.self) { response in
-                switch response.result {
-                case .success(let tokenResponse):
-                    KeyChain.create(key: "JWTAccessToken", token: tokenResponse.accessToken)
-                    completion(true)
-                case .failure:
-                    print("리프레시 토큰 만료, 로그인 필요")
-                    self.handleTokenExpiry()
-                    completion(false)
-                }
-            }
+        isLoading = false
     }
     
-    private func handleTokenExpiry() {
-        DispatchQueue.main.async {
-            KeyChain.delete(key: "JWTAccessToken")
-            KeyChain.delete(key: "JWTRefreshToken")
-            self.isUserAuthenticated = false
-            self.showingLoginView = true
+    /// 계정 탈퇴
+    func revokeAccount() async -> Bool {
+        isLoading = true
+        
+        do {
+            // 백엔드 서버에 apple token 해제 및 DB에서 유저 관련 정보 및 유저가 올린 게시물까지 삭제 요청
+            let response = try await authService.revokeAccount()
+            
+            guard response.success, let revokeData = response.data, revokeData.revoked else {
+                print("계정 탈퇴 실패: \(response.message)")
+                isLoading = false
+                return false
+            }
+            
+            // keychain에 저장된 토큰도 삭제
+            try authService.clearAllTokens()
+            
+            // 상태 초기화 (온보딩뷰로 이동)
+            goToOnboardingView()
+            
+            print("계정 탈퇴 성공")
+            isLoading = false
+            return true
+        } catch {
+            print("계정 탈퇴 실패: \(error.localizedDescription)")
+            isLoading = false
+            return false
         }
     }
-
-    struct AccessTokenResponse: Codable {
-        let accessToken: String
+    
+    private func goToOnboardingView() {
+        isUserAuthenticated = false
+        isGuestMode = false
+        showingLoginView = false
     }
 }

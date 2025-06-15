@@ -157,6 +157,7 @@ struct StoryImagesGridView: View {
 // MARK: - StoryImageCell
 
 struct StoryImageCell: View {
+    // MARK: - 이미지를 여러장 올릴 때 크래시 해결
     @EnvironmentObject var viewModel: StoryFormViewModel
     let image: UIImage
     let index: Int

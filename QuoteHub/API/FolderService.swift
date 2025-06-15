@@ -14,10 +14,7 @@ class FolderService {
     func createFolder(image: UIImage?, name: String, description: String?, isPublic: Bool, completion: @escaping (Result<ThemeResponse, Error>) -> Void) {
         let url = APIEndpoint.createFolderURL
         
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            let error = NSError(domain: "FolderService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])
-            print("Error: \(error.localizedDescription)")
-            completion(.failure(error))
+        guard let token = AuthService.shared.validAccessToken else {
             return
         }
         
@@ -53,16 +50,6 @@ class FolderService {
             case .failure:
                 if let statusCode = response.response?.statusCode {
                     switch statusCode {
-                    case 401:
-                        UserAuthenticationManager().renewAccessToken { success in
-                            if success {
-                                self.createFolder(image: image, name: name, description: description, isPublic: isPublic, completion: completion)
-                            } else {
-                                let renewalError = NSError(domain: "FolderService", code: -3, userInfo: [NSLocalizedDescriptionKey: "Token renewal failed"])
-                                print("Error: \(renewalError.localizedDescription)")
-                                completion(.failure(renewalError))
-                            }
-                        }
                     case 409:
                         let duplicateError = NSError(domain: "FolderService", code: 409, userInfo: [NSLocalizedDescriptionKey: "Folder already exists"])
                         completion(.failure(duplicateError))
@@ -106,11 +93,9 @@ class FolderService {
             return
         }
         
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            print("No Authorization Token Found for Folder")
+        guard let token = AuthService.shared.validAccessToken else {
             return
         }
-        
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
 
 
@@ -119,16 +104,8 @@ class FolderService {
             case .success(let folderListResponse):
                 completion(.success(folderListResponse))
             case .failure(let error):
-                if response.response?.statusCode == 401 {
-                    UserAuthenticationManager().renewAccessToken { success in
-                        if success {
-                            self.getMyFolders(page: page, pageSize: pageSize, completion: completion)
-                        } else {
-                            let renewalError = NSError(domain: "FolderService", code: -3, userInfo: [NSLocalizedDescriptionKey: "Token renewal failed"])
-                            completion(.failure(renewalError))
-                        }
-                    }
-                }
+                let renewalError = NSError(domain: "FolderService", code: -3, userInfo: [NSLocalizedDescriptionKey: "Token renewal failed"])
+                completion(.failure(renewalError))
             }
         }
     }
@@ -160,11 +137,9 @@ class FolderService {
     
     func updateFolder(folderId: String, image: UIImage?, name: String, description: String?, isPublic: Bool, completion: @escaping (Result<ThemeResponse, Error>) -> Void) {
         
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            completion(.failure(NSError(domain: "BookStoryService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])))
+        guard let token = AuthService.shared.validAccessToken else {
             return
         }
-
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
         
         var urlString = APIEndpoint.updateFolderURL
@@ -205,16 +180,7 @@ class FolderService {
             case .failure:
                 if let statusCode = response.response?.statusCode {
                     switch statusCode {
-                    case 401:
-                        UserAuthenticationManager().renewAccessToken { success in
-                            if success {
-                                self.updateFolder(folderId: folderId, image: image, name: name, description: description, isPublic: isPublic, completion: completion)
-                            } else {
-                                let renewalError = NSError(domain: "BookStoryService", code: -3, userInfo: [NSLocalizedDescriptionKey: "Token renewal failed"])
-                                print("Error: \(renewalError.localizedDescription)")
-                                completion(.failure(renewalError))
-                            }
-                        }
+                        
                     case 404:
                         let notFoundError = NSError(domain: "FolderService", code: -5, userInfo: [NSLocalizedDescriptionKey: "Folder not found or access denied"])
                         completion(.failure(notFoundError))
@@ -235,13 +201,9 @@ class FolderService {
     
     func deleteFolder(folderId: String, completion: @escaping (Result<APIResponse<EmptyData>, Error>) -> Void) {
         
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            let error = NSError(domain: "FolderService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])
-            print("Error: \(error.localizedDescription)")
-            completion(.failure(error))
+        guard let token = AuthService.shared.validAccessToken else {
             return
         }
-
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
 
         var urlString = APIEndpoint.deleteFolderURL
@@ -258,17 +220,8 @@ class FolderService {
             case .success(let deleteResponse):
                 completion(.success(deleteResponse))
             case .failure:
-                if response.response?.statusCode == 401 {
-                    UserAuthenticationManager().renewAccessToken { success in
-                        if success {
-                            self.deleteFolder(folderId: folderId, completion: completion)
-                        } else {
-                            completion(.failure(NSError(domain: "FolderService", code: -3, userInfo: [NSLocalizedDescriptionKey: "Token renewal failed"])))
-                        }
-                    }
-                } else {
                     completion(.failure(NSError(domain: "FolderService", code: -4, userInfo: [NSLocalizedDescriptionKey: "API Request Failed"])))
-                }
+                
             }
         }
         

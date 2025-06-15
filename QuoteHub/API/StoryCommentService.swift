@@ -17,9 +17,7 @@ class StoryCommentService {
             completion(.failure(NSError(domain: "StoryCommentService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
             return
         }
-        
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            completion(.failure(NSError(domain: "StoryCommentService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])))
+        guard let token = AuthService.shared.validAccessToken else {
             return
         }
         
@@ -36,17 +34,8 @@ class StoryCommentService {
             case .success(let postCommentResponse):
                 completion(.success(postCommentResponse))
             case .failure:
-                if response.response?.statusCode == 401 {
-                    UserAuthenticationManager().renewAccessToken { success in
-                        if success {
-                            self.addCommentToStory(bookStoryId: bookStoryId, content: content, parentCommentId: parentCommentId, completion: completion)
-                        } else {
-                            completion(.failure(NSError(domain: "StoryCommentService", code: -3, userInfo: [NSLocalizedDescriptionKey: "Token renewal failed"])))
-                        }
-                    }
-                } else {
                     completion(.failure(NSError(domain: "StoryCommentService", code: -4, userInfo: [NSLocalizedDescriptionKey: "API Request Failed"])))
-                }
+                
             }
         }
     }
@@ -99,11 +88,9 @@ class StoryCommentService {
 
     func deleteCommentStory(commentId: String, completion: @escaping (Result<APIResponse<EmptyData>, Error>) -> Void) {
         
-        guard let token = KeyChain.read(key: "JWTAccessToken") else {
-            completion(.failure(NSError(domain: "StoryCommentService", code: -2, userInfo: [NSLocalizedDescriptionKey: "No Authorization Token Found"])))
+        guard let token = AuthService.shared.validAccessToken else {
             return
         }
-
         let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
 
         var urlString = APIEndpoint.deleteCommentStoryURL
@@ -119,17 +106,8 @@ class StoryCommentService {
             case .success(let deleteResponse):
                 completion(.success(deleteResponse))
             case .failure:
-                if response.response?.statusCode == 401 {
-                    UserAuthenticationManager().renewAccessToken { success in
-                        if success {
-                            self.deleteCommentStory(commentId: commentId, completion: completion)
-                        } else {
-                            completion(.failure(NSError(domain: "StoryCommentService", code: -3, userInfo: [NSLocalizedDescriptionKey: "Token renewal failed"])))
-                        }
-                    }
-                } else {
                     completion(.failure(NSError(domain: "StoryCommentService", code: -4, userInfo: [NSLocalizedDescriptionKey: "API Request Failed"])))
-                }
+                
             }
         }
     }

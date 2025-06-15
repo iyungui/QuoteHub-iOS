@@ -98,13 +98,16 @@ struct CommonStoryDisplayView: View {
     
     private var storyContentSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("나의 생각")
-                .font(.scoreDream(.bold, size: .body))
-                .foregroundColor(.primaryText)
+            if story.content != nil {
+                Text("나의 생각")
+                    .font(.scoreDream(.bold, size: .body))
+                    .foregroundColor(.primaryText)
+            }
             
             Text(story.content ?? "")
                 .font(.scoreDream(.regular, size: .callout))
                 .foregroundColor(.primaryText.opacity(0.8))
+                .multilineTextAlignment(.leading)
                 .lineSpacing(6)
                 .frame(minHeight: 60)
         }
