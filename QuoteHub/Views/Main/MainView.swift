@@ -27,7 +27,7 @@ struct MainView: View {
     @State private var showActionButtons: Bool = false
     @State private var activeSheet: ActiveSheet?
     
-    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
+    @EnvironmentObject private var authManager: UserAuthenticationManager
     @EnvironmentObject private var userViewModel: UserViewModel
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
     @EnvironmentObject private var themesViewModel: ThemesViewModel
@@ -37,10 +37,6 @@ struct MainView: View {
             ZStack {
                 // 메인 콘텐츠
                 mainContent
-                    .environmentObject(userAuthManager)
-                    .environmentObject(userViewModel)
-                    .environmentObject(storiesViewModel)
-                    .environmentObject(themesViewModel)
                 
                 // 플로팅 액션 버튼들
                 if showActionButtons {
@@ -49,7 +45,6 @@ struct MainView: View {
                         activeSheet: $activeSheet,
                         showAlert: showLoginAlert
                     )
-                    .environmentObject(userAuthManager)
                     .zIndex(2)
                 }
                 
@@ -61,7 +56,6 @@ struct MainView: View {
                         showActionButtons: $showActionButtons,
                         showAlert: showLoginAlert
                     )
-                    .environmentObject(userAuthManager)
                 }
                 .zIndex(1)
             }
@@ -70,7 +64,7 @@ struct MainView: View {
         }
         .alert("", isPresented: $showAlert) {
             Button {
-                userAuthManager.showingLoginView = true
+                authManager.showingLoginView = true
             } label: {
                 Text("로그인").font(.scoreDreamBody)
             }
@@ -81,8 +75,8 @@ struct MainView: View {
         .fullScreenCover(item: $activeSheet) { sheet in
             destinationView(for: sheet)
         }
-        .fullScreenCover(isPresented: $userAuthManager.showingLoginView) {
-            LoginView(isOnboarding: false).environmentObject(userAuthManager)
+        .fullScreenCover(isPresented: $authManager.showingLoginView) {
+            LoginView(isOnboarding: false)
         }
     }
     
@@ -105,12 +99,9 @@ struct MainView: View {
         switch sheet {
         case .search:
             SearchBookView()
-                .environmentObject(storiesViewModel)
-                .environmentObject(userAuthManager)
         case .theme:
             NavigationStack {
                 CreateThemeView(mode: .fullScreenSheet)
-                    .environmentObject(themesViewModel)
             }
         }
     }
@@ -121,7 +112,7 @@ struct MainView: View {
     
     // TODO: - onAppear 없애기
     private func onAppear() {
-        if userAuthManager.isUserAuthenticated {
+        if authManager.isUserAuthenticated {
             selectedTab = 0
             userViewModel.getProfile(userId: nil)
         }
