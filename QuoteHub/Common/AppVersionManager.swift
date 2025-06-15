@@ -8,11 +8,11 @@
 import Foundation
 import SwiftUI
 
-struct AppStoreVersionResponse: Codable {
+struct AppStoreVersionResponse: Codable, Sendable {
     let results: [AppStoreAppInfo]
 }
 
-struct AppStoreAppInfo: Codable {
+struct AppStoreAppInfo: Codable, Sendable {
     let version: String
 }
 
@@ -27,18 +27,21 @@ class AppVersionManager: ObservableObject {
         self.currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
     }
     
-    func checkVersionFromAppStore() {
+    func checkVersionFromAppStore() async {
         guard let url = URL(string: "https://itunes.apple.com/lookup?id=\(appId)") else { return }
-        
-        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
-            guard let data = data,
-                  let response = try? JSONDecoder().decode(AppStoreVersionResponse.self, from: data),
-                  let appInfo = response.results.first else { return }
+        do {
+            // url session에서 자동으로 백그라운드 스레드로 전환
+            let (data, _) = try await URLSession.shared.data(from: url)
+            let decodedResponse = try JSONDecoder().decode(AppStoreVersionResponse.self, from: data)
+            guard let appInfo = decodedResponse.results.first else { return }
             
-            DispatchQueue.main.async {
-                self?.compareVersions(latestVersion: appInfo.version)
+            // 메인스레드에서 ui 업데이트(alert)
+            await MainActor.run {
+                compareVersions(latestVersion: appInfo.version)
             }
-        }.resume()
+        } catch {
+            print("Failed to check app version: \(error.localizedDescription)")
+        }
     }
     
     private func compareVersions(latestVersion: String) {
@@ -50,6 +53,7 @@ class AppVersionManager: ObservableObject {
         }
     }
     
+    /// (앱 업데이트 위해) 앱스토어로 이동
     func goUpdate() {
         let url = "itms-apps://itunes.apple.com/app/\(appId)";
         if let url = URL(string: url), UIApplication.shared.canOpenURL(url) {
@@ -61,7 +65,8 @@ class AppVersionManager: ObservableObject {
         }
     }
     
-    func closeApp(){ //앱 종료 함수
+    /// 앱 종료 함수
+    func closeApp() {
         UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             exit(0)

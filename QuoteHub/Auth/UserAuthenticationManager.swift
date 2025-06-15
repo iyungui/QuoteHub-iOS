@@ -7,8 +7,7 @@
 
 import Foundation
 
-@MainActor
-final class UserAuthenticationManager: ObservableObject, @preconcurrency LoadingViewModel {
+final class UserAuthenticationManager: ObservableObject, LoadingViewModel {
     @Published var isUserAuthenticated: Bool = false
     @Published var isGuestMode: Bool = false
     @Published var showingLoginView: Bool = false
@@ -22,11 +21,12 @@ final class UserAuthenticationManager: ObservableObject, @preconcurrency Loading
     }
     
     /// 애플 로그인 시 응답처리(토큰저장 및 상태 업데이트)
+    @MainActor
     func handleAppleLogin(authCode: String) async {
         isLoading = true
         
         do {
-            // 서버로 Apple 로그인 요청
+            // 서버로 Apple 로그인 요청(백그라운드 스레드)
             let response = try await authService.signInWithApple(authCode: authCode)
             
             guard response.success, let loginData = response.data else {
@@ -35,8 +35,10 @@ final class UserAuthenticationManager: ObservableObject, @preconcurrency Loading
             }
             
             // 토큰 저장
-            try authService.saveTokens(loginData)
-            
+            Task.detached { // 토큰 저장 완료되면 Task는 자동으로 메모리에서 해제
+                try? self.authService.saveTokens(loginData)
+//                print("토큰 저장 완료: \(Thread.isMainThread)")
+            }
             isUserAuthenticated = true
             showingLoginView = false
             
@@ -51,6 +53,7 @@ final class UserAuthenticationManager: ObservableObject, @preconcurrency Loading
     
     /// 토큰 검증 및 토큰 재발급 (자동 로그인)
     // TODO: 하나의 메서드로 하기 보다는 기능 나누기
+    @MainActor
     func validateAndRenewTokenNeeded() async {
         // 저장된 액세스 토큰이 있는지 먼저 확인
         guard authService.hasValidToken else {
@@ -60,7 +63,7 @@ final class UserAuthenticationManager: ObservableObject, @preconcurrency Loading
         
         // 저장된 액세스 토큰이 있어도 서버 통신을 통해 액세스토큰이 유효한지 확인
         do {
-            // 네트워크 요청
+            // 네트워크 요청(백그라운드 스레드에서 실행)
             let response = try await authService.validateAndRenewToken()
             
             guard response.success, let validationData = response.data else {
@@ -79,11 +82,12 @@ final class UserAuthenticationManager: ObservableObject, @preconcurrency Loading
             } else if let newAccessToken = validationData.accessToken,
                     let newRefreshToken = validationData.refreshToken {
                 // 새 토큰 Keychain에 업데이트
-                try authService.updateBothTokens(
-                    newAccessToken: newAccessToken,
-                    newRefreshToken: newRefreshToken
-                )
-                
+                Task.detached { // 토큰 저장 완료되면 Task는 자동으로 메모리에서 해제
+                    try? self.authService.updateBothTokens(
+                        newAccessToken: newAccessToken,
+                        newRefreshToken: newRefreshToken
+                    )
+                }
                 isUserAuthenticated = true
                 print("새 토큰 발급 - 자동 로그인 성공")
             } else {
@@ -100,23 +104,21 @@ final class UserAuthenticationManager: ObservableObject, @preconcurrency Loading
     }
     
     /// 로그아웃
+    @MainActor
     func logout() async {
         isLoading = true
-        
-        do {
-            try authService.clearAllTokens()
-            
-            // 상태 초기화 (온보딩뷰로 이동)
-            goToOnboardingView()
-            
-            print("로그아웃 성공")
-        } catch {
-            print("로그아웃 실패: \(error.localizedDescription)")
+        Task.detached {
+            try? self.authService.clearAllTokens()
         }
+        // 상태 초기화 (온보딩뷰로 이동)
+        goToOnboardingView()
+        
+        print("로그아웃 성공")
         isLoading = false
     }
     
     /// 계정 탈퇴
+    @MainActor
     func revokeAccount() async -> Bool {
         isLoading = true
         
@@ -131,7 +133,9 @@ final class UserAuthenticationManager: ObservableObject, @preconcurrency Loading
             }
             
             // keychain에 저장된 토큰도 삭제
-            try authService.clearAllTokens()
+            Task.detached {
+                try? self.authService.clearAllTokens()
+            }
             
             // 상태 초기화 (온보딩뷰로 이동)
             goToOnboardingView()
@@ -146,6 +150,7 @@ final class UserAuthenticationManager: ObservableObject, @preconcurrency Loading
         }
     }
     
+    @MainActor
     private func goToOnboardingView() {
         isUserAuthenticated = false
         isGuestMode = false

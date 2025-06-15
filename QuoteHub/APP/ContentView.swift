@@ -23,11 +23,10 @@ struct ContentView: View {
         if isSplashView {
             LaunchScreenView()
                 // LaunchScreenView 나타날 때 토큰 검증 및 앱 버전 체크
-                .onAppear {
-                    versionManager.checkVersionFromAppStore()
-                }
                 // TODO: - 여기서 .task 로 (유저, 북스토리, 테마) 데이터 모델을 미리 로드하고 전달하기.
                 .task {
+                    
+                    await versionManager.checkVersionFromAppStore()
                     await authManager.validateAndRenewTokenNeeded()
                     
                     try? await Task.sleep(nanoseconds: 1_000_000_000)
