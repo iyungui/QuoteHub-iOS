@@ -18,9 +18,10 @@ struct LibraryView: View {
     let user: User?
     
     /// 내 라이브러리인지 친구 라이브러리인지 구분
+    /// user 가 nil 이면, 내 라이브러리
     var isMyLibaray: Bool {
         return user == nil
-    }   // friendId 가 nil 이면, 내 라이브러리
+    }
     
     private var currentUser: User? {
         return user ?? userViewModel.user

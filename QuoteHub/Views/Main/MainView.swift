@@ -57,6 +57,7 @@ struct MainView: View {
                 }
             }
         }
+        
         .alert("", isPresented: $showAlert) {
             Button {
                 authManager.showingLoginView = true

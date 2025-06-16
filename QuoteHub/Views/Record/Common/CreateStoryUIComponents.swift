@@ -27,7 +27,6 @@ struct CustomTextEditor: View {
                         .stroke(Color.brownLeather.opacity(0.1), lineWidth: 0.5)
                 )
                 .frame(minHeight: minHeight)
-//                .animation(.easeInOut(duration: 0.2), value: isFocused)
             
             // 플레이스 홀더
             if text.isEmpty {
@@ -51,34 +50,6 @@ struct CustomTextEditor: View {
                         text = String(newValue.prefix(maxLength))
                     }
                 }
-        }
-    }
-}
-
-// MARK: - CARD HEADER
-
-struct CardHeader: View {
-    let title: String
-    let icon: String
-    let subtitle: String?
-    
-    init(title: String, icon: String, subtitle: String? = nil) {
-        self.title = title
-        self.icon = icon
-        self.subtitle = subtitle
-    }
-    
-    var body: some View {
-        VStack(alignment: .center, spacing: 2) {
-            Text(title)
-                .font(.scoreDream(.bold, size: .body))
-                .foregroundColor(.primaryText)
-            
-            if let subtitle = subtitle {
-                Text(subtitle)
-                    .font(.scoreDream(.light, size: .caption))
-                    .foregroundColor(.secondaryText.opacity(0.8))
-            }
         }
     }
 }
@@ -218,15 +189,3 @@ struct StoryBackgroundGradient: View {
         Spacer()
     }
 }
-
-//#Preview {
-//    VStack {
-//        Spacer()
-//        // TODO: 키워드 최대 개수 5개 -> 10개
-//        CardHeader(title: "키워드", icon: "", subtitle: "최대 5개", guide: "책의 핵심내용을 키워드로 연결하면, 기억력이 80% 올라가요")
-//            .background(Color.white)
-//        Spacer()
-//    }
-//    .frame(maxWidth: .infinity, maxHeight: .infinity)
-//    .background(Color.gray.opacity(0.2))
-//}
