@@ -23,6 +23,10 @@ class BookStoriesViewModel: ObservableObject, LoadingViewModel {
     @Published var isLastPage = false
     @Published var errorMessage: String?
 
+    
+    /// 북스토리 생성, 수정 후 해당 북스토리로 navigation 하기 위한 프로퍼티
+    @Published var lastCreatedStory: BookStory?
+    
     private var currentPage = 1
     private let pageSize = 10
     private var service = BookStoryService()
@@ -221,6 +225,7 @@ class BookStoriesViewModel: ObservableObject, LoadingViewModel {
                     
                     // (my 타입과 공개인 경우 public 타입에 새 스토리 추가하기)
                     self.addStoryToTypes(newStory)
+                    self.lastCreatedStory = newStory
                     
                     self.isLoading = false
                     self.loadingMessage = nil
@@ -313,7 +318,7 @@ class BookStoriesViewModel: ObservableObject, LoadingViewModel {
                     
                     // 관련된 타입에서 스토리 업데이트
                     self.updateStoryInTypes(updatedStory)
-                    
+                    self.lastCreatedStory = updatedStory
                     self.isLoading = false
                     self.loadingMessage = nil
                     

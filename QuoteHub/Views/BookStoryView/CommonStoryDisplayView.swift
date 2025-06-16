@@ -20,12 +20,12 @@ struct CommonStoryDisplayView: View {
     @EnvironmentObject private var commentViewModel: CommentViewModel
     
     var body: some View {
-        LazyVStack(spacing: 20) {
+        LazyVStack(alignment: .leading, spacing: 20) {
             // 이미지 섹션
             storyImagesSection
             
             // 컨텐츠 섹션
-            storyContentSection
+            storyContentSection.padding(.horizontal)
             
             if !isMyStory {
                 // 프로필 섹션
@@ -105,7 +105,7 @@ struct CommonStoryDisplayView: View {
             }
             
             Text(story.content ?? "")
-                .font(.scoreDream(.regular, size: .callout))
+                .font(.scoreDream(.regular, size: .subheadline))
                 .foregroundColor(.primaryText.opacity(0.8))
                 .multilineTextAlignment(.leading)
                 .lineSpacing(6)

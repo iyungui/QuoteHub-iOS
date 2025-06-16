@@ -7,25 +7,14 @@
 
 import SwiftUI
 
-// MARK: - for plus button sheet
-enum ActiveSheet: Identifiable {
-    case search, theme
-    
-    var id: String {
-        switch self {
-        case .search: return "search"
-        case .theme: return "theme"
-        }
-    }
-}
 
 // MARK: - Main View
 
 struct MainView: View {
-    @State private var selectedTab: Int = 2
+    @StateObject private var tabController = TabController()
+    
     @State private var showAlert: Bool = false
     @State private var showActionButtons: Bool = false
-    @State private var activeSheet: ActiveSheet?
     
     @EnvironmentObject private var authManager: UserAuthenticationManager
     @EnvironmentObject private var userViewModel: UserViewModel
@@ -42,7 +31,7 @@ struct MainView: View {
                 if showActionButtons {
                     FloatingActionOverlay(
                         showActionButtons: $showActionButtons,
-                        activeSheet: $activeSheet,
+                        activeSheet: $tabController.activeSheet,
                         showAlert: showLoginAlert
                     )
                     .zIndex(2)
@@ -52,7 +41,7 @@ struct MainView: View {
                 VStack {
                     Spacer()
                     CustomTabbar(
-                        selectedTab: $selectedTab,
+                        selectedTab: $tabController.selectedTab,
                         showActionButtons: $showActionButtons,
                         showAlert: showLoginAlert
                     )
@@ -60,7 +49,13 @@ struct MainView: View {
                 .zIndex(1)
             }
             .navigationBarBackButtonHidden()
-            .onAppear(perform: onAppear)
+            .onAppear {
+                if !authManager.isUserAuthenticated {
+                    tabController.selectedTab = 2
+                } else {
+                    userViewModel.getProfile(userId: nil)
+                }
+            }
         }
         .alert("", isPresented: $showAlert) {
             Button {
@@ -72,18 +67,19 @@ struct MainView: View {
         } message: {
             Text("이 기능을 사용하려면 로그인이 필요합니다.").font(.scoreDreamBody)
         }
-        .fullScreenCover(item: $activeSheet) { sheet in
+        .fullScreenCover(item: $tabController.activeSheet) { sheet in
             destinationView(for: sheet)
         }
         .fullScreenCover(isPresented: $authManager.showingLoginView) {
             LoginView(isOnboarding: false)
         }
+        .environmentObject(tabController)
     }
     
     /// 메인뷰 - 홈뷰와 라이브러리뷰
     @ViewBuilder
     private var mainContent: some View {
-        switch selectedTab {
+        switch tabController.selectedTab {
         case 0:
             LibraryView(user: nil)
         case 2:
@@ -108,13 +104,5 @@ struct MainView: View {
     
     private func showLoginAlert() {
         showAlert = true
-    }
-    
-    // TODO: - onAppear 없애기
-    private func onAppear() {
-        if authManager.isUserAuthenticated {
-            selectedTab = 0
-            userViewModel.getProfile(userId: nil)
-        }
     }
 }

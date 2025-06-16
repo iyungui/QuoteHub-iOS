@@ -46,6 +46,7 @@ struct LibraryView: View {
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
     @EnvironmentObject private var themesViewModel: ThemesViewModel
     @EnvironmentObject private var userViewModel: UserViewModel
+    @EnvironmentObject private var tabController: TabController
 
     // 신고, 차단 기능을 위한
     @StateObject private var followViewModel: FollowViewModel
@@ -75,6 +76,11 @@ struct LibraryView: View {
                 ContentUnavailableView("차단된 사용자", systemImage: "person.crop.circle.badge.xmark.fill", description: Text("설정의 차단 목록을 확인해주세요."))
             } else {
                 mainContent
+            }
+        }
+        .navigationDestination(isPresented: $tabController.shouldNavigateToStoryDetail) {
+            if let story = tabController.selectedStory {
+                BookStoryDetailView(story: story, isMyStory: true)
             }
         }
         // 툴바

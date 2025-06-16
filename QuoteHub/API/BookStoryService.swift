@@ -400,12 +400,8 @@ class BookStoryService {
             completion(.failure(NSError(domain: "BookStoryService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
             return
         }
-        guard let token = AuthService.shared.validAccessToken else {
-            return
-        }
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-
-        AF.request(urlString, method: .get, headers: headers)
+        
+        AF.request(urlString, method: .get)
         .responseDecodable(of: BookStoryResponse.self) { response in
             switch response.result {
             case .success(let data):

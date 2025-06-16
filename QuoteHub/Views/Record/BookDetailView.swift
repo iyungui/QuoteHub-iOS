@@ -147,12 +147,14 @@ struct BookDetailView: View {
             
             Spacer()
             
-            NavigationLink(destination: StoryQuotesRecordView(book: book).environmentObject(storiesViewModel)) {
-                Image(systemName: "highlighter")
-                    .font(.title2.weight(.medium))
-                    .foregroundColor(.white)
-                    .frame(width: 44, height: 44)
-                    .background(Circle().fill(.ultraThinMaterial))
+            if userAuthManager.isUserAuthenticated {
+                NavigationLink(destination: StoryQuotesRecordView(book: book).environmentObject(storiesViewModel)) {
+                    Image(systemName: "highlighter")
+                        .font(.title2.weight(.medium))
+                        .foregroundColor(.white)
+                        .frame(width: 44, height: 44)
+                        .background(Circle().fill(.ultraThinMaterial))
+                }
             }
         }
         .padding(.horizontal, 20)

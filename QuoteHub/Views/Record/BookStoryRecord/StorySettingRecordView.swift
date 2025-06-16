@@ -14,6 +14,7 @@ struct StorySettingRecordView: View {
     
     @EnvironmentObject var formViewModel: StoryFormViewModel
     @EnvironmentObject var storiesViewModel: BookStoriesViewModel
+    @EnvironmentObject var tabController: TabController
     
     var body: some View {
         VStack(spacing: 20) {
@@ -23,12 +24,8 @@ struct StorySettingRecordView: View {
             
             Spacer()
         }
-        .alert("북스토리 완성!", isPresented: $formViewModel.showAlert, actions: {
-            Button("확인") {
-                // TODO: - 북스토리 수정 완료 시 이전 화면으로 돌아가기
-                
-                // TODO: - 북스토리 처음 생성 시, 북스토리 디테일뷰로 가기
-            }
+        .alert("알림", isPresented: $formViewModel.showAlert, actions: {
+            Button("확인") { }
         }, message: {
             Text(formViewModel.alertMessage)
         })
@@ -161,19 +158,20 @@ extension StorySettingRecordView {
         }
     }
     private func handleSubmissionResult(isSuccess: Bool, isEdit: Bool) {
-        formViewModel.alertType = .make
         
         if isSuccess {
-            formViewModel.alertMessage = isEdit ?
-                "북스토리가 성공적으로 수정되었어요!" :
-                "북스토리가 성공적으로 등록되었어요!"
+            if let lastCreatedStory = storiesViewModel.lastCreatedStory {
+                tabController.navigateToStory(lastCreatedStory)
+            }
         } else {
+            formViewModel.alertType = .make
             formViewModel.alertMessage = isEdit ?
                 "북스토리 수정 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요." :
                 "북스토리 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+            formViewModel.showAlert = true
+
         }
         
-        formViewModel.showAlert = true
     }
 }
 
