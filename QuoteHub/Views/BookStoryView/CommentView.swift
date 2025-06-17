@@ -86,7 +86,7 @@ struct CommentView: View {
             LazyVStack(spacing: 20) {
                 ForEach(viewModel.bookStoryComments, id: \.id) { comment in
                     VStack(alignment: .leading, spacing: 10) {
-                        commentRow(comment: comment).environmentObject(viewModel).environmentObject(userViewModel)
+                        CommentRow(comment: comment).environmentObject(viewModel).environmentObject(userViewModel)
                         Divider()
                     }
                     .padding(.horizontal)
@@ -105,7 +105,7 @@ struct CommentView: View {
 }
 
 
-struct commentRow: View {
+struct CommentRow: View {
     let comment: BookStoryComment
     @EnvironmentObject var viewModel: CommentViewModel
     @State private var commentShowingSheet: Bool = false

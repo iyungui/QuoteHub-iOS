@@ -61,7 +61,6 @@ struct BookCard: View {
             }
             .resizable()
             .indicator(.activity)
-            .transition(.fade(duration: 0.5))
             .scaledToFill()
             .frame(width: 120, height: 180)
             .clipShape(RoundedRectangle(cornerRadius: 12))

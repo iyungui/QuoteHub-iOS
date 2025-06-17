@@ -220,10 +220,16 @@ struct StoryBookView: View {
             if let url = URL(string: story.bookId.bookImageURL), !story.bookId.bookImageURL.isEmpty {
                 WebImage(url: url)
                     .placeholder {
-                        Circle()
-                            .fill(Color.paperBeige.opacity(0.5))
+                        Rectangle()
+                            .fill(Color.paperBeige.opacity(0.3))
+                            .overlay(
+                                Image(systemName: "book.closed")
+                                    .foregroundColor(.brownLeather)
+                                    .font(.largeTitle)
+                            )
                     }
                     .resizable()
+                    .indicator(.activity)
                     .scaledToFill()
                     .frame(width: bookWidth, height: bookHeight)
                     .clipped()

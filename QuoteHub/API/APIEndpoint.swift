@@ -11,24 +11,6 @@ struct APIEndpoint {
     
     static private let baseURL = "https://port-0-quotehub-server-m015aiy374b6cd11.sel4.cloudtype.app/"
     
-    // MARK: - USER
-    
-    static let signInWithAppleURL = baseURL + "auth/apple/callback"
-    static let profileInputURL = baseURL + "auth/inputProfile"
-    static let JWTRefreshURL = baseURL + "renew-access-token"
-    static let validateTokenURL = baseURL + "validate-token"
-    static let revokeTokenURL = baseURL + "revoke"
-    
-    static let getProfileURL = baseURL + "profile"   // + /userId?
-    static let updateProfileURL = baseURL + "update"
-    
-    static let getListUsersURL = baseURL + "list/users"
-    
-    // MARK: - BOOK
-    
-    static let searchBookURL = baseURL + "book/search" // + query
-    static let recommendBooksURL = baseURL + "book/todayBooks"
-    
     // MARK: - BOOKSTORY
     
     static let createStoryURL = baseURL + "bookstories/createBookStory"
@@ -54,7 +36,7 @@ struct APIEndpoint {
     static let getCommentCountForStoryURL = baseURL + "bookstoriesComments/count"   // + /bookStoryId
     static let deleteCommentStoryURL = baseURL + "bookstoriesComments"    // + /commentId
     
-    // MARK: - FOLDER
+    // MARK: - THEME
     
     // 폴더별 조회
     static let getAllPublicStoriesByFolderURL = baseURL + "folder/public"   // + /:folderId
@@ -88,6 +70,7 @@ struct APIEndpoint {
     static let updateFollowStatusURL = baseURL + "follow/update"  // + /userId
     static let blockedListURL = baseURL + "follow/blockedList"
 
+    
     // MARK: - BOOKMARK
     
     static let createBookmarkURL = baseURL + "bookmarks"    // + /bookstoryId

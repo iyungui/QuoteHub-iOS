@@ -309,13 +309,10 @@
 			isa = PBXGroup;
 			children = (
 				C6D78A092AD03B2900F03FB8 /* APIEndpoint.swift */,
-				C694A2EC2AC5778400574D20 /* UserService.swift */,
-				CED3795C2DFEE902001CE700 /* AuthService.swift */,
 				C697D0FF2AC9535B00F0111B /* BookStoryService.swift */,
 				C6DE7F502AF76B480020F5CB /* StoryCommentService.swift */,
 				C60700CC2AFE05D9009D202A /* FolderService.swift */,
 				C65330342B02540300E6B283 /* FollowService.swift */,
-				C67AA3C82AE3839F00490DDE /* BookSearchService.swift */,
 				C63DB3AB2B1188C50026B668 /* ReportService.swift */,
 			);
 			path = API;
@@ -341,17 +338,17 @@
 			isa = PBXGroup;
 			children = (
 				C6B56FFD2AA8CC1B003905C3 /* QuoteHub.entitlements */,
-				CEA554D12E018AF50029A8A9 /* Legacy */,
-				CEA554CE2E018AF30029A8A9 /* Utils */,
-				C6336CF12AAF1A91007355EC /* Extension */,
-				CE8C483E2DEAB3EA003188ED /* Components */,
+				CE8C478C2DEA8D93003188ED /* Models */,
 				CE8C47772DEA8D01003188ED /* APP */,
 				CE8C477E2DEA8D84003188ED /* Auth */,
-				CE8C478D2DEA8D93003188ED /* Data */,
 				CE8C479C2DEA8D97003188ED /* Network */,
 				CE8C481A2DEA8DAE003188ED /* Views */,
 				C676F5422AAC443500EC7241 /* API */,
 				C676F5252AAC02CB00EC7241 /* ViewModel */,
+				C6336CF12AAF1A91007355EC /* Extension */,
+				CE8C483E2DEAB3EA003188ED /* Components */,
+				CEA554D12E018AF50029A8A9 /* Legacy */,
+				CEA554CE2E018AF30029A8A9 /* Utils */,
 				CE8C48E82DF0586A003188ED /* Resources */,
 				C6B56FE22AA8B60D003905C3 /* Preview Content */,
 			);
@@ -428,23 +425,13 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		CE8C478D2DEA8D93003188ED /* Data */ = {
-			isa = PBXGroup;
-			children = (
-				CE8C478C2DEA8D93003188ED /* Models */,
-			);
-			path = Data;
-			sourceTree = "<group>";
-		};
 		CE8C479C2DEA8D97003188ED /* Network */ = {
 			isa = PBXGroup;
 			children = (
 				CE8C47962DEA8D97003188ED /* APIClient.swift */,
-				CE8C47972DEA8D97003188ED /* AuthEndpoints.swift */,
-				CE8C479B2DEA8D97003188ED /* UserEndpoints.swift */,
-				CE8C47982DEA8D97003188ED /* BookSearchEndpoints.swift */,
-				CE8C47992DEA8D97003188ED /* EndpointProtocol.swift */,
 				CE8C479A2DEA8D97003188ED /* NetworkError.swift */,
+				CEA554DF2E019FBD0029A8A9 /* Services */,
+				CEA554E02E01A08D0029A8A9 /* Endpoints */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -660,6 +647,27 @@
 				CEA554D02E018AF50029A8A9 /* symbolExampleView.swift */,
 			);
 			path = Legacy;
+			sourceTree = "<group>";
+		};
+		CEA554DF2E019FBD0029A8A9 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				CED3795C2DFEE902001CE700 /* AuthService.swift */,
+				C694A2EC2AC5778400574D20 /* UserService.swift */,
+				C67AA3C82AE3839F00490DDE /* BookSearchService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		CEA554E02E01A08D0029A8A9 /* Endpoints */ = {
+			isa = PBXGroup;
+			children = (
+				CE8C47972DEA8D97003188ED /* AuthEndpoints.swift */,
+				CE8C479B2DEA8D97003188ED /* UserEndpoints.swift */,
+				CE8C47982DEA8D97003188ED /* BookSearchEndpoints.swift */,
+				CE8C47992DEA8D97003188ED /* EndpointProtocol.swift */,
+			);
+			path = Endpoints;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
