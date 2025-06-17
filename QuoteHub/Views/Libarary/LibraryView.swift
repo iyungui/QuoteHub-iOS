@@ -51,8 +51,6 @@ struct LibraryView: View {
 
     @State private var selectedView: Int = 0    // 테마, 스토리 탭
 
-    @Environment(\.colorScheme) var colorScheme // 다크모드 지원
-
     // 알림 관련
     @State private var showAlert: Bool = false
     @State private var alertType: AlertType = .loginRequired
@@ -76,6 +74,7 @@ struct LibraryView: View {
                 mainContent
             }
         }
+        // 북스토리 생성, 업데이트 후 tabController에서 네비게이션 트리거
         .navigationDestination(isPresented: $tabController.shouldNavigateToStoryDetail) {
             if let story = tabController.selectedStory {
                 BookStoryDetailView(story: story, isMyStory: true)
@@ -118,6 +117,7 @@ struct LibraryView: View {
             storiesViewModel.refreshBookStories(type: loadType)
             themesViewModel.refreshThemes(type: loadType)
         }
+        
         .task {
             // 내 프로필은 이미 로드했음 (contentview에서)
             if !isMyLibrary {
@@ -127,14 +127,17 @@ struct LibraryView: View {
             storiesViewModel.loadBookStories(type: loadType)
             themesViewModel.loadThemes(type: loadType)
         }
+        
+        // 친구 정보 초기화
         .onDisappear {
             userViewModel.currentOtherUser = nil
             userViewModel.currentOtherUserStoryCount = nil
         }
+        
         // 여러 ViewModel 의 로딩 상태를 동시에 추적하고 로딩뷰 표시하는 모디파이어
         .progressOverlay(
             viewModels: userViewModel, storiesViewModel, themesViewModel,
-            opacity: true
+            opacity: false
         )
         .navigationBarTitleDisplayMode(.inline)
     }

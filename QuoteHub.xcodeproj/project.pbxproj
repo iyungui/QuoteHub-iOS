@@ -124,6 +124,10 @@
 		CEA554C12E003C670029A8A9 /* CardHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554C02E003C670029A8A9 /* CardHeader.swift */; };
 		CEA554CA2E00FF860029A8A9 /* CreateStoryUIComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554C82E00FF860029A8A9 /* CreateStoryUIComponents.swift */; };
 		CEA554CC2E01230D0029A8A9 /* ImageResize.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554CB2E01230D0029A8A9 /* ImageResize.swift */; };
+		CEA554CF2E018AF30029A8A9 /* DraftManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554CD2E018AF30029A8A9 /* DraftManager.swift */; };
+		CEA554D22E018AF50029A8A9 /* symbolExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554D02E018AF50029A8A9 /* symbolExampleView.swift */; };
+		CEA554D42E018D9C0029A8A9 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554D32E018D9C0029A8A9 /* View+Extensions.swift */; };
+		CEA554D62E018E290029A8A9 /* GradientBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554D52E018E290029A8A9 /* GradientBackground.swift */; };
 		CED3795D2DFEE902001CE700 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED3795C2DFEE902001CE700 /* AuthService.swift */; };
 		CEF1A4792DF74204001EC484 /* hideKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF1A4782DF74204001EC484 /* hideKeyboard.swift */; };
 /* End PBXBuildFile section */
@@ -243,15 +247,17 @@
 		CEA554C02E003C670029A8A9 /* CardHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardHeader.swift; sourceTree = "<group>"; };
 		CEA554C82E00FF860029A8A9 /* CreateStoryUIComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateStoryUIComponents.swift; sourceTree = "<group>"; };
 		CEA554CB2E01230D0029A8A9 /* ImageResize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageResize.swift; sourceTree = "<group>"; };
+		CEA554CD2E018AF30029A8A9 /* DraftManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftManager.swift; sourceTree = "<group>"; };
+		CEA554D02E018AF50029A8A9 /* symbolExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = symbolExampleView.swift; sourceTree = "<group>"; };
+		CEA554D32E018D9C0029A8A9 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
+		CEA554D52E018E290029A8A9 /* GradientBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientBackground.swift; sourceTree = "<group>"; };
 		CED3795C2DFEE902001CE700 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		CEF1A4782DF74204001EC484 /* hideKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hideKeyboard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		CE4FEF8C2DFBDDB20072E8B9 /* Utils */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Utils; sourceTree = "<group>"; };
 		CE8C48472DEADAAC003188ED /* Font */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Font; sourceTree = "<group>"; };
 		CE8C48E92DF05884003188ED /* Lottie */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Lottie; sourceTree = "<group>"; };
-		CEA554C72E003D570029A8A9 /* Legacy */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Legacy; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -277,6 +283,7 @@
 				C627C8CB2AE25831004D867B /* ColorExtension.swift */,
 				C6E465572ADEAB66002F5FA0 /* CheckboxStyle.swift */,
 				CEA554CB2E01230D0029A8A9 /* ImageResize.swift */,
+				CEA554D32E018D9C0029A8A9 /* View+Extensions.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -333,9 +340,10 @@
 			isa = PBXGroup;
 			children = (
 				C6B56FFD2AA8CC1B003905C3 /* QuoteHub.entitlements */,
-				CEA554C72E003D570029A8A9 /* Legacy */,
-				CE4FEF8C2DFBDDB20072E8B9 /* Utils */,
-				CE8C483E2DEAB3EA003188ED /* Common */,
+				CEA554D12E018AF50029A8A9 /* Legacy */,
+				CEA554CE2E018AF30029A8A9 /* Utils */,
+				C6336CF12AAF1A91007355EC /* Extension */,
+				CE8C483E2DEAB3EA003188ED /* Components */,
 				CE8C47772DEA8D01003188ED /* APP */,
 				CE8C477E2DEA8D84003188ED /* Auth */,
 				CE8C478D2DEA8D93003188ED /* Data */,
@@ -343,7 +351,6 @@
 				CE8C481A2DEA8DAE003188ED /* Views */,
 				C676F5422AAC443500EC7241 /* API */,
 				C676F5252AAC02CB00EC7241 /* ViewModel */,
-				C6336CF12AAF1A91007355EC /* Extension */,
 				CE8C48E82DF0586A003188ED /* Resources */,
 				C6B56FE22AA8B60D003905C3 /* Preview Content */,
 			);
@@ -555,12 +562,13 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		CE8C483E2DEAB3EA003188ED /* Common */ = {
+		CE8C483E2DEAB3EA003188ED /* Components */ = {
 			isa = PBXGroup;
 			children = (
 				CE8C483F2DEAB3FE003188ED /* AnimatedText.swift */,
 				CEA554C02E003C670029A8A9 /* CardHeader.swift */,
 				CE4FEF5C2DF93F260072E8B9 /* HiddenModifier.swift */,
+				CEA554D52E018E290029A8A9 /* GradientBackground.swift */,
 				CE8C488D2DEC46E9003188ED /* tabIndicator.swift */,
 				CE8C48E02DF04BD8003188ED /* CustomProgressView.swift */,
 				CE8C48722DEBECAC003188ED /* Spacer.swift */,
@@ -574,7 +582,7 @@
 				CEF1A4782DF74204001EC484 /* hideKeyboard.swift */,
 				CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */,
 			);
-			path = Common;
+			path = Components;
 			sourceTree = "<group>";
 		};
 		CE8C487E2DEBF39D003188ED /* BookStoryRecord */ = {
@@ -636,6 +644,22 @@
 			path = Common;
 			sourceTree = "<group>";
 		};
+		CEA554CE2E018AF30029A8A9 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				CEA554CD2E018AF30029A8A9 /* DraftManager.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		CEA554D12E018AF50029A8A9 /* Legacy */ = {
+			isa = PBXGroup;
+			children = (
+				CEA554D02E018AF50029A8A9 /* symbolExampleView.swift */,
+			);
+			path = Legacy;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -652,10 +676,8 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				CE4FEF8C2DFBDDB20072E8B9 /* Utils */,
 				CE8C48472DEADAAC003188ED /* Font */,
 				CE8C48E92DF05884003188ED /* Lottie */,
-				CEA554C72E003D570029A8A9 /* Legacy */,
 			);
 			name = QuoteHub;
 			packageProductDependencies = (
@@ -733,6 +755,8 @@
 				C6B56FDF2AA8B60B003905C3 /* ContentView.swift in Sources */,
 				CE4FEF5D2DF93F260072E8B9 /* HiddenModifier.swift in Sources */,
 				C6DE7F512AF76B480020F5CB /* StoryCommentService.swift in Sources */,
+				CEA554D22E018AF50029A8A9 /* symbolExampleView.swift in Sources */,
+				CEA554D42E018D9C0029A8A9 /* View+Extensions.swift in Sources */,
 				CE8C478E2DEA8D93003188ED /* APIResponse.swift in Sources */,
 				CE8C478F2DEA8D93003188ED /* Book.swift in Sources */,
 				CE8C47902DEA8D93003188ED /* BookStory.swift in Sources */,
@@ -781,6 +805,7 @@
 				CE8C48712DEB5190003188ED /* ProfileView.swift in Sources */,
 				CE8C48342DEA8DAE003188ED /* BookStoryDetailView.swift in Sources */,
 				CE8C487F2DEBF39D003188ED /* BookDetailView.swift in Sources */,
+				CEA554D62E018E290029A8A9 /* GradientBackground.swift in Sources */,
 				CE8C49472DF18B89003188ED /* ThemeGalleryListView.swift in Sources */,
 				CE8C48812DEBF39D003188ED /* SearchBookView.swift in Sources */,
 				CE8C48822DEBF39D003188ED /* SetThemeView.swift in Sources */,
@@ -818,6 +843,7 @@
 				CEA554B82E003BFD0029A8A9 /* CarouselQuotesRecordView.swift in Sources */,
 				CEA554BA2E003BFD0029A8A9 /* KeywordInputSection.swift in Sources */,
 				CEA554BB2E003BFD0029A8A9 /* ListQuotesRecordView.swift in Sources */,
+				CEA554CF2E018AF30029A8A9 /* DraftManager.swift in Sources */,
 				CEA554BC2E003BFD0029A8A9 /* StoryQuotesRecordView.swift in Sources */,
 				CEA554BD2E003BFD0029A8A9 /* StorySettingRecordView.swift in Sources */,
 				CEA554BE2E003BFD0029A8A9 /* ThemeSelectionCard + PrivacyToggleCard.swift in Sources */,

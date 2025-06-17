@@ -30,7 +30,6 @@ struct ProfileView: View {
     
     // 친구 프로필인지 구분하는 파라미터
     let otherUser: User?
-    var showFollowButton: Bool { otherUser != nil }
     var storyCount: Int {
         (otherUser != nil) ? userViewModel.currentOtherUserStoryCount ?? 0 : userViewModel.currentUserStoryCount ?? 0
     }

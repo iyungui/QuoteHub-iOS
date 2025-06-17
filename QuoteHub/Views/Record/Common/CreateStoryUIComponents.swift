@@ -158,24 +158,6 @@ struct FeedbackView: View {
     }
 }
 
-// MARK: - BACKGROUND GRADIENT
-
-struct StoryBackgroundGradient: View {
-    var body: some View {
-        LinearGradient(
-            gradient: Gradient(colors: [
-                Color.softBeige.opacity(0.3),
-                Color.lightPaper.opacity(0.2),
-                Color.paperBeige.opacity(0.1)
-            ]),
-            startPoint: .top,
-            endPoint: .bottom
-        )
-        .ignoresSafeArea()
-    }
-}
-
-
 #Preview {
     VStack {
         CustomTextEditor(
