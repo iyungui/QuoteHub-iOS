@@ -11,15 +11,11 @@ import SwiftUI
 // MARK: - Main View
 
 struct MainView: View {
-    @StateObject private var tabController = TabController()
-    
+    @EnvironmentObject private var tabController: TabController
+    @EnvironmentObject private var authManager: UserAuthenticationManager
+
     @State private var showAlert: Bool = false
     @State private var showActionButtons: Bool = false
-    
-    @EnvironmentObject private var authManager: UserAuthenticationManager
-    @EnvironmentObject private var userViewModel: UserViewModel
-    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
-    @EnvironmentObject private var themesViewModel: ThemesViewModel
     
     var body: some View {
         NavigationStack {
@@ -52,8 +48,6 @@ struct MainView: View {
             .onAppear {
                 if !authManager.isUserAuthenticated {
                     tabController.selectedTab = 2
-                } else {
-//                    userViewModel.getProfile(userId: nil)
                 }
             }
         }

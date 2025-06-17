@@ -11,11 +11,12 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var versionManager = AppVersionManager()
+
     @EnvironmentObject private var authManager: UserAuthenticationManager
     @EnvironmentObject private var userViewModel: UserViewModel
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
     @EnvironmentObject private var themesViewModel: ThemesViewModel
-    
+
     @State private var isSplashView = true  // 런치스크린 표시
 
     var body: some View {

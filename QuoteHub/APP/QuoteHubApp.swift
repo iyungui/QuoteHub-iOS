@@ -15,6 +15,7 @@ struct QuoteHubApp: App {
     @StateObject private var userViewModel = UserViewModel()
     @StateObject private var storiesViewModel = BookStoriesViewModel()
     @StateObject private var themesViewModel = ThemesViewModel()
+    @StateObject private var tabController = TabController()
 
     // SwiftData ModelContainer 설정
 //    var sharedModelContainer: ModelContainer = {
@@ -44,6 +45,7 @@ struct QuoteHubApp: App {
                 .environmentObject(userViewModel)
                 .environmentObject(storiesViewModel)
                 .environmentObject(themesViewModel)
+                .environmentObject(tabController)
 
         }
 //        .modelContainer(sharedModelContainer)
