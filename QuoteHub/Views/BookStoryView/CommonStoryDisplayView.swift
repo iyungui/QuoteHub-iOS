@@ -135,11 +135,7 @@ struct CommonStoryDisplayView: View {
             Spacer()
             
             NavigationLink(
-                destination: LibraryView(user: story.userId)
-                    .environmentObject(userAuthManager)
-                    .environmentObject(userViewModel)
-                    .environmentObject(storiesViewModel)
-                    .environmentObject(themesViewModel)
+                destination: LibraryView(otherUser: isMyStory ? nil : story.userId)
             ) {
                 Image(systemName: "chevron.right")
                     .font(.caption.weight(.medium))

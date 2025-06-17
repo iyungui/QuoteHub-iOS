@@ -15,31 +15,28 @@ struct LibraryView: View {
     // MARK: - Properties
     
     // 친구 프로필인지 구분하는 프로퍼티
-    let user: User?
+    let otherUser: User?
     
-    /// 내 라이브러리인지 친구 라이브러리인지 구분
-    /// user 가 nil 이면, 내 라이브러리
-    var isMyLibaray: Bool {
-        return user == nil
-    }
-    
-    private var currentUser: User? {
-        return user ?? userViewModel.currentUser
+    /// 내 라이브러리인지 친구 라이브러리인지 구분.
+    /// otherUser 가 nil 이면, 내 라이브러리
+    var isMyLibrary: Bool {
+        return otherUser == nil
     }
 
     var loadType: LoadType {
-        if !isMyLibaray {
-            guard let userId = user?.id else { return LoadType.my }
-            return LoadType.friend(userId)
+        // 다른 사람의 라이브러리
+        if !isMyLibrary {
+            guard let friendId = otherUser?.id else { return LoadType.my }
+            return LoadType.friend(friendId)  // 여기서 해당 사용자의 북스토리와 테마 불러오도록 모드 설정
         } else {
             return LoadType.my
         }
     }
     
     // 초기화
-    init(user: User? = nil) {
-        self.user = user
-        self._followViewModel = StateObject(wrappedValue: FollowViewModel(userId: user?.id))
+    init(otherUser: User? = nil) {
+        self.otherUser = otherUser
+        self._followViewModel = StateObject(wrappedValue: FollowViewModel(userId: otherUser?.id))
     }
     
     // viewmodel
@@ -73,7 +70,7 @@ struct LibraryView: View {
             backgroundColor
             
             // 친구의 라이브러리이고 해당 친구가 차단된 사용자일 때
-            if !isMyLibaray && followViewModel.isBlocked {
+            if !isMyLibrary && followViewModel.isBlocked {
                 ContentUnavailableView("차단된 사용자", systemImage: "person.crop.circle.badge.xmark.fill", description: Text("설정의 차단 목록을 확인해주세요."))
             } else {
                 mainContent
@@ -99,7 +96,7 @@ struct LibraryView: View {
         
         // 유저 신고하기 창
         .sheet(isPresented: $showReportSheet) {
-            if let friend = user {
+            if let friend = userViewModel.currentOtherUser {
                 UserReportSheetView(
                     userId: friend.id,
                     reportReason: $reportReason
@@ -109,10 +106,30 @@ struct LibraryView: View {
         
         // 새로 고침
         .refreshable {
-            await refreshContent(type: loadType)
+            if isMyLibrary {
+                await userViewModel.loadUserProfile(userId: nil)
+                await userViewModel.loadStoryCount(userId: nil)
+                
+            } else if let otherUser = userViewModel.currentOtherUser {
+                await userViewModel.loadUserProfile(userId: otherUser.id)
+                await userViewModel.loadStoryCount(userId: otherUser.id)
+            }
+
+            storiesViewModel.refreshBookStories(type: loadType)
+            themesViewModel.refreshThemes(type: loadType)
         }
-        .onAppear {
-            onAppear(type: loadType)
+        .task {
+            // 내 프로필은 이미 로드했음 (contentview에서)
+            if !isMyLibrary {
+                await userViewModel.loadUserProfile(userId: otherUser?.id)
+                await userViewModel.loadStoryCount(userId: otherUser?.id)
+            }
+            storiesViewModel.loadBookStories(type: loadType)
+            themesViewModel.loadThemes(type: loadType)
+        }
+        .onDisappear {
+            userViewModel.currentOtherUser = nil
+            userViewModel.currentOtherUserStoryCount = nil
         }
         // 여러 ViewModel 의 로딩 상태를 동시에 추적하고 로딩뷰 표시하는 모디파이어
         .progressOverlay(
@@ -142,21 +159,10 @@ struct LibraryView: View {
         ScrollViewReader { proxy in
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 20) {
-                    if let friend = user {   // 친구 프로필
-                        ProfileView(user: friend)
-                            .environmentObject(followViewModel)
-                            .environmentObject(userAuthManager)
-                            .environmentObject(userViewModel)
-                            .environmentObject(storiesViewModel)
-                            .environmentObject(themesViewModel)
-
+                    if let friend = userViewModel.currentOtherUser {   // 친구 프로필
+                        ProfileView(otherUser: friend)
                     } else {    // 내 프로필
                         ProfileView()
-                            .environmentObject(followViewModel)
-                            .environmentObject(userAuthManager)
-                            .environmentObject(userViewModel)
-                            .environmentObject(storiesViewModel)
-                            .environmentObject(themesViewModel)
                     }
                     
                     LibraryTabButtonView(selectedView: $selectedView)
@@ -185,28 +191,22 @@ struct LibraryView: View {
             if storiesViewModel.bookStories(for: loadType).isEmpty {
                 ContentUnavailableView("아직 기록이 없어요", systemImage: "tray", description: Text("지금 바로 나만의 문장을 기록해보세요"))
             } else {
-                LibraryStoriesListView(isMy: isMyLibaray, loadType: loadType)
-                    .environmentObject(storiesViewModel)
-                    .environmentObject(userAuthManager)
+                LibraryStoriesListView(isMy: isMyLibrary, loadType: loadType)
             }
         } else if selectedView == 1 {    // 테마 기록
             if themesViewModel.themes(for: loadType).isEmpty {
                 ContentUnavailableView("아직 기록이 없어요", systemImage: "tray", description: Text("지금 바로 나만의 문장을 기록해보세요"))
             } else {
-                LibraryThemesListView(isMy: isMyLibaray, loadType: loadType)
-                    .environmentObject(themesViewModel)
-                    .environmentObject(userViewModel)
+                LibraryThemesListView(isMy: isMyLibrary, loadType: loadType)
             }
         } else if selectedView == 2 {   // 키워드별 북스토리 기록
-            KeywordGroupedStoriesView(isMy: isMyLibaray, loadType: loadType)
-                .environmentObject(storiesViewModel)
-                .environmentObject(userViewModel)
+            KeywordGroupedStoriesView(isMy: isMyLibrary, loadType: loadType)
         }
     }
     
     @ViewBuilder
     private var navBarItems: some View {
-        if isMyLibaray {
+        if isMyLibrary {
             myLibraryNavBarItems
         } else {
             friendLibraryNavBarItems
@@ -241,35 +241,6 @@ struct LibraryView: View {
         }
     }
     
-    private func refreshContent(type: LoadType) async {
-//        userViewModel.getProfile(userId: currentUser?.id)
-//        userViewModel.loadStoryCount(userId: currentUser?.id)
-        followViewModel.setUserId(currentUser?.id)
-        followViewModel.loadFollowCounts()
-
-        storiesViewModel.refreshBookStories(type: type)
-        themesViewModel.refreshThemes(type: type)
-                
-        // 친구 프로필인 경우 팔로우 상태 업데이트
-        if let friend = user {
-            followViewModel.updateFollowStatus(userId: friend.id)
-        }
-    }
-    
-    private func onAppear(type: LoadType) {
-//        userViewModel.getProfile(userId: currentUser?.id)
-//        userViewModel.loadStoryCount(userId: currentUser?.id)
-        followViewModel.setUserId(currentUser?.id)
-        followViewModel.loadFollowCounts()
-        
-        storiesViewModel.loadBookStories(type: type)
-        themesViewModel.loadThemes(type: type)
-        
-        // 친구 프로필인 경우 팔로우 상태 업데이트
-        if let friend = user {
-            followViewModel.updateFollowStatus(userId: friend.id)
-        }
-    }
     
     private var alertView: Alert {
         switch alertType {
@@ -318,7 +289,7 @@ struct LibraryView: View {
     }
     
     private func blockUser() {
-        guard let friend = user else { return }
+        guard let friend = userViewModel.currentOtherUser else { return }
         
         FollowService().updateFollowStatus(userId: friend.id, status: "BLOCKED") { result in
             switch result {

@@ -29,20 +29,20 @@ struct ProfileView: View {
     @State private var alertType: AlertType = .loginRequired
     
     // 친구 프로필인지 구분하는 파라미터
-    let user: User?
-    var showFollowButton: Bool { user != nil }
+    let otherUser: User?
+    var showFollowButton: Bool { otherUser != nil }
     var storyCount: Int {
-        /*userViewModel.storyCount ?? */1
+        (otherUser != nil) ? userViewModel.currentOtherUserStoryCount ?? 0 : userViewModel.currentUserStoryCount ?? 0
     }
     
     // 초기화 메서드
-    init(user: User? = nil) {
-        self.user = user
+    init(otherUser: User? = nil) {
+        self.otherUser = otherUser
     }
     
-    // 현재 표시할 사용자 ID (내 프로필이면 userViewModel.user?.id, 친구면 friendId?.id)
+    // 현재 표시할 사용자 ID
     private var currentUser: User? {
-        return user ?? userViewModel.currentUser
+        return userViewModel.currentOtherUser ?? userViewModel.currentUser
     }
     
     var body: some View {

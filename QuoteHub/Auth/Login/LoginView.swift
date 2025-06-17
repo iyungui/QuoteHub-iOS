@@ -91,6 +91,8 @@ struct AppleLoginButton: View {
                 let success = await authManager.handleAppleLogin(authCode: authCodeString)
                 
                 if success { await loadLoginUserData() }
+                
+                authManager.goToMainView()
             }
         case .failure(let error):
             print("Apple 로그인 실패: \(error.localizedDescription)")
@@ -100,7 +102,7 @@ struct AppleLoginButton: View {
     private func loadLoginUserData() async {
         await withTaskGroup(of: Void.self) { group in
             group.addTask {
-                await userViewModel.loadCurrentUserProfile()
+                await userViewModel.loadUserProfile(userId: nil)
             }
             group.addTask {
                 await userViewModel.loadStoryCount(userId: nil)

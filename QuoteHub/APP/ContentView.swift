@@ -42,7 +42,7 @@ struct ContentView: View {
                         await withTaskGroup(of: Void.self) { group in
                             // 현재 사용자 정보 가져오기 (유저모델의 currentUser 업데이트)
                             group.addTask {
-                                await userViewModel.loadCurrentUserProfile()
+                                await userViewModel.loadUserProfile(userId: nil)
                             }
                             // 현재 사용자 정보의 북스토리 카운트도 동시에 가져오기 (storyCount 업데이트)
                             group.addTask {

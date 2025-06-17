@@ -76,11 +76,7 @@ struct FollowListView: View {
                     } else {
                         ForEach(currentUsers, id: \.id) { user in
                             NavigationLink(
-                                destination: LibraryView(user: user)
-                                    .environmentObject(userAuthManager)
-                                    .environmentObject(userViewModel)
-                                    .environmentObject(storiesViewModel)
-                                    .environmentObject(themesViewModel)
+                                destination: LibraryView(otherUser: user)
                             ) {
                                 UserRow(user: user)
                             }

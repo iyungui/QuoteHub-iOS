@@ -23,7 +23,6 @@ class BookStoriesViewModel: ObservableObject, LoadingViewModel {
     @Published var isLastPage = false
     @Published var errorMessage: String?
 
-    
     /// 북스토리 생성, 수정 후 해당 북스토리로 navigation 하기 위한 프로퍼티
     @Published var lastCreatedStory: BookStory?
     

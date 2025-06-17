@@ -11,11 +11,13 @@ import SwiftUI
 @Observable
 final class UserViewModel: LoadingViewModel {
     
-    // 현재 사용자
+    // 현재 로그인한 사용자
     var currentUser: User?
+    var currentUserStoryCount: Int?
     
-    // 사용자 북스토리 개수
-    var storyCount: Int?
+    // 현재 보고 있는 다른 사용자 (친구 프로필용)
+    var currentOtherUser: User?
+    var currentOtherUserStoryCount: Int?
     
     // 로딩 상태
     var isLoading: Bool = false
@@ -36,8 +38,8 @@ final class UserViewModel: LoadingViewModel {
 
 extension UserViewModel {
     
-    /// 현재 로그인한 사용자 프로필 조회 (currentUesr 에 업데이트)
-    func loadCurrentUserProfile() async {
+    /// 사용자 프로필 조회 (로그인한 사용자는 currentUesr 에, 다른 사용자는 currentOtherUser에 업데이트)
+    func loadUserProfile(userId: String?) async {
         isLoading = true
         loadingMessage = "프로필을 불러오는 중..."
         clearMessage()
@@ -50,45 +52,22 @@ extension UserViewModel {
         
         do {
             // 네트워크 요청(백그라운드에서)
-            let response = try await userService.getProfile(userId: nil)
+            let response = try await userService.getProfile(userId: userId)
             
             if response.success {
-                currentUser = response.data
                 successMessage = response.message
+
+                if userId == nil {
+                    currentUser = response.data
+                } else {
+                    currentOtherUser = response.data
+                }
             } else {
                 errorMessage = response.message
             }
                 
         } catch {
             handleError(error)
-        }
-    }
-    
-    /// 특정 사용자 프로필 조회
-    func loadUserProfile(userId: String) async -> User? {
-        isLoading = true
-        loadingMessage = "프로필을 불러오는 중..."
-        clearMessage()
-
-        defer {
-            isLoading = false
-            loadingMessage = nil
-        }
-        
-        do {
-            // 네트워크 요청 (백그라운드에서)
-            let response = try await userService.getProfile(userId: userId)
-            
-            if response.success {
-                successMessage = response.message
-                return response.data
-            } else {
-                errorMessage = response.message
-                return nil
-            }
-        } catch {
-            handleError(error)
-            return nil
         }
     }
     
@@ -139,6 +118,7 @@ extension UserViewModel {
         }
     }
     
+    /// 사용자 북스토리 기록 개수 조회
     func loadStoryCount(userId: String?) async {
         isLoading = true
         loadingMessage = "로딩 중..."
@@ -155,7 +135,13 @@ extension UserViewModel {
             
             if response.success {
                 successMessage = response.message
-                storyCount = response.data
+                
+                if userId == nil {
+                    currentUserStoryCount = response.data
+                } else {
+                    currentOtherUserStoryCount = response.data
+                }
+                
             } else {
                 errorMessage = response.message
             }
