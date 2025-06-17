@@ -26,14 +26,33 @@ struct ContentView: View {
                 .task {
                     // 각 작업이 독립적이므로 병렬 실행
                     await withTaskGroup(of: Void.self) { group in
+                        // 현재 앱스토어 버전 확인
                         group.addTask {
                             await versionManager.checkVersionFromAppStore()
                         }
+                        // 인증 확인
                         group.addTask {
                             await authManager.validateAndRenewTokenNeeded()
                         }
                     }
                     
+                    // 인증 후
+                    if authManager.isUserAuthenticated {
+                        await withTaskGroup(of: Void.self) { group in
+                            // 현재 사용자 정보 가져오기 (유저모델의 currentUser 업데이트)
+                            group.addTask {
+                                await userViewModel.loadCurrentUserProfile()
+                            }
+                            // 현재 사용자 정보의 북스토리 카운트도 동시에 가져오기 (storyCount 업데이트)
+                            group.addTask {
+                                await userViewModel.loadStoryCount(userId: nil)
+                            }
+                        }
+                    }
+                    
+                    // 인증된 사용자 아니면 바로 isSplashView를 false로
+                    
+                    // 지연 (나중에 지울 코드)
                     try? await Task.sleep(nanoseconds: 1_000_000_000)
                     withAnimation {
                         isSplashView = false

@@ -37,7 +37,7 @@ final class UserViewModel: LoadingViewModel {
 extension UserViewModel {
     
     /// 현재 로그인한 사용자 프로필 조회 (currentUesr 에 업데이트)
-    func loadCurrentUserProfile(userId: String?) async {
+    func loadCurrentUserProfile() async {
         isLoading = true
         loadingMessage = "프로필을 불러오는 중..."
         clearMessage()
