@@ -10,22 +10,16 @@ import SDWebImageSwiftUI
 
 /// 홈뷰에서 쓰는 랜덤(최근에 검색된 책들중) 책 리스트 뷰
 struct RandomBookListView: View {
-    @EnvironmentObject private var booksViewModel: RandomBooksViewModel
-    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
-//    @EnvironmentObject private var themesViewModel: ThemesViewModel
-    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
-
+    @State private var booksViewModel = RandomBooksViewModel()
+    
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 20) {
                 ForEach(Array(booksViewModel.books.enumerated()), id: \.element.id) { _, book in
                     
                     NavigationLink(destination: BookDetailView(book: book)
-                        .environmentObject(userAuthManager)
-//                        .env YironmentObject(themesViewModel)
-                        .environmentObject(storiesViewModel)
                     ) {
-                        BookCard(book: book).environmentObject(booksViewModel)
+                        BookCard(book: book)
                     }
                     .buttonStyle(PlainButtonStyle())
 
@@ -33,7 +27,6 @@ struct RandomBookListView: View {
             }
             .padding(.horizontal, 30)
         }
-        // TODO: 메서드 확인
         .task {
             await booksViewModel.fetchRandomBooks()
         }
@@ -44,7 +37,6 @@ struct RandomBookListView: View {
 
 struct BookCard: View {
     let book: Book
-    @EnvironmentObject private var booksViewModel: RandomBooksViewModel
     
     var body: some View {
         VStack(alignment: .center, spacing: 12) {
@@ -54,7 +46,6 @@ struct BookCard: View {
         }
         .padding(.horizontal, 10)
         .scaleEffect(1.0)
-        .animation(.easeInOut(duration: 0.2), value: booksViewModel.isLoading)
     }
     
     private var bookImage: some View {
@@ -97,9 +88,4 @@ struct BookCard: View {
         }
         .frame(width: 140)
     }
-}
-
-
-#Preview {
-    RandomBookListView()
 }

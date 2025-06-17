@@ -7,23 +7,33 @@
 
 import Foundation
 
-class RandomBooksViewModel: ObservableObject, LoadingViewModel {
-    @Published var loadingMessage: String?
+@MainActor
+@Observable
+class RandomBooksViewModel: LoadingViewModel {
+    var loadingMessage: String?
     
-    @Published var books = [Book]()
-    @Published var isLoading = false
-    @Published var errorMessage: String?
+    var books = [Book]()
+    var isLoading = false
+    var errorMessage: String?
     
-    private var bookSearchService = BookSearchService()
+    private var bookSearchService: BookSearchServiceProtocol
     
-    @MainActor
+    init(bookSearchService: BookSearchServiceProtocol = BookSearchService()) {
+        self.bookSearchService = bookSearchService
+    }
+    
     func fetchRandomBooks() async {
         guard !isLoading else { return }
         
-        self.isLoading = true
+        isLoading = true
+        
+        defer {
+            isLoading = false
+        }
         
         do {
             let response = try await bookSearchService.getRandomBooks()
+            
             
             if response.success, let books = response.data {
                 self.books = books
@@ -32,9 +42,15 @@ class RandomBooksViewModel: ObservableObject, LoadingViewModel {
                 print("Boos Response is empty")
             }
         } catch {
-            
+            handleError(error)
         }
-        
-        isLoading = false
+    }
+    
+    private func handleError(_ error: Error) {
+        if let networkError = error as? NetworkError {
+            errorMessage = networkError.localizedDescription
+        } else {
+            errorMessage = "알 수 없는 오류가 발생했습니다.: \(error.localizedDescription)"
+        }
     }
 }

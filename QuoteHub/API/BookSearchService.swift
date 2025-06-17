@@ -7,7 +7,12 @@
 
 import Foundation
 
-final class BookSearchService {
+protocol BookSearchServiceProtocol {
+    func fetchBooksAsync(query: String, page: Int) async throws -> APIResponse<BooksResponse>
+    func getRandomBooks() async throws -> APIResponse<[Book]>
+}
+
+final class BookSearchService: BookSearchServiceProtocol {
     private let apiClient = APIClient.shared
 
     func fetchBooksAsync(query: String, page: Int) async throws -> APIResponse<BooksResponse> {
