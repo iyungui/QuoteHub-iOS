@@ -66,7 +66,7 @@ struct FollowListView: View {
     
     var body: some View {
         ZStack {
-            backgroundGradient
+            GradientBackground()
             
             ScrollView(showsIndicators: false) {
                 LazyVStack(spacing: 16) {
@@ -109,19 +109,6 @@ struct FollowListView: View {
     }
     
     // MARK: - UI Components
-    
-    private var backgroundGradient: some View {
-        LinearGradient(
-            gradient: Gradient(colors: [
-                Color.softBeige.opacity(0.3),
-                Color.lightPaper.opacity(0.2),
-                Color.paperBeige.opacity(0.1)
-            ]),
-            startPoint: .top,
-            endPoint: .bottom
-        )
-        .ignoresSafeArea()
-    }
     
     private var emptyStateView: some View {
         VStack(spacing: 24) {

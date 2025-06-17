@@ -43,7 +43,7 @@ struct ThemeDetailView: View {
     
     var body: some View {
         ZStack {
-            backgroundGradient
+            GradientBackground()
             
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 0) {
@@ -94,19 +94,6 @@ struct ThemeDetailView: View {
     }
     
     // MARK: - UI Components
-    
-    private var backgroundGradient: some View {
-        LinearGradient(
-            gradient: Gradient(colors: [
-                Color.softBeige.opacity(0.3),
-                Color.lightPaper.opacity(0.2),
-                Color.paperBeige.opacity(0.1)
-            ]),
-            startPoint: .top,
-            endPoint: .bottom
-        )
-        .ignoresSafeArea()
-    }
     
     private var themeHeaderView: some View {
         ZStack {

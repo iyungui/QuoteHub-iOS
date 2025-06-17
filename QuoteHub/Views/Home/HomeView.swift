@@ -19,7 +19,7 @@ struct HomeView: View {
     
     var body: some View {
         ZStack {
-            backgroundColor
+            GradientBackground()
             
             ScrollView {
                 VStack(spacing: 0) {
@@ -115,19 +115,6 @@ struct HomeView: View {
     
     // MARK: - UI Components
 
-    private var backgroundColor: some View {
-        LinearGradient(
-            gradient: Gradient(colors: [
-                Color.softBeige.opacity(0.3),
-                Color.lightPaper.opacity(0.3),
-                Color.paperBeige.opacity(0.1)
-            ]),
-            startPoint: .top,
-            endPoint: .bottom
-        )
-        .ignoresSafeArea()
-    }
-    
     private var heroSection: some View {
         VStack(spacing: 12) {
             Text("오늘도 좋은 문장과 함께")

@@ -47,17 +47,7 @@ struct StoryQuotesRecordView: View {
             
             Spacer()
         }
-        .background(
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    Color.softBeige.opacity(0.3),
-                    Color.lightPaper.opacity(0.2),
-                    Color.paperBeige.opacity(0.1)
-                ]),
-                startPoint: .top,
-                endPoint: .bottom
-            )
-        )
+        .backgroundGradient()
         .alert("알림", isPresented: $formViewModel.showAlert) {
             Button("확인") {}
         } message: {

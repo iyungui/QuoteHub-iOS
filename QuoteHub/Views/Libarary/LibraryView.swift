@@ -65,7 +65,7 @@ struct LibraryView: View {
     
     var body: some View {
         ZStack {
-            backgroundColor
+            GradientBackground()
             
             // 친구의 라이브러리이고 해당 친구가 차단된 사용자일 때
             if !isMyLibrary && followViewModel.isBlocked {
@@ -140,21 +140,6 @@ struct LibraryView: View {
             opacity: false
         )
         .navigationBarTitleDisplayMode(.inline)
-    }
-    
-    // MARK: - Private Views
-    
-    private var backgroundColor: some View {
-        LinearGradient(
-            gradient: Gradient(colors: [
-                Color.softBeige.opacity(0.3),
-                Color.lightPaper.opacity(0.3),
-                Color.paperBeige.opacity(0.1)
-            ]),
-            startPoint: .top,
-            endPoint: .bottom
-        )
-        .ignoresSafeArea()
     }
 
     /// main 컨텐츠

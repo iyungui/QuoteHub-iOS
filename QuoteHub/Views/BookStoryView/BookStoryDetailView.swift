@@ -41,7 +41,7 @@ struct BookStoryDetailView: View {
     var body: some View {
         ZStack {
             // 배경 오버레이
-            backgroundGradient
+            GradientBackground()
             
             // 여기서 분기처리 (북스토리 잘 불러와졌을 때(mainContent), 차단된 사용자일때, 못불러왔을 때
             if let currentStory = detailViewModel.story {
@@ -97,19 +97,6 @@ struct BookStoryDetailView: View {
         .environmentObject(userAuthManager)
         .environmentObject(themesViewModel)
         .environmentObject(commentViewModel)
-    }
-    
-    private var backgroundGradient: some View {
-        LinearGradient(
-            gradient: Gradient(colors: [
-                Color.softBeige.opacity(0.3),
-                Color.lightPaper.opacity(0.2),
-                Color.paperBeige.opacity(0.1)
-            ]),
-            startPoint: .top,
-            endPoint: .bottom
-        )
-        .ignoresSafeArea()
     }
     
     private var actionSheetView: some View {

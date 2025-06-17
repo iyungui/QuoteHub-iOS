@@ -58,7 +58,7 @@ struct BookDetailView: View {
                 .padding(.bottom, 100) // Bottom spacing
             }
         }
-        .background(backgroundGradient)
+        .backgroundGradient()
         .ignoresSafeArea(.container, edges: .top)
         .navigationBarHidden(true)
 //        .onAppear {
@@ -117,19 +117,6 @@ struct BookDetailView: View {
 //    }
     
     // MARK: - UI COMPONENTS
-    
-    private var backgroundGradient: some View {
-        LinearGradient(
-            gradient: Gradient(colors: [
-                Color.paperBeige.opacity(0.3),
-                Color.lightPaper.opacity(0.2),
-                Color.softBeige.opacity(0.1)
-            ]),
-            startPoint: .top,
-            endPoint: .bottom
-        )
-        .ignoresSafeArea()
-    }
     
     private var customNavigationBar: some View {
         HStack {
