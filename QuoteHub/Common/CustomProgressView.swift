@@ -49,6 +49,7 @@ struct CustomProgressView: View {
 
 // MARK: - PROTOCOL
 
+@MainActor
 protocol LoadingViewModel: ObservableObject {
     var isLoading: Bool { get }
     var loadingMessage: String? { get }

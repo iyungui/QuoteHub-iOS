@@ -31,7 +31,7 @@ struct UserSearchView: View {
         VStack(spacing: 20) {
             searchField
             Divider()
-            resultsListView
+//            resultsListView
             Spacer()
         }
         .padding()
@@ -40,8 +40,8 @@ struct UserSearchView: View {
     
     private func searchWithNickname() {
         self.isActioned = true
-        viewModel.users.removeAll()
-        viewModel.searchUser(nickname: searchNickname)
+        viewModel.users?.removeAll()
+//        viewModel.searchUser(nickname: searchNickname)
     }
 
     private var searchField: some View {
@@ -72,10 +72,10 @@ struct UserSearchView: View {
             }
         }
     }
-    
+    /*
     private var resultsListView: some View {
         ScrollView {
-            if viewModel.users.isEmpty && isActioned {
+            if viewModel.users?.isEmpty ?? [] && isActioned {
                 Text("검색결과가 없습니다.")
                     .foregroundColor(.gray)
                     .font(.headline)
@@ -95,6 +95,7 @@ struct UserSearchView: View {
             }
         }
     }
+     */
 }
 
 struct ProfileRowView: View {

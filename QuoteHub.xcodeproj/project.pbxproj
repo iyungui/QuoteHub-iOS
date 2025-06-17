@@ -122,6 +122,8 @@
 		CEA554BE2E003BFD0029A8A9 /* ThemeSelectionCard + PrivacyToggleCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554B42E003BFD0029A8A9 /* ThemeSelectionCard + PrivacyToggleCard.swift */; };
 		CEA554BF2E003BFD0029A8A9 /* ThoughtInputCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554B52E003BFD0029A8A9 /* ThoughtInputCard.swift */; };
 		CEA554C12E003C670029A8A9 /* CardHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554C02E003C670029A8A9 /* CardHeader.swift */; };
+		CEA554CA2E00FF860029A8A9 /* CreateStoryUIComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554C82E00FF860029A8A9 /* CreateStoryUIComponents.swift */; };
+		CEA554CC2E01230D0029A8A9 /* ImageResize.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554CB2E01230D0029A8A9 /* ImageResize.swift */; };
 		CED3795D2DFEE902001CE700 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED3795C2DFEE902001CE700 /* AuthService.swift */; };
 		CEF1A4792DF74204001EC484 /* hideKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF1A4782DF74204001EC484 /* hideKeyboard.swift */; };
 /* End PBXBuildFile section */
@@ -239,6 +241,8 @@
 		CEA554B42E003BFD0029A8A9 /* ThemeSelectionCard + PrivacyToggleCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ThemeSelectionCard + PrivacyToggleCard.swift"; sourceTree = "<group>"; };
 		CEA554B52E003BFD0029A8A9 /* ThoughtInputCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThoughtInputCard.swift; sourceTree = "<group>"; };
 		CEA554C02E003C670029A8A9 /* CardHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardHeader.swift; sourceTree = "<group>"; };
+		CEA554C82E00FF860029A8A9 /* CreateStoryUIComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateStoryUIComponents.swift; sourceTree = "<group>"; };
+		CEA554CB2E01230D0029A8A9 /* ImageResize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageResize.swift; sourceTree = "<group>"; };
 		CED3795C2DFEE902001CE700 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		CEF1A4782DF74204001EC484 /* hideKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hideKeyboard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -247,7 +251,6 @@
 		CE4FEF8C2DFBDDB20072E8B9 /* Utils */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Utils; sourceTree = "<group>"; };
 		CE8C48472DEADAAC003188ED /* Font */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Font; sourceTree = "<group>"; };
 		CE8C48E92DF05884003188ED /* Lottie */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Lottie; sourceTree = "<group>"; };
-		CEA554C22E003CC10029A8A9 /* Common */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Common; sourceTree = "<group>"; };
 		CEA554C72E003D570029A8A9 /* Legacy */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Legacy; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -273,6 +276,7 @@
 				C6336CF22AAF1AA0007355EC /* ImagePicker.swift */,
 				C627C8CB2AE25831004D867B /* ColorExtension.swift */,
 				C6E465572ADEAB66002F5FA0 /* CheckboxStyle.swift */,
+				CEA554CB2E01230D0029A8A9 /* ImageResize.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -429,10 +433,10 @@
 			children = (
 				CE8C47962DEA8D97003188ED /* APIClient.swift */,
 				CE8C47972DEA8D97003188ED /* AuthEndpoints.swift */,
+				CE8C479B2DEA8D97003188ED /* UserEndpoints.swift */,
 				CE8C47982DEA8D97003188ED /* BookSearchEndpoints.swift */,
 				CE8C47992DEA8D97003188ED /* EndpointProtocol.swift */,
 				CE8C479A2DEA8D97003188ED /* NetworkError.swift */,
-				CE8C479B2DEA8D97003188ED /* UserEndpoints.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -485,7 +489,7 @@
 		CE8C48062DEA8DAE003188ED /* Record */ = {
 			isa = PBXGroup;
 			children = (
-				CEA554C22E003CC10029A8A9 /* Common */,
+				CEA554C92E00FF860029A8A9 /* Common */,
 				CEA554AB2E003BE10029A8A9 /* Book */,
 				CE8C487E2DEBF39D003188ED /* BookStoryRecord */,
 				CE8C48852DEBF39F003188ED /* ThemeRecord */,
@@ -624,6 +628,14 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		CEA554C92E00FF860029A8A9 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				CEA554C82E00FF860029A8A9 /* CreateStoryUIComponents.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -643,7 +655,6 @@
 				CE4FEF8C2DFBDDB20072E8B9 /* Utils */,
 				CE8C48472DEADAAC003188ED /* Font */,
 				CE8C48E92DF05884003188ED /* Lottie */,
-				CEA554C22E003CC10029A8A9 /* Common */,
 				CEA554C72E003D570029A8A9 /* Legacy */,
 			);
 			name = QuoteHub;
@@ -737,6 +748,7 @@
 				C67AA3CB2AE389F500490DDE /* BooksViewModel.swift in Sources */,
 				C694A2ED2AC5778400574D20 /* UserService.swift in Sources */,
 				C60700CF2AFE14F1009D202A /* ThemeViewModel.swift in Sources */,
+				CEA554CA2E00FF860029A8A9 /* CreateStoryUIComponents.swift in Sources */,
 				CE8C481B2DEA8DAE003188ED /* HomeView.swift in Sources */,
 				CE8C481C2DEA8DAE003188ED /* PublicStoriesListView.swift in Sources */,
 				CE8C481D2DEA8DAE003188ED /* PublicThemesListView.swift in Sources */,
@@ -753,6 +765,7 @@
 				CE8C48692DEB1972003188ED /* ThemeToggleButton.swift in Sources */,
 				CE8C488A2DEC3BF2003188ED /* LibraryThemesListView.swift in Sources */,
 				CE8C48732DEBECAC003188ED /* Spacer.swift in Sources */,
+				CEA554CC2E01230D0029A8A9 /* ImageResize.swift in Sources */,
 				CE8C482D2DEA8DAE003188ED /* BlockedListView.swift in Sources */,
 				CE8C482E2DEA8DAE003188ED /* DeveloperInfoView.swift in Sources */,
 				CE8C482F2DEA8DAE003188ED /* ReportListView.swift in Sources */,

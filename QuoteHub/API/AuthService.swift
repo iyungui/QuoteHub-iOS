@@ -14,7 +14,7 @@ final class AuthService {
     
     private let apiClient: APIClient
     private let tokenManager: KeyChainTokenManager
-    
+
     // MARK: - Initialization
     private init(apiClient: APIClient = APIClient.shared,
                  tokenManager: KeyChainTokenManager = KeyChainTokenManager()) {

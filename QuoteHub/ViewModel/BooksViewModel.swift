@@ -8,7 +8,7 @@
 import SwiftUI
 
 @MainActor
-class BookSearchViewModel: ObservableObject, @preconcurrency LoadingViewModel {
+class BookSearchViewModel: ObservableObject, LoadingViewModel {
     @Published var books: [Book] = []
     
     @Published var isLoading: Bool = false

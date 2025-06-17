@@ -9,10 +9,16 @@ import Foundation
 
 // MARK: - Base Response Models
 
-struct APIResponse<T: Codable>: Codable {
+protocol APIResponseProtocol {
+    var success: Bool { get }
+    var message: String { get }
+}
+
+struct APIResponse<T: Codable>: Codable, APIResponseProtocol {
     let success: Bool
     let message: String
     let data: T?
+    let errors: [String: String]?
 }
 
 struct Pagination: Codable {
@@ -22,6 +28,7 @@ struct Pagination: Codable {
     let totalItems: Int
 }
 
+// 만약 에러 시 APIResponse 로...
 struct PaginatedAPIResponse<T: Codable>: Codable {
     let success: Bool
     let message: String
@@ -29,23 +36,12 @@ struct PaginatedAPIResponse<T: Codable>: Codable {
     let pagination: Pagination
 }
 
-struct ErrorResponse: Codable {
-    let success: Bool
-    let message: String
-    let errors: [String: String]?
-}
-
-struct CountResponse: Codable {
-    let success: Bool
-    let message: String
-    let count: Int
-}
-
 // Kakao API Response
 struct BooksResponse: Codable {
     let documents: [Book]
     let meta: Meta
 }
+
 struct Meta: Codable {
     let is_end: Bool
     let pageable_count: Int

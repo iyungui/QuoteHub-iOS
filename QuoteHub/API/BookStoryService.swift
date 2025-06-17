@@ -111,36 +111,36 @@ class BookStoryService {
     }
     
     // MARK: - Get Book Story Count
- 
-    func getUserBookStoryCount(userId: String?, completion: @escaping (Result<CountResponse, Error>) -> Void) {
-        var urlString = APIEndpoint.getUserStoryCount
-        
-        // Append the user ID to the URL if it's provided
-        if let userId = userId, !userId.isEmpty {
-            urlString += "/\(userId)"
-        }
-        
-        guard let url = URL(string: urlString) else {
-            completion(.failure(NSError(domain: "BookStoryService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
-            return
-        }
-        
-        // Create headers only if a token exists
-        var headers: HTTPHeaders?
-
-        if let token = AuthService.shared.validAccessToken {
-            headers = ["Authorization": "Bearer \(token)"]
-        }
-        
-        AF.request(url, method: .get, headers: headers).responseDecodable(of: CountResponse.self) { response in
-            switch response.result {
-            case .success(let storyCountResponse):
-                completion(.success(storyCountResponse))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
+// 
+//    func getUserBookStoryCount(userId: String?, completion: @escaping (Result<CountResponse, Error>) -> Void) {
+//        var urlString = APIEndpoint.getUserStoryCount
+//        
+//        // Append the user ID to the URL if it's provided
+//        if let userId = userId, !userId.isEmpty {
+//            urlString += "/\(userId)"
+//        }
+//        
+//        guard let url = URL(string: urlString) else {
+//            completion(.failure(NSError(domain: "BookStoryService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
+//            return
+//        }
+//        
+//        // Create headers only if a token exists
+//        var headers: HTTPHeaders?
+//
+//        if let token = AuthService.shared.validAccessToken {
+//            headers = ["Authorization": "Bearer \(token)"]
+//        }
+//        
+//        AF.request(url, method: .get, headers: headers).responseDecodable(of: CountResponse.self) { response in
+//            switch response.result {
+//            case .success(let storyCountResponse):
+//                completion(.success(storyCountResponse))
+//            case .failure(let error):
+//                completion(.failure(error))
+//            }
+//        }
+//    }
     
     // MARK: - Public 북스토리 조회
     

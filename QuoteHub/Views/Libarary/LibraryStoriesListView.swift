@@ -183,7 +183,7 @@ struct StoryBookView: View {
     }
     
     private var destinationView: some View {
-        if story.userId.id == userViewModel.user?.id {
+        if story.userId.id == userViewModel.currentUser?.id {
             return AnyView(BookStoryDetailView(story: story, isMyStory: true)
                 .environmentObject(userViewModel)
                 .environmentObject(storiesViewModel)

@@ -28,7 +28,7 @@ struct CommentView: View {
             Alert(title: Text("오류"), message: Text(errorMessage), dismissButton: .default(Text("확인")))
         }
         .onAppear {
-            userViewModel.getProfile(userId: nil)
+//            userViewModel.getProfile(userId: nil)
         }
     }
     
@@ -142,7 +142,7 @@ struct commentRow: View {
                         .lineLimit(nil)
                 }
                 Spacer()
-                if comment.userId.id == userViewModel.user?.id {
+                if comment.userId.id == userViewModel.currentUser?.id {
                     Button(action: {
                         print("commentShowingSheet")
                         commentShowingSheet = true
@@ -167,7 +167,7 @@ struct commentRow: View {
         var buttons: [ActionSheet.Button] = [.cancel()]
 
         // Check if the current user is the author of the comment
-        if comment.userId.id == userViewModel.user?.id ?? "" {
+        if comment.userId.id == userViewModel.currentUser?.id ?? "" {
             let deleteButton = ActionSheet.Button.destructive(Text("댓글 삭제하기")) {
                 viewModel.deleteCommentStory(commentId: comment.id) { success, errorMessage in
                     if !success {

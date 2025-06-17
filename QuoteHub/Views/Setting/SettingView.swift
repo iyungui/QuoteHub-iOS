@@ -32,7 +32,7 @@ struct SettingView: View {
             ProgressView()
         }
         
-        NavigationLink(destination: UserProfileView()
+        NavigationLink(destination: EmptyView()
             .environmentObject(userViewModel)
             .onAppear {
                 self.isLoading = false

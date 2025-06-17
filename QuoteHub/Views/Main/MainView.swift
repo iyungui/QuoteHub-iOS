@@ -53,7 +53,7 @@ struct MainView: View {
                 if !authManager.isUserAuthenticated {
                     tabController.selectedTab = 2
                 } else {
-                    userViewModel.getProfile(userId: nil)
+//                    userViewModel.getProfile(userId: nil)
                 }
             }
         }

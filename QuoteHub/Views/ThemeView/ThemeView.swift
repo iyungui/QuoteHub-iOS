@@ -173,7 +173,7 @@ struct ThemeView: View {
     }
     
     private var destinationView: some View {
-        if theme.userId.id == userViewModel.user?.id {
+        if theme.userId.id == userViewModel.currentUser?.id {
             return AnyView(ThemeDetailView(theme: theme, isMy: true)
                 .environmentObject(themesViewModel)
                 .environmentObject(userViewModel))

@@ -24,7 +24,7 @@ struct LibraryView: View {
     }
     
     private var currentUser: User? {
-        return user ?? userViewModel.user
+        return user ?? userViewModel.currentUser
     }
 
     var loadType: LoadType {
@@ -242,8 +242,8 @@ struct LibraryView: View {
     }
     
     private func refreshContent(type: LoadType) async {
-        userViewModel.getProfile(userId: currentUser?.id)
-        userViewModel.loadStoryCount(userId: currentUser?.id)
+//        userViewModel.getProfile(userId: currentUser?.id)
+//        userViewModel.loadStoryCount(userId: currentUser?.id)
         followViewModel.setUserId(currentUser?.id)
         followViewModel.loadFollowCounts()
 
@@ -257,8 +257,8 @@ struct LibraryView: View {
     }
     
     private func onAppear(type: LoadType) {
-        userViewModel.getProfile(userId: currentUser?.id)
-        userViewModel.loadStoryCount(userId: currentUser?.id)
+//        userViewModel.getProfile(userId: currentUser?.id)
+//        userViewModel.loadStoryCount(userId: currentUser?.id)
         followViewModel.setUserId(currentUser?.id)
         followViewModel.loadFollowCounts()
         

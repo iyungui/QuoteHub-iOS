@@ -194,6 +194,7 @@ struct SearchBookView: View {
     }
     
     private func performSearch() {
+        print("performSearch 호출!")
         booksViewModel.updateQuery(searchText)
         booksViewModel.clearSearch()
         Task {

@@ -22,7 +22,6 @@ struct User: Codable, Identifiable, Equatable {
     let nickname: String
     let profileImage: String
     let statusMessage: String?
-    let monthlyReadingGoal: Int?    // ->
     
     var followers: [String]?    //
     var following: [String]?    //

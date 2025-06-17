@@ -5,7 +5,7 @@
 //  Created by 이융의 on 5/26/25.
 //
 
-import Foundation
+import SwiftUI
 
 final class APIClient {
     // 싱글톤패턴으로, 앱 전체에서 하나의 APIClient 인스턴스만 사용하도록 설정
@@ -25,8 +25,8 @@ final class APIClient {
         self.tokenManager = KeyChainTokenManager()
     }
     
-    /// 제네릭 요청 async throws 메서드
-    func request<T: Codable, U: Codable>(
+    /// APIResponseProtocol타입-요청 async throws 메서드 (request, url, 헤더, body 설정만)
+    func request<T: Codable, U: APIResponseProtocol & Codable>(
         endpoint: EndpointProtocol,
         body: T? = nil,
         responseType: U.Type,
@@ -68,6 +68,59 @@ final class APIClient {
         }
         
         // 네트워크 요청 실행
+        return try await executeRequest(urlRequest, endpoint: endpoint, responseType: responseType, isRetry: isRetry)
+    }
+    
+    
+    /// APIResponseProtocol타입-Multipart 요청 async throws 메서드 (request, url, 헤더, body 설정만)
+    func requestWithMultipart<U: APIResponseProtocol & Codable>(
+        endpoint: EndpointProtocol,
+        textFields: [String: Any] = [:],
+        imageFields: [String: UIImage] = [:],
+        responseType: U.Type,
+        isRetry: Bool = false
+    ) async throws -> U {
+        // URL 생성
+        guard let url = URL(string: endpoint.fullURL) else {
+            throw NetworkError.invalidURL
+        }
+        
+        // URLRequest 생성
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = endpoint.method.rawValue
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        // Multipart boundary 생성
+        let boundary = "Boundary-\(UUID().uuidString)"
+        urlRequest.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+        // 필요 시 인증 헤더 추가
+        if endpoint.requiresAuth {
+            guard let accessToken = tokenManager.getAccessToken() else {
+                throw NetworkError.unauthorized
+            }
+            urlRequest.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        }
+        
+        // Multipart body 생성
+        urlRequest.httpBody = createMultipartBody(
+            boundary: boundary,
+            textFields: textFields,
+            imageFields: imageFields
+        )
+        
+        // 네트워크 요청 실행
+        return try await executeRequest(urlRequest, endpoint: endpoint, responseType: responseType, isRetry: isRetry)
+    }
+    
+    
+    /// APIResponseProtocol타입-네트워크 요청 실행 로직
+    private func executeRequest<U: APIResponseProtocol & Codable>(
+        _ urlRequest: URLRequest,
+        endpoint: EndpointProtocol,
+        responseType: U.Type,
+        isRetry: Bool = false
+    ) async throws -> U {
         do {
             let (data, response) = try await session.data(for: urlRequest)
             
@@ -75,10 +128,18 @@ final class APIClient {
                 throw NetworkError.invalidResponse
             }
             
+            let apiResponse = try parseAPIResponse(data, responseType: responseType)
+
             // 상태 코드별 처리
             switch httpResponse.statusCode {
             case 200...299:
-                return try parseSuccessResponse(data, responseType: responseType)
+                if apiResponse.success {
+                    return apiResponse
+                } else {
+                    // 200 상태 코드지만 success=false 인 경우
+                    // 이 경우는 없나??
+                    throw NetworkError.serverError(httpResponse.statusCode, apiResponse.message)
+                }
                 
             case 401:
                 // 인증 실패 - 토큰 리프레시 시도(재시도가 아닌 경우에만)
@@ -87,45 +148,108 @@ final class APIClient {
                     
                     // 리프레시 토큰 성공 시 재시도
                     if refreshSuccess {
-                        return try await request(
-                            endpoint: endpoint,
-                            body: body,
-                            responseType: responseType,
-                            customHeaders: customHeaders,
-                            isRetry: true   // isRetry를 true로 설정 (다음 request에는 재시도안함)
-                        )
+                        // 새로운 토큰으로 헤더 업데이트
+                        var retryRequest = urlRequest
+                        if let newAccessToken = tokenManager.getAccessToken() {
+                            retryRequest.setValue("Bearer \(newAccessToken)", forHTTPHeaderField: "Authorization")
+                        }
+                        
+                        return try await executeRequest(retryRequest, endpoint: endpoint, responseType: responseType, isRetry: true)
                     }
                 }
-                
                 // 다시 401일 때 throw
                 throw NetworkError.unauthorized
                 
             default:
-                let errorMessage = parseErrorResponse(data)
-                throw NetworkError.serverError(httpResponse.statusCode, errorMessage)
+                throw NetworkError.serverError(httpResponse.statusCode, apiResponse.message)
             }
-            
         } catch {
             if error is NetworkError { throw error }
             else { throw NetworkError.networkError(error) }
         }
     }
+}
+
+extension APIClient {
     
-    /// 응답 파싱
-    private func parseSuccessResponse<T: Codable>(_ data: Data, responseType: T.Type) throws -> T {
+    /// Multipart body 생성
+    private func createMultipartBody(
+        boundary: String,
+        textFields: [String: Any],
+        imageFields: [String: UIImage]
+    ) -> Data {
+        var body = Data()
+        
+        // 텍스트 필드 추가 (자동 타입 변환)
+        for (key, value) in textFields {
+            body.append("--\(boundary)\r\n")
+            body.append("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
+            
+            // 타입별 자동 변환
+            let stringValue: String
+            switch value {
+            case let boolValue as Bool:
+                stringValue = boolValue ? "true" : "false"
+            case let intValue as Int:
+                stringValue = String(intValue)
+            case let doubleValue as Double:
+                stringValue = String(doubleValue)
+            case let floatValue as Float:
+                stringValue = String(floatValue)
+            case let str as String:
+                stringValue = str
+            case let optionalValue where optionalValue is OptionalProtocol:
+                // Optional 타입 처리
+                if let unwrapped = Mirror(reflecting: optionalValue).children.first?.value {
+                    stringValue = String(describing: unwrapped)
+                } else {
+                    stringValue = ""
+                }
+            case let arrayValue as [Any]:
+                // 배열을 JSON 문자열로 변환
+                if let jsonData = try? JSONSerialization.data(withJSONObject: arrayValue),
+                   let jsonString = String(data: jsonData, encoding: .utf8) {
+                    stringValue = jsonString
+                } else {
+                    stringValue = String(describing: arrayValue)
+                }
+            case let dictValue as [String: Any]:
+                // 딕셔너리를 JSON 문자열로 변환
+                if let jsonData = try? JSONSerialization.data(withJSONObject: dictValue),
+                   let jsonString = String(data: jsonData, encoding: .utf8) {
+                    stringValue = jsonString
+                } else {
+                    stringValue = String(describing: dictValue)
+                }
+            default:
+                stringValue = String(describing: value)
+            }
+            
+            body.append("\(stringValue)\r\n")
+        }
+        
+        // 이미지 필드 추가
+        for (key, image) in imageFields {
+            if let imageData = image.jpegData(compressionQuality: 0.8) {
+                body.append("--\(boundary)\r\n")
+                body.append("Content-Disposition: form-data; name=\"\(key)\"; filename=\"\(key).jpg\"\r\n")
+                body.append("Content-Type: image/jpeg\r\n\r\n")
+                body.append(imageData)
+                body.append("\r\n")
+            }
+        }
+        
+        body.append("--\(boundary)--\r\n")
+        return body
+    }
+    
+    /// APIResponseProtocol 타입으로 응답 파싱
+    private func parseAPIResponse<T: APIResponseProtocol & Codable>(_ data: Data, responseType: T.Type) throws -> T {
         do {
             return try JSONDecoder().decode(responseType, from: data)
         } catch {
+            // json decode 실패
             throw NetworkError.decodingError(error)
-        }
-    }
-    
-    private func parseErrorResponse(_ data: Data) -> String {
-        do {
-            let errorResponse = try JSONDecoder().decode(ErrorResponse.self, from: data)
-            return errorResponse.message
-        } catch {
-            return "알 수 없는 서버 오류가 발생했습니다."
         }
     }
 
@@ -170,5 +294,23 @@ final class APIClient {
     /// 토큰 존재 여부 확인
     func hasValidToken() -> Bool {
         return tokenManager.hasValidToken()
+    }
+}
+
+extension APIClient {
+    // 외부 API 요청 메서드
+    
+}
+
+
+// Optional 타입 감지를 위한 프로토콜
+private protocol OptionalProtocol {}
+extension Optional: OptionalProtocol {}
+
+extension Data {
+    mutating func append(_ string: String) {
+        if let data = string.data(using: .utf8) {
+            append(data)
+        }
     }
 }

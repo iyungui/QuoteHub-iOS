@@ -32,7 +32,7 @@ struct ProfileView: View {
     let user: User?
     var showFollowButton: Bool { user != nil }
     var storyCount: Int {
-        userViewModel.storyCount ?? 1
+        /*userViewModel.storyCount ?? */1
     }
     
     // 초기화 메서드
@@ -42,7 +42,7 @@ struct ProfileView: View {
     
     // 현재 표시할 사용자 ID (내 프로필이면 userViewModel.user?.id, 친구면 friendId?.id)
     private var currentUser: User? {
-        return user ?? userViewModel.user
+        return user ?? userViewModel.currentUser
     }
     
     var body: some View {
