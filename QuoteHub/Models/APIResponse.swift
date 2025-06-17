@@ -29,7 +29,7 @@ struct Pagination: Codable {
 }
 
 // 만약 에러 시 APIResponse 로...
-struct PaginatedAPIResponse<T: Codable>: Codable {
+struct PaginatedAPIResponse<T: Codable>: Codable, APIResponseProtocol {
     let success: Bool
     let message: String
     let data: [T]

@@ -17,8 +17,11 @@ protocol UserServiceProtocol {
 
 final class UserService: UserServiceProtocol {
     
-    private let apiClient = APIClient.shared
+    private let apiClient: APIClient
     
+    init(apiClient: APIClient = APIClient.shared) {
+        self.apiClient = apiClient
+    }
     func getProfile(userId: String?) async throws -> APIResponse<User> {
         return try await apiClient.request(
             endpoint: UserEndpoints.getProfile(userId: userId),

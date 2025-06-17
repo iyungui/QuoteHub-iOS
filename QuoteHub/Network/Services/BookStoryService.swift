@@ -1,19 +1,116 @@
 //
-//  BookService.swift
+//  BookStoryService.swift
 //  QuoteHub
 //
 //  Created by 이융의 on 2023/10/01.
 //
 
-import Foundation
 import SwiftUI
-import Alamofire
 
+protocol BookStoryServiceProtocol {
+    /// 북스토리 생성
+    func createBookStory(
+        images: [UIImage]?,
+        bookId: String,
+        quotes: [Quote],
+        content: String?,
+        isPublic: Bool,
+        keywords: [String]?,
+        themeIds: [String]?
+    ) async throws -> APIResponse<BookStory>
+    
+    /// 북스토리 수정
+    func updateBookStory(
+        storyId: String,
+        quotes: [Quote],
+        images: [UIImage]?,
+        content: String?,
+        isPublic: Bool,
+        keywords: [String]?,
+        themeIds: [String]?
+    ) async throws -> APIResponse<BookStory>
+    
+    /// 북스토리 삭제
+    func deleteBookStory(
+        storyId: String
+    ) async throws -> APIResponse<EmptyData>
+    
+    /// 특정 북스토리 하나 조회
+    func fetchSpecificBookStory(
+        storyId: String
+    ) async throws -> APIResponse<BookStory>
+    
+    /// 북스토리 조회 (public)
+    func fetchPublicBookStories(
+        page: Int,
+        pageSize: Int
+    ) async throws -> PaginatedAPIResponse<BookStory>
+    
+    /// 북스토리 조회 (friend)
+    func fetchFriendBookStories(
+        friendId: String,
+        page: Int,
+        pageSize: Int
+    ) async throws -> PaginatedAPIResponse<BookStory>
+    
+    /// 북스토리 조회 (my)
+    func fetchMyBookStories(
+        page: Int, pageSize: Int
+    ) async throws -> PaginatedAPIResponse<BookStory>
+    
+    /// 키워드별 북스토리 조회(public)
+    func fetchPublicBookStoriesByKeyword(
+        keyword: String,
+        page: Int,
+        pageSize: Int
+    ) async throws -> PaginatedAPIResponse<BookStory>
+    
+    /// 키워드별 북스토리 조회(friend)
+    func fetchFriendBookStoriesByKeyword(
+        friendId: String,
+        keyword: String,
+        page: Int,
+        pageSize: Int
+    ) async throws -> PaginatedAPIResponse<BookStory>
 
-class BookStoryService {
+    /// 키워드별 북스토리 조회(my)
+    func fetchMyBookStoriesByKeyword(
+        keyword: String,
+        page: Int,
+        pageSize: Int
+    ) async throws -> PaginatedAPIResponse<BookStory>
+
+    /// 테마별 북스토리 조회(public)
+    func fetchPublicBookStoriesByTheme(
+        themeId: String,
+        page: Int,
+        pageSize: Int
+    ) async throws -> PaginatedAPIResponse<BookStory>
     
-    // MARK: -  BookStory 생성
+    /// 테마별 북스토리 조회(friend)
+    func fetchFriendBookStoriesByTheme(
+        themeId: String,
+        friendId: String,
+        page: Int,
+        pageSize: Int
+    ) async throws -> PaginatedAPIResponse<BookStory>
     
+    /// 테마별 북스토리 조회(my)
+    func fetchMyBookStoriesByTheme(
+        themeId: String,
+        page: Int,
+        pageSize: Int
+    ) async throws -> PaginatedAPIResponse<BookStory>
+}
+
+final class BookStoryService: BookStoryServiceProtocol {
+    private let apiClient: APIClient
+    
+    init(apiClient: APIClient = APIClient.shared) {
+        self.apiClient = apiClient
+    }
+    
+    /// 북스토리 생성
     func createBookStory(
         images: [UIImage]? = nil,
         bookId: String,
@@ -21,470 +118,245 @@ class BookStoryService {
         content: String? = nil,
         isPublic: Bool = false,
         keywords: [String]? = nil,
-        themeIds: [String]? = nil,
-        completion: @escaping (Result<BookStoryResponse, Error>) -> Void
-    ) {
+        themeIds: [String]? = nil
+    ) async throws -> APIResponse<BookStory> {
         
-        guard let url = URL(string: APIEndpoint.createStoryURL) else {
-            let error = NSError(domain: "BookStoryService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL for creating book story"])
-            print("Error: \(error.localizedDescription)")
-            completion(.failure(error))
-            return
-        }
-
-        guard let token = AuthService.shared.validAccessToken else {
-            return
-        }
-        
+        // quotes 필수 검증
         guard !quotes.isEmpty else {
-            let error = NSError(domain: "BookStoryService", code: -7, userInfo: [NSLocalizedDescriptionKey : "At least one quote is required"])
-            completion(.failure(error))
-            return
-        }
-        
-        var parameters: [String: Any] = [
-            "bookId": bookId,
-            "isPublic": isPublic,
-        ]
-        
-        if let content = content, !content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            parameters["content"] = content
-        }
-        
-        if let keywords = keywords, !keywords.isEmpty {
-            parameters["keywords"] = keywords
-        }
-        
-        if let themeIds = themeIds, !themeIds.isEmpty {
-            parameters["folderIds"] = themeIds
-        }
-
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        
-        AF.upload(multipartFormData: { (multipartFormData) in
-            if let actualImages = images, !actualImages.isEmpty {
-                for (index, actualImage) in actualImages.enumerated() {
-                    if let resizedImage = actualImage.resizeWithWidth(width: 400),
-                       let imageData = resizedImage.jpegData(compressionQuality: 0.9) {
-                        multipartFormData.append(imageData, withName: "storyImage", fileName: "image\(index).jpg", mimeType: "image/jpeg")
-                    }
-                }
-            }
-            
-            for (key, value) in parameters {
-                if let val = value as? String, !val.isEmpty {
-                    multipartFormData.append(val.data(using: .utf8)!, withName: key)
-                } else if let val = value as? Bool {
-                    multipartFormData.append("\(val)".data(using: .utf8)!, withName: key)
-                }
-            }
-            
-            // quotes 배열을 JSON으로 인코딩해서 추가
-            do {
-                let quotesData = try JSONEncoder().encode(quotes)
-                multipartFormData.append(quotesData, withName: "quotes")
-            } catch {
-                print("Error encoding quotes: \(error)")
-            }
-            
-            // Append keywords and themeIds(folderIds) separately
-            keywords?.forEach { keyword in
-                multipartFormData.append(keyword.data(using: .utf8)!, withName: "keywords")
-            }
-            
-            themeIds?.forEach { themeId in
-                multipartFormData.append(themeId.data(using: .utf8)!, withName: "folderIds")
-            }
-            
-        }, to: url, method: .post, headers: headers)
-        .validate()
-        .responseDecodable(of: BookStoryResponse.self) { response in
-            switch response.result {
-            case .success(let data):
-                completion(.success(data))
-            case .failure:
-                    let generalError = NSError(domain: "BookStoryService", code: -4, userInfo: [NSLocalizedDescriptionKey: "API Request Failed"])
-                    completion(.failure(generalError))
-                
-            }
-        }
-    }
-    
-    // MARK: - Get Book Story Count
-// 
-//    func getUserBookStoryCount(userId: String?, completion: @escaping (Result<CountResponse, Error>) -> Void) {
-//        var urlString = APIEndpoint.getUserStoryCount
-//        
-//        // Append the user ID to the URL if it's provided
-//        if let userId = userId, !userId.isEmpty {
-//            urlString += "/\(userId)"
-//        }
-//        
-//        guard let url = URL(string: urlString) else {
-//            completion(.failure(NSError(domain: "BookStoryService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
-//            return
-//        }
-//        
-//        // Create headers only if a token exists
-//        var headers: HTTPHeaders?
-//
-//        if let token = AuthService.shared.validAccessToken {
-//            headers = ["Authorization": "Bearer \(token)"]
-//        }
-//        
-//        AF.request(url, method: .get, headers: headers).responseDecodable(of: CountResponse.self) { response in
-//            switch response.result {
-//            case .success(let storyCountResponse):
-//                completion(.success(storyCountResponse))
-//            case .failure(let error):
-//                completion(.failure(error))
-//            }
-//        }
-//    }
-    
-    // MARK: - Public 북스토리 조회
-    
-    func fetchPublicBookStories(page: Int, pageSize: Int, completion: @escaping (Result<BookStoriesResponse, Error>) -> Void) {
-        let urlString = APIEndpoint.getPublicStoryURL + "?page=\(page)&pageSize=\(pageSize)"
-        
-        AF.request(urlString, method: .get).responseDecodable(of: BookStoriesResponse.self) { response in
-            switch response.result {
-            case .success(let bookStoriesResponse):
-                completion(.success(bookStoriesResponse))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-    
-    // MARK: - 내 서재 북스토리 조회
-    
-    func fetchMyBookStories(page: Int, pageSize: Int, completion: @escaping (Result<BookStoriesResponse, Error>) -> Void) {
-        
-        var urlString = APIEndpoint.getMyStoryURL
-
-        urlString += "?page=\(page)&pageSize=\(pageSize)"
-        
-        guard let url = URL(string: urlString) else {
-            completion(.failure(NSError(domain: "BookStoryService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
-            return
-        }
-        
-        guard let token = AuthService.shared.validAccessToken else {
-            return
-        }
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-
-
-
-        AF.request(urlString, method: .get, headers: headers).responseDecodable(of: BookStoriesResponse.self) { response in
-            switch response.result {
-            case .success(let bookStoriesResponse):
-                completion(.success(bookStoriesResponse))
-            case .failure(let error):
-                    let generalError = NSError(domain: "BookStoryService", code: -4, userInfo: [NSLocalizedDescriptionKey: "API Request Failed"])
-                    completion(.failure(generalError))
-            }
-        }
-    }
-
-    // MARK: -  특정 사용자 북스토리 조회
-    
-    func fetchFriendBookStories(friendId: String, page: Int, pageSize: Int, completion: @escaping (Result<BookStoriesResponse, Error>) -> Void) {
-        
-        var urlString = APIEndpoint.getFriendStoryURL
-
-        urlString += "/\(friendId)?page=\(page)&pageSize=\(pageSize)"
-        
-        guard let url = URL(string: urlString) else {
-            completion(.failure(NSError(domain: "BookStoryService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
-            return
-        }
-        
-        AF.request(urlString, method: .get).responseDecodable(of: BookStoriesResponse.self) { response in
-            switch response.result {
-            case .success(let bookStoriesResponse):
-                completion(.success(bookStoriesResponse))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-    
-    // MARK: - 키워드 검색 (모두)
-    
-    func getAllPublicStoriesKeyword(keyword: String, page: Int, pageSize: Int, completion: @escaping (Result<BookStoriesResponse, Error>) -> Void) {
-        let urlString = APIEndpoint.getAllPublicStoriesKeywordURL + "?keyword=\(keyword)&page=\(page)&pageSize=\(pageSize)"
-        
-        AF.request(urlString, method: .get).responseDecodable(of: BookStoriesResponse.self) { response in
-            switch response.result {
-            case .success(let bookStoriesResponse):
-                completion(.success(bookStoriesResponse))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-    
-    // MARK: - 키워드 검색 (친구의 서재)
-    
-    func getAllFriendStoriesKeyword(friendId: String, keyword: String, page: Int, pageSize: Int, completion: @escaping (Result<BookStoriesResponse, Error>) -> Void) {
-        let urlString = APIEndpoint.getFriendPublicStoriesKeywordURL + "?keyword=\(keyword)&page=\(page)&pageSize=\(pageSize)"
-        
-        AF.request(urlString, method: .get).responseDecodable(of: BookStoriesResponse.self) { response in
-            switch response.result {
-            case .success(let bookStoriesResponse):
-                completion(.success(bookStoriesResponse))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-    
-    // MARK: - 키워드 검색 (내 서재)
-    
-    func getAllmyStoriesKeyword(keyword: String, page: Int, pageSize: Int, completion: @escaping (Result<BookStoriesResponse, Error>) -> Void) {
-        let urlString = APIEndpoint.getMyStoriesKeywordURL + "?keyword=\(keyword)&page=\(page)&pageSize=\(pageSize)"
-        
-        guard let token = AuthService.shared.validAccessToken else {
-            return
-        }
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        
-        AF.request(urlString, method: .get, headers: headers).responseDecodable(of: BookStoriesResponse.self) { response in
-            switch response.result {
-            case .success(let bookStoriesResponse):
-                completion(.success(bookStoriesResponse))
-            case .failure(let error):
-                    let generalError = NSError(domain: "BookStoryService", code: -4, userInfo: [NSLocalizedDescriptionKey: "API Request Failed"])
-                    completion(.failure(generalError))
-                
-            }
-        }
-    }
-    
-    // MARK: -  BookStory 수정
-    
-    func updateBookStory(
-        storyID: String,
-        quotes: [Quote],
-        images: [UIImage]? = nil,
-        content: String? = nil,
-        isPublic: Bool? = false,
-        keywords: [String]? = nil,
-        themeIds: [String]? = nil,
-        completion: @escaping (Result<BookStoryResponse, Error>) -> Void
-    ) {
-
-        guard let token = AuthService.shared.validAccessToken else {
-            return
-        }
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-
-        var urlString = APIEndpoint.updateStoryURL
-
-        urlString += "/\(storyID)"
-        
-        guard let url = URL(string: urlString) else {
-            completion(.failure(NSError(domain: "BookStoryService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
-            return
-        }
-        
-        guard !quotes.isEmpty else {
-            let error = NSError(domain: "BookStoryService", code: -7, userInfo: [NSLocalizedDescriptionKey: "At least one quote is required"])
-            completion(.failure(error))
-            return
+            throw NetworkError.serverError(400, "최소 하나의 문장이 필요합니다.")
         }
         
         // 각 quote의 유효성 검증
         for quote in quotes {
             guard !quote.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-                let error = NSError(domain: "BookStoryService", code: -8, userInfo: [NSLocalizedDescriptionKey: "Quote text cannot be empty"])
-                completion(.failure(error))
-                return
+                throw NetworkError.serverError(400, "문장 내용은 비어있을 수 없습니다.")
             }
         }
         
-        // 업데이트할 파라미터만 포함 (모든 필드 선택적)
-        var parameters: [String: Any] = [:]
+        // 텍스트 필드 설정
+        var textFields: [String: Any] = [
+            "bookId": bookId,
+            "quotes": quotes,  // APIClient에서 JSON으로 변환
+            "isPublic": isPublic
+        ]
         
-        if let content = content {
-            parameters["content"] = content
+        // 옵셔널 필드들 추가
+        if let content = content, !content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            textFields["content"] = content
         }
         
-        if let isPublic = isPublic {
-            parameters["isPublic"] = isPublic
+        if let keywords = keywords, !keywords.isEmpty {
+            textFields["keywords"] = keywords
+        }
+        
+        if let themeIds = themeIds, !themeIds.isEmpty {
+            textFields["folderIds"] = themeIds
+        }
+        
+        // 이미지 필드 설정 (리사이즈는 APIClient에서 처리)
+        var imageFields: [String: UIImage] = [:]
+        if let images = images, !images.isEmpty {
+            for (index, image) in images.enumerated() {
+                imageFields["storyImage\(index)"] = image
+            }
+        }
+        
+        return try await apiClient.requestWithMultipart(
+            endpoint: BookStoryEndpoints.createBookStory,
+            textFields: textFields,
+            imageFields: imageFields,
+            responseType: APIResponse<BookStory>.self
+        )
+    }
+
+    /// 북스토리 수정
+    func updateBookStory(
+        storyId: String,
+        quotes: [Quote],
+        images: [UIImage]? = nil,
+        content: String? = nil,
+        isPublic: Bool,
+        keywords: [String]? = nil,
+        themeIds: [String]? = nil
+    ) async throws -> APIResponse<BookStory> {
+        
+        // quotes 필수 검증
+        guard !quotes.isEmpty else {
+            throw NetworkError.serverError(400, "최소 하나의 문장이 필요합니다.")
+        }
+        
+        // 각 quote의 유효성 검증
+        for quote in quotes {
+            guard !quote.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+                throw NetworkError.serverError(400, "문장 내용은 비어있을 수 없습니다.")
+            }
+        }
+        
+        // 텍스트 필드 설정 (업데이트할 필드만 포함)
+        var textFields: [String: Any] = [
+            "quotes": quotes,  // APIClient에서 JSON으로 변환
+            "isPublic": isPublic
+        ]
+        
+        // 선택적 필드들 추가
+        if let content = content {
+            textFields["content"] = content
         }
         
         if let keywords = keywords {
-            parameters["keywords"] = keywords
+            textFields["keywords"] = keywords
         }
         
         if let themeIds = themeIds {
-            parameters["folderIds"] = themeIds
-        }
-
-        
-        AF.upload(multipartFormData: { (multipartFormData) in
-            // 이미지 추가 (선택)
-            if let actualImages = images, !actualImages.isEmpty {
-                for (index, actualImage) in actualImages.enumerated() {
-                    if let resizedImage = actualImage.resizeWithWidth(width: 400),
-                       let imageData = resizedImage.jpegData(compressionQuality: 0.9) {
-                        multipartFormData.append(imageData, withName: "storyImage", fileName: "image\(index).jpg", mimeType: "image/jpeg")
-                    }
-                }
-            }
-
-            // 일반 파라미터들 추가
-            for (key, value) in parameters {
-                if let val = value as? String {
-                    multipartFormData.append(val.data(using: .utf8)!, withName: key)
-                } else if let val = value as? Bool {
-                    multipartFormData.append("\(val)".data(using: .utf8)!, withName: key)
-                }
-            }
-            
-            // quotes 배열이 제공된 경우에만 추가
-            do {
-                let quotesData = try JSONEncoder().encode(quotes)
-                let quotesString = String(data: quotesData, encoding: .utf8) ?? "encoding failed"
-                print("Quotes JSON being sent: \(quotesString)")
-                multipartFormData.append(quotesData, withName: "quotes")
-                print("Quotes successfully encoded and added to multipart data")
-            } catch {
-                print("Error encoding quotes: \(error)")
-            }
-            
-            // keywords와 themeIds를 개별적으로 추가 (제공된 경우에만)
-            keywords?.forEach { keyword in
-                multipartFormData.append(keyword.data(using: .utf8)!, withName: "keywords")
-            }
-            
-            themeIds?.forEach { themeId in
-                multipartFormData.append(themeId.data(using: .utf8)!, withName: "folderIds")
-            }
-            
-        }, to: url, method: .put, headers: headers)
-        .validate()
-        .responseDecodable(of: BookStoryResponse.self) { response in
-            switch response.result {
-            case .success(let data):
-                completion(.success(data))
-            case .failure:
-                if let statusCode = response.response?.statusCode {
-                    switch statusCode {
-                    case 404:
-                        let notFoundError = NSError(domain: "BookStoryService", code: -5, userInfo: [NSLocalizedDescriptionKey: "Book story not found or access denied"])
-                        completion(.failure(notFoundError))
-                    default:
-                        let generalError = NSError(domain: "BookStoryService", code: -4, userInfo: [NSLocalizedDescriptionKey: "API Request Failed with status code: \(statusCode)"])
-                        completion(.failure(generalError))
-                    }
-                } else {
-                    let unknownError = NSError(domain: "BookStoryService", code: -6, userInfo: [NSLocalizedDescriptionKey: "Unknown API Error"])
-                    completion(.failure(unknownError))
-                }
-            }
-        }
-    }
-
-    // MARK: - 특정 북스토리 하나 조회
-    
-    func fetchSpecificBookStory(storyId: String, completion: @escaping (Result<BookStoryResponse, Error>) -> Void) {
-        var urlString = APIEndpoint.fetchSpecificStoryURL
-        
-        urlString += "/\(storyId)"
-        
-        guard let url = URL(string: urlString) else {
-            completion(.failure(NSError(domain: "BookStoryService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
-            return
+            textFields["folderIds"] = themeIds
         }
         
-        AF.request(urlString, method: .get)
-        .responseDecodable(of: BookStoryResponse.self) { response in
-            switch response.result {
-            case .success(let data):
-                completion(.success(data))
-            case .failure(let error):
-                completion(.failure(error))
+        // 이미지 필드 설정 (리사이즈는 APIClient에서 처리)
+        var imageFields: [String: UIImage] = [:]
+        if let images = images, !images.isEmpty {
+            for (index, image) in images.enumerated() {
+                imageFields["storyImage\(index)"] = image
             }
         }
+        
+        return try await apiClient.requestWithMultipart(
+            endpoint: BookStoryEndpoints.updateBookStory(storyId: storyId),
+            textFields: textFields,
+            imageFields: imageFields,
+            responseType: APIResponse<BookStory>.self
+        )
     }
     
-    // MARK: -  BookStory 삭제 함수
-    
-    func deleteBookStory(storyID: String, completion: @escaping (Result<APIResponse<EmptyData>, Error>) -> Void) {
-
-        guard let token = AuthService.shared.validAccessToken else {
-            return
-        }
-
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-
-        var urlString = APIEndpoint.deleteStoryURL
-
-        urlString += "/\(storyID)"
-        
-        guard let url = URL(string: urlString) else {
-            completion(.failure(NSError(domain: "BookStoryService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
-            return
-        }
-        
-        AF.request(url, method: .delete, encoding: JSONEncoding.default, headers: headers).responseDecodable(of: APIResponse<EmptyData>.self) { response in
-            switch response.result {
-            case .success(let deleteResponse):
-                completion(.success(deleteResponse))
-            case .failure:
-                    completion(.failure(NSError(domain: "BookStoryService", code: -4, userInfo: [NSLocalizedDescriptionKey: "API Request Failed"])))
-                
-            }
-        }
+    /// 내 북스토리 삭제
+    func deleteBookStory(
+        storyId: String
+    ) async throws -> APIResponse<EmptyData> {
+        return try await apiClient.request(
+            endpoint: BookStoryEndpoints.deleteBookStory(storyId: storyId),
+            body: EmptyData(),
+            responseType: APIResponse<EmptyData>.self
+        )
     }
     
-    // MARK: - 폴더별 스토리 조회
-    
-    func getAllStoriesByFolder(folderId: String, page: Int, pageSize: Int, completion: @escaping (Result<BookStoriesResponse, Error>) -> Void) {
-        let urlString = APIEndpoint.getAllPublicStoriesByFolderURL + "/\(folderId)?page=\(page)&pageSize=\(pageSize)"
-        
-        AF.request(urlString, method: .get).responseDecodable(of: BookStoriesResponse.self) { response in
-            switch response.result {
-            case .success(let bookStoriesResponse):
-                completion(.success(bookStoriesResponse))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+    /// 특정 북스토리 하나 조회
+    func fetchSpecificBookStory(
+        storyId: String
+    ) async throws -> APIResponse<BookStory> {
+        return try await apiClient.request(
+            endpoint: BookStoryEndpoints.fetchSpecificBookStory(storyId: storyId),
+            body: EmptyData(),
+            responseType: APIResponse<BookStory>.self
+        )
     }
     
-    func getFriendStoriesByFolder(folderId: String, friendId: String, page: Int, pageSize: Int, completion: @escaping (Result<BookStoriesResponse, Error>) -> Void) {
-        let urlString = APIEndpoint.getFriendPublicStoriesByFolderURL + "/\(friendId)/\(folderId)?page=\(page)&pageSize=\(pageSize)"
-        
-        AF.request(urlString, method: .get).responseDecodable(of: BookStoriesResponse.self) { response in
-            switch response.result {
-            case .success(let bookStoriesResponse):
-                completion(.success(bookStoriesResponse))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+    /// 모든 사용자의 공개된 북스토리 조회
+    func fetchPublicBookStories(
+        page: Int,
+        pageSize: Int
+    ) async throws -> PaginatedAPIResponse<BookStory> {
+        return try await apiClient.request(
+            endpoint: BookStoryEndpoints.fetchPublicBookStories(page: page, pageSize: pageSize),
+            body: EmptyData(),
+            responseType: PaginatedAPIResponse<BookStory>.self
+        )
     }
     
-    func getMyStoriesByFolder(folderId: String, page: Int, pageSize: Int, completion: @escaping (Result<BookStoriesResponse, Error>) -> Void) {
-        let urlString = APIEndpoint.getMyStoriesByFolderURL + "/\(folderId)?page=\(page)&pageSize=\(pageSize)"
-        
-        guard let token = AuthService.shared.validAccessToken else {
-            return
-        }
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        
-        AF.request(urlString, method: .get, headers: headers).responseDecodable(of: BookStoriesResponse.self) { response in
-            switch response.result {
-            case .success(let bookStoriesResponse):
-                completion(.success(bookStoriesResponse))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
+    /// 특정 사용자의 공개된 북스토리 조회
+    func fetchFriendBookStories(
+        friendId: String,
+        page: Int,
+        pageSize: Int
+    ) async throws -> PaginatedAPIResponse<BookStory> {
+        return try await apiClient.request(
+            endpoint: BookStoryEndpoints.fetchFriendBookStories(friendId: friendId, page: page, pageSize: pageSize),
+            body: EmptyData(),
+            responseType: PaginatedAPIResponse<BookStory>.self
+        )
+    }
+    
+    /// 내 서재 북스토리 조회
+    func fetchMyBookStories(
+        page: Int,
+        pageSize: Int
+    ) async throws -> PaginatedAPIResponse<BookStory> {
+        return try await apiClient.request(
+            endpoint: BookStoryEndpoints.fetchMyBookStories(page: page, pageSize: pageSize),
+            body: EmptyData(),
+            responseType: PaginatedAPIResponse<BookStory>.self
+        )
+    }
+    
+    func fetchPublicBookStoriesByKeyword(
+        keyword: String,
+        page: Int,
+        pageSize: Int
+    ) async throws -> PaginatedAPIResponse<BookStory> {
+        return try await apiClient.request(
+            endpoint: BookStoryEndpoints.fetchPublicBookStoriesByKeyword(keyword: keyword, page: page, pageSize: pageSize),
+            body: EmptyData(),
+            responseType: PaginatedAPIResponse<BookStory>.self
+        )
+    }
+    
+    func fetchFriendBookStoriesByKeyword(
+        friendId: String,
+        keyword: String,
+        page: Int,
+        pageSize: Int
+    ) async throws -> PaginatedAPIResponse<BookStory> {
+        return try await apiClient.request(
+            endpoint: BookStoryEndpoints.fetchFriendBookStoriesByKeyword(friendId: friendId, keyword: keyword, page: page, pageSize: pageSize),
+            body: EmptyData(),
+            responseType: PaginatedAPIResponse<BookStory>.self
+        )
+    }
+    
+    func fetchMyBookStoriesByKeyword(
+        keyword: String,
+        page: Int,
+        pageSize: Int
+    ) async throws -> PaginatedAPIResponse<BookStory> {
+        return try await apiClient.request(
+            endpoint: BookStoryEndpoints.fetchMyBookStoriesByKeyword(keyword: keyword, page: page, pageSize: pageSize),
+            body: EmptyData(),
+            responseType: PaginatedAPIResponse<BookStory>.self
+        )
+    }
+    
+    func fetchPublicBookStoriesByTheme(
+        themeId: String,
+        page: Int,
+        pageSize: Int
+    ) async throws -> PaginatedAPIResponse<BookStory> {
+        return try await apiClient.request(
+            endpoint: BookStoryEndpoints.fetchPublicBookStoriesByTheme(themeId: themeId, page: page, pageSize: pageSize),
+            body: EmptyData(),
+            responseType: PaginatedAPIResponse<BookStory>.self
+        )
+    }
+    
+    func fetchFriendBookStoriesByTheme(
+        themeId: String,
+        friendId: String,
+        page: Int,
+        pageSize: Int
+    ) async throws -> PaginatedAPIResponse<BookStory> {
+        return try await apiClient.request(
+            endpoint: BookStoryEndpoints.fetchFriendBookStoriesByTheme(themeId: themeId, friendId: friendId, page: page, pageSize: pageSize),
+            body: EmptyData(),
+            responseType: PaginatedAPIResponse<BookStory>.self
+        )
+    }
+    
+    func fetchMyBookStoriesByTheme(
+        themeId: String,
+        page: Int,
+        pageSize: Int
+    ) async throws -> PaginatedAPIResponse<BookStory> {
+        return try await apiClient.request(
+            endpoint: BookStoryEndpoints.fetchMyBookStoriesByTheme(themeId: themeId, page: page, pageSize: pageSize),
+            body: EmptyData(),
+            responseType: PaginatedAPIResponse<BookStory>.self
+        )
     }
 }

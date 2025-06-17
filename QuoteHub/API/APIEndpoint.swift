@@ -14,7 +14,6 @@ struct APIEndpoint {
     // MARK: - BOOKSTORY
     
     static let createStoryURL = baseURL + "bookstories/createBookStory"
-    static let getUserStoryCount = baseURL + "bookstories/count"    // + /userId?
     static let getPublicStoryURL = baseURL + "bookstories/public"   // ?page=2&pageSize=10
     static let getFriendStoryURL = baseURL + "bookstories/friend"  // + /friendID
     static let getMyStoryURL = baseURL + "bookstories/my"

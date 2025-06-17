@@ -205,8 +205,24 @@ extension APIClient {
                 } else {
                     stringValue = ""
                 }
+            case let codableValue as Codable:
+                // Codable 객체를 JSON 문자열로 변환 (Quote 배열 등)
+                if let jsonData = try? JSONEncoder().encode(codableValue),
+                   let jsonString = String(data: jsonData, encoding: .utf8) {
+                    stringValue = jsonString
+                } else {
+                    stringValue = String(describing: codableValue)
+                }
+            case let arrayValue as [String]:
+                // 문자열 배열의 경우 각각을 개별 필드로 추가
+                for item in arrayValue {
+                    body.append("--\(boundary)\r\n")
+                    body.append("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
+                    body.append("\(item)\r\n")
+                }
+                continue
             case let arrayValue as [Any]:
-                // 배열을 JSON 문자열로 변환
+                // 다른 배열을 JSON 문자열로 변환
                 if let jsonData = try? JSONSerialization.data(withJSONObject: arrayValue),
                    let jsonString = String(data: jsonData, encoding: .utf8) {
                     stringValue = jsonString
@@ -224,13 +240,15 @@ extension APIClient {
             default:
                 stringValue = String(describing: value)
             }
-            
+
             body.append("\(stringValue)\r\n")
         }
         
-        // 이미지 필드 추가
+        // 이미지 필드 추가 (리사이즈 포함)
         for (key, image) in imageFields {
-            if let imageData = image.jpegData(compressionQuality: 0.8) {
+            // 이미지를 400px 너비로 리사이즈
+            let processedImage = image.resizeWithWidth(width: 400) ?? image
+            if let imageData = processedImage.jpegData(compressionQuality: 0.8) {
                 body.append("--\(boundary)\r\n")
                 body.append("Content-Disposition: form-data; name=\"\(key)\"; filename=\"\(key).jpg\"\r\n")
                 body.append("Content-Type: image/jpeg\r\n\r\n")
@@ -296,12 +314,6 @@ extension APIClient {
         return tokenManager.hasValidToken()
     }
 }
-
-extension APIClient {
-    // 외부 API 요청 메서드
-    
-}
-
 
 // Optional 타입 감지를 위한 프로토콜
 private protocol OptionalProtocol {}
