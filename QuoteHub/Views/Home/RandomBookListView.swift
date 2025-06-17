@@ -34,7 +34,9 @@ struct RandomBookListView: View {
             .padding(.horizontal, 30)
         }
         // TODO: 메서드 확인
-        .onAppear(perform: booksViewModel.getRandomBooksIfNeeded)
+        .task {
+            await booksViewModel.fetchRandomBooks()
+        }
     }
 }
 

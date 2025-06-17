@@ -7,33 +7,34 @@
 
 import Foundation
 
-class RandomBooksViewModel: ObservableObject {
+class RandomBooksViewModel: ObservableObject, LoadingViewModel {
+    @Published var loadingMessage: String?
+    
     @Published var books = [Book]()
     @Published var isLoading = false
     @Published var errorMessage: String?
-    @Published var hasLoadedOnce = false
     
     private var bookSearchService = BookSearchService()
     
-    func getRandomBooksIfNeeded() {
-        if !hasLoadedOnce {
-            getRandomBooks()
-            hasLoadedOnce = true
-        }
-    }
-    
-    func getRandomBooks() {
+    @MainActor
+    func fetchRandomBooks() async {
+        guard !isLoading else { return }
+        
         self.isLoading = true
-        bookSearchService.getRandomBooks { [weak self] result in
-            DispatchQueue.main.async {
-                self?.isLoading = false
-                switch result {
-                case .success(let response):
-                    self?.books = response.data!
-                case .failure(let error):
-                    self?.errorMessage = error.localizedDescription
-                }
+        
+        do {
+            let response = try await bookSearchService.getRandomBooks()
+            
+            if response.success, let books = response.data {
+                self.books = books
+            } else {
+                print(#fileID, #function, #line, "- ")
+                print("Boos Response is empty")
             }
+        } catch {
+            
         }
+        
+        isLoading = false
     }
 }

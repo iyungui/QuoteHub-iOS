@@ -6,68 +6,25 @@
 //
 
 import Foundation
-import Combine
-import Alamofire
 
-class BookSearchService {
-    func fetchBooksPublisher(query: String, page: Int) -> AnyPublisher<APIResponse<BooksResponse>, Error> {
-        let endpoint = "?query=\(query)&page=\(page)"
-        let urlString = APIEndpoint.searchBookURL + endpoint
-        
-        guard let url = URL(string: urlString) else {
-            return Fail(error: APIError.invalidURL)
-                .eraseToAnyPublisher()
-        }
-        
-        return Future<APIResponse<BooksResponse>, Error> { promise in
-            AF.request(url, method: .get)
-                .validate()
-                .responseDecodable(of: APIResponse<BooksResponse>.self) { response in
-                    switch response.result {
-                    case .success(let booksResponse):
-                        promise(.success(booksResponse))
-                    case .failure(let error):
-                        promise(.failure(error))
-                    }
-                }
-        }
-        .eraseToAnyPublisher()
+final class BookSearchService {
+    private let apiClient = APIClient.shared
+
+    func fetchBooksAsync(query: String, page: Int) async throws -> APIResponse<BooksResponse> {
+        print(#fileID, #function, #line, "- ")
+        print("query: \(query), page: \(page)")
+        return try await apiClient.request(
+            endpoint: BookSearchEndpoints.searchBook(query: query, page: page),
+            body: EmptyData(),
+            responseType: APIResponse<BooksResponse>.self
+        )
     }
     
-    func fetchBooksAsync(query: String, page: Int) async throws -> APIResponse<BooksResponse> {
-        let endpoint = "?query=\(query)&page=\(page)"
-        let urlString = APIEndpoint.searchBookURL + endpoint
-        
-        guard let url = URL(string: urlString) else {
-            throw APIError.invalidURL
-        }
-        
-        return try await withCheckedThrowingContinuation { continuation in
-            AF.request(url, method: .get)
-                .validate()
-                .responseDecodable(of: APIResponse<BooksResponse>.self) { response in
-                    switch response.result {
-                    case .success(let booksResponse):
-                        continuation.resume(returning: booksResponse)
-                    case .failure(let error):
-                        continuation.resume(throwing: error)
-                    }
-                }
-        }
-    }
-
-    func getRandomBooks(completion: @escaping (Result<RandomBooksResponse, AFError>) -> Void) {
-        let url = APIEndpoint.recommendBooksURL
-        
-        AF.request(url, method: .get)
-            .validate()
-            .responseDecodable(of: RandomBooksResponse.self) { response in
-                completion(response.result)
-            }
-    }
-
-    enum APIError: Error {
-        case invalidURL
-        case noData
+    func getRandomBooks() async throws -> APIResponse<[Book]> {
+        return try await apiClient.request(
+            endpoint: BookSearchEndpoints.recommendBooks,
+            body: EmptyData(),
+            responseType: APIResponse<[Book]>.self
+        )
     }
 }

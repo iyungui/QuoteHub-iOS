@@ -57,7 +57,7 @@
 		CE8C47952DEA8D93003188ED /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C478B2DEA8D93003188ED /* User.swift */; };
 		CE8C479D2DEA8D97003188ED /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47962DEA8D97003188ED /* APIClient.swift */; };
 		CE8C479E2DEA8D97003188ED /* AuthEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47972DEA8D97003188ED /* AuthEndpoints.swift */; };
-		CE8C479F2DEA8D97003188ED /* BookEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47982DEA8D97003188ED /* BookEndpoints.swift */; };
+		CE8C479F2DEA8D97003188ED /* BookSearchEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47982DEA8D97003188ED /* BookSearchEndpoints.swift */; };
 		CE8C47A02DEA8D97003188ED /* EndpointProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47992DEA8D97003188ED /* EndpointProtocol.swift */; };
 		CE8C47A12DEA8D97003188ED /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C479A2DEA8D97003188ED /* NetworkError.swift */; };
 		CE8C47A22DEA8D97003188ED /* UserEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C479B2DEA8D97003188ED /* UserEndpoints.swift */; };
@@ -175,7 +175,7 @@
 		CE8C478B2DEA8D93003188ED /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		CE8C47962DEA8D97003188ED /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		CE8C47972DEA8D97003188ED /* AuthEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthEndpoints.swift; sourceTree = "<group>"; };
-		CE8C47982DEA8D97003188ED /* BookEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookEndpoints.swift; sourceTree = "<group>"; };
+		CE8C47982DEA8D97003188ED /* BookSearchEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookSearchEndpoints.swift; sourceTree = "<group>"; };
 		CE8C47992DEA8D97003188ED /* EndpointProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndpointProtocol.swift; sourceTree = "<group>"; };
 		CE8C479A2DEA8D97003188ED /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		CE8C479B2DEA8D97003188ED /* UserEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEndpoints.swift; sourceTree = "<group>"; };
@@ -429,7 +429,7 @@
 			children = (
 				CE8C47962DEA8D97003188ED /* APIClient.swift */,
 				CE8C47972DEA8D97003188ED /* AuthEndpoints.swift */,
-				CE8C47982DEA8D97003188ED /* BookEndpoints.swift */,
+				CE8C47982DEA8D97003188ED /* BookSearchEndpoints.swift */,
 				CE8C47992DEA8D97003188ED /* EndpointProtocol.swift */,
 				CE8C479A2DEA8D97003188ED /* NetworkError.swift */,
 				CE8C479B2DEA8D97003188ED /* UserEndpoints.swift */,
@@ -801,7 +801,7 @@
 				CE8C48402DEAB3FE003188ED /* AnimatedText.swift in Sources */,
 				CE8C48442DEAD467003188ED /* CustomTabbar.swift in Sources */,
 				CE8C479E2DEA8D97003188ED /* AuthEndpoints.swift in Sources */,
-				CE8C479F2DEA8D97003188ED /* BookEndpoints.swift in Sources */,
+				CE8C479F2DEA8D97003188ED /* BookSearchEndpoints.swift in Sources */,
 				CEA554B82E003BFD0029A8A9 /* CarouselQuotesRecordView.swift in Sources */,
 				CEA554BA2E003BFD0029A8A9 /* KeywordInputSection.swift in Sources */,
 				CEA554BB2E003BFD0029A8A9 /* ListQuotesRecordView.swift in Sources */,

@@ -108,7 +108,7 @@ struct HomeView: View {
     // MARK: - Private Methods
     // TODO: - 비동기적으로 처리
     private func refreshContent() async {
-        booksViewModel.getRandomBooks()
+        await booksViewModel.fetchRandomBooks()
         storiesViewModel.refreshBookStories(type: .public)
         themesViewModel.refreshThemes(type: .public)
     }

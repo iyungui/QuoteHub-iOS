@@ -14,7 +14,7 @@ struct SearchBookView: View {
     @Environment(\.dismiss) var dismiss
     
     // viewmodel
-    @StateObject private var booksViewModel = BooksViewModel()
+    @StateObject private var booksViewModel = BookSearchViewModel()
     @EnvironmentObject var storiesViewModel: BookStoriesViewModel
     @EnvironmentObject var userAuthManager: UserAuthenticationManager
 
@@ -42,7 +42,6 @@ struct SearchBookView: View {
                 }
             }
             .progressOverlay(viewModel: booksViewModel, animationName: "progressLottie", opacity: false)
-            .onAppear { setupSearchBinding() }
         }
     }
 
@@ -68,14 +67,16 @@ struct SearchBookView: View {
                     .focused($focusField, equals: .searchText)
                     .submitLabel(.search)
                     .foregroundColor(.primaryText)
-                    .onChange(of: searchText) { _, newValue in
-                        booksViewModel.updateSearchQuery(newValue)
+                    .onSubmit {
+                        performSearch()
                     }
                 
                 if !searchText.isEmpty {
                     Button(action: {
                         searchText = ""
+                        booksViewModel.updateQuery("")
                         booksViewModel.clearSearch()
+                        
                         focusField = .searchText
                     }) {
                         Image(systemName: "xmark.circle.fill")
@@ -95,7 +96,7 @@ struct SearchBookView: View {
                     focusField = .searchText
                 } else {
                     focusField = nil
-                    booksViewModel.performSearch()
+                    performSearch()
                 }
             }) {
                 Image(systemName: "arrow.right")
@@ -114,7 +115,7 @@ struct SearchBookView: View {
         .onSubmit {
             switch focusField {
             case .searchText:
-                booksViewModel.performSearch()
+                performSearch()
                 focusField = nil
             default:
                 break
@@ -127,16 +128,15 @@ struct SearchBookView: View {
         ScrollView {
             LazyVStack {
                 if booksViewModel.books.isEmpty && booksViewModel.hasSearched && !booksViewModel.isLoading {
+                    
                     emptyStateView.padding(.top, 50)
+                    
                 } else {
                     ForEach(Array(booksViewModel.books.enumerated()), id: \.element.id) { index, book in
                         BookRowView(book: book)
-                            .environmentObject(booksViewModel)
-                            .environmentObject(storiesViewModel)
-                            .environmentObject(userAuthManager)
-                            .onAppear {
+                            .task {
                                 // 마지막 책이 화면에 나타날 때
-                                booksViewModel.loadMoreIfNeeded(currentIndex: index)
+                                await booksViewModel.loadMoreIfNeeded(currentIndex: index)
                             }
                     }
                     
@@ -149,8 +149,7 @@ struct SearchBookView: View {
             .padding(.top, 8)
         }
         .refreshable {
-            /// pull to refresh 할 때는 async 메서드
-            await booksViewModel.performSearchAsync()
+            performSearch()
         }
     }
     
@@ -194,8 +193,12 @@ struct SearchBookView: View {
         .adaptiveShadow(radius: 2, y: 1)
     }
     
-    private func setupSearchBinding() {
-        booksViewModel.setupSearchDebouncing()
+    private func performSearch() {
+        booksViewModel.updateQuery(searchText)
+        booksViewModel.clearSearch()
+        Task {
+            await booksViewModel.performSearchAsync()
+        }
     }
 }
 
@@ -204,7 +207,7 @@ struct SearchBookView: View {
 struct BookRowView: View {
     var book: Book
     
-    @EnvironmentObject private var booksViewModel: BooksViewModel
+    @EnvironmentObject private var booksViewModel: BookSearchViewModel
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
     @EnvironmentObject private var userAuthManager: UserAuthenticationManager
     
