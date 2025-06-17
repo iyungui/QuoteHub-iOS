@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 /// 홈뷰 -> 유저 검색
 struct UserSearchView: View {

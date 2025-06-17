@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 // MARK: - THEME GALLERY LIST VIEW
 

@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 struct BlockedListView: View {
     @State private var blockedUsers: [User] = []

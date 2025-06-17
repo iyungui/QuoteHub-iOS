@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 /// 홈뷰에서 보이는 공개된 테마 리스트 뷰
 struct PublicThemesListView: View {

@@ -7,7 +7,6 @@
 
 import SwiftUI
 //import SwiftData
-import SDWebImageSwiftUI
 
 /// 북스토리 기록 3: 북스토리 기록 뷰
 

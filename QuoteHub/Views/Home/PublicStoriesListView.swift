@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 /// 홈뷰에서 보이는 공개된 북스토리 리스트 뷰
 struct PublicStoriesListView: View {
