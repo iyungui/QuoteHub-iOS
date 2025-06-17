@@ -14,7 +14,7 @@ struct HomeUserLevelBadge: View {
     
     var body: some View {
         CompactReadingLevelBadge(storyCount: storyCount, showProgress: false, showChevron: true)
-            .padding(.horizontal, 12)
+            .padding(.horizontal, 6)
             .padding(.vertical, 4)
             .background(
                 RoundedRectangle(cornerRadius: 20)

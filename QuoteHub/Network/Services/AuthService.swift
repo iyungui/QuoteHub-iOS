@@ -7,7 +7,13 @@
 
 import Foundation
 
-final class AuthService {
+protocol AuthServiceProtocol {
+    func signInWithApple(authCode: String) async throws -> APIResponse<SignInWithAppleResponse>
+    func validateAndRenewToken() async throws -> APIResponse<TokenValidationResponse>
+    func revokeAccount() async throws -> APIResponse<RevokeAccountResponse>
+}
+
+final class AuthService: AuthServiceProtocol {
     
     // MARK: - Properties
     static let shared = AuthService()
