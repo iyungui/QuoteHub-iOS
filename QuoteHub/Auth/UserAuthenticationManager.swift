@@ -15,14 +15,18 @@ final class UserAuthenticationManager: ObservableObject, LoadingViewModel {
     @Published var loadingMessage: String?
     
     private let authService: AuthService
+    private let tabController: TabController
     
-    init(authService: AuthService = AuthService.shared) {
+    init(authService: AuthService = AuthService.shared,
+         tabController: TabController = TabController()
+    ) {
         self.authService = authService
+        self.tabController = tabController
     }
     
     /// 애플 로그인 시 응답처리(토큰저장 및 상태 업데이트)
     @MainActor
-    func handleAppleLogin(authCode: String) async {
+    func handleAppleLogin(authCode: String) async -> Bool {
         isLoading = true
         
         do {
@@ -31,24 +35,28 @@ final class UserAuthenticationManager: ObservableObject, LoadingViewModel {
             
             guard response.success, let loginData = response.data else {
                 print("Apple 로그인 실패: \(response.message)")
-                return
+                return false
             }
             
             // 토큰 저장
             Task.detached { // 토큰 저장 완료되면 Task는 자동으로 메모리에서 해제
-                try? self.authService.saveTokens(loginData)
+                try? await self.authService.saveTokens(loginData)
 //                print("토큰 저장 완료: \(Thread.isMainThread)")
             }
             isUserAuthenticated = true
             showingLoginView = false
             
+            tabController.selectedTab = 0   // 라이브러리뷰로 이동
+            
             print("Apple 로그인 성공: \(loginData.user.nickname)")
 
         } catch {
             print("Apple 로그인 에러: \(error.localizedDescription)")
+            return false
         }
         
         isLoading = false
+        return true
     }
     
     /// 토큰 검증 및 토큰 재발급 (자동 로그인)
@@ -83,7 +91,7 @@ final class UserAuthenticationManager: ObservableObject, LoadingViewModel {
                     let newRefreshToken = validationData.refreshToken {
                 // 새 토큰 Keychain에 업데이트
                 Task.detached { // 토큰 저장 완료되면 Task는 자동으로 메모리에서 해제
-                    try? self.authService.updateBothTokens(
+                    try? await self.authService.updateBothTokens(
                         newAccessToken: newAccessToken,
                         newRefreshToken: newRefreshToken
                     )
@@ -108,7 +116,7 @@ final class UserAuthenticationManager: ObservableObject, LoadingViewModel {
     func logout() async {
         isLoading = true
         Task.detached {
-            try? self.authService.clearAllTokens()
+            try? await self.authService.clearAllTokens()
         }
         // 상태 초기화 (온보딩뷰로 이동)
         goToOnboardingView()
@@ -134,7 +142,7 @@ final class UserAuthenticationManager: ObservableObject, LoadingViewModel {
             
             // keychain에 저장된 토큰도 삭제
             Task.detached {
-                try? self.authService.clearAllTokens()
+                try? await self.authService.clearAllTokens()
             }
             
             // 상태 초기화 (온보딩뷰로 이동)

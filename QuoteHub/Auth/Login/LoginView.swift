@@ -62,6 +62,7 @@ struct LoginView: View {
 
 struct AppleLoginButton: View {
     @EnvironmentObject var authManager: UserAuthenticationManager
+    @EnvironmentObject var userViewModel: UserViewModel
     
     var body: some View {
         SignInWithAppleButton(
@@ -87,10 +88,23 @@ struct AppleLoginButton: View {
             
             // User Auth Manager에서 네트워크 요청 및 로그인 처리
             Task {
-                await authManager.handleAppleLogin(authCode: authCodeString)
+                let success = await authManager.handleAppleLogin(authCode: authCodeString)
+                
+                if success { await loadLoginUserData() }
             }
         case .failure(let error):
             print("Apple 로그인 실패: \(error.localizedDescription)")
+        }
+    }
+    
+    private func loadLoginUserData() async {
+        await withTaskGroup(of: Void.self) { group in
+            group.addTask {
+                await userViewModel.loadCurrentUserProfile()
+            }
+            group.addTask {
+                await userViewModel.loadStoryCount(userId: nil)
+            }
         }
     }
 }
