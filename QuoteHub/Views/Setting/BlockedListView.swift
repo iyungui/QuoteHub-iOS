@@ -16,21 +16,7 @@ struct BlockedListView: View {
     var body: some View {
         List(blockedUsers) { user in
             HStack {
-                if let url = URL(string: user.profileImage), !user.profileImage.isEmpty {
-                    WebImage(url: URL(string: user.profileImage))
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 50, height: 50)
-                        .clipShape(Circle())
-                        .overlay(Circle().stroke(Color.gray.opacity(0.5), lineWidth: 1))
-                        .padding(.trailing, 5)
-                } else {
-                    Image(systemName: "person.crop.circle.fill")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 50, height: 50)
-                        .padding(.trailing, 5)
-                }
+                ProfileImage(profileImageURL: user.profileImage, size: 50)
 
                 VStack(alignment: .leading) {
                     Text(user.nickname)

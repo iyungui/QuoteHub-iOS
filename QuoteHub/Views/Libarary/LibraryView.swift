@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 /// 내 라이브러리, 친구 라이브러리 모두 LibraryView 로 접근
 /// 친구 라이브러리의 경우 user 파라미터를 추가로 받아서 구분

@@ -51,7 +51,7 @@ struct MainView: View {
                 }
             }
         }
-        
+        // 로그인 필요 기능 시 알림
         .alert("", isPresented: $showAlert) {
             Button {
                 authManager.showingLoginView = true
@@ -68,7 +68,6 @@ struct MainView: View {
         .fullScreenCover(isPresented: $authManager.showingLoginView) {
             LoginView(isOnboarding: false)
         }
-        .environmentObject(tabController)
     }
     
     /// 메인뷰 - 홈뷰와 라이브러리뷰
@@ -96,7 +95,6 @@ struct MainView: View {
             }
         }
     }
-    
     private func showLoginAlert() {
         showAlert = true
     }

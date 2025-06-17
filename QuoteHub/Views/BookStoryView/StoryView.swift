@@ -92,44 +92,6 @@ struct StoryView: View {
         .padding(.trailing, isCompact ? 8 : 12)
     }
     
-    private var profileImage: some View {
-        Group {
-            if let url = URL(string: story.userId.profileImage), !story.userId.profileImage.isEmpty {
-                WebImage(url: url)
-                    .placeholder {
-                        Circle()
-                            .fill(Color.paperBeige.opacity(0.5))
-                            .overlay(
-                                Image(systemName: "person.fill")
-                                    .foregroundColor(.brownLeather.opacity(0.7))
-                                    .font(.system(size: isCompact ? 12 : 16))
-                            )
-                    }
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: isCompact ? 28 : 36, height: isCompact ? 28 : 36)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.gray.opacity(0.5), lineWidth: 1))
-            } else {
-                // 대체 이미지
-                Circle()
-                    .fill(
-                        LinearGradient(
-                            gradient: Gradient(colors: [Color.paperBeige.opacity(0.8), Color.antiqueGold.opacity(0.6)]),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .frame(width: isCompact ? 28 : 36, height: isCompact ? 28 : 36)
-                    .overlay(
-                        Image(systemName: "person.fill")
-                            .foregroundColor(.brownLeather.opacity(0.7))
-                            .font(.system(size: isCompact ? 12 : 16, weight: .medium))
-                    )
-            }
-        }
-    }
-    
     private var backgroundSection: some View {
         Group {
             if let imageUrl = story.storyImageURLs?.first, !imageUrl.isEmpty {
@@ -237,7 +199,7 @@ struct StoryView: View {
     private var userInfoSection: some View {
         HStack(spacing: 12) {
             // 프로필 이미지
-            profileImage
+            ProfileImage(profileImageURL: story.userId.profileImage, size: isCompact ? 28 : 36)
             
             // 사용자 정보
             VStack(alignment: .leading, spacing: 2) {

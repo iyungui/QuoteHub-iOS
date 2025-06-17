@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 enum AlertType {
     case loginRequired
@@ -18,11 +17,6 @@ enum AlertType {
 struct ProfileView: View {
     @EnvironmentObject private var followViewModel: FollowViewModel
     @EnvironmentObject private var userViewModel: UserViewModel
-    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
-    @EnvironmentObject private var themesViewModel: ThemesViewModel
-    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
-    
-    @Environment(\.colorScheme) var colorScheme
     
     @State private var showAlert: Bool = false
     @State private var showLevelBadgeSheet: Bool = false
@@ -47,7 +41,7 @@ struct ProfileView: View {
     var body: some View {
         VStack(spacing: 20) {
             HStack(alignment: .center, spacing: 20) {
-                userImage
+                ProfileImage(profileImageURL: currentUser?.profileImage ?? "", size: 60)
                 userInfo
             }
             .padding(25)
@@ -61,26 +55,6 @@ struct ProfileView: View {
     }
     
     // MARK: - UI Components
-    
-    private var userImage: some View {
-        VStack {
-            if let url = URL(string: currentUser?.profileImage ?? "") {
-                WebImage(url: url)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 60, height: 60)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.gray.opacity(0.5), lineWidth: 1))
-                    .shadow(radius: 4)
-            } else {
-                Image(systemName: "person.crop.circle.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .foregroundStyle(.gray)
-                    .frame(width: 60, height: 60)
-            }
-        }
-    }
     
     private var userInfo: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -133,7 +107,4 @@ struct ProfileView: View {
     ProfileView()
         .environmentObject(UserViewModel())
         .environmentObject(FollowViewModel())
-        .environmentObject(BookStoriesViewModel())
-        .environmentObject(ThemesViewModel())
-        .environmentObject(UserAuthenticationManager())
 }

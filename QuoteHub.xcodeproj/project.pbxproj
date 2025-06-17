@@ -111,7 +111,6 @@
 		CE8C49732DF19133003188ED /* StoryListCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C49722DF19133003188ED /* StoryListCard.swift */; };
 		CE8C49772DF1D132003188ED /* StoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C49762DF1D132003188ED /* StoryView.swift */; };
 		CE8C49792DF1DB4E003188ED /* ThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C49782DF1DB4E003188ED /* ThemeView.swift */; };
-		CE8C497B2DF1E548003188ED /* ReadingLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C497A2DF1E548003188ED /* ReadingLevel.swift */; };
 		CE8C497D2DF1E575003188ED /* ReadingLevelSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C497C2DF1E575003188ED /* ReadingLevelSection.swift */; };
 		CE8C497F2DF1E874003188ED /* AppVersionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C497E2DF1E874003188ED /* AppVersionManager.swift */; };
 		CEA554B82E003BFD0029A8A9 /* CarouselQuotesRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554AE2E003BFD0029A8A9 /* CarouselQuotesRecordView.swift */; };
@@ -128,6 +127,7 @@
 		CEA554D22E018AF50029A8A9 /* symbolExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554D02E018AF50029A8A9 /* symbolExampleView.swift */; };
 		CEA554D42E018D9C0029A8A9 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554D32E018D9C0029A8A9 /* View+Extensions.swift */; };
 		CEA554D62E018E290029A8A9 /* GradientBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554D52E018E290029A8A9 /* GradientBackground.swift */; };
+		CEA554DD2E01931F0029A8A9 /* ProfileImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554DC2E01931F0029A8A9 /* ProfileImage.swift */; };
 		CED3795D2DFEE902001CE700 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED3795C2DFEE902001CE700 /* AuthService.swift */; };
 		CEF1A4792DF74204001EC484 /* hideKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF1A4782DF74204001EC484 /* hideKeyboard.swift */; };
 /* End PBXBuildFile section */
@@ -234,7 +234,6 @@
 		CE8C49722DF19133003188ED /* StoryListCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryListCard.swift; sourceTree = "<group>"; };
 		CE8C49762DF1D132003188ED /* StoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryView.swift; sourceTree = "<group>"; };
 		CE8C49782DF1DB4E003188ED /* ThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeView.swift; sourceTree = "<group>"; };
-		CE8C497A2DF1E548003188ED /* ReadingLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingLevel.swift; sourceTree = "<group>"; };
 		CE8C497C2DF1E575003188ED /* ReadingLevelSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingLevelSection.swift; sourceTree = "<group>"; };
 		CE8C497E2DF1E874003188ED /* AppVersionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionManager.swift; sourceTree = "<group>"; };
 		CEA554AE2E003BFD0029A8A9 /* CarouselQuotesRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselQuotesRecordView.swift; sourceTree = "<group>"; };
@@ -251,6 +250,7 @@
 		CEA554D02E018AF50029A8A9 /* symbolExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = symbolExampleView.swift; sourceTree = "<group>"; };
 		CEA554D32E018D9C0029A8A9 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		CEA554D52E018E290029A8A9 /* GradientBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientBackground.swift; sourceTree = "<group>"; };
+		CEA554DC2E01931F0029A8A9 /* ProfileImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImage.swift; sourceTree = "<group>"; };
 		CED3795C2DFEE902001CE700 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		CEF1A4782DF74204001EC484 /* hideKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hideKeyboard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -258,6 +258,7 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		CE8C48472DEADAAC003188ED /* Font */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Font; sourceTree = "<group>"; };
 		CE8C48E92DF05884003188ED /* Lottie */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Lottie; sourceTree = "<group>"; };
+		CEA554D92E0192150029A8A9 /* LevelBadge */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = LevelBadge; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -565,6 +566,7 @@
 		CE8C483E2DEAB3EA003188ED /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				CEA554D92E0192150029A8A9 /* LevelBadge */,
 				CE8C483F2DEAB3FE003188ED /* AnimatedText.swift */,
 				CEA554C02E003C670029A8A9 /* CardHeader.swift */,
 				CE4FEF5C2DF93F260072E8B9 /* HiddenModifier.swift */,
@@ -576,11 +578,11 @@
 				CE8C48662DEB0F53003188ED /* CardButtonStyle.swift */,
 				CE8C48642DEAE2A9003188ED /* FontManager.swift */,
 				CE8C488F2DEC96B6003188ED /* PhotoPickerAlertType.swift */,
-				CE8C497A2DF1E548003188ED /* ReadingLevel.swift */,
 				CE8C497C2DF1E575003188ED /* ReadingLevelSection.swift */,
 				CE8C48682DEB1972003188ED /* ThemeToggleButton.swift */,
 				CEF1A4782DF74204001EC484 /* hideKeyboard.swift */,
 				CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */,
+				CEA554DC2E01931F0029A8A9 /* ProfileImage.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -678,6 +680,7 @@
 			fileSystemSynchronizedGroups = (
 				CE8C48472DEADAAC003188ED /* Font */,
 				CE8C48E92DF05884003188ED /* Lottie */,
+				CEA554D92E0192150029A8A9 /* LevelBadge */,
 			);
 			name = QuoteHub;
 			packageProductDependencies = (
@@ -806,6 +809,7 @@
 				CE8C48342DEA8DAE003188ED /* BookStoryDetailView.swift in Sources */,
 				CE8C487F2DEBF39D003188ED /* BookDetailView.swift in Sources */,
 				CEA554D62E018E290029A8A9 /* GradientBackground.swift in Sources */,
+				CEA554DD2E01931F0029A8A9 /* ProfileImage.swift in Sources */,
 				CE8C49472DF18B89003188ED /* ThemeGalleryListView.swift in Sources */,
 				CE8C48812DEBF39D003188ED /* SearchBookView.swift in Sources */,
 				CE8C48822DEBF39D003188ED /* SetThemeView.swift in Sources */,
@@ -859,7 +863,6 @@
 				CE8C48902DEC96B6003188ED /* PhotoPickerAlertType.swift in Sources */,
 				CE8C49792DF1DB4E003188ED /* ThemeView.swift in Sources */,
 				CEF1A4792DF74204001EC484 /* hideKeyboard.swift in Sources */,
-				CE8C497B2DF1E548003188ED /* ReadingLevel.swift in Sources */,
 				C6336CF32AAF1AA0007355EC /* ImagePicker.swift in Sources */,
 				C627C8CC2AE25831004D867B /* ColorExtension.swift in Sources */,
 				C6691C522B04DA8C0083C678 /* FollowViewModel.swift in Sources */,

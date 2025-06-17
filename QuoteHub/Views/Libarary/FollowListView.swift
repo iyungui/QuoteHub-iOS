@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 // MARK: - Follow List Type
 
@@ -188,8 +187,7 @@ struct UserRow: View {
         
         HStack(spacing: 16) {
             // 프로필 이미지
-            profileImageView
-            
+            ProfileImage(profileImageURL: user.profileImage, size: 60)
             // 사용자 정보
             userInfoView
             
@@ -207,48 +205,6 @@ struct UserRow: View {
     }
     
     // MARK: - User Card Components
-    
-    private var profileImageView: some View {
-        Group {
-            if let url = URL(string: user.profileImage), !user.profileImage.isEmpty {
-                WebImage(url: url)
-                    .placeholder {
-                        Circle()
-                            .fill(Color.paperBeige.opacity(0.5))
-                            .overlay(
-                                Image(systemName: "person.fill")
-                                    .foregroundColor(.brownLeather.opacity(0.7))
-                                    .font(.title2)
-                            )
-                    }
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 60, height: 60)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.antiqueGold.opacity(0.3), lineWidth: 2))
-                    .shadow(color: .brownLeather.opacity(0.2), radius: 6, x: 0, y: 3)
-            } else {
-                Circle()
-                    .fill(
-                        LinearGradient(
-                            gradient: Gradient(colors: [
-                                Color.paperBeige.opacity(0.8),
-                                Color.antiqueGold.opacity(0.6)
-                            ]),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .frame(width: 60, height: 60)
-                    .overlay(
-                        Image(systemName: "person.fill")
-                            .foregroundColor(.brownLeather.opacity(0.7))
-                            .font(.title2)
-                    )
-                    .shadow(color: .brownLeather.opacity(0.2), radius: 6, x: 0, y: 3)
-            }
-        }
-    }
     
     private var userInfoView: some View {
         VStack(alignment: .leading, spacing: 6) {

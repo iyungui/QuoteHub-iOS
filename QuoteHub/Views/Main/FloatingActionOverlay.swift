@@ -68,6 +68,7 @@ struct FloatingActionOverlay: View {
                 activeSheet = sheet
             }
         } else {
+            // 로그인 필요 시 알람
             dismissOverlay()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 showAlert()

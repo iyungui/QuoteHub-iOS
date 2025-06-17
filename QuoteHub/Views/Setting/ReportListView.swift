@@ -32,14 +32,7 @@ struct ReportListView: View {
                         ForEach(viewModel.reportedUsers, id: \.id) { report in
                             VStack(alignment: .leading, spacing: 20) {
                                 HStack {
-                                    // Displaying the profile image
-                                    WebImage(url: URL(string: report.targetId.profileImage))
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 50, height: 50)
-                                        .clipShape(Circle())
-                                        .overlay(Circle().stroke(Color.gray.opacity(0.5), lineWidth: 1))
-                                        .shadow(radius: 3)
+                                    ProfileImage(profileImageURL: report.targetId.profileImage, size: 50)
                                     
                                     VStack(alignment: .leading) {
                                         // Displaying the nickname and report reason

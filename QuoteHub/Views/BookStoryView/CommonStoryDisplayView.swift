@@ -117,8 +117,7 @@ struct CommonStoryDisplayView: View {
     
     private var profileSection: some View {
         HStack(spacing: 16) {
-            profileImage(for: story.userId.profileImage)
-            
+            ProfileImage(profileImageURL: story.userId.profileImage, size: 60)
             VStack(alignment: .leading, spacing: 6) {
                 Text(story.userId.nickname)
                     .font(.scoreDream(.bold, size: .body))
@@ -144,29 +143,6 @@ struct CommonStoryDisplayView: View {
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 12)
-    }
-    
-    private func profileImage(for userImageString: String) -> some View {
-        Group {
-            if let url = URL(string: userImageString), !userImageString.isEmpty {
-                WebImage(url: url)
-                    .placeholder {
-                        Circle()
-                            .fill(Color.paperBeige.opacity(0.5))
-                            .overlay(
-                                Image(systemName: "person.fill")
-                                    .foregroundColor(.brownLeather.opacity(0.7))
-                                    .font(.title2)
-                            )
-                    }
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 60, height: 60)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.antiqueGold.opacity(0.3), lineWidth: 2))
-                    .shadow(color: .brownLeather.opacity(0.2), radius: 6, x: 0, y: 3)
-            }
-        }
     }
 
     private var bookInfoSection: some View {

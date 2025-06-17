@@ -35,71 +35,6 @@ struct ReadingLevelSection: View {
     }
 }
 
-// MARK: - Reading Progress Section
-
-struct ReadingProgressSection: View {
-    let storyCount: Int
-    
-    var body: some View {
-        let currentLevel = ReadingLevelManager.calculateLevel(storyCount: storyCount)
-        let nextLevelInfo = ReadingLevelManager.getNextLevelInfo(currentLevel: currentLevel.level)
-        let progress = ReadingLevelManager.calculateProgress(storyCount: storyCount)
-        let motivationMessage = ReadingLevelManager.getMotivationMessage(storyCount: storyCount)
-        
-        VStack(spacing: 12) {
-            // 프로그레스 바
-            VStack(spacing: 6) {
-                HStack {
-                    if nextLevelInfo.isMaxLevel {
-                        Text("최고 레벨 달성!")
-                            .font(.scoreDream(.medium, size: .subheadline))
-                            .foregroundColor(.appAccent)
-                        
-                        
-                    } else {
-                        Text("다음 레벨까지")
-                            .font(.scoreDream(.medium, size: .subheadline))
-
-                    }
-                    Spacer()
-
-                    Text("\(storyCount)/\(nextLevelInfo.storiesNeeded)")
-                        .font(.scoreDream(.medium, size: .subheadline))
-                        .foregroundColor(.primary)
-                }
-                
-                ProgressView(value: progress)
-                    .progressViewStyle(LinearProgressViewStyle(tint: nextLevelInfo.isMaxLevel ? .appAccent : .appAccent.opacity(0.8)))
-                    .scaleEffect(x: 1, y: 2, anchor: .center)
-            }
-            
-            // 동기부여 메시지
-            if nextLevelInfo.isMaxLevel {
-                Text(motivationMessage)
-                    .font(.scoreDreamCaption)
-                    .foregroundColor(.appAccent)
-                    .multilineTextAlignment(.center)
-            } else {
-                let parts = motivationMessage.components(separatedBy: " 레벨까지")
-                if parts.count >= 2 {
-                    (Text(parts[0])
-                        .font(.scoreDream(.medium, size: .caption))
-                        .foregroundColor(.blue) +
-                     Text(" 레벨까지\(parts[1])"))
-                        .font(.scoreDreamCaption)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                } else {
-                    Text(motivationMessage)
-                        .font(.scoreDreamCaption)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                }
-            }
-        }
-        .padding(.horizontal, 25)
-    }
-}
 
 // MARK: - Compact Reading Level Badge (for smaller spaces)
 
@@ -143,6 +78,7 @@ struct CompactReadingLevelBadge: View {
                         .scaleEffect(x: 1, y: 0.8, anchor: .center)
                 }
             }
+            
             if showChevron {
                 Image(systemName: "chevron.right")
                     .font(.caption.weight(.medium))
@@ -277,31 +213,7 @@ struct LevelStatisticsView: View {
 
 import SwiftUI
 
-// MARK: - Usage Examples
-
-/// 다양한 컨텍스트에서 레벨 시스템을 사용하는 예시들
-
-// MARK: - 1. 홈뷰에서 간단한 레벨 배지 표시
-
-struct HomeUserLevelBadge: View {
-    let storyCount: Int
-    
-    var body: some View {
-        CompactReadingLevelBadge(storyCount: storyCount, showProgress: false, showChevron: true)
-            .padding(.horizontal, 12)
-            .padding(.vertical, 4)
-            .background(
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(.ultraThinMaterial)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(Color.antiqueGold.opacity(0.3), lineWidth: 1)
-                    )
-            )
-    }
-}
-
-// MARK: - 2. 스토리 카드에 작성자 레벨 표시
+// MARK: - 스토리 카드에 작성자 레벨 표시
 
 struct StoryCardWithUserLevel: View {
     let story: BookStory
@@ -337,7 +249,7 @@ struct StoryCardWithUserLevel: View {
     }
 }
 
-// MARK: - 3. 설정뷰에서 상세한 레벨 통계
+// MARK: - 설정뷰에서 상세한 레벨 통계
 
 struct UserStatsView: View {
     let storyCount: Int
@@ -394,7 +306,7 @@ struct UserStatsView: View {
 }
 
 
-// MARK: - 5. 전체 예시 뷰
+// MARK: - 전체 예시 뷰
 
 struct ReadingLevelExamplesView: View {
     @State private var selectedStoryCount: Int = 25

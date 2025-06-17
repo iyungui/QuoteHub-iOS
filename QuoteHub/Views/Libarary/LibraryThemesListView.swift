@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 /// 라이브러리 -> 테마 탭뷰에서 보이는 테마 리스트 뷰
 struct LibraryThemesListView: View {

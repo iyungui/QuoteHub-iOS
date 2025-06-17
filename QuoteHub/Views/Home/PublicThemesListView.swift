@@ -21,7 +21,8 @@ struct PublicThemesListView: View {
                 ForEach(Array(themesViewModel.themes(for: .public).enumerated()), id: \.element.id) { index, theme in
                     ThemeView(
                         theme: theme,
-                        index: index
+                        index: index,
+                        isCompact: false
                     )
                     .environmentObject(themesViewModel)
                     .environmentObject(userViewModel)

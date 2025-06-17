@@ -90,15 +90,13 @@ struct TabBarItem: View {
     
     var body: some View {
         Button(action: action) {
-//            VStack(spacing: 4) {
-                Image(systemName: icon)
-                    .font(.title2)
-                    .foregroundStyle(isSelected ? Color.appAccent : Color.gray)
-                    .scaleEffect(isSelected ? 1.1 : 1.0)
-//            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 8)
-            .contentShape(Rectangle())
+            Image(systemName: icon)
+                .font(.title2)
+                .foregroundStyle(isSelected ? Color.appAccent : Color.gray)
+                .scaleEffect(isSelected ? 1.1 : 1.0)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 8)
+                .contentShape(Rectangle())
         }
         .buttonStyle(PlainButtonStyle())
         .animation(.easeInOut(duration: 0.2), value: isSelected)

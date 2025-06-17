@@ -132,37 +132,8 @@ struct ThemeView: View {
     
     private var userProfileView: some View {
         HStack(spacing: 8) {
-            // 프로필 이미지
-            if let url = URL(string: theme.userId.profileImage), !theme.userId.profileImage.isEmpty {
-                WebImage(url: url)
-                    .placeholder {
-                        Circle()
-                            .fill(Color.white.opacity(0.3))
-                            .overlay(
-                                Image(systemName: "person.fill")
-                                    .foregroundColor(.white.opacity(0.7))
-                                    .font(.system(size: 12))
-                            )
-                    }
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 24, height: 24)
-                    .clipShape(Circle())
-                    .overlay(
-                        Circle()
-                            .stroke(Color.white.opacity(0.6), lineWidth: 1)
-                    )
-            } else {
-                Circle()
-                    .fill(Color.white.opacity(0.3))
-                    .frame(width: 24, height: 24)
-                    .overlay(
-                        Image(systemName: "person.fill")
-                            .foregroundColor(.white.opacity(0.7))
-                            .font(.system(size: 12))
-                    )
-            }
-            
+            ProfileImage(profileImageURL: theme.userId.profileImage, size: 24)
+
             Text(theme.userId.nickname)
                 .font(.scoreDream(.medium, size: .caption))
                 .fontWeight(.medium)
