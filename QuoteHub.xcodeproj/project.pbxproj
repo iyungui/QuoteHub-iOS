@@ -35,6 +35,14 @@
 		C6E465582ADEAB66002F5FA0 /* CheckboxStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E465572ADEAB66002F5FA0 /* CheckboxStyle.swift */; };
 		CE1100DB2E0275D6003C592E /* StoryBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100DA2E0275D6003C592E /* StoryBookView.swift */; };
 		CE1100E62E0280C3003C592E /* LoadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100E52E0280C3003C592E /* LoadingViewModel.swift */; };
+		CE1100EC2E02816A003C592E /* CustomTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100E72E02816A003C592E /* CustomTextEditor.swift */; };
+		CE1100ED2E02816A003C592E /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100E82E02816A003C592E /* FeedbackView.swift */; };
+		CE1100EE2E02816A003C592E /* StoryCharacterCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100E92E02816A003C592E /* StoryCharacterCountView.swift */; };
+		CE1100EF2E02816A003C592E /* StoryCreateGuideSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100EA2E02816A003C592E /* StoryCreateGuideSection.swift */; };
+		CE1100F52E02816A003C592E /* HomeUserLevelBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100F02E02816A003C592E /* HomeUserLevelBadge.swift */; };
+		CE1100F62E02816A003C592E /* ReadingLevel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100F12E02816A003C592E /* ReadingLevel.swift */; };
+		CE1100F72E02816A003C592E /* ReadingLevelSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100F22E02816A003C592E /* ReadingLevelSection.swift */; };
+		CE1100F82E02816A003C592E /* ReadingProgressSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100F32E02816A003C592E /* ReadingProgressSection.swift */; };
 		CE4FEF5B2DF925EE0072E8B9 /* RoundedCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */; };
 		CE4FEF5D2DF93F260072E8B9 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF5C2DF93F260072E8B9 /* HiddenModifier.swift */; };
 		CE4FEF812DFA90D80072E8B9 /* AchievementBadgesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */; };
@@ -160,6 +168,14 @@
 		C6E465572ADEAB66002F5FA0 /* CheckboxStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxStyle.swift; sourceTree = "<group>"; };
 		CE1100DA2E0275D6003C592E /* StoryBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryBookView.swift; sourceTree = "<group>"; };
 		CE1100E52E0280C3003C592E /* LoadingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewModel.swift; sourceTree = "<group>"; };
+		CE1100E72E02816A003C592E /* CustomTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextEditor.swift; sourceTree = "<group>"; };
+		CE1100E82E02816A003C592E /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
+		CE1100E92E02816A003C592E /* StoryCharacterCountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCharacterCountView.swift; sourceTree = "<group>"; };
+		CE1100EA2E02816A003C592E /* StoryCreateGuideSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCreateGuideSection.swift; sourceTree = "<group>"; };
+		CE1100F02E02816A003C592E /* HomeUserLevelBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeUserLevelBadge.swift; sourceTree = "<group>"; };
+		CE1100F12E02816A003C592E /* ReadingLevel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingLevel.swift; sourceTree = "<group>"; };
+		CE1100F22E02816A003C592E /* ReadingLevelSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingLevelSection.swift; sourceTree = "<group>"; };
+		CE1100F32E02816A003C592E /* ReadingProgressSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingProgressSection.swift; sourceTree = "<group>"; };
 		CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorner.swift; sourceTree = "<group>"; };
 		CE4FEF5C2DF93F260072E8B9 /* HiddenModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenModifier.swift; sourceTree = "<group>"; };
 		CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementBadgesView.swift; sourceTree = "<group>"; };
@@ -256,10 +272,8 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		CE1100DE2E027F0C003C592E /* RecordUIComponents */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = RecordUIComponents; sourceTree = "<group>"; };
 		CE8C48472DEADAAC003188ED /* Font */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Font; sourceTree = "<group>"; };
 		CE8C48E92DF05884003188ED /* Lottie */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Lottie; sourceTree = "<group>"; };
-		CEA554D92E0192150029A8A9 /* LevelBadge */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = LevelBadge; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -292,6 +306,7 @@
 		C676F5252AAC02CB00EC7241 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				CE4FEF842DFAF3D20072E8B9 /* BookStoryDetailViewModel.swift */,
 				C667E97F2ACA388C006EE7A9 /* UserViewModel.swift */,
 				C6691C592B0619C10083C678 /* UserSearchViewModel.swift */,
 				C67AA3CA2AE389F500490DDE /* BooksViewModel.swift */,
@@ -301,6 +316,7 @@
 				C6691C512B04DA8C0083C678 /* FollowViewModel.swift */,
 				C63DB3AF2B118C280026B668 /* ReportViewModel.swift */,
 				CE8C48EC2DF1134C003188ED /* RandomBooksViewModel.swift */,
+				CE7274162DF8050300B09DC3 /* StoryFormViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -362,20 +378,26 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		CE4FEF832DFAF3C50072E8B9 /* ViewModel */ = {
+		CE1100EB2E02816A003C592E /* RecordUIComponents */ = {
 			isa = PBXGroup;
 			children = (
-				CE4FEF842DFAF3D20072E8B9 /* BookStoryDetailViewModel.swift */,
+				CE1100E72E02816A003C592E /* CustomTextEditor.swift */,
+				CE1100E82E02816A003C592E /* FeedbackView.swift */,
+				CE1100E92E02816A003C592E /* StoryCharacterCountView.swift */,
+				CE1100EA2E02816A003C592E /* StoryCreateGuideSection.swift */,
 			);
-			path = ViewModel;
+			path = RecordUIComponents;
 			sourceTree = "<group>";
 		};
-		CE7274172DF8050300B09DC3 /* ViewModel */ = {
+		CE1100F42E02816A003C592E /* LevelBadge */ = {
 			isa = PBXGroup;
 			children = (
-				CE7274162DF8050300B09DC3 /* StoryFormViewModel.swift */,
+				CE1100F02E02816A003C592E /* HomeUserLevelBadge.swift */,
+				CE1100F12E02816A003C592E /* ReadingLevel.swift */,
+				CE1100F22E02816A003C592E /* ReadingLevelSection.swift */,
+				CE1100F32E02816A003C592E /* ReadingProgressSection.swift */,
 			);
-			path = ViewModel;
+			path = LevelBadge;
 			sourceTree = "<group>";
 		};
 		CE8C47772DEA8D01003188ED /* APP */ = {
@@ -484,7 +506,6 @@
 		CE8C48062DEA8DAE003188ED /* Record */ = {
 			isa = PBXGroup;
 			children = (
-				CEA554C92E00FF860029A8A9 /* Common */,
 				CEA554AB2E003BE10029A8A9 /* Book */,
 				CE8C487E2DEBF39D003188ED /* BookStoryRecord */,
 				CE8C48852DEBF39F003188ED /* ThemeRecord */,
@@ -508,7 +529,6 @@
 		CE8C48122DEA8DAE003188ED /* BookStoryView */ = {
 			isa = PBXGroup;
 			children = (
-				CE4FEF832DFAF3C50072E8B9 /* ViewModel */,
 				CE8C480F2DEA8DAE003188ED /* BookStoryDetailView.swift */,
 				CE4FEF862DFB39080072E8B9 /* CarouselStoryQuotesDisplayView.swift */,
 				CE4FEF882DFB391F0072E8B9 /* ListStoryQuotesDisplayView.swift */,
@@ -553,8 +573,8 @@
 		CE8C483E2DEAB3EA003188ED /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				CE1100DE2E027F0C003C592E /* RecordUIComponents */,
-				CEA554D92E0192150029A8A9 /* LevelBadge */,
+				CE1100EB2E02816A003C592E /* RecordUIComponents */,
+				CE1100F42E02816A003C592E /* LevelBadge */,
 				CE8C483F2DEAB3FE003188ED /* AnimatedText.swift */,
 				C6E465572ADEAB66002F5FA0 /* CheckboxStyle.swift */,
 				CEA554C02E003C670029A8A9 /* CardHeader.swift */,
@@ -575,8 +595,13 @@
 		CE8C487E2DEBF39D003188ED /* BookStoryRecord */ = {
 			isa = PBXGroup;
 			children = (
-				CEA554B62E003BFD0029A8A9 /* View */,
-				CE7274172DF8050300B09DC3 /* ViewModel */,
+				CEA554B22E003BFD0029A8A9 /* StoryQuotesRecordView.swift */,
+				CEA554AE2E003BFD0029A8A9 /* CarouselQuotesRecordView.swift */,
+				CEA554B12E003BFD0029A8A9 /* ListQuotesRecordView.swift */,
+				CEA554B02E003BFD0029A8A9 /* KeywordInputSection.swift */,
+				CEA554B32E003BFD0029A8A9 /* StorySettingRecordView.swift */,
+				CEA554B42E003BFD0029A8A9 /* ThemeSelectionCard + PrivacyToggleCard.swift */,
+				CEA554B52E003BFD0029A8A9 /* ThoughtInputCard.swift */,
 			);
 			path = BookStoryRecord;
 			sourceTree = "<group>";
@@ -607,27 +632,6 @@
 				CE8C487A2DEBF39D003188ED /* BookDetailView.swift */,
 			);
 			path = Book;
-			sourceTree = "<group>";
-		};
-		CEA554B62E003BFD0029A8A9 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				CEA554B22E003BFD0029A8A9 /* StoryQuotesRecordView.swift */,
-				CEA554AE2E003BFD0029A8A9 /* CarouselQuotesRecordView.swift */,
-				CEA554B12E003BFD0029A8A9 /* ListQuotesRecordView.swift */,
-				CEA554B02E003BFD0029A8A9 /* KeywordInputSection.swift */,
-				CEA554B32E003BFD0029A8A9 /* StorySettingRecordView.swift */,
-				CEA554B42E003BFD0029A8A9 /* ThemeSelectionCard + PrivacyToggleCard.swift */,
-				CEA554B52E003BFD0029A8A9 /* ThoughtInputCard.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		CEA554C92E00FF860029A8A9 /* Common */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Common;
 			sourceTree = "<group>";
 		};
 		CEA554CE2E018AF30029A8A9 /* Utils */ = {
@@ -688,10 +692,8 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				CE1100DE2E027F0C003C592E /* RecordUIComponents */,
 				CE8C48472DEADAAC003188ED /* Font */,
 				CE8C48E92DF05884003188ED /* Lottie */,
-				CEA554D92E0192150029A8A9 /* LevelBadge */,
 			);
 			name = QuoteHub;
 			packageProductDependencies = (
@@ -768,9 +770,17 @@
 				CE8C49772DF1D132003188ED /* StoryView.swift in Sources */,
 				C6B56FDF2AA8B60B003905C3 /* ContentView.swift in Sources */,
 				CE4FEF5D2DF93F260072E8B9 /* HiddenModifier.swift in Sources */,
+				CE1100EC2E02816A003C592E /* CustomTextEditor.swift in Sources */,
+				CE1100ED2E02816A003C592E /* FeedbackView.swift in Sources */,
+				CE1100EE2E02816A003C592E /* StoryCharacterCountView.swift in Sources */,
+				CE1100EF2E02816A003C592E /* StoryCreateGuideSection.swift in Sources */,
 				C6DE7F512AF76B480020F5CB /* StoryCommentService.swift in Sources */,
 				CEA554D22E018AF50029A8A9 /* symbolExampleView.swift in Sources */,
 				CEA554D42E018D9C0029A8A9 /* View+Extensions.swift in Sources */,
+				CE1100F52E02816A003C592E /* HomeUserLevelBadge.swift in Sources */,
+				CE1100F62E02816A003C592E /* ReadingLevel.swift in Sources */,
+				CE1100F72E02816A003C592E /* ReadingLevelSection.swift in Sources */,
+				CE1100F82E02816A003C592E /* ReadingProgressSection.swift in Sources */,
 				CE8C478E2DEA8D93003188ED /* APIResponse.swift in Sources */,
 				CE8C478F2DEA8D93003188ED /* Book.swift in Sources */,
 				CE8C47902DEA8D93003188ED /* BookStory.swift in Sources */,
