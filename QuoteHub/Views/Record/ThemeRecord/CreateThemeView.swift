@@ -147,7 +147,7 @@ struct CreateThemeView: View {
             }
         }
         .padding(20)
-        .background(cardBackground)
+        .backgroundCard(cornerRadius: 20)
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 4)
     }
@@ -311,7 +311,7 @@ struct CreateThemeView: View {
             }
         }
         .padding(20)
-        .background(cardBackground)
+        .backgroundCard(cornerRadius: 20)
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 4)
     }
@@ -345,7 +345,7 @@ struct CreateThemeView: View {
             )
         }
         .padding(20)
-        .background(cardBackground)
+        .backgroundCard(cornerRadius: 20)
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .shadow(color: .black.opacity(0.06), radius: 6, x: 0, y: 3)
     }
@@ -377,26 +377,6 @@ struct CreateThemeView: View {
     }
     
     // MARK: - Helper Views
-    
-    private var cardBackground: some View {
-        RoundedRectangle(cornerRadius: 20)
-            .fill(.ultraThinMaterial)
-            .overlay(
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(
-                        LinearGradient(
-                            gradient: Gradient(colors: [
-                                Color.white.opacity(0.2),
-                                Color.clear,
-                                Color.antiqueGold.opacity(0.1)
-                            ]),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: 1
-                    )
-            )
-    }
     
     private func cardHeader(title: String, icon: String, subtitle: String? = nil) -> some View {
         HStack(spacing: 12) {

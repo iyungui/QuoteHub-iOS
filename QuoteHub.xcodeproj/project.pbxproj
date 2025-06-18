@@ -34,6 +34,7 @@
 		C6DE7F612AF7C2940020F5CB /* CommentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6DE7F602AF7C2940020F5CB /* CommentViewModel.swift */; };
 		C6E465582ADEAB66002F5FA0 /* CheckboxStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E465572ADEAB66002F5FA0 /* CheckboxStyle.swift */; };
 		CE1100DB2E0275D6003C592E /* StoryBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100DA2E0275D6003C592E /* StoryBookView.swift */; };
+		CE1100DD2E027C4E003C592E /* CustomTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100DC2E027C4E003C592E /* CustomTextEditor.swift */; };
 		CE4FEF5B2DF925EE0072E8B9 /* RoundedCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */; };
 		CE4FEF5D2DF93F260072E8B9 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF5C2DF93F260072E8B9 /* HiddenModifier.swift */; };
 		CE4FEF812DFA90D80072E8B9 /* AchievementBadgesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */; };
@@ -161,6 +162,7 @@
 		C6DE7F602AF7C2940020F5CB /* CommentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewModel.swift; sourceTree = "<group>"; };
 		C6E465572ADEAB66002F5FA0 /* CheckboxStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxStyle.swift; sourceTree = "<group>"; };
 		CE1100DA2E0275D6003C592E /* StoryBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryBookView.swift; sourceTree = "<group>"; };
+		CE1100DC2E027C4E003C592E /* CustomTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextEditor.swift; sourceTree = "<group>"; };
 		CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorner.swift; sourceTree = "<group>"; };
 		CE4FEF5C2DF93F260072E8B9 /* HiddenModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenModifier.swift; sourceTree = "<group>"; };
 		CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementBadgesView.swift; sourceTree = "<group>"; };
@@ -574,6 +576,7 @@
 				CEF1A4782DF74204001EC484 /* hideKeyboard.swift */,
 				CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */,
 				CEA554DC2E01931F0029A8A9 /* ProfileImage.swift */,
+				CE1100DC2E027C4E003C592E /* CustomTextEditor.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -866,6 +869,7 @@
 				CEA554CF2E018AF30029A8A9 /* DraftManager.swift in Sources */,
 				CEA554BC2E003BFD0029A8A9 /* StoryQuotesRecordView.swift in Sources */,
 				CEA554BD2E003BFD0029A8A9 /* StorySettingRecordView.swift in Sources */,
+				CE1100DD2E027C4E003C592E /* CustomTextEditor.swift in Sources */,
 				CEA554BE2E003BFD0029A8A9 /* ThemeSelectionCard + PrivacyToggleCard.swift in Sources */,
 				CEA554BF2E003BFD0029A8A9 /* ThoughtInputCard.swift in Sources */,
 				CE8C47A02DEA8D97003188ED /* EndpointProtocol.swift in Sources */,

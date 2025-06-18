@@ -195,7 +195,7 @@ struct UserRow: View {
                 .foregroundColor(.secondaryText.opacity(0.6))
         }
         .padding(20)
-        .background(cardBackground)
+        .backgroundCard(cornerRadius: 20)
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 4)
     }
@@ -217,25 +217,5 @@ struct UserRow: View {
                 .multilineTextAlignment(.leading)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-    }
-    
-    private var cardBackground: some View {
-        RoundedRectangle(cornerRadius: 16)
-            .fill(.ultraThinMaterial)
-            .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(
-                        LinearGradient(
-                            gradient: Gradient(colors: [
-                                Color.white.opacity(0.2),
-                                Color.clear,
-                                Color.antiqueGold.opacity(0.1)
-                            ]),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: 1
-                    )
-            )
     }
 }

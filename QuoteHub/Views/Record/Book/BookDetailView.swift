@@ -278,7 +278,7 @@ struct BookDetailView: View {
             }
         }
         .padding(24)
-        .background(cardBackground)
+        .backgroundCard(cornerRadius: 20)
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .shadow(color: .black.opacity(0.08), radius: 10, x: 0, y: 4)
     }
@@ -435,26 +435,6 @@ struct BookDetailView: View {
     }
     
     // MARK: - Helper Views
-    
-    private var cardBackground: some View {
-        RoundedRectangle(cornerRadius: 20)
-            .fill(.ultraThinMaterial)
-            .overlay(
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(
-                        LinearGradient(
-                            gradient: Gradient(colors: [
-                                Color.white.opacity(0.2),
-                                Color.clear,
-                                Color.antiqueGold.opacity(0.1)
-                            ]),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: 1
-                    )
-            )
-    }
     
     private func cardHeader(title: String, icon: String) -> some View {
         HStack(spacing: 12) {
