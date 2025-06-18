@@ -28,9 +28,6 @@ struct LibraryThemesListView: View {
     
     @EnvironmentObject private var themesViewModel: ThemesViewModel
     @EnvironmentObject private var userViewModel: UserViewModel
-//    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
-//    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
-
     var body: some View {
         LazyVGrid(columns: columns, spacing: spacing) {
             ForEach(Array(themesViewModel.themes(for: loadType).enumerated()), id: \.element.id) { index, theme in
@@ -41,10 +38,6 @@ struct LibraryThemesListView: View {
                     cardWidth: cardSize,
                     cardHeight: cardSize // 정사각형
                 )
-                .environmentObject(themesViewModel)
-                .environmentObject(userViewModel)
-//                .environmentObject(storiesViewModel)
-//                .environmentObject(userAuthManager)
             }
             
             // 더 로딩할 테마가 있을 때 로딩 인디케이터

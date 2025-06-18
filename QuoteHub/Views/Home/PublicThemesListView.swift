@@ -10,9 +10,6 @@ import SwiftUI
 /// 홈뷰에서 보이는 공개된 테마 리스트 뷰
 struct PublicThemesListView: View {
     @EnvironmentObject private var themesViewModel: ThemesViewModel
-    @EnvironmentObject private var userViewModel: UserViewModel
-    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
-    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -23,8 +20,6 @@ struct PublicThemesListView: View {
                         index: index,
                         isCompact: false
                     )
-                    .environmentObject(themesViewModel)
-                    .environmentObject(userViewModel)
                 }
                 
                 if !themesViewModel.isLastPage {

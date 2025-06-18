@@ -11,18 +11,12 @@ import SwiftUI
 struct PublicStoriesListView: View {
     
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
-//    @EnvironmentObject private var themesViewModel: ThemesViewModel
-    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
-    @EnvironmentObject private var userViewModel: UserViewModel
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(spacing: 20) {
                 ForEach(storiesViewModel.bookStories(for: .public), id: \.id) { story in
                     StoryView(story: story)
-                        .environmentObject(userViewModel)
-                        .environmentObject(storiesViewModel)
-                        .environmentObject(userAuthManager)
                 }
                 
                 if !storiesViewModel.isLastPage {

@@ -48,10 +48,6 @@ struct FollowListView: View {
     let type: FollowListType
     
     @EnvironmentObject private var followViewModel: FollowViewModel
-    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
-    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
-    @EnvironmentObject private var themesViewModel: ThemesViewModel
-    @EnvironmentObject private var userViewModel: UserViewModel
     
     /// 현재 타입에 따른 사용자 목록
     private var currentUsers: [User] {

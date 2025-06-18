@@ -93,7 +93,6 @@ class BookStoriesViewModel: LoadingViewModel {
     func refreshBookStories(type: LoadType) {
         // 기존 로딩 Task 취소
         cancelLoadingTask(for: type)
-        // 기존 작업 Task도 취소? 혹은 실행 중인지 확인
         
         currentStoryType = type
         currentPage = 1
@@ -117,6 +116,7 @@ class BookStoriesViewModel: LoadingViewModel {
         
         // 타입이 바뀐 경우 상태 초기화
         if currentStoryType != type {
+            print("로드 타입이 바뀜! ")
             /// 타입이 바뀌면 기존 로딩(예전 타입의 로딩)을 캔슬!
             cancelLoadingTask(for: currentStoryType)
             currentStoryType = type
@@ -126,12 +126,19 @@ class BookStoriesViewModel: LoadingViewModel {
         
         // 이미 해당 타입의 북스토리를 로딩 중이 아니어야 하고,
         // 마지막 페이지가 아니어야 함
-        guard loadingTasks[type] == nil && !isLastPage else {
+        guard loadingTasks[type] == nil else {
+            print("로딩 테스크가 이미 있다!")
             return
         }
         
-        // 빈 키워드면 로드할 필요없으므로 return
+        guard !isLastPage else {
+            print("마지막 페이지다!")
+            return
+        }
+        
+        // 키워드 검색의 경우 - 빈 키워드면 로드할 필요없으므로 return
         if searchKeyword?.isEmpty == true {
+            print("검색어 없으므로 리턴")
             return
         }
         
@@ -142,6 +149,7 @@ class BookStoriesViewModel: LoadingViewModel {
             await performLoadBookStories(type: type)
         }
         
+        // 해당 타입에 테스크 추가
         loadingTasks[type] = task
     }
     
@@ -154,12 +162,14 @@ class BookStoriesViewModel: LoadingViewModel {
         loadingMessage = "북스토리를 불러오는 중..."
         clearErrorMessage()
         
-        // 함수가 종료될 때 실행
-        // 로딩 상태 초기화
+        // 함수가 종료될 때 실행 (실패 및 취소하더라도 실행됨)
         defer {
+            // 로딩 상태 초기화
             isLoading = false
             loadingMessage = nil
+            // 해당 타입의 테스크 참조 제거
             loadingTasks[type] = nil
+            // task는 함수가 종료될 때 이미 완료되었으므로 참조만 제거하면 됨.
         }
         
         do {

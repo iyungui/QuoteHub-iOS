@@ -14,7 +14,6 @@ struct LibraryStoriesListView: View {
     let loadType: LoadType
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
     @EnvironmentObject private var userViewModel: UserViewModel
-    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
     
     private let columns: [GridItem] = [
         GridItem(.flexible(), spacing: 12),
@@ -35,9 +34,6 @@ struct LibraryStoriesListView: View {
         LazyVGrid(columns: columns, spacing: spacing) {
             ForEach(storiesViewModel.bookStories(for: loadType), id: \.id) { story in
                 StoryBookView(story: story, cardSize: cardSize)
-                    .environmentObject(storiesViewModel)
-                    .environmentObject(userViewModel)
-                    .environmentObject(userAuthManager)
             }
             
             // 더 로딩할 스토리가 있을 때 로딩 인디케이터
@@ -148,7 +144,6 @@ struct StoryBookView: View {
     let story: BookStory
     let cardSize: CGFloat
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
-    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
     @EnvironmentObject private var userViewModel: UserViewModel
     
     private let aspectRatio: CGFloat = 1.5 // 책의 높이/너비 비율
@@ -182,17 +177,12 @@ struct StoryBookView: View {
         .buttonStyle(BookButtonStyle())
     }
     
+    @ViewBuilder
     private var destinationView: some View {
         if story.userId.id == userViewModel.currentUser?.id {
-            return AnyView(BookStoryDetailView(story: story, isMyStory: true)
-                .environmentObject(userViewModel)
-                .environmentObject(storiesViewModel)
-                .environmentObject(userAuthManager))
+            BookStoryDetailView(story: story, isMyStory: true)
         } else {
-            return AnyView(BookStoryDetailView(story: story)
-                .environmentObject(userViewModel)
-                .environmentObject(storiesViewModel)
-                .environmentObject(userAuthManager))
+            BookStoryDetailView(story: story)
         }
     }
     

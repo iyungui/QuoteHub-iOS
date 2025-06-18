@@ -14,8 +14,8 @@ struct ContentView: View {
 
     @EnvironmentObject private var authManager: UserAuthenticationManager
     @EnvironmentObject private var userViewModel: UserViewModel
-    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
     @EnvironmentObject private var themesViewModel: ThemesViewModel
+    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
 
     @State private var isSplashView = true  // 런치스크린 표시
 
@@ -37,7 +37,7 @@ struct ContentView: View {
                         }
                     }
                     
-                    // 인증 후
+                    // 인증된 사용자는 프로필, 게시물 불러오고 mainView로 이동
                     if authManager.isUserAuthenticated {
                         await withTaskGroup(of: Void.self) { group in
                             // 현재 사용자 정보 가져오기 (유저모델의 currentUser 업데이트)
@@ -48,9 +48,14 @@ struct ContentView: View {
                             group.addTask {
                                 await userViewModel.loadStoryCount(userId: nil)
                             }
+                            
+                            group.addTask {
+                                await storiesViewModel.loadBookStories(type: .my)
+                            }
+                            // 내 테마 불러오기
                         }
                     }
-                    
+                    // public 북스토리, 테마는 HomeView에서 load
                     // 인증된 사용자 아니면 바로 isSplashView를 false로
                     
                     // 지연 (나중에 지울 코드)
