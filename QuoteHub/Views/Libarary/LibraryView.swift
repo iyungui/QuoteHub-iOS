@@ -13,7 +13,7 @@ struct LibraryView: View {
     
     // MARK: - Properties
     
-    // 친구 프로필인지 구분하는 프로퍼티
+    /// 친구 프로필인지 구분하는 프로퍼티
     let otherUser: User?
     
     /// 내 라이브러리인지 친구 라이브러리인지 구분.
@@ -23,10 +23,11 @@ struct LibraryView: View {
     }
 
     var loadType: LoadType {
-        // 다른 사람의 라이브러리
         if !isMyLibrary {
-            guard let friendId = otherUser?.id else { return LoadType.my }
-            return LoadType.friend(friendId)  // 여기서 해당 사용자의 북스토리와 테마 불러오도록 모드 설정
+            guard let friendId = otherUser?.id else {
+                return LoadType.my
+            }
+            return LoadType.friend(friendId)  // 여기서 해당 사용자id로 북스토리와 테마 불러오도록 모드 설정
         } else {
             return LoadType.my
         }
@@ -118,8 +119,9 @@ struct LibraryView: View {
         }
         
         .task {
-            // 내 프로필은 이미 로드했음 (contentview에서)
+            // 내 프로필은 이미 Contentview에서 로드해서 userViewModel의 currentUser에 할당된 상태
             if !isMyLibrary {
+                // TODO: 병렬로 불러올 수 있도록 바꾸기
                 await userViewModel.loadUserProfile(userId: otherUser?.id)
                 await userViewModel.loadStoryCount(userId: otherUser?.id)
             }

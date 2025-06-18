@@ -36,7 +36,7 @@ struct ContentView: View {
                             await authManager.validateAndRenewTokenNeeded()
                         }
                     }
-                    
+                    // 여기까지 오면 isUserAuthenticated 여부 확인됨.
                     // 인증된 사용자는 프로필, 게시물 불러오고 mainView로 이동
                     if authManager.isUserAuthenticated {
                         await withTaskGroup(of: Void.self) { group in
@@ -53,6 +53,7 @@ struct ContentView: View {
                                 await storiesViewModel.loadBookStories(type: .my)
                             }
                             // 내 테마 불러오기
+                            
                         }
                     }
                     // public 북스토리, 테마는 HomeView에서 load

@@ -20,10 +20,17 @@ final class UserViewModel: LoadingViewModel {
     var currentOtherUserStoryCount: Int?
     
     // 로딩 상태
-    var isLoading: Bool = false
+    var isLoadingProfile: Bool = false
+    var isLoadingStoryCount: Bool = false
+
+    var isLoading: Bool {
+        // 프로필, 스토리 개수 둘 중에 하나만 false(로딩중)이면 전체 로딩 상태는 false로 되도록
+        isLoadingProfile || isLoadingStoryCount
+    }
+    
     var loadingMessage: String?
     
-    // 메시지
+    // 메시지(일단 지금은 메시지는 덜 중요하므로 그대로 둠 - (race condition 발생 가능성 있다!)
     var errorMessage: String?
     var successMessage: String?
     
@@ -40,13 +47,13 @@ extension UserViewModel {
     
     /// 사용자 프로필 조회 (로그인한 사용자는 currentUesr 에, 다른 사용자는 currentOtherUser에 업데이트)
     func loadUserProfile(userId: String?) async {
-        isLoading = true
-        loadingMessage = "프로필을 불러오는 중..."
+        isLoadingProfile = true
+        loadingMessage = "로딩 중..."
         clearMessage()
         
         // 함수 종료 후 로딩 상태 초기화
         defer {
-            isLoading = false
+            isLoadingProfile = false
             loadingMessage = nil
         }
         
@@ -87,12 +94,12 @@ extension UserViewModel {
             return false
         }
         
-        isLoading = true
-        loadingMessage = "프로필을 업데이트하는 중..."
+        isLoadingProfile = true
+        loadingMessage = "로딩 중..."
         clearMessage()
         
         defer {
-            isLoading = false
+            isLoadingProfile = false
             loadingMessage = nil
         }
         
@@ -120,12 +127,12 @@ extension UserViewModel {
     
     /// 사용자 북스토리 기록 개수 조회
     func loadStoryCount(userId: String?) async {
-        isLoading = true
+        isLoadingStoryCount = true
         loadingMessage = "로딩 중..."
         clearMessage()
         
         defer {
-            isLoading = false
+            isLoadingStoryCount = false
             loadingMessage = nil
         }
         
@@ -152,7 +159,7 @@ extension UserViewModel {
     
 }
 
-// MARK: - Helper Methods (다른 뷰모델에서 범용적으로 사용)
+// MARK: - Helper Methods (TODO: - 다른 뷰모델에서 범용적으로 사용 가능한지)
 
 extension UserViewModel {
     
