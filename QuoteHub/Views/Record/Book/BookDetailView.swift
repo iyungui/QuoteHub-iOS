@@ -19,7 +19,6 @@ struct BookDetailView: View {
 //    @Environment(\.modelContext) private var modelContext
     
     @EnvironmentObject private var userAuthManager: UserAuthenticationManager
-    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
     
     // 임시저장 관련
 //    @State private var draftManager: DraftManager?
@@ -135,7 +134,7 @@ struct BookDetailView: View {
             Spacer()
             
             if userAuthManager.isUserAuthenticated {
-                NavigationLink(destination: StoryQuotesRecordView(book: book).environmentObject(storiesViewModel)) {
+                NavigationLink(destination: StoryQuotesRecordView(book: book)) {
                     Image(systemName: "highlighter")
                         .font(.title2.weight(.medium))
                         .foregroundColor(.white)
@@ -338,7 +337,7 @@ struct BookDetailView: View {
                 .buttonStyle(CardButtonStyle())
                 
                 // Record Button
-                NavigationLink(destination: StoryQuotesRecordView(book: book).environmentObject(storiesViewModel)) {
+                NavigationLink(destination: StoryQuotesRecordView(book: book)) {
                     HStack(spacing: 10) {
                         Image(systemName: "highlighter")
                         Text("북스토리 기록")

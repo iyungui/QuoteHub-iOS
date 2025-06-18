@@ -12,6 +12,7 @@ import SwiftUI
 class BookSearchViewModel: ObservableObject, LoadingViewModel {
     var books: [Book] = []
     
+    // TODO: - isLoading 필요없는 것 같다
     var isLoading: Bool = false
     var loadingMessage: String?
     

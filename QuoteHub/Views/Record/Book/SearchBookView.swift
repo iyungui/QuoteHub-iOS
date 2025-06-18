@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 /// 북스토리 기록 1: 책검색 뷰 (책 검색, 결과 리스트 뷰 - 무한스크롤로 구현)
 struct SearchBookView: View {

@@ -23,3 +23,19 @@ struct Book: Codable, Identifiable {
     let ISBN: [String]
     let _id: String
 }
+
+extension Book {
+    // for preview
+    static let previewBook: Book = Book(
+        title: "코스모스",
+        author: ["칼 세이건"],
+        translator: [""],
+        introduction: "",
+        publisher: "",
+        publicationDate: "",
+        bookImageURL: "",
+        bookLink: "",
+        ISBN: [""],
+        _id: ""
+    )
+}
