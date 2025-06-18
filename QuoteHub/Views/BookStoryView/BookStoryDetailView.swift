@@ -18,9 +18,7 @@ struct BookStoryDetailView: View {
     
     // view model
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
-    @EnvironmentObject private var userViewModel: UserViewModel
     @EnvironmentObject private var userAuthManager: UserAuthenticationManager
-    @EnvironmentObject private var themesViewModel: ThemesViewModel
     
     @StateObject private var detailViewModel: BookStoryDetailViewModel
     @StateObject private var commentViewModel: CommentViewModel
@@ -73,6 +71,8 @@ struct BookStoryDetailView: View {
             detailViewModel.loadStoryDetail(storyId: story.id)
         }
         .progressOverlay(viewModel: detailViewModel, opacity: false)
+        .environmentObject(detailViewModel)
+        .environmentObject(commentViewModel)
     }
     
     // MARK: - VIEW COMPONENTS
@@ -90,14 +90,9 @@ struct BookStoryDetailView: View {
                 CommonStoryDisplayView(story: currentStory, isMyStory: isMyStory)
             }
         }
-        .environmentObject(detailViewModel)
-        .environmentObject(storiesViewModel)
-        .environmentObject(userViewModel)
-        .environmentObject(userAuthManager)
-        .environmentObject(themesViewModel)
-        .environmentObject(commentViewModel)
     }
     
+    @ViewBuilder
     private var actionSheetView: some View {
         Group {
             if isMyStory {

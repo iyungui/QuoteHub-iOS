@@ -20,6 +20,7 @@ struct ThemeDetailView: View {
         return isMy ? .my : .public
     }
     
+    // MARK: - TODO: _storiesViewModel
     init(theme: Theme, isMy: Bool) {
         self.theme = theme
         self.isMy = isMy

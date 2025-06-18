@@ -13,10 +13,6 @@ struct CommonStoryDisplayView: View {
     let isMyStory: Bool
     
     @EnvironmentObject private var detailViewModel: BookStoryDetailViewModel
-    @EnvironmentObject private var userViewModel: UserViewModel
-    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
-    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
-    @EnvironmentObject private var themesViewModel: ThemesViewModel
     @EnvironmentObject private var commentViewModel: CommentViewModel
     
     var body: some View {
@@ -148,8 +144,6 @@ struct CommonStoryDisplayView: View {
     private var bookInfoSection: some View {
         NavigationLink(destination: {
             BookDetailView(book: story.bookId)
-                .environmentObject(storiesViewModel)
-                .environmentObject(userViewModel)
         }) {
             HStack(spacing: 16) {
                 WebImage(url: URL(string: story.bookId.bookImageURL))

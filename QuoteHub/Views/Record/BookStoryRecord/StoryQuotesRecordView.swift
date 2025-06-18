@@ -53,8 +53,6 @@ struct StoryQuotesRecordView: View {
         } message: {
             Text(formViewModel.alertMessage)
         }
-        
-        .environmentObject(formViewModel)
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(isEditMode ? "북스토리 수정" : "북스토리 기록")
         .toolbar {
@@ -64,6 +62,7 @@ struct StoryQuotesRecordView: View {
             await loadStoryDataIfNeeded()
         }
         .progressOverlay(viewModel: storiesViewModel, opacity: false)
+        .environmentObject(formViewModel)
     }
     
     private var toolBarItems: some ToolbarContent {

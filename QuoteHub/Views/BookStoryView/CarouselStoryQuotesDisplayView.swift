@@ -11,11 +11,7 @@ import SwiftUI
 
 struct CarouselStoryQuotesDisplayView: View {
     let story: BookStory
-    @EnvironmentObject private var detailViewModel: BookStoryDetailViewModel
-    @EnvironmentObject private var userViewModel: UserViewModel
-    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
-    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
-    @EnvironmentObject private var themesViewModel: ThemesViewModel
+//    @EnvironmentObject private var detailViewModel: BookStoryDetailViewModel
     
     let width: CGFloat = UIScreen.main.bounds.width
     
