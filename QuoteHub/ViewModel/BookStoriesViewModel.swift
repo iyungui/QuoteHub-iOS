@@ -206,7 +206,9 @@ class BookStoriesViewModel: LoadingViewModel {
         guard let item = item else { return }
         let stories = bookStories(for: type)
         
+        // 현재 아이템이 배열의 마지막 아이템과 같은지 비교
         if item == stories.last {
+            // 다음 페이지 로드
             loadBookStories(type: type)
         }
     }

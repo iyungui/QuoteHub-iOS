@@ -96,7 +96,7 @@ struct LibraryView: View {
                 UserReportSheetView(
                     userId: friend.id,
                     reportReason: $reportReason
-                ).environmentObject(followViewModel)
+                )
             }
         }
         
@@ -163,6 +163,7 @@ struct LibraryView: View {
             opacity: false
         )
         .navigationBarTitleDisplayMode(.inline)
+        .environmentObject(followViewModel)
     }
 
     /// main 컨텐츠
@@ -231,8 +232,6 @@ struct LibraryView: View {
 
             NavigationLink(
                 destination: SettingView()
-                    .environmentObject(userViewModel)
-                    .environmentObject(userAuthManager)
             ) {
                 Image(systemName: "gearshape.fill")
                     .foregroundColor(.brownLeather)
