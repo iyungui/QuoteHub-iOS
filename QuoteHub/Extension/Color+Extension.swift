@@ -1,5 +1,5 @@
 //
-//  ColorExtension.swift
+//  Color+Extension.swift
 //  QuoteHub
 //
 //  Created by 이융의 on 10/20/23.
@@ -164,20 +164,5 @@ extension Color {
             blue: Double(b) / 255,
             opacity: Double(a) / 255
         )
-    }
-}
-
-// MARK: - Environment Color Scheme Helper
-extension View {
-    func adaptiveBackground() -> some View {
-        self.background(Color.cardBackground)
-    }
-    
-    func adaptiveShadow(radius: CGFloat = 10, x: CGFloat = 0, y: CGFloat = 5) -> some View {
-        self.shadow(color: Color.shadowColor, radius: radius, x: x, y: y)
-    }
-    
-    func bookPaperBackground() -> some View {
-        self.background(Color.lightPaper)
     }
 }

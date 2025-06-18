@@ -1,5 +1,5 @@
 //
-//  navBarLogo.swift
+//  NavBarLogo.swift
 //  QuoteHub
 //
 //  Created by 이융의 on 6/1/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public func navBarLogo() -> some View {
+public func NavBarLogo() -> some View {
     HStack(spacing: 8) {
         Image("logo")
             .resizable().scaledToFit().frame(height: 24)

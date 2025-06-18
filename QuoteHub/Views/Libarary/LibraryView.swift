@@ -180,7 +180,7 @@ struct LibraryView: View {
                     LibraryTabButtonView(selectedView: $selectedView)
                         .id("tabSection")
                     
-                    tabIndicator(height: 2, selectedView: selectedView, tabCount: 3)
+                    TabIndicator(height: 2, selectedView: selectedView, tabCount: 3)
                     contentSection
                     
                     Spacer().frame(height: 100)

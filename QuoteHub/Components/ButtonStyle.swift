@@ -1,5 +1,5 @@
 //
-//  CardButtonStyle.swift
+//  ButtonStyle.swift
 //  QuoteHub
 //
 //  Created by 이융의 on 5/31/25.
@@ -15,7 +15,6 @@ struct CardButtonStyle: ButtonStyle {
             .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
 }
-
 
 struct MyActionButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {

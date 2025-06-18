@@ -47,14 +47,6 @@ struct CustomProgressView: View {
     }
 }
 
-// MARK: - PROTOCOL
-
-@MainActor
-protocol LoadingViewModel: ObservableObject {
-    var isLoading: Bool { get }
-    var loadingMessage: String? { get }
-}
-
 // MARK: - VIEW MODIFIER
 
 /// 하나의 뷰모델 사용하는 로딩뷰 모디파이어
@@ -135,7 +127,6 @@ struct MultipleProgressOverlay: ViewModifier {
 // MARK: - VIEW EXTENSION
 
 extension View {
-    
     /// 단일 ViewModel 에서의 로딩뷰
     func progressOverlay<VM: LoadingViewModel>(
         viewModel: VM,
@@ -158,45 +149,3 @@ extension View {
         ))
     }
 }
-
-
-
-/*
-/// MARK: - 사용 방법
-
-class LoginTestViewModel: ObservableObject, LoadingViewModel {
-    @Published var isLoading = false
-    @Published var loadingMessage: String?
-    @Published var user: String?
-    
-    func login() {
-        isLoading = true
-        loadingMessage = "login..."
-        
-        // 네트워크 요청 시뮬레이션
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.isLoading = false
-            self.loadingMessage = nil
-            self.user = "융의"
-        }
-    }
-}
-
-struct LoadingExampleView: View {
-    @StateObject private var vm = LoginTestViewModel()
-    var body: some View {
-        VStack(spacing: 20) {
-            Text("Login View").font(.title)
-            
-            Button("로그인하기") { vm.login() }
-                .buttonStyle(.borderedProminent)
-            
-            if let user = vm.user {
-                Text("환영합니다, \(user)님")
-                    .foregroundStyle(.green)
-            }
-        }
-        .progressOverlay(viewModel: vm)
-    }
-}
-*/

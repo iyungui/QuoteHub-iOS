@@ -53,3 +53,18 @@ struct CustomTextEditor: View {
         }
     }
 }
+
+
+#Preview {
+    VStack {
+        CustomTextEditor(
+            text: .constant(""),
+            placeholder: "간직하고 싶은 문장을 기록해보세요.",
+            minHeight: 100,
+            maxLength: 100,
+            isFocused: true
+        )
+        .padding()
+        Spacer()
+    }
+}

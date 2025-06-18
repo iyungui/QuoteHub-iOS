@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// MARK: - BACKGROUND EXTENSION
+
 extension View {
     func backgroundGradient() -> some View {
         self.background(
@@ -45,3 +47,28 @@ extension View {
         
     }
 }
+
+extension View {
+    func adaptiveBackground() -> some View {
+        self.background(Color.cardBackground)
+    }
+    
+    func adaptiveShadow(radius: CGFloat = 10, x: CGFloat = 0, y: CGFloat = 5) -> some View {
+        self.shadow(color: Color.shadowColor, radius: radius, x: x, y: y)
+    }
+    
+    func bookPaperBackground() -> some View {
+        self.background(Color.lightPaper)
+    }
+}
+
+// MARK: - HIDE KEYBOARD
+// TODO: - 이거 필요한지 확인
+
+#if canImport(UIKit)
+extension View {
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
+#endif

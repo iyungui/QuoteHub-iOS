@@ -1,5 +1,5 @@
 //
-//  tabIndicator.swift
+//  TabIndicator.swift
 //  QuoteHub
 //
 //  Created by 이융의 on 6/1/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public func tabIndicator(height: CGFloat, selectedView: Int, tabCount: Int) -> some View {
+public func TabIndicator(height: CGFloat, selectedView: Int, tabCount: Int) -> some View {
     let totalWidth = UIScreen.main.bounds.width
     let indicatorWidth: CGFloat
     

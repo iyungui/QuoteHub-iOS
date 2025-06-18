@@ -294,7 +294,7 @@ struct BookDetailView: View {
                 .lineSpacing(8)
         }
         .padding(24)
-        .background(cardBackground)
+        .backgroundCard(cornerRadius: 20)
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .shadow(color: .black.opacity(0.08), radius: 10, x: 0, y: 4)
     }
@@ -363,7 +363,7 @@ struct BookDetailView: View {
             }
         }
         .padding(24)
-        .background(cardBackground)
+        .backgroundCard(cornerRadius: 20)
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .shadow(color: .black.opacity(0.08), radius: 10, x: 0, y: 4)
     }

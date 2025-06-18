@@ -106,7 +106,7 @@ struct HomeView: View {
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                navBarLogo()
+                NavBarLogo()
             }
             ToolbarItem(placement: .topBarTrailing) {
                 navBarActions()
