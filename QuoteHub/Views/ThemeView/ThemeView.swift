@@ -25,9 +25,8 @@ struct ThemeView: View {
         self.cardWidth = cardWidth
         self.cardHeight = cardHeight
     }
-    
-    @EnvironmentObject private var themesViewModel: ThemesViewModel
-    @EnvironmentObject private var userViewModel: UserViewModel
+
+    @Environment(UserViewModel.self) private var userViewModel
 
     private var themeColors: [Color] {
         let colors: [Color] = [
@@ -143,15 +142,12 @@ struct ThemeView: View {
         }
     }
     
+    @ViewBuilder
     private var destinationView: some View {
         if theme.userId.id == userViewModel.currentUser?.id {
-            return AnyView(ThemeDetailView(theme: theme, isMy: true)
-                .environmentObject(themesViewModel)
-                .environmentObject(userViewModel))
+            ThemeDetailView(theme: theme, isMy: true)
         } else {
-            return AnyView(ThemeDetailView(theme: theme, isMy: false)
-                .environmentObject(themesViewModel)
-                .environmentObject(userViewModel))
+            ThemeDetailView(theme: theme, isMy: false)
         }
     }
 }

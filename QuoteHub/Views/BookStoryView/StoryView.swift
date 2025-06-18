@@ -23,10 +23,8 @@ struct StoryView: View {
         self.cardWidth = cardWidth
         self.cardHeight = cardHeight
     }
-    
-    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
-    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
-    @EnvironmentObject private var userViewModel: UserViewModel
+
+    @Environment(UserViewModel.self) private var userViewModel
 
     var body: some View {
         NavigationLink(destination: destinationView) {
@@ -53,17 +51,12 @@ struct StoryView: View {
         .buttonStyle(CardButtonStyle())
     }
     
+    @ViewBuilder
     private var destinationView: some View {
         if story.userId.id == userViewModel.currentUser?.id {
-            return AnyView(BookStoryDetailView(story: story, isMyStory: true)
-                .environmentObject(userViewModel)
-                .environmentObject(storiesViewModel)
-                .environmentObject(userAuthManager))
+            BookStoryDetailView(story: story, isMyStory: true)
         } else {
-            return AnyView(BookStoryDetailView(story: story)
-                .environmentObject(userViewModel)
-                .environmentObject(storiesViewModel)
-                .environmentObject(userAuthManager))
+            BookStoryDetailView(story: story)
         }
     }
 
