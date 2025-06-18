@@ -8,20 +8,21 @@
 import SwiftUI
 
 @MainActor
+@Observable
 class BookSearchViewModel: ObservableObject, LoadingViewModel {
-    @Published var books: [Book] = []
+    var books: [Book] = []
     
-    @Published var isLoading: Bool = false
-    @Published var loadingMessage: String?
+    var isLoading: Bool = false
+    var loadingMessage: String?
     
-    @Published var isLoadingMore: Bool = false
+    var isLoadingMore: Bool = false
     /// 실제로 검색을 했는지 여부 (검색 결과가 없을 시 사용)
-    @Published var hasSearched: Bool = false {
+    var hasSearched: Bool = false {
         didSet {
             print("HASSEARCHED: \(hasSearched)")
         }
     }
-    @Published var isEnd: Bool = false
+    var isEnd: Bool = false
     
     private var currentPage: Int = 1
     private var currentQuery: String = ""

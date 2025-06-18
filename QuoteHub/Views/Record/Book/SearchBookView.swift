@@ -14,10 +14,7 @@ struct SearchBookView: View {
     @Environment(\.dismiss) var dismiss
     
     // viewmodel
-    @StateObject private var booksViewModel = BookSearchViewModel()
-    @EnvironmentObject var storiesViewModel: BookStoriesViewModel
-    @EnvironmentObject var userAuthManager: UserAuthenticationManager
-
+    @State private var bookSearchViewModel = BookSearchViewModel()
     @State private var searchText: String = ""
     
     // focusField
@@ -41,7 +38,7 @@ struct SearchBookView: View {
                     backButton
                 }
             }
-            .progressOverlay(viewModel: booksViewModel, animationName: "progressLottie", opacity: false)
+            .progressOverlay(viewModel: bookSearchViewModel, animationName: "progressLottie", opacity: false)
         }
     }
 
@@ -74,8 +71,8 @@ struct SearchBookView: View {
                 if !searchText.isEmpty {
                     Button(action: {
                         searchText = ""
-                        booksViewModel.updateQuery("")
-                        booksViewModel.clearSearch()
+                        bookSearchViewModel.updateQuery("")
+                        bookSearchViewModel.clearSearch()
                         
                         focusField = .searchText
                     }) {
@@ -105,11 +102,11 @@ struct SearchBookView: View {
                     .frame(width: 44, height: 44)
                     .background(
                         Circle()
-                            .fill(booksViewModel.isLoading ? Color.gray : Color.appAccent)
+                            .fill(bookSearchViewModel.isLoading ? Color.gray : Color.appAccent)
                     )
                     .adaptiveShadow(radius: 3, y: 2)
             }
-            .disabled(booksViewModel.isLoading)
+            .disabled(bookSearchViewModel.isLoading)
             .animation(.easeInOut(duration: 0.2), value: searchText.isEmpty)
         }
         .onSubmit {
@@ -127,20 +124,20 @@ struct SearchBookView: View {
     private var resultsListView: some View {
         ScrollView {
             LazyVStack {
-                if booksViewModel.books.isEmpty && booksViewModel.hasSearched && !booksViewModel.isLoading {
+                if bookSearchViewModel.books.isEmpty && bookSearchViewModel.hasSearched && !bookSearchViewModel.isLoading {
                     
                     emptyStateView.padding(.top, 50)
                     
                 } else {
-                    ForEach(Array(booksViewModel.books.enumerated()), id: \.element.id) { index, book in
-                        BookRowView(book: book)
+                    ForEach(Array(bookSearchViewModel.books.enumerated()), id: \.element.id) { index, book in
+                        BookSearchResultRowView(book: book)
                             .task {
                                 // 마지막 책이 화면에 나타날 때
-                                await booksViewModel.loadMoreIfNeeded(currentIndex: index)
+                                await bookSearchViewModel.loadMoreIfNeeded(currentIndex: index)
                             }
                     }
                     
-                    if booksViewModel.isLoadingMore {
+                    if bookSearchViewModel.isLoadingMore {
                         loadingMoreView
                     }
                 }
@@ -195,88 +192,10 @@ struct SearchBookView: View {
     
     private func performSearch() {
         print("performSearch 호출!")
-        booksViewModel.updateQuery(searchText)
-        booksViewModel.clearSearch()
+        bookSearchViewModel.updateQuery(searchText)
+        bookSearchViewModel.clearSearch()
         Task {
-            await booksViewModel.performSearchAsync()
+            await bookSearchViewModel.performSearchAsync()
         }
-    }
-}
-
-// MARK: - BOOK ROW VIEW
-
-struct BookRowView: View {
-    var book: Book
-    
-    @EnvironmentObject private var booksViewModel: BookSearchViewModel
-    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
-    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
-    
-    var body: some View {
-        NavigationLink(
-            destination: BookDetailView(book: book)
-                .environmentObject(storiesViewModel)
-                .environmentObject(userAuthManager)
-        ) {
-            HStack(spacing: 16) {
-                bookImageView
-                bookInfoView
-                Spacer()
-                chevronIcon
-            }
-            .padding(16)
-            .adaptiveBackground()
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-            .adaptiveShadow(radius: 6, y: 3)
-        }
-        .buttonStyle(CardButtonStyle())
-    }
-    
-    private var bookImageView: some View {
-        WebImage(url: URL(string: book.bookImageURL))
-            .placeholder {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(Color.secondaryCardBackground)
-                    .overlay(
-                        Image(systemName: "book.fill")
-                            .font(.title2)
-                            .foregroundColor(.secondaryText.opacity(0.6))
-                    )
-            }
-            .resizable()
-            .indicator(.activity)
-            .scaledToFit()
-            .frame(width: 80, height: 100)
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-            .adaptiveShadow(radius: 4, y: 2)
-    }
-    
-    private var bookInfoView: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(book.title)
-                .font(.scoreDream(.medium, size: .subheadline))
-                .foregroundColor(.primaryText)
-                .lineLimit(2)
-                .multilineTextAlignment(.leading)
-            
-            if !book.author.isEmpty {
-                Text(book.author.joined(separator: ", "))
-                    .font(.scoreDream(.medium, size: .caption))
-                    .foregroundColor(.secondaryText)
-                    .lineLimit(1)
-            }
-            
-            Text("출판사: \(book.publisher)")
-                .font(.scoreDreamCaption)
-                .foregroundColor(.secondaryText.opacity(0.8))
-                .lineLimit(1)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-    
-    private var chevronIcon: some View {
-        Image(systemName: "chevron.right")
-            .font(.caption.weight(.medium))
-            .foregroundColor(.secondaryText.opacity(0.6))
     }
 }
