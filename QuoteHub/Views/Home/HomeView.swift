@@ -11,11 +11,11 @@ import SwiftUI
 struct HomeView: View {
     @State private var booksViewModel = RandomBooksViewModel()
 
-    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
+    @Environment(BookStoriesViewModel.self) private var storiesViewModel
     @EnvironmentObject private var themesViewModel: ThemesViewModel
     @EnvironmentObject private var userAuthManager: UserAuthenticationManager
-    @EnvironmentObject private var userViewModel: UserViewModel
-    
+    @Environment(UserViewModel.self) private var userViewModel
+
     var body: some View {
         ZStack {
             GradientBackground()

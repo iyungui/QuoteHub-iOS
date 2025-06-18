@@ -144,4 +144,5 @@ struct FloatingActionButton: View {
 
 #Preview {
     CustomTabbar(selectedTab: .constant(1), showActionButtons: .constant(true), showAlert: {})
+        .environmentObject(UserAuthenticationManager())
 }

@@ -16,9 +16,10 @@ struct AppStoreAppInfo: Codable, Sendable {
     let version: String
 }
 
-class AppVersionManager: ObservableObject {
-    @Published var showUpdateAlert = false
-    @Published var latestVersion = ""
+@Observable
+class AppVersionManager {
+    var showUpdateAlert = false
+    var latestVersion = ""
     
     private let appId = "6469527373"
     private let currentVersion: String

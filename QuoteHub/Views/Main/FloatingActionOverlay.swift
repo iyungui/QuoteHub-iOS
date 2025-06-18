@@ -131,5 +131,5 @@ struct FloatingActionItem: View {
 
 
 #Preview {
-    FloatingActionOverlay(showActionButtons: .constant(true), activeSheet: .constant(.search), showAlert: {})
+    FloatingActionOverlay(showActionButtons: .constant(true), activeSheet: .constant(.search), showAlert: {}).environmentObject(UserAuthenticationManager())
 }

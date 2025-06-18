@@ -27,7 +27,7 @@ struct LibraryThemesListView: View {
     }
     
     @EnvironmentObject private var themesViewModel: ThemesViewModel
-    @EnvironmentObject private var userViewModel: UserViewModel
+    
     var body: some View {
         LazyVGrid(columns: columns, spacing: spacing) {
             ForEach(Array(themesViewModel.themes(for: loadType).enumerated()), id: \.element.id) { index, theme in

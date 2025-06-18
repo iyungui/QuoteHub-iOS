@@ -38,9 +38,9 @@ struct LibraryView: View {
     
     // viewmodel
     @EnvironmentObject private var userAuthManager: UserAuthenticationManager
-    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
+    @Environment(BookStoriesViewModel.self) private var storiesViewModel
     @EnvironmentObject private var themesViewModel: ThemesViewModel
-    @EnvironmentObject private var userViewModel: UserViewModel
+    @Environment(UserViewModel.self) private var userViewModel
     @EnvironmentObject private var tabController: TabController
 
     // 신고, 차단 기능을 위한

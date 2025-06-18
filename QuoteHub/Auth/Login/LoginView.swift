@@ -62,7 +62,7 @@ struct LoginView: View {
 
 struct AppleLoginButton: View {
     @EnvironmentObject var authManager: UserAuthenticationManager
-    @EnvironmentObject var userViewModel: UserViewModel
+    @Environment(UserViewModel.self) var userViewModel
     
     var body: some View {
         SignInWithAppleButton(

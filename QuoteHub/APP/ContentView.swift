@@ -10,12 +10,12 @@ import SwiftUI
 // ContentView 에서는 앱 화면 분기처리
 
 struct ContentView: View {
-    @StateObject private var versionManager = AppVersionManager()
+    @State private var versionManager = AppVersionManager()
 
     @EnvironmentObject private var authManager: UserAuthenticationManager
-    @EnvironmentObject private var userViewModel: UserViewModel
     @EnvironmentObject private var themesViewModel: ThemesViewModel
-    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
+    @Environment(BookStoriesViewModel.self) private var storiesViewModel
+    @Environment(UserViewModel.self) private var userViewModel
 
     @State private var isSplashView = true  // 런치스크린 표시
 

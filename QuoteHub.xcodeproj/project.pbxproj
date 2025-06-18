@@ -33,6 +33,7 @@
 		C6DE7F562AF76EA30020F5CB /* TabBar in Frameworks */ = {isa = PBXBuildFile; productRef = C6DE7F552AF76EA30020F5CB /* TabBar */; };
 		C6DE7F612AF7C2940020F5CB /* CommentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6DE7F602AF7C2940020F5CB /* CommentViewModel.swift */; };
 		C6E465582ADEAB66002F5FA0 /* CheckboxStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E465572ADEAB66002F5FA0 /* CheckboxStyle.swift */; };
+		CE1100DB2E0275D6003C592E /* StoryBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100DA2E0275D6003C592E /* StoryBookView.swift */; };
 		CE4FEF5B2DF925EE0072E8B9 /* RoundedCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */; };
 		CE4FEF5D2DF93F260072E8B9 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF5C2DF93F260072E8B9 /* HiddenModifier.swift */; };
 		CE4FEF812DFA90D80072E8B9 /* AchievementBadgesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */; };
@@ -159,6 +160,7 @@
 		C6DE7F502AF76B480020F5CB /* StoryCommentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCommentService.swift; sourceTree = "<group>"; };
 		C6DE7F602AF7C2940020F5CB /* CommentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewModel.swift; sourceTree = "<group>"; };
 		C6E465572ADEAB66002F5FA0 /* CheckboxStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxStyle.swift; sourceTree = "<group>"; };
+		CE1100DA2E0275D6003C592E /* StoryBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryBookView.swift; sourceTree = "<group>"; };
 		CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorner.swift; sourceTree = "<group>"; };
 		CE4FEF5C2DF93F260072E8B9 /* HiddenModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenModifier.swift; sourceTree = "<group>"; };
 		CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementBadgesView.swift; sourceTree = "<group>"; };
@@ -478,6 +480,7 @@
 				CE8C486E2DEB2E39003188ED /* LibraryTabButtonView.swift */,
 				CE8C48892DEC3BF2003188ED /* LibraryThemesListView.swift */,
 				CE8C488B2DEC3E73003188ED /* LibraryStoriesListView.swift */,
+				CE1100DA2E0275D6003C592E /* StoryBookView.swift */,
 			);
 			path = Libarary;
 			sourceTree = "<group>";
@@ -664,10 +667,10 @@
 		CEA554E02E01A08D0029A8A9 /* Endpoints */ = {
 			isa = PBXGroup;
 			children = (
+				CE8C47992DEA8D97003188ED /* EndpointProtocol.swift */,
 				CE8C47972DEA8D97003188ED /* AuthEndpoints.swift */,
 				CE8C479B2DEA8D97003188ED /* UserEndpoints.swift */,
 				CE8C47982DEA8D97003188ED /* BookSearchEndpoints.swift */,
-				CE8C47992DEA8D97003188ED /* EndpointProtocol.swift */,
 				CEA554E12E01B1660029A8A9 /* BookStoryEndpoints.swift */,
 			);
 			path = Endpoints;
@@ -790,6 +793,7 @@
 				CE8C481B2DEA8DAE003188ED /* HomeView.swift in Sources */,
 				CE8C481C2DEA8DAE003188ED /* PublicStoriesListView.swift in Sources */,
 				CE8C481D2DEA8DAE003188ED /* PublicThemesListView.swift in Sources */,
+				CE1100DB2E0275D6003C592E /* StoryBookView.swift in Sources */,
 				CE8C481E2DEA8DAE003188ED /* UserSearchView.swift in Sources */,
 				CE8C48202DEA8DAE003188ED /* KeywordGroupedStoriesView.swift in Sources */,
 				CE8C49452DF18B69003188ED /* ThemeGalleryGridView.swift in Sources */,

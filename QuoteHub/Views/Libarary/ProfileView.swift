@@ -16,8 +16,8 @@ enum AlertType {
 /// 라이브러리에서 보이는 프로필 뷰
 struct ProfileView: View {
     @EnvironmentObject private var followViewModel: FollowViewModel
-    @EnvironmentObject private var userViewModel: UserViewModel
-    
+    @Environment(UserViewModel.self) private var userViewModel
+
     @State private var showAlert: Bool = false
     @State private var showLevelBadgeSheet: Bool = false
     @State private var alertType: AlertType = .loginRequired
@@ -105,6 +105,6 @@ struct ProfileView: View {
 
 #Preview {
     ProfileView()
-        .environmentObject(UserViewModel())
+        .environment(UserViewModel())
         .environmentObject(FollowViewModel())
 }
