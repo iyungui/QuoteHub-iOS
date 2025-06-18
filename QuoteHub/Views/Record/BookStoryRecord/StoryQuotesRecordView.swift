@@ -27,7 +27,8 @@ struct StoryQuotesRecordView: View {
         self.storyId = storyId
     }
 
-    @EnvironmentObject var storiesViewModel: BookStoriesViewModel
+    @Environment(BookStoriesViewModel.self) private var storiesViewModel
+    
     @StateObject private var formViewModel = StoryFormViewModel()
     
     @FocusState private var focusedField: BookStoryFormField?
@@ -59,10 +60,10 @@ struct StoryQuotesRecordView: View {
         .toolbar {
             toolBarItems
         }
-        .onAppear {
-            loadStoryDataIfNeeded()
+        .task {
+            await loadStoryDataIfNeeded()
         }
-        .progressOverlay(viewModel: storiesViewModel, animationName: "progressLottie", opacity: false)
+        .progressOverlay(viewModel: storiesViewModel, opacity: false)
     }
     
     private var toolBarItems: some ToolbarContent {
@@ -109,8 +110,6 @@ struct StoryQuotesRecordView: View {
     private var nextButton: some View {
         NavigationLink {
             StorySettingRecordView(book: book, storyId: storyId)
-            .environmentObject(formViewModel)
-            .environmentObject(storiesViewModel)
         } label: {
             Text("다음")
                 .foregroundStyle(formViewModel.isQuotesFilled ? Color.blue : Color.gray.opacity(0.7))
@@ -118,23 +117,22 @@ struct StoryQuotesRecordView: View {
         .disabled(!formViewModel.isQuotesFilled)
     }
     
-    private func loadStoryDataIfNeeded() {
-        guard let storyId = storyId else { return }
-        
-        storiesViewModel.fetchSpecificBookStory(storyId: storyId) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let story):
-                    formViewModel.loadFromBookStory(story)
-                case .failure(let error):
-                    print("Failed to load story data: \(error.localizedDescription)")
-                    formViewModel.alertMessage = "북스토리를 불러오지 못했어요."
-                    formViewModel.showAlert = true
-                }
-            }
+    private func loadStoryDataIfNeeded() async {
+        guard let storyId = storyId else {
+            // storyId 가 주어지지 않으면 생성 모드이므로 바로 return
+            return
         }
+        
+        let loadedStory = await storiesViewModel.fetchSpecificBookStory(storyId: storyId)
+        
+        guard let loadedStory = loadedStory else {
+            formViewModel.showAlert = true
+            formViewModel.alertMessage = storiesViewModel.errorMessage ?? "북스토리를 불러오지 못했어요."
+            return
+        }
+        
+        formViewModel.loadFromBookStory(loadedStory)
     }
-
 }
 
 #Preview {

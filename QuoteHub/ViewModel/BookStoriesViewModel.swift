@@ -274,8 +274,8 @@ class BookStoriesViewModel: LoadingViewModel {
             
             try Task.checkCancellation()
             
-            guard let newStory = response.data else {
-                errorMessage = "북스토리 생성에 실패했습니다."
+            guard response.success, let newStory = response.data else {
+                errorMessage = response.message
                 return false
             }
             
@@ -437,13 +437,12 @@ class BookStoriesViewModel: LoadingViewModel {
             
             try Task.checkCancellation()
             
-            if let story = response.data {
-                return story
+            if response.success {
+                return response.data    // BookStory?
             } else {
-                errorMessage = "북스토리를 찾을 수 없습니다."
+                errorMessage = response.message
                 return nil
             }
-            
         } catch is CancellationError {
             return nil
         } catch {
