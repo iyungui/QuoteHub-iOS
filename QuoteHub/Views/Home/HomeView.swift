@@ -9,8 +9,8 @@ import SwiftUI
 
 /// 첫번째 탭 뷰
 struct HomeView: View {
-    @StateObject var booksViewModel = RandomBooksViewModel()
-    
+    @State private var booksViewModel = RandomBooksViewModel()
+
     @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
     @EnvironmentObject private var themesViewModel: ThemesViewModel
     @EnvironmentObject private var userAuthManager: UserAuthenticationManager
@@ -35,9 +35,6 @@ struct HomeView: View {
                         )
                         // TODO: - 로딩 중 상태 표시
                         PublicStoriesListView()
-                            .environmentObject(storiesViewModel)
-                            .environmentObject(userAuthManager)
-                            .environmentObject(userViewModel)
                             .frame(height: 350)
                     }
                     
@@ -52,10 +49,6 @@ struct HomeView: View {
                         
                         // TODO: - 로딩 중 상태 표시
                         PublicThemesListView()
-                            .environmentObject(userAuthManager)
-                            .environmentObject(userViewModel)
-                            .environmentObject(themesViewModel)
-                            .environmentObject(storiesViewModel)
                             .frame(height: 220)
                     }
 
@@ -73,10 +66,7 @@ struct HomeView: View {
                                 .scaleEffect(1.2)
                                 .tint(.brownLeather)
                         } else {
-                            RandomBookListView()
-                                .environmentObject(booksViewModel)
-                                .environmentObject(storiesViewModel)
-                                .environmentObject(userAuthManager)
+                            RandomBookListView(randomBooks: booksViewModel.books)
                                 .frame(height: 320)
                         }
                     }
@@ -86,13 +76,33 @@ struct HomeView: View {
                 .padding(.top, 20)
             }
             .refreshable {
-                await refreshContent()
+                await withTaskGroup(of: Void.self) { group in
+                    group.addTask {
+                        await booksViewModel.fetchRandomBooks()
+                    }
+                    group.addTask {
+                        await storiesViewModel.refreshBookStories(type: .public)
+                    }
+                    // TODO: public 테마도 북스토리와 함께 병렬로 불러오기
+                }
+                themesViewModel.refreshThemes(type: .public)
+            }
+        }
+        .task {
+            // randombooks, loadBookStories, loadThemes 병렬로 호출 (첫 페이지부터)
+            await withTaskGroup(of: Void.self) { group in
+                group.addTask {
+                    await booksViewModel.fetchRandomBooks()
+                }
+                group.addTask {
+                    await storiesViewModel.loadBookStories(type: .public)
+                }
+                
+                // TODO: public 테마도 북스토리와 함께 병렬로 불러오기
             }
         }
         .onAppear {
-            storiesViewModel.loadBookStories(type: .public)
             themesViewModel.loadThemes(type: .public)
-//            userViewModel.getProfile(userId: nil)
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -102,14 +112,6 @@ struct HomeView: View {
                 navBarActions()
             }
         }
-    }
-    
-    // MARK: - Private Methods
-    // TODO: - 비동기적으로 처리
-    private func refreshContent() async {
-        await booksViewModel.fetchRandomBooks()
-        storiesViewModel.refreshBookStories(type: .public)
-        themesViewModel.refreshThemes(type: .public)
     }
     
     // MARK: - UI Components
@@ -177,8 +179,6 @@ struct HomeView: View {
             
             if userAuthManager.isUserAuthenticated {
                 NavigationLink(destination: UserSearchView()
-                    .environmentObject(storiesViewModel)
-                    .environmentObject(userAuthManager)
                 ) {
                     Image(systemName: "person.2")
                         .foregroundColor(.brownLeather)
