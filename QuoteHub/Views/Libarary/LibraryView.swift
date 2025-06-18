@@ -121,11 +121,20 @@ struct LibraryView: View {
         .task {
             // 내 프로필은 이미 Contentview에서 로드해서 userViewModel의 currentUser에 할당된 상태
             if !isMyLibrary {
-                // TODO: 병렬로 불러올 수 있도록 바꾸기
-                await userViewModel.loadUserProfile(userId: otherUser?.id)
-                await userViewModel.loadStoryCount(userId: otherUser?.id)
+                await withTaskGroup(of: Void.self) { group in
+                    group.addTask {
+                        await userViewModel.loadUserProfile(userId: otherUser?.id)
+                    }
+                    group.addTask {
+                        await userViewModel.loadStoryCount(userId: otherUser?.id)
+                    }
+                    group.addTask {
+                        await storiesViewModel.loadBookStories(type: loadType)
+                    }
+                    // TODO: - 테마 뷰모델 async await로 만들면 여기에 병렬 실행 추가
+                }
             }
-            storiesViewModel.loadBookStories(type: loadType)
+            // 내 북스토리와 테마의 경우, 이미 ContentView 에서 불러온 상태
             themesViewModel.loadThemes(type: loadType)
         }
         
