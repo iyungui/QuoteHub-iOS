@@ -94,11 +94,14 @@ class BookStoriesViewModel: LoadingViewModel {
         // 기존 로딩 Task 취소
         cancelLoadingTask(for: type)
         
+        // 타입 변경
         currentStoryType = type
+        
+        // 페이지네이션 상태 초기화
         currentPage = 1
         isLastPage = false
         
-        // 해당 타입의 데이터만 초기화
+        // 해당 타입의 데이터만 초기화 (만약 내 북스토리 리프레시면 내 북스토리 배열만 초기화됨)
         storiesByType[type] = []
         
         // 북스토리 로드

@@ -23,11 +23,8 @@ struct LibraryView: View {
     }
 
     var loadType: LoadType {
-        if !isMyLibrary {
-            guard let friendId = otherUser?.id else {
-                return LoadType.my
-            }
-            return LoadType.friend(friendId)  // 여기서 해당 사용자id로 북스토리와 테마 불러오도록 모드 설정
+        if let friendId = otherUser?.id, !isMyLibrary {
+            return LoadType.friend(friendId)  // 여기서 해당 사용자 id로 북스토리와 테마 불러오도록 모드 설정
         } else {
             return LoadType.my
         }
@@ -106,15 +103,31 @@ struct LibraryView: View {
         // 새로 고침
         .refreshable {
             if isMyLibrary {
-                await userViewModel.loadUserProfile(userId: nil)
-                await userViewModel.loadStoryCount(userId: nil)
-                
-            } else if let otherUser = userViewModel.currentOtherUser {
-                await userViewModel.loadUserProfile(userId: otherUser.id)
-                await userViewModel.loadStoryCount(userId: otherUser.id)
+                await withTaskGroup(of: Void.self) { group in
+                    group.addTask {
+                        await userViewModel.loadUserProfile(userId: nil)
+                    }
+                    group.addTask {
+                        await userViewModel.loadStoryCount(userId: nil)
+                    }
+                    group.addTask {
+                        await storiesViewModel.refreshBookStories(type: loadType)
+                    }
+                }
+            } else if let otherUser = userViewModel.currentOtherUser, loadType == .friend(otherUser.id) {
+                await withTaskGroup(of: Void.self) { group in
+                    group.addTask {
+                        await userViewModel.loadUserProfile(userId: otherUser.id)
+                    }
+                    group.addTask {
+                        await userViewModel.loadStoryCount(userId: otherUser.id)
+                    }
+                    group.addTask {
+                        await storiesViewModel.refreshBookStories(type: loadType)
+                    }
+                }
             }
-
-            storiesViewModel.refreshBookStories(type: loadType)
+            
             themesViewModel.refreshThemes(type: loadType)
         }
         
@@ -134,7 +147,7 @@ struct LibraryView: View {
                     // TODO: - 테마 뷰모델 async await로 만들면 여기에 병렬 실행 추가
                 }
             }
-            // 내 북스토리와 테마의 경우, 이미 ContentView 에서 불러온 상태
+            // 내 북스토리와 테마의 경우, 이미 ContentView 에서 불러온 상태이므로 한번 더 부르지 않음
             themesViewModel.loadThemes(type: loadType)
         }
         
