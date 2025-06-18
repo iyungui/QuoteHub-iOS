@@ -138,6 +138,7 @@ struct StoryQuotesRecordView: View {
 #Preview {
     NavigationStack {
         StoryQuotesRecordView(book: Book.previewBook)
+            .environmentObject(StoryFormViewModel())
             .environmentObject(BookStoriesViewModel())
     }
 }

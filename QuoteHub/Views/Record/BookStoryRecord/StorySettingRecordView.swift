@@ -12,8 +12,8 @@ struct StorySettingRecordView: View {
     let storyId: String?
     var isEditMode: Bool { storyId != nil }
     
-    @EnvironmentObject var formViewModel: StoryFormViewModel
-    @EnvironmentObject var storiesViewModel: BookStoriesViewModel
+    @EnvironmentObject private var formViewModel: StoryFormViewModel
+    @Environment(BookStoriesViewModel.self) private var storiesViewModel
     @EnvironmentObject var tabController: TabController
     
     var body: some View {
@@ -24,6 +24,7 @@ struct StorySettingRecordView: View {
             
             Spacer()
         }
+        // 오류 났을 때 alert
         .alert("알림", isPresented: $formViewModel.showAlert, actions: {
             Button("확인") { }
         }, message: {
@@ -98,10 +99,57 @@ extension StorySettingRecordView {
     }
     
     private func submitStory() {
-        guard formViewModel.isQuotesFilled else {
-            formViewModel.updateFeedbackMessage()
+        // 검증 로직
+        guard let validQuotes = validateQuotes() else {
             return
         }
+        
+        Task {
+            await performSubmitStory(validQuotes)
+        }
+    }
+    
+    private func performSubmitStory(_ validQuotes: [Quote]) async {
+        // 옵셔널 처리
+        let retContent = formViewModel.content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : formViewModel.content
+        let retImages = formViewModel.selectedImages.isEmpty ? nil : formViewModel.selectedImages
+        let retKeywords = formViewModel.keywords.isEmpty ? nil : formViewModel.keywords
+        let retThemeIds = formViewModel.themeIds.isEmpty ? nil : formViewModel.themeIds
+        
+        let resultStory: BookStory?
+        
+        // 모드에 따라 resultStory에 담기. nil이면 fail
+        if isEditMode, let storyId = storyId {
+            resultStory = await storiesViewModel.updateBookStory(
+                storyID: storyId,
+                quotes: validQuotes,
+                images: retImages,
+                content: retContent,
+                isPublic: formViewModel.isPublic,
+                keywords: retKeywords,
+                themeIds: retThemeIds
+            )
+        } else {
+            resultStory = await storiesViewModel.createBookStory(
+                bookId: book.id,
+                quotes: validQuotes,
+                images: retImages,
+                content: retContent,
+                isPublic: formViewModel.isPublic,
+                keywords: retKeywords,
+                themeIds: retThemeIds
+            )
+        }
+        
+        handleSubmissionResult(story: resultStory, isEdit: isEditMode)
+    }
+    
+    private func validateQuotes() -> [Quote]? {
+        guard formViewModel.isQuotesFilled else {
+            formViewModel.updateFeedbackMessage()
+            return nil
+        }
+        
         // quotes 처리 - 빈 quote 제거하고 최소 하나는 보장
         let validQuotes = formViewModel.quotes.filter {
             !$0.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
@@ -111,63 +159,28 @@ extension StorySettingRecordView {
             print("❌ No valid quotes found")
             formViewModel.alertMessage = "최소 하나의 인용구가 필요합니다."
             formViewModel.showAlert = true
-            return
+            return nil
         }
-
-        // 옵셔널 처리
-        let retContent = formViewModel.content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : formViewModel.content
-        let retImages = formViewModel.selectedImages.isEmpty ? nil : formViewModel.selectedImages
-        let retKeywords = formViewModel.keywords.isEmpty ? nil : formViewModel.keywords
-        let retThemeIds = formViewModel.themeIds.isEmpty ? nil : formViewModel.themeIds
-
-        if isEditMode, let storyId = storyId {
-            // 수정 모드
-            storiesViewModel.updateBookStory(
-                storyID: storyId,
-                quotes: validQuotes,
-                images: retImages,
-                content: retContent,
-                isPublic: formViewModel.isPublic,
-                keywords: retKeywords,
-                themeIds: retThemeIds) { isSuccess in
-                    handleSubmissionResult(isSuccess: isSuccess, isEdit: true)
-                }
-        } else {
-            // 생성 모드
-            storiesViewModel.createBookStory(
-                bookId: book.id,
-                quotes: formViewModel.quotes,
-                images: retImages,
-                content: retContent,
-                isPublic: formViewModel.isPublic,
-                keywords: retKeywords,
-                themeIds: retThemeIds
-            ) { isSuccess in
-                handleSubmissionResult(isSuccess: isSuccess, isEdit: false)
-            }
-        }
-    }
-    private func handleSubmissionResult(isSuccess: Bool, isEdit: Bool) {
         
-        if isSuccess {
-            if let lastCreatedStory = storiesViewModel.lastCreatedStory {
-                tabController.navigateToStory(lastCreatedStory)
-            }
+        return validQuotes
+    }
+    
+    private func handleSubmissionResult(story: BookStory?, isEdit: Bool) {
+        if let story = story {
+            tabController.navigateToStory(story)
         } else {
             formViewModel.alertType = .make
             formViewModel.alertMessage = isEdit ?
                 "북스토리 수정 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요." :
                 "북스토리 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
             formViewModel.showAlert = true
-
         }
-        
     }
 }
 
 #Preview {
-    return NavigationStack {
-        StorySettingRecordView(book: Book(title: "", author: [], translator: [], introduction: "", publisher: "", publicationDate: "", bookImageURL: "", bookLink: "", ISBN: [], _id: ""), storyId: nil)
+    NavigationStack {
+        StorySettingRecordView(book: Book.previewBook, storyId: nil)
         .environmentObject(StoryFormViewModel())
         .environmentObject(BookStoriesViewModel())
     }

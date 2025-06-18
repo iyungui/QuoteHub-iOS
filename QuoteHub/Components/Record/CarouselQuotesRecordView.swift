@@ -15,7 +15,7 @@ struct CarouselQuotesRecordView: View {
     
     @State private var currentQuoteIndex: Int = 0
     @State private var scrollPosition: UUID? = nil
-
+    
     let width: CGFloat = UIScreen.main.bounds.width
     
     var body: some View {

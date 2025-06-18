@@ -380,15 +380,20 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		CE1100EB2E02816A003C592E /* RecordUIComponents */ = {
+		CE1100EB2E02816A003C592E /* Record */ = {
 			isa = PBXGroup;
 			children = (
+				CEA554B52E003BFD0029A8A9 /* ThoughtInputCard.swift */,
+				CEA554AE2E003BFD0029A8A9 /* CarouselQuotesRecordView.swift */,
+				CEA554B42E003BFD0029A8A9 /* ThemeSelectionCard + PrivacyToggleCard.swift */,
+				CEA554B12E003BFD0029A8A9 /* ListQuotesRecordView.swift */,
+				CEA554B02E003BFD0029A8A9 /* KeywordInputSection.swift */,
 				CE1100E72E02816A003C592E /* CustomTextEditor.swift */,
 				CE1100E82E02816A003C592E /* FeedbackView.swift */,
 				CE1100E92E02816A003C592E /* StoryCharacterCountView.swift */,
 				CE1100EA2E02816A003C592E /* StoryCreateGuideSection.swift */,
 			);
-			path = RecordUIComponents;
+			path = Record;
 			sourceTree = "<group>";
 		};
 		CE1100F42E02816A003C592E /* LevelBadge */ = {
@@ -575,7 +580,7 @@
 		CE8C483E2DEAB3EA003188ED /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				CE1100EB2E02816A003C592E /* RecordUIComponents */,
+				CE1100EB2E02816A003C592E /* Record */,
 				CE1100F42E02816A003C592E /* LevelBadge */,
 				CE8C483F2DEAB3FE003188ED /* AnimatedText.swift */,
 				C6E465572ADEAB66002F5FA0 /* CheckboxStyle.swift */,
@@ -598,12 +603,7 @@
 			isa = PBXGroup;
 			children = (
 				CEA554B22E003BFD0029A8A9 /* StoryQuotesRecordView.swift */,
-				CEA554AE2E003BFD0029A8A9 /* CarouselQuotesRecordView.swift */,
-				CEA554B12E003BFD0029A8A9 /* ListQuotesRecordView.swift */,
-				CEA554B02E003BFD0029A8A9 /* KeywordInputSection.swift */,
 				CEA554B32E003BFD0029A8A9 /* StorySettingRecordView.swift */,
-				CEA554B42E003BFD0029A8A9 /* ThemeSelectionCard + PrivacyToggleCard.swift */,
-				CEA554B52E003BFD0029A8A9 /* ThoughtInputCard.swift */,
 			);
 			path = BookStoryRecord;
 			sourceTree = "<group>";

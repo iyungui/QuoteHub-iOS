@@ -27,9 +27,6 @@ class BookStoriesViewModel: LoadingViewModel {
     var isLastPage = false
     var errorMessage: String?
     
-    /// 북스토리 생성, 수정 후 해당 북스토리로 navigation 하기 위한 프로퍼티
-    var lastCreatedStory: BookStory?
-    
     // MARK: - PRIVATE PROPERTIES
     private var currentPage = 1
     private let pageSize = 10   // pageSize는 고정
@@ -50,9 +47,12 @@ class BookStoriesViewModel: LoadingViewModel {
     /// 같은 타입의 데이터를 동시에 여러 번 로딩하지 않도록 방지
     private var loadingTasks: [LoadType: Task<Void, Never>] = [:]
     
-    /// 생성/수정/삭제 작업들을 추적.
+    /// 생성/수정 작업들을 추적.
     /// Set을 사용해 완료된 Task는 자동으로 제거
-    private var operationTasks: Set<Task<Bool, Never>> = []
+    private var operationTasks: Set<Task<BookStory?, Never>> = []
+    
+    // 삭제 작업 (삭제는 Bool 값 리턴)
+    private var deletionTasks: Task<Bool, Never>?
     
     
     // MARK: - Initialization
@@ -223,7 +223,7 @@ class BookStoriesViewModel: LoadingViewModel {
         isPublic: Bool,
         keywords: [String]?,
         themeIds: [String]?
-    ) async -> Bool {
+    ) async -> BookStory? {
         let task = Task { @MainActor in
             await performCreateBookStory(
                 bookId: bookId,
@@ -251,7 +251,7 @@ class BookStoriesViewModel: LoadingViewModel {
         isPublic: Bool,
         keywords: [String]?,
         themeIds: [String]?
-    ) async -> Bool {
+    ) async -> BookStory? {
         isLoading = true
         loadingMessage = "북스토리를 등록하는 중..."
         clearErrorMessage()
@@ -276,22 +276,21 @@ class BookStoriesViewModel: LoadingViewModel {
             
             guard response.success, let newStory = response.data else {
                 errorMessage = response.message
-                return false
+                return nil
             }
             
             // 스토리를 관련 타입에 추가
             addStoryToTypes(newStory)
-            lastCreatedStory = newStory
-            
             print("북스토리 생성 완료")
-            return true
+            
+            return newStory
             
         } catch is CancellationError {
-            return false
+            return nil
         } catch {
             print("북스토리 생성 실패 - \(error.localizedDescription)")
             handleError(error)
-            return false
+            return nil
         }
     }
     
@@ -305,7 +304,7 @@ class BookStoriesViewModel: LoadingViewModel {
         isPublic: Bool,
         keywords: [String]?,
         themeIds: [String]?
-    ) async -> Bool {
+    ) async -> BookStory? {
         let task = Task { @MainActor in
             await performUpdateBookStory(
                 storyID: storyID,
@@ -333,7 +332,7 @@ class BookStoriesViewModel: LoadingViewModel {
         isPublic: Bool,
         keywords: [String]?,
         themeIds: [String]?
-    ) async -> Bool {
+    ) async -> BookStory? {
         isLoading = true
         loadingMessage = "북스토리를 수정하는 중..."
         clearErrorMessage()
@@ -358,36 +357,32 @@ class BookStoriesViewModel: LoadingViewModel {
             
             guard let updatedStory = response.data else {
                 errorMessage = "북스토리 수정에 실패했습니다."
-                return false
+                return nil
             }
             
             // 스토리 업데이트
             updateStoryInTypes(updatedStory)
-            lastCreatedStory = updatedStory
-            
             print("북스토리 업데이트 성공")
-            return true
+            return updatedStory
             
         } catch is CancellationError {
-            return false
+            return nil
         } catch {
             print("북스토리 업데이트 실패: \(error.localizedDescription)")
             errorMessage = "북스토리 수정 중 오류가 발생했습니다."
-            return false
+            return nil
         }
     }
     
     // MARK: - Delete Story
     
     func deleteBookStory(storyID: String) async -> Bool {
-        let task = Task { @MainActor in
+        deletionTasks = Task { @MainActor in
             await performDeleteBookStory(storyID: storyID)
         }
         
-        operationTasks.insert(task)
-        let result = await task.value
-        operationTasks.remove(task)
-        
+        let result = await (deletionTasks?.value ?? false)
+
         return result
     }
     
@@ -576,6 +571,9 @@ private extension BookStoriesViewModel {
             task.cancel()
         }
         operationTasks.removeAll()
+        
+        deletionTasks?.cancel()
+        deletionTasks = nil
     }
     
     /// 에러 메시지 초기화
