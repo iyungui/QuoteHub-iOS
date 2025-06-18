@@ -12,8 +12,8 @@ import SwiftUI
 @main
 struct QuoteHubApp: App {
     @StateObject private var authManager = UserAuthenticationManager()
-    @StateObject private var userViewModel = UserViewModel()
-    @StateObject private var storiesViewModel = BookStoriesViewModel()
+    @State private var userViewModel = UserViewModel()
+    @State private var storiesViewModel = BookStoriesViewModel()
     @StateObject private var themesViewModel = ThemesViewModel()
     @StateObject private var tabController = TabController()
 
@@ -42,8 +42,8 @@ struct QuoteHubApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(authManager)
-                .environmentObject(userViewModel)
-                .environmentObject(storiesViewModel)
+                .environment(userViewModel)
+                .environment(storiesViewModel)
                 .environmentObject(themesViewModel)
                 .environmentObject(tabController)
 
