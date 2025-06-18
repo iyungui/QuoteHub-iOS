@@ -14,11 +14,6 @@ struct UserSearchView: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var isActioned: Bool = false
     @StateObject var viewModel = UserSearchViewModel()
-    
-    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
-    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
-    @EnvironmentObject private var themesViewModel: ThemesViewModel
-    @EnvironmentObject private var userViewModel: UserViewModel
 
     enum Field: Hashable {
         case searchNickname

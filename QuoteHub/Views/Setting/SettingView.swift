@@ -11,58 +11,41 @@ struct SettingView: View {
     
     @State private var showLogoutActionSheet: Bool = false
     @State private var showDeleteUserActionSheet: Bool = false
-    @EnvironmentObject var userAuthManager: UserAuthenticationManager
-    @EnvironmentObject var userViewModel: UserViewModel
-
-    @State private var isLoading = false
-    @State private var navigateToUserProfile = false
+    
+    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
     
     private let introURL: String = "https://obtainable-postage-df4.notion.site/c4e2df8b16e643bfa05d61cadd238ba2?pvs=4"
     private let termsURL: String = "https://obtainable-postage-df4.notion.site/31236e89fe8942858a7b5a06f458e2ba?pvs=4"
     private let privacyURL: String = "https://obtainable-postage-df4.notion.site/6f8d432d3e5e417b9fa72d1121ec4011?pvs=4"
     private let supportURL: String = "https://docs.google.com/forms/d/e/1FAIpQLSd8Ljo-F7h92bBBy1z_gqHkWQaLWd3yqKogf60mnev7CnrIuw/viewform"
+    
     @State private var isPresentIntroWebView = false
     @State private var isPresentTermsWebView = false
     @State private var isPresentPrivacyWebView = false
     @State private var isPresentSupportWebView = false
 
     var body: some View {
-        
-        if isLoading {
-            ProgressView()
-        }
-        
-        NavigationLink(destination: EmptyView()
-            .environmentObject(userViewModel)
-            .onAppear {
-                self.isLoading = false
-            }, isActive: $navigateToUserProfile) {
-            EmptyView()
-        }
-
-        
         List {
             Section(header: Text("내 정보")) {
-                Button(action: {
-                    self.isLoading = true
-                    // 잠시 후에 navigateToUserProfile을 true로 설정하여 이동을 트리거
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        self.navigateToUserProfile = true
-                    }
-                }) {
+                NavigationLink {
+                    EmptyView() // TODO: - UpdateProfileView로 변경
+                } label: {
                     HStack {
                         Image(systemName: "person.circle")
                         Text("내 프로필 수정")
                     }
                 }
-                
-                NavigationLink(destination: BlockedListView()) {
+                NavigationLink {
+                    BlockedListView()
+                } label: {
                     HStack {
                         Image(systemName: "person.crop.circle.badge.xmark")
                         Text("차단 목록")
                     }
                 }
-                NavigationLink(destination: ReportListView()) {
+                NavigationLink {
+                    ReportListView()
+                } label: {
                     HStack {
                         Image(systemName: "exclamationmark.bubble")
                         Text("신고 목록")

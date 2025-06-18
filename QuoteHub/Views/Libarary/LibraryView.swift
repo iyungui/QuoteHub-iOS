@@ -212,7 +212,8 @@ struct LibraryView: View {
                 LibraryThemesListView(isMy: isMyLibrary, loadType: loadType)
             }
         } else if selectedView == 2 {   // 키워드별 북스토리 기록
-            KeywordGroupedStoriesView(isMy: isMyLibrary, loadType: loadType)
+//            KeywordGroupedStoriesView(isMy: isMyLibrary, loadType: loadType)
+            EmptyView()
         }
     }
     

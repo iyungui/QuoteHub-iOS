@@ -1,5 +1,5 @@
 ////
-////  UserProfileView.swift
+////  UpdateProfileView.swift
 ////  QuoteHub
 ////
 ////  Created by 이융의 on 2023/10/02.
@@ -75,7 +75,7 @@
 //}
 //
 //
-//struct UserProfileView: View {
+//struct UpdateProfileView: View {
 //    @EnvironmentObject var userViewModel: UserViewModel
 //    
 //    @State private var inputImage: UIImage?
