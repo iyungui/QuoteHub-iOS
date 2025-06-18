@@ -7,137 +7,187 @@
 
 import SwiftUI
 
-enum LoadType: Equatable, Hashable {
+// Sendable: A thread-safe type whose values can be shared across arbitrary concurrent contexts without introducing a risk of data races.
+enum LoadType: Equatable, Hashable, Sendable {
     case my
     case friend(String) // friendID
     case `public`
 }
 
-class BookStoriesViewModel: ObservableObject, LoadingViewModel {
+@MainActor  // 클래스의 모든 메서드와 프로퍼티가 메인 스레드에서 실행됨을 보장
+@Observable // SwiftUI 뷰가 필요한 프로퍼티 변경시에만 리렌더링, 효율적
+class BookStoriesViewModel: LoadingViewModel {
     // MARK: - LoadingViewModel Protocol
-    @Published var isLoading = false
-    @Published var loadingMessage: String?
+    var isLoading = false
+    var loadingMessage: String?
     
-    // MARK: - PROPERTIES
-    @Published var storiesByType: [LoadType: [BookStory]] = [:]
-    @Published var isLastPage = false
-    @Published var errorMessage: String?
-
+    // MARK: - PUBLISHED PROPERTIES
+    var storiesByType: [LoadType: [BookStory]] = [:]
+    /// 페이지네이션(무한스크롤) 할 때 필요한 프로퍼티
+    var isLastPage = false
+    var errorMessage: String?
+    
     /// 북스토리 생성, 수정 후 해당 북스토리로 navigation 하기 위한 프로퍼티
-    @Published var lastCreatedStory: BookStory?
+    var lastCreatedStory: BookStory?
     
+    // MARK: - PRIVATE PROPERTIES
     private var currentPage = 1
-    private let pageSize = 10
-    private var service = BookStoryService()
+    private let pageSize = 10   // pageSize는 고정
+    private let service: BookStoryServiceProtocol
     
+    /// 테마 ID - 테마 ID가 있으면, 테마별 북스토리로 조회
     private var themeId: String?
+    
+    /// 검색 키워드 - 키워드가 있으면, 키워드별 북스토리로 조회
     private var searchKeyword: String?
     
+    /// 현재 북스토리 로드 타입 (기본 my)
     private var currentStoryType: LoadType = .my
 
-    init(themeId: String? = nil, searchKeyword: String? = nil) {
+    // MARK: - TASK MANAGEMENT
+    
+    /// 각 LoadType(my, friend, public)별로 하나의 로딩 Task만 허용.
+    /// 같은 타입의 데이터를 동시에 여러 번 로딩하지 않도록 방지
+    private var loadingTasks: [LoadType: Task<Void, Never>] = [:]
+    
+    /// 생성/수정/삭제 작업들을 추적.
+    /// Set을 사용해 완료된 Task는 자동으로 제거
+    private var operationTasks: Set<Task<Bool, Never>> = []
+    
+    
+    // MARK: - Initialization
+    init(
+        service: BookStoryServiceProtocol = BookStoryService(),
+        themeId: String? = nil,
+        searchKeyword: String? = nil
+    ) {
+        self.service = service
         self.themeId = themeId
         self.searchKeyword = searchKeyword
     }
     
-    // 뷰에서 사용할 현재 타입의 북스토리들
+    /// 메모리누수 방지위해, 뷰모델이 해제될 때 모든 실행 중인 Task 취소
+//    deinit {
+//        for task in loadingTasks.values {
+//            task.cancel()
+//        }
+//        
+//        for task in operationTasks {
+//            task.cancel()
+//        }
+//    }
+    
+    // MARK: - PUBLIC METHODS
+    
+    /// 뷰에서 사용할 현재 타입의 북스토리들
     func bookStories(for type: LoadType) -> [BookStory] {
         return storiesByType[type] ?? []
     }
     
+    /// 검색키워드 업데이트
     func updateSearchKeyword(_ keyword: String) {
         self.searchKeyword = keyword
     }
-
-    /// 새로고침 (북스토리 타입 파라미터로 받음)
+    
+    /// 새로고침 (북스토리 로드 타입 파라미터로 받음)
     func refreshBookStories(type: LoadType) {
+        // 기존 로딩 Task 취소
+        cancelLoadingTask(for: type)
+        // 기존 작업 Task도 취소? 혹은 실행 중인지 확인
+        
         currentStoryType = type
         currentPage = 1
         isLastPage = false
-        isLoading = false
         
         // 해당 타입의 데이터만 초기화
         storiesByType[type] = []
+        
+        // 북스토리 로드
         loadBookStories(type: type)
     }
     
     // MARK: - LOAD STORIES
     
+    /// 타입 바뀌면 상태 초기화하기,
+    /// 빈 키워드일 경우 return,
+    /// 테스크로딩중이거나 마지막페이지라면 return,
+    /// task 생성 및 실행까지
     func loadBookStories(type: LoadType) {
         print(#fileID, #function, #line, "- ")
         
         // 타입이 바뀐 경우 상태 초기화
         if currentStoryType != type {
+            /// 타입이 바뀌면 기존 로딩(예전 타입의 로딩)을 캔슬!
+            cancelLoadingTask(for: currentStoryType)
             currentStoryType = type
             currentPage = 1
             isLastPage = false
-            isLoading = false
         }
         
-        guard !isLoading && !isLastPage else { return }
+        // 이미 해당 타입의 북스토리를 로딩 중이 아니어야 하고,
+        // 마지막 페이지가 아니어야 함
+        guard loadingTasks[type] == nil && !isLastPage else {
+            return
+        }
         
+        // 빈 키워드면 로드할 필요없으므로 return
         if searchKeyword?.isEmpty == true {
             return
         }
         
-        isLoading = true
-        loadingMessage = "북스토리를 불러오는 중..."
-                
-        let completion: (Result<BookStoriesResponse, Error>) -> Void = { [weak self] result in
-            guard let self = self else { return }
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let response):
-                    // 해당 타입의 기존 데이터에 추가
-                    var existingStories = self.storiesByType[type] ?? []
-                    existingStories.append(contentsOf: response.data)
-                    self.storiesByType[type] = existingStories
-                    
-                    self.isLastPage = response.pagination.currentPage >= response.pagination.totalPages
-                    self.currentPage += 1
-                    
-//                    sleep(1)
-                    self.isLoading = false
-                    self.loadingMessage = nil
-                case .failure(let error):
-                    print("Error loading book stories (\(type)): \(error)")
-                    self.isLoading = false
-                    self.loadingMessage = nil
-                    self.errorMessage = "북스토리를 불러오는 중 오류가 발생했습니다."
-                }
-            }
+        // 여기까지는, 타입만 업데이트되었거나 변화없음
+        // 이제 로딩 Task 생성 및 실행!
+        let task = Task { @MainActor in
+            // MainActor에서 실행되는 북스토리 로드 테스크
+            await performLoadBookStories(type: type)
         }
         
-        // 내 북스토리만, or 친구의 북스토리만 or 모든 사용자의 북스토리만 조회
-        switch type {
-        case .my:
-            if let themeId = themeId {    // 테마에서 북스토리 조회하는 경우
-                service.getMyStoriesByFolder(folderId: themeId, page: currentPage, pageSize: pageSize, completion: completion)
-            } else if let searchKeyword = searchKeyword {   // 키워드로 북스토리 조회하는 경우
-                service.getAllmyStoriesKeyword(keyword: searchKeyword, page: currentPage, pageSize: pageSize, completion: completion)
-            } else {    // 내 북스토리 다 조회하기
-                service.fetchMyBookStories(page: currentPage, pageSize: pageSize, completion: completion)
-            }
-        case .friend(let friendId):
-            if let themeId = themeId {
-                service.getFriendStoriesByFolder(folderId: themeId, friendId: friendId, page: currentPage, pageSize: pageSize, completion: completion)
-            } else if let searchKeyword = searchKeyword {
-                service.getAllFriendStoriesKeyword(friendId: friendId, keyword: searchKeyword, page: currentPage, pageSize: pageSize, completion: completion)
-            } else {
-                service.fetchFriendBookStories(friendId: friendId, page: currentPage, pageSize: pageSize, completion: completion)
-            }
-        case .public:
-            if let themeId = themeId {
-                service.getAllStoriesByFolder(folderId: themeId, page: currentPage, pageSize: pageSize, completion: completion)
-            } else if let searchKeyword = searchKeyword {
-                service.getAllPublicStoriesKeyword(keyword: searchKeyword, page: currentPage, pageSize: pageSize, completion: completion)
-            } else {
-                service.fetchPublicBookStories(page: currentPage, pageSize: pageSize, completion: completion)
-            }
-        }
+        loadingTasks[type] = task
     }
     
-    /// for pagination
+    /// 로딩상태 설정 및 초기화,
+    /// Task 실행(fetchBookStoriesForType)하고 await
+    /// Task가 취소된 경우 바로 return
+    /// 서버 응답을 로컬 북스토리에 업데이트
+    private func performLoadBookStories(type: LoadType) async {
+        isLoading = true
+        loadingMessage = "북스토리를 불러오는 중..."
+        clearErrorMessage()
+        
+        // 함수가 종료될 때 실행
+        // 로딩 상태 초기화
+        defer {
+            isLoading = false
+            loadingMessage = nil
+            loadingTasks[type] = nil
+        }
+        
+        do {
+            let response = try await fetchBookStoriesForType(type)
+            
+            // Task가 취소되었는지 확인
+            try Task.checkCancellation()
+            
+            // 기존 데이터에 추가
+            var existingStories = storiesByType[type] ?? []
+            existingStories.append(contentsOf: response.data)
+            storiesByType[type] = existingStories
+            
+            // 페이지네이션 상태 업데이트
+            isLastPage = response.pagination.currentPage >= response.pagination.totalPages
+            if !isLastPage {
+                currentPage += 1
+            }
+        } catch is CancellationError {
+            // Task가 취소된 경우 - 아무것도 하지 않고 리턴
+            return
+        } catch {
+            print("북스토리 로드 실패: type: \(type), error: \(error)")
+            handleError(error)
+        }
+    }
+     
+    /// for Pagianation
     func loadMoreIfNeeded(currentItem item: BookStory?, type: LoadType) {
         print(#fileID, #function, #line, "- ")
         guard let item = item else { return }
@@ -147,44 +197,8 @@ class BookStoriesViewModel: ObservableObject, LoadingViewModel {
             loadBookStories(type: type)
         }
     }
-    
-    // MARK: - HELPER METHODS FOR MULTI TYPE UPDATES
-    
-    // 스토리를 my 타입과 (isPublic일 경우) public 타입에 추가하는 메서드
-    private func addStoryToTypes(_ story: BookStory) {
-        // my 타입에 추가
-        var myStories = storiesByType[.my] ?? []
-        myStories.insert(story, at: 0)
-        storiesByType[.my] = myStories
-        
-        // isPublic인 경우 .public에도 추가 -- 스토리 추가하면 홈뷰에도 바로뜨도록
-        if story.isPublic {
-            var publicStories = storiesByType[.public] ?? []
-            publicStories.insert(story, at: 0)
-            storiesByType[.public] = publicStories
-        }
-    }
-    
-    // 스토리를 관련된 타입들에서 삭제
-    private func removeStoryFromTypes(storyID: String) {
-        // 모든 타입에서 해당 스토리 삭제
-        for (type, stories) in storiesByType {
-            var updatedStories = stories
-            updatedStories.removeAll { $0.id == storyID }
-            storiesByType[type] = updatedStories
-        }
-    }
-    
-    // 스토리를 관련된 타입들에서 업데이트
-    private func updateStoryInTypes(_ story: BookStory) {
-        // 먼저 모든 타입에서 해당 스토리 제거 -> O(n)
-        removeStoryFromTypes(storyID: story.id)
-        
-        // 새로운 상태에 맞게 다시 추가 (0번째에 다시 추가함. 만약 이번에 isPublic이 아니면, public 타입에는 추가되지 않음)
-        addStoryToTypes(story)
-    }
-    
-    // MARK: - CREATE NEW STORY
+
+    // MARK: - CREATE STORY
     
     func createBookStory(
         bookId: String,
@@ -193,91 +207,80 @@ class BookStoriesViewModel: ObservableObject, LoadingViewModel {
         content: String?,
         isPublic: Bool,
         keywords: [String]?,
-        themeIds: [String]?,
-        completion: @escaping (Bool) -> Void
-    ) {
-        print(#fileID, #function, #line, "- ")
+        themeIds: [String]?
+    ) async -> Bool {
+        let task = Task { @MainActor in
+            await performCreateBookStory(
+                bookId: bookId,
+                quotes: quotes,
+                images: images,
+                content: content,
+                isPublic: isPublic,
+                keywords: keywords,
+                themeIds: themeIds
+            )
+        }
         
+        operationTasks.insert(task)
+        let result = await task.value
+        operationTasks.remove(task)
+        
+        return result
+    }
+    
+    private func performCreateBookStory(
+        bookId: String,
+        quotes: [Quote],
+        images: [UIImage]?,
+        content: String?,
+        isPublic: Bool,
+        keywords: [String]?,
+        themeIds: [String]?
+    ) async -> Bool {
         isLoading = true
         loadingMessage = "북스토리를 등록하는 중..."
+        clearErrorMessage()
         
-        service.createBookStory(
-            images: images,
-            bookId: bookId,
-            quotes: quotes,
-            content: content,
-            isPublic: isPublic,
-            keywords: keywords,
-            themeIds: themeIds
-        ) { [weak self] result in
-            guard let self = self else { return }
-
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let bookStoryResponse):
-                    guard let newStory = bookStoryResponse.data else {
-                        self.isLoading = false
-                        self.loadingMessage = nil
-                        completion(false)
-                        return
-                    }
-                    
-                    // (my 타입과 공개인 경우 public 타입에 새 스토리 추가하기)
-                    self.addStoryToTypes(newStory)
-                    self.lastCreatedStory = newStory
-                    
-                    self.isLoading = false
-                    self.loadingMessage = nil
-                    
-                    print("북스토리 생성 완료")
-                    completion(true)
-                case .failure(let error):
-                    self.isLoading = false
-                    self.loadingMessage = nil
-                    
-                    print("북스토리 생성 실패 - \(error.localizedDescription)")
-                    completion(false)
-                }
+        defer {
+            isLoading = false
+            loadingMessage = nil
+        }
+        
+        do {
+            let response = try await service.createBookStory(
+                images: images,
+                bookId: bookId,
+                quotes: quotes,
+                content: content,
+                isPublic: isPublic,
+                keywords: keywords,
+                themeIds: themeIds
+            )
+            
+            try Task.checkCancellation()
+            
+            guard let newStory = response.data else {
+                errorMessage = "북스토리 생성에 실패했습니다."
+                return false
             }
+            
+            // 스토리를 관련 타입에 추가
+            addStoryToTypes(newStory)
+            lastCreatedStory = newStory
+            
+            print("북스토리 생성 완료")
+            return true
+            
+        } catch is CancellationError {
+            return false
+        } catch {
+            print("북스토리 생성 실패 - \(error.localizedDescription)")
+            handleError(error)
+            return false
         }
     }
     
-    // MARK: - DELETE MY STORY
-    
-    func deleteBookStory(storyID: String, completion: @escaping (Bool) -> Void) {
-        print(#fileID, #function, #line, "- ")
-        
-        isLoading = true
-        loadingMessage = "북스토리를 삭제하는 중..."
-        
-        service.deleteBookStory(storyID: storyID) { [weak self] result in
-            guard let self = self else { return }
-            DispatchQueue.main.async {
-                switch result {
-                case .success(_):
-                    /// 해당 삭제된 북스토리를 로컬에서도 바로 삭제
-                    
-                    // 모든 타입에서 해당 스토리 삭제 (my + public)
-                    self.removeStoryFromTypes(storyID: storyID)
-                    
-                    self.isLoading = false
-                    self.loadingMessage = nil
-                    
-                    print("북스토리 삭제 성공")
-                    completion(true)    // 함수 종료
-                case .failure(let error):
-                    self.isLoading = false
-                    self.loadingMessage = nil
-                    self.isLastPage = false
-                    
-                    print("북스토리 삭제 실패 - \(error.localizedDescription)")
-                    completion(false)
-                }
-            }
-        }
-    }
-    
-    // MARK: - UPDATE MY STORY
+    // MARK: - Update Story
     
     func updateBookStory(
         storyID: String,
@@ -286,90 +289,292 @@ class BookStoriesViewModel: ObservableObject, LoadingViewModel {
         content: String?,
         isPublic: Bool,
         keywords: [String]?,
-        themeIds: [String]?,
-        completion: @escaping (Bool) -> Void
-    ) {
-        print(#fileID, #function, #line, "- ")
+        themeIds: [String]?
+    ) async -> Bool {
+        let task = Task { @MainActor in
+            await performUpdateBookStory(
+                storyID: storyID,
+                quotes: quotes,
+                images: images,
+                content: content,
+                isPublic: isPublic,
+                keywords: keywords,
+                themeIds: themeIds
+            )
+        }
         
+        operationTasks.insert(task)
+        let result = await task.value
+        operationTasks.remove(task)
+        
+        return result
+    }
+    
+    private func performUpdateBookStory(
+        storyID: String,
+        quotes: [Quote],
+        images: [UIImage]?,
+        content: String?,
+        isPublic: Bool,
+        keywords: [String]?,
+        themeIds: [String]?
+    ) async -> Bool {
         isLoading = true
         loadingMessage = "북스토리를 수정하는 중..."
+        clearErrorMessage()
         
-        service.updateBookStory(
-            storyID: storyID,
-            quotes: quotes,
-            images: images,
-            content: content,
-            isPublic: isPublic,
-            keywords: keywords,
-            themeIds: themeIds
-        ) { [weak self] result in
-            guard let self = self else { return }
+        defer {
+            isLoading = false
+            loadingMessage = nil
+        }
+        
+        do {
+            let response = try await service.updateBookStory(
+                storyId: storyID,
+                quotes: quotes,
+                images: images,
+                content: content,
+                isPublic: isPublic,
+                keywords: keywords,
+                themeIds: themeIds
+            )
             
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let updatedStoryResponse):
-                    guard let updatedStory = updatedStoryResponse.data else {
-                        self.isLoading = false
-                        self.loadingMessage = nil
-                        completion(false)
-                        return
-                    }
-                    
-                    // 관련된 타입에서 스토리 업데이트
-                    self.updateStoryInTypes(updatedStory)
-                    self.lastCreatedStory = updatedStory
-                    self.isLoading = false
-                    self.loadingMessage = nil
-                    
-                    print("북스토리 업데이트 성공")
-                    completion(true)
-                    
-                case .failure(let error):
-                    self.isLoading = false
-                    self.loadingMessage = nil
-                
-                    print("북스토리 업데이트 실패: \(error.localizedDescription)")
-                    completion(false)
-                }
+            try Task.checkCancellation()
+            
+            guard let updatedStory = response.data else {
+                errorMessage = "북스토리 수정에 실패했습니다."
+                return false
             }
+            
+            // 스토리 업데이트
+            updateStoryInTypes(updatedStory)
+            lastCreatedStory = updatedStory
+            
+            print("북스토리 업데이트 성공")
+            return true
+            
+        } catch is CancellationError {
+            return false
+        } catch {
+            print("북스토리 업데이트 실패: \(error.localizedDescription)")
+            errorMessage = "북스토리 수정 중 오류가 발생했습니다."
+            return false
+        }
+    }
+    
+    // MARK: - Delete Story
+    
+    func deleteBookStory(storyID: String) async -> Bool {
+        let task = Task { @MainActor in
+            await performDeleteBookStory(storyID: storyID)
+        }
+        
+        operationTasks.insert(task)
+        let result = await task.value
+        operationTasks.remove(task)
+        
+        return result
+    }
+    
+    private func performDeleteBookStory(storyID: String) async -> Bool {
+        isLoading = true
+        loadingMessage = "북스토리를 삭제하는 중..."
+        clearErrorMessage()
+        
+        defer {
+            isLoading = false
+            loadingMessage = nil
+        }
+        
+        do {
+            _ = try await service.deleteBookStory(storyId: storyID)
+            
+            try Task.checkCancellation()
+            
+            // 로컬에서 스토리 삭제
+            removeStoryFromTypes(storyID: storyID)
+            
+            print("북스토리 삭제 성공")
+            return true
+            
+        } catch is CancellationError {
+            return false
+        } catch {
+            handleError(error)
+            return false
+        }
+    }
+    
+    // MARK: - Fetch Specific Story
+    
+    func fetchSpecificBookStory(storyId: String) async -> BookStory? {
+        isLoading = true
+        loadingMessage = "북스토리를 불러오는 중..."
+        clearErrorMessage()
+        
+        defer {
+            isLoading = false
+            loadingMessage = nil
+        }
+        
+        do {
+            let response = try await service.fetchSpecificBookStory(storyId: storyId)
+            
+            try Task.checkCancellation()
+            
+            if let story = response.data {
+                return story
+            } else {
+                errorMessage = "북스토리를 찾을 수 없습니다."
+                return nil
+            }
+            
+        } catch is CancellationError {
+            return nil
+        } catch {
+            handleError(error)
+            return nil
         }
     }
 }
 
-extension BookStoriesViewModel {
+// MARK: - Private Helper Methods
+
+private extension BookStoriesViewModel {
     
-    // MARK: - FETCH SPECIFIC STORY
-    
-    func fetchSpecificBookStory(storyId: String, completion: @escaping (Result<BookStory, Error>) -> Void) {
-        print(#fileID, #function, #line, "- ")
-        
-        isLoading = true
-        loadingMessage = "북스토리를 불러오는 중..."
-        
-        service.fetchSpecificBookStory(storyId: storyId) { [weak self] result in
-            guard let self = self else { return }
-            
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let bookStoryResponse):
-                    self.isLoading = false
-                    self.loadingMessage = nil
-                    
-                    if let story = bookStoryResponse.data {
-                        completion(.success(story))
-                    } else {
-                        let error = NSError(domain: "BookStoriesViewModel", code: -1, userInfo: [NSLocalizedDescriptionKey: "Story data not found"])
-                        completion(.failure(error))
-                    }
-                    
-                case .failure(let error):
-                    self.isLoading = false
-                    self.loadingMessage = nil
-                    
-                    print("북스토리 로드 실패: \(error.localizedDescription)")
-                    completion(.failure(error))
-                }
+    /// 타입에 따른 북스토리 fetch
+    func fetchBookStoriesForType(_ type: LoadType) async throws -> PaginatedAPIResponse<BookStory> {
+        switch type {
+        case .my:
+            if let themeId = themeId {
+                return try await service.fetchMyBookStoriesByTheme(
+                    themeId: themeId,
+                    page: currentPage,
+                    pageSize: pageSize
+                )
+            } else if let searchKeyword = searchKeyword {
+                return try await service.fetchMyBookStoriesByKeyword(
+                    keyword: searchKeyword,
+                    page: currentPage,
+                    pageSize: pageSize
+                )
+            } else {
+                return try await service.fetchMyBookStories(
+                    page: currentPage,
+                    pageSize: pageSize
+                )
             }
+            
+        case .friend(let friendId):
+            if let themeId = themeId {
+                return try await service.fetchFriendBookStoriesByTheme(
+                    themeId: themeId,
+                    friendId: friendId,
+                    page: currentPage,
+                    pageSize: pageSize
+                )
+            } else if let searchKeyword = searchKeyword {
+                return try await service.fetchFriendBookStoriesByKeyword(
+                    friendId: friendId,
+                    keyword: searchKeyword,
+                    page: currentPage,
+                    pageSize: pageSize
+                )
+            } else {
+                return try await service.fetchFriendBookStories(
+                    friendId: friendId,
+                    page: currentPage,
+                    pageSize: pageSize
+                )
+            }
+            
+        case .public:
+            if let themeId = themeId {
+                return try await service.fetchPublicBookStoriesByTheme(
+                    themeId: themeId,
+                    page: currentPage,
+                    pageSize: pageSize
+                )
+            } else if let searchKeyword = searchKeyword {
+                return try await service.fetchPublicBookStoriesByKeyword(
+                    keyword: searchKeyword,
+                    page: currentPage,
+                    pageSize: pageSize
+                )
+            } else {
+                return try await service.fetchPublicBookStories(
+                    page: currentPage,
+                    pageSize: pageSize
+                )
+            }
+        }
+    }
+    
+    /// 스토리를 my 타입과 (isPublic일 경우) public 타입에 추가
+    func addStoryToTypes(_ story: BookStory) {
+        // my 타입에 추가
+        var myStories = storiesByType[.my] ?? []
+        myStories.insert(story, at: 0)
+        storiesByType[.my] = myStories
+        
+        // isPublic인 경우 .public에도 추가
+        if story.isPublic {
+            var publicStories = storiesByType[.public] ?? []
+            publicStories.insert(story, at: 0)
+            storiesByType[.public] = publicStories
+        }
+    }
+    
+    /// 스토리를 관련된 타입들에서 삭제 (북스토리 삭제/업데이트 시 사용)
+    func removeStoryFromTypes(storyID: String) {
+        for (type, stories) in storiesByType {
+            var updatedStories = stories
+            updatedStories.removeAll { $0.id == storyID }
+            storiesByType[type] = updatedStories
+        }
+    }
+    
+    /// 스토리를 관련된 타입들에서 업데이트 (북스토리 업데이트 시 사용)
+    func updateStoryInTypes(_ story: BookStory) {
+        // 먼저 모든 타입에서 해당 스토리 제거
+        removeStoryFromTypes(storyID: story.id)
+        
+        // 새로운 상태에 맞게 다시 추가
+        addStoryToTypes(story)
+    }
+    
+    /// 특정 타입의 로딩 Task 취소
+    func cancelLoadingTask(for type: LoadType) {
+        loadingTasks[type]?.cancel()
+        loadingTasks[type] = nil
+    }
+    
+    /// 모든 Task 취소
+    func cancelAllTasks() {
+        // 로딩 Task들 취소
+        for task in loadingTasks.values {
+            task.cancel()
+        }
+        loadingTasks.removeAll()
+        
+        // 작업 Task들 취소
+        for task in operationTasks {
+            task.cancel()
+        }
+        operationTasks.removeAll()
+    }
+    
+    /// 에러 메시지 초기화
+    func clearErrorMessage() {
+        errorMessage = nil
+    }
+    
+    /// 에러 처리
+    private func handleError(_ error: Error) {
+        if let networkError = error as? NetworkError {
+            errorMessage = networkError.localizedDescription
+        } else {
+            errorMessage = "알 수 없는 오류가 발생했습니다.: \(error.localizedDescription)"
         }
     }
 }
