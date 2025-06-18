@@ -55,7 +55,9 @@ struct BookStoryDetailView: View {
         // 북스토리 수정, 차단 액션 시트
         .confirmationDialog(Text(""), isPresented: $detailViewModel.showActionSheet) { actionSheetView
         }
-        
+        .alert("알림", isPresented: $detailViewModel.showAlert) {
+            Button(role: .cancel) {} label: { Text("확인") }
+        } message: { Text(detailViewModel.alertMessage) }
         // 댓글창
         .sheet(isPresented: $detailViewModel.isCommentSheetExpanded) {
             CommentView(viewModel: commentViewModel)

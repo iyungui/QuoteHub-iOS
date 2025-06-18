@@ -44,6 +44,7 @@
 		CE1100F72E02816A003C592E /* ReadingLevelSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100F22E02816A003C592E /* ReadingLevelSection.swift */; };
 		CE1100F82E02816A003C592E /* ReadingProgressSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100F32E02816A003C592E /* ReadingProgressSection.swift */; };
 		CE1100FA2E028257003C592E /* BookSearchResultRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100F92E028257003C592E /* BookSearchResultRowView.swift */; };
+		CE1100FC2E02F188003C592E /* RequestBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100FB2E02F188003C592E /* RequestBody.swift */; };
 		CE4FEF5B2DF925EE0072E8B9 /* RoundedCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */; };
 		CE4FEF5D2DF93F260072E8B9 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF5C2DF93F260072E8B9 /* HiddenModifier.swift */; };
 		CE4FEF812DFA90D80072E8B9 /* AchievementBadgesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */; };
@@ -178,6 +179,7 @@
 		CE1100F22E02816A003C592E /* ReadingLevelSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingLevelSection.swift; sourceTree = "<group>"; };
 		CE1100F32E02816A003C592E /* ReadingProgressSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingProgressSection.swift; sourceTree = "<group>"; };
 		CE1100F92E028257003C592E /* BookSearchResultRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookSearchResultRowView.swift; sourceTree = "<group>"; };
+		CE1100FB2E02F188003C592E /* RequestBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestBody.swift; sourceTree = "<group>"; };
 		CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorner.swift; sourceTree = "<group>"; };
 		CE4FEF5C2DF93F260072E8B9 /* HiddenModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenModifier.swift; sourceTree = "<group>"; };
 		CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementBadgesView.swift; sourceTree = "<group>"; };
@@ -458,6 +460,7 @@
 			children = (
 				CE8C47962DEA8D97003188ED /* APIClient.swift */,
 				CE8C479A2DEA8D97003188ED /* NetworkError.swift */,
+				CE1100FB2E02F188003C592E /* RequestBody.swift */,
 				CEA554DF2E019FBD0029A8A9 /* Services */,
 				CEA554E02E01A08D0029A8A9 /* Endpoints */,
 			);
@@ -844,6 +847,7 @@
 				CE8C483C2DEA8DAE003188ED /* WebView.swift in Sources */,
 				C67AA3C92AE3839F00490DDE /* BookSearchService.swift in Sources */,
 				CE1100FA2E028257003C592E /* BookSearchResultRowView.swift in Sources */,
+				CE1100FC2E02F188003C592E /* RequestBody.swift in Sources */,
 				C6DE7F612AF7C2940020F5CB /* CommentViewModel.swift in Sources */,
 				C697D1002AC9535B00F0111B /* BookStoryService.swift in Sources */,
 				CE8C48672DEB0F53003188ED /* ButtonStyle.swift in Sources */,

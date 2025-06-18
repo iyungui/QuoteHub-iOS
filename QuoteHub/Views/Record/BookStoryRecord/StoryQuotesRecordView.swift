@@ -61,8 +61,8 @@ struct StoryQuotesRecordView: View {
         .task {
             await loadStoryDataIfNeeded()
         }
-        .progressOverlay(viewModel: storiesViewModel, opacity: false)
         .environmentObject(formViewModel)
+        .progressOverlay(viewModel: storiesViewModel, opacity: false)
     }
     
     private var toolBarItems: some ToolbarContent {
@@ -82,7 +82,8 @@ struct StoryQuotesRecordView: View {
             
             ToolbarItem(placement: .navigation) {
                 if let message = formViewModel.feedbackMessage, !formViewModel.isQuotesFilled {
-                    FeedbackView(message: message)
+                    FeedbackView(message: message).environmentObject(formViewModel)
+
                 }
             }
             
@@ -109,6 +110,7 @@ struct StoryQuotesRecordView: View {
     private var nextButton: some View {
         NavigationLink {
             StorySettingRecordView(book: book, storyId: storyId)
+                .environmentObject(formViewModel)
         } label: {
             Text("다음")
                 .foregroundStyle(formViewModel.isQuotesFilled ? Color.blue : Color.gray.opacity(0.7))

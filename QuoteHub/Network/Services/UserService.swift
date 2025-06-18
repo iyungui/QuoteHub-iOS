@@ -25,46 +25,45 @@ final class UserService: UserServiceProtocol {
     func getProfile(userId: String?) async throws -> APIResponse<User> {
         return try await apiClient.request(
             endpoint: UserEndpoints.getProfile(userId: userId),
-            body: EmptyData(),
+            body: .empty,
             responseType: APIResponse<User>.self
         )
     }
     
     func updateProfile(nickname: String, profileImage: UIImage?, statusMessage: String) async throws -> APIResponse<User> {
+        let requestBody: RequestBody
         
         if let profileImage = profileImage {
             // 이미지가 있는 경우 multipart 요청
-            return try await apiClient.requestWithMultipart(
-                endpoint: UserEndpoints.updateProfile,
+            requestBody = .multipart(
                 textFields: [
                     "nickname": nickname,
                     "statusMessage": statusMessage
                 ],
-                imageFields: [
+                singleImages: [
                     "profileImage": profileImage
-                ],
-                responseType: APIResponse<User>.self
+                ]
             )
         } else {
-            // 이미지가 없는 경우
-            let requestBody: [String: String] = [
+            // 이미지가 없는 경우 JSON 요청
+            requestBody = .dictionary([
                 "nickname": nickname,
                 "statusMessage": statusMessage
-            ]
-            
-            return try await apiClient.request(
-                endpoint: UserEndpoints.updateProfile,
-                body: requestBody,
-                responseType: APIResponse<User>.self
-            )
+            ])
         }
+        
+        return try await apiClient.request(
+            endpoint: UserEndpoints.updateProfile,
+            body: requestBody,
+            responseType: APIResponse<User>.self
+        )
     }
     
     func searchUser(nickname: String) async throws -> APIResponse<[User]> {
         
         return try await apiClient.request(
             endpoint: UserEndpoints.searchUser(nickname: nickname),
-            body: EmptyData(),
+            body: .empty,
             responseType: APIResponse<[User]>.self
         )
     }
@@ -73,7 +72,7 @@ final class UserService: UserServiceProtocol {
         
         return try await apiClient.request(
             endpoint: UserEndpoints.getUserStoryCount(userId: userId),
-            body: EmptyData(),
+            body: .empty,
             responseType: APIResponse<Int>.self
         )
     }

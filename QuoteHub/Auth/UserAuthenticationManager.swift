@@ -171,9 +171,9 @@ final class UserAuthenticationManager: ObservableObject, LoadingViewModel {
     
     @MainActor
     func goToMainView() {
+        tabController.selectedTab = 0   // 라이브러리뷰로 이동
+
         isUserAuthenticated = true
         showingLoginView = false
-        
-        tabController.selectedTab = 0   // 라이브러리뷰로 이동
     }
 }

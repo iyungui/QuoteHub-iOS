@@ -20,7 +20,7 @@ final class BookSearchService: BookSearchServiceProtocol {
         print("query: \(query), page: \(page)")
         return try await apiClient.request(
             endpoint: BookSearchEndpoints.searchBook(query: query, page: page),
-            body: EmptyData(),
+            body: .empty,
             responseType: APIResponse<BooksResponse>.self
         )
     }
@@ -28,7 +28,7 @@ final class BookSearchService: BookSearchServiceProtocol {
     func getRandomBooks() async throws -> APIResponse<[Book]> {
         return try await apiClient.request(
             endpoint: BookSearchEndpoints.recommendBooks,
-            body: EmptyData(),
+            body: .empty,
             responseType: APIResponse<[Book]>.self
         )
     }

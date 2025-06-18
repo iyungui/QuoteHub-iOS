@@ -13,6 +13,7 @@ struct StorySettingRecordView: View {
     var isEditMode: Bool { storyId != nil }
     
     @EnvironmentObject private var formViewModel: StoryFormViewModel
+    
     @Environment(BookStoriesViewModel.self) private var storiesViewModel
     @EnvironmentObject var tabController: TabController
     

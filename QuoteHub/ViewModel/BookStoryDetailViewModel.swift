@@ -137,7 +137,7 @@ private extension BookStoryDetailViewModel {
             loadedImages = []
             return
         }
-        
+        print("이미지 배열: \(imageURLs)")
         // 기존 이미지 로딩 Task 취소
         imageLoadingTask?.cancel()
         

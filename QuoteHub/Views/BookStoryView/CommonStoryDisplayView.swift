@@ -14,6 +14,7 @@ struct CommonStoryDisplayView: View {
     
     @Environment(BookStoryDetailViewModel.self) private var detailViewModel
     @EnvironmentObject private var commentViewModel: CommentViewModel
+    @EnvironmentObject private var authManager: UserAuthenticationManager
     
     var body: some View {
         LazyVStack(alignment: .leading, spacing: 20) {
@@ -112,33 +113,33 @@ struct CommonStoryDisplayView: View {
     }
     
     private var profileSection: some View {
-        HStack(spacing: 16) {
-            ProfileImage(profileImageURL: story.userId.profileImage, size: 60)
-            VStack(alignment: .leading, spacing: 6) {
-                Text(story.userId.nickname)
-                    .font(.scoreDream(.bold, size: .body))
-                    .foregroundColor(.primaryText)
-                    .lineLimit(1)
-                    .truncationMode(.tail)
+        NavigationLink {
+            LibraryView(otherUser: isMyStory ? nil : story.userId)
+        } label: {
+            HStack(spacing: 16) {
+                ProfileImage(profileImageURL: story.userId.profileImage, size: 60)
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(story.userId.nickname)
+                        .font(.scoreDream(.bold, size: .body))
+                        .foregroundColor(.primaryText)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                    
+                    Text(story.userId.statusMessage ?? "")
+                        .font(.scoreDream(.medium, size: .subheadline))
+                        .foregroundColor(.secondaryText)
+                        .lineLimit(2)
+                }
                 
-                Text(story.userId.statusMessage ?? "")
-                    .font(.scoreDream(.medium, size: .subheadline))
-                    .foregroundColor(.secondaryText)
-                    .lineLimit(2)
-            }
-            
-            Spacer()
-            
-            NavigationLink(
-                destination: LibraryView(otherUser: isMyStory ? nil : story.userId)
-            ) {
+                Spacer()
+                
                 Image(systemName: "chevron.right")
                     .font(.caption.weight(.medium))
                     .foregroundColor(.secondaryText.opacity(0.6))
             }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 12)
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 12)
     }
 
     private var bookInfoSection: some View {
@@ -253,7 +254,11 @@ struct CommonStoryDisplayView: View {
     
     private var commentSheetToggleButton: some View {
         Button {
-            detailViewModel.toggleCommentSheet()
+            if authManager.isUserAuthenticated {
+                detailViewModel.toggleCommentSheet()
+            } else {
+                detailViewModel.showAlertWith(message: "로그인이 필요한 기능입니다.")
+            }
         } label: {
             HStack(spacing: 12) {
                 Image(systemName: "bubble.left.and.bubble.right.fill")

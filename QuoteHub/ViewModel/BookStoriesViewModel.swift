@@ -585,8 +585,10 @@ private extension BookStoriesViewModel {
     private func handleError(_ error: Error) {
         if let networkError = error as? NetworkError {
             errorMessage = networkError.localizedDescription
+            print("북스토리 생성 실패오류: - \(String(describing: errorMessage))")
         } else {
             errorMessage = "알 수 없는 오류가 발생했습니다.: \(error.localizedDescription)"
+            print("북스토리 생성 알수없는 실패오류: - \(String(describing: errorMessage))")
         }
     }
 }

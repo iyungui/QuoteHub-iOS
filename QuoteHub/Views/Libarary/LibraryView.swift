@@ -156,14 +156,13 @@ struct LibraryView: View {
             userViewModel.currentOtherUser = nil
             userViewModel.currentOtherUserStoryCount = nil
         }
-        
+        .environmentObject(followViewModel)
         // 여러 ViewModel 의 로딩 상태를 동시에 추적하고 로딩뷰 표시하는 모디파이어
         .progressOverlay(
             viewModels: userViewModel, storiesViewModel, themesViewModel,
             opacity: false
         )
         .navigationBarTitleDisplayMode(.inline)
-        .environmentObject(followViewModel)
     }
 
     /// main 컨텐츠

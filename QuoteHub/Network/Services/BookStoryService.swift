@@ -133,42 +133,45 @@ final class BookStoryService: BookStoryServiceProtocol {
             }
         }
         
-        // 텍스트 필드 설정
-        var textFields: [String: Any] = [
+        // 공통 필드 구성
+        var fields: [String: Any] = [
             "bookId": bookId,
-            "quotes": quotes,  // APIClient에서 JSON으로 변환
+            "quotes": quotes,
             "isPublic": isPublic
         ]
         
-        // 옵셔널 필드들 추가
         if let content = content, !content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            textFields["content"] = content
+            fields["content"] = content
         }
         
         if let keywords = keywords, !keywords.isEmpty {
-            textFields["keywords"] = keywords
+            fields["keywords"] = keywords
         }
         
         if let themeIds = themeIds, !themeIds.isEmpty {
-            textFields["folderIds"] = themeIds
+            fields["folderIds"] = themeIds
         }
         
-        // 이미지 필드 설정 (리사이즈는 APIClient에서 처리)
-        var imageFields: [String: UIImage] = [:]
+        // 요청 Body 타입 결정
+        let requestBody: RequestBody
+        
+        // 이미지가 있는 경우: Multipart 요청
         if let images = images, !images.isEmpty {
-            for (index, image) in images.enumerated() {
-                imageFields["storyImage\(index)"] = image
-            }
+            requestBody = .multipart(
+                textFields: fields,
+                imageArrays: ["storyImage": images] // storyImage 필드로 images 이미지를 업로드하겠다는 뜻
+            )
+        } else {
+            // 이미지가 없는 경우: JSON 요청
+            requestBody = .dictionary(fields)
         }
-        
-        return try await apiClient.requestWithMultipart(
+        return try await apiClient.request(
             endpoint: BookStoryEndpoints.createBookStory,
-            textFields: textFields,
-            imageFields: imageFields,
+            body: requestBody,
             responseType: APIResponse<BookStory>.self
         )
     }
-
+    
     /// 북스토리 수정
     func updateBookStory(
         storyId: String,
@@ -192,48 +195,52 @@ final class BookStoryService: BookStoryServiceProtocol {
             }
         }
         
-        // 텍스트 필드 설정 (업데이트할 필드만 포함)
-        var textFields: [String: Any] = [
-            "quotes": quotes,  // APIClient에서 JSON으로 변환
+        // 공통 필드 구성
+        var fields: [String: Any] = [
+            "quotes": quotes,
             "isPublic": isPublic
         ]
         
-        // 선택적 필드들 추가
         if let content = content {
-            textFields["content"] = content
+            fields["content"] = content
         }
         
         if let keywords = keywords {
-            textFields["keywords"] = keywords
+            fields["keywords"] = keywords
         }
         
         if let themeIds = themeIds {
-            textFields["folderIds"] = themeIds
+            fields["folderIds"] = themeIds
         }
         
-        // 이미지 필드 설정 (리사이즈는 APIClient에서 처리)
-        var imageFields: [String: UIImage] = [:]
+        // 요청 Body 타입 결정
+        let requestBody: RequestBody
+        
         if let images = images, !images.isEmpty {
-            for (index, image) in images.enumerated() {
-                imageFields["storyImage\(index)"] = image
-            }
+            // 이미지가 있는 경우: Multipart 요청
+            requestBody = .multipart(
+                textFields: fields,
+                imageArrays: ["storyImage": images]
+            )
+        } else {
+            // 이미지가 없는 경우: JSON 요청
+            requestBody = .dictionary(fields)
         }
         
-        return try await apiClient.requestWithMultipart(
+        return try await apiClient.request(
             endpoint: BookStoryEndpoints.updateBookStory(storyId: storyId),
-            textFields: textFields,
-            imageFields: imageFields,
+            body: requestBody,
             responseType: APIResponse<BookStory>.self
         )
     }
-    
+
     /// 내 북스토리 삭제
     func deleteBookStory(
         storyId: String
     ) async throws -> APIResponse<EmptyData> {
         return try await apiClient.request(
             endpoint: BookStoryEndpoints.deleteBookStory(storyId: storyId),
-            body: EmptyData(),
+            body: .empty,
             responseType: APIResponse<EmptyData>.self
         )
     }
@@ -244,7 +251,7 @@ final class BookStoryService: BookStoryServiceProtocol {
     ) async throws -> APIResponse<BookStory> {
         return try await apiClient.request(
             endpoint: BookStoryEndpoints.fetchSpecificBookStory(storyId: storyId),
-            body: EmptyData(),
+            body: .empty,
             responseType: APIResponse<BookStory>.self
         )
     }
@@ -256,7 +263,7 @@ final class BookStoryService: BookStoryServiceProtocol {
     ) async throws -> PaginatedAPIResponse<BookStory> {
         return try await apiClient.request(
             endpoint: BookStoryEndpoints.fetchPublicBookStories(page: page, pageSize: pageSize),
-            body: EmptyData(),
+            body: .empty,
             responseType: PaginatedAPIResponse<BookStory>.self
         )
     }
@@ -269,7 +276,7 @@ final class BookStoryService: BookStoryServiceProtocol {
     ) async throws -> PaginatedAPIResponse<BookStory> {
         return try await apiClient.request(
             endpoint: BookStoryEndpoints.fetchFriendBookStories(friendId: friendId, page: page, pageSize: pageSize),
-            body: EmptyData(),
+            body: .empty,
             responseType: PaginatedAPIResponse<BookStory>.self
         )
     }
@@ -281,7 +288,7 @@ final class BookStoryService: BookStoryServiceProtocol {
     ) async throws -> PaginatedAPIResponse<BookStory> {
         return try await apiClient.request(
             endpoint: BookStoryEndpoints.fetchMyBookStories(page: page, pageSize: pageSize),
-            body: EmptyData(),
+            body: .empty,
             responseType: PaginatedAPIResponse<BookStory>.self
         )
     }
@@ -293,7 +300,7 @@ final class BookStoryService: BookStoryServiceProtocol {
     ) async throws -> PaginatedAPIResponse<BookStory> {
         return try await apiClient.request(
             endpoint: BookStoryEndpoints.fetchPublicBookStoriesByKeyword(keyword: keyword, page: page, pageSize: pageSize),
-            body: EmptyData(),
+            body: .empty,
             responseType: PaginatedAPIResponse<BookStory>.self
         )
     }
@@ -306,7 +313,7 @@ final class BookStoryService: BookStoryServiceProtocol {
     ) async throws -> PaginatedAPIResponse<BookStory> {
         return try await apiClient.request(
             endpoint: BookStoryEndpoints.fetchFriendBookStoriesByKeyword(friendId: friendId, keyword: keyword, page: page, pageSize: pageSize),
-            body: EmptyData(),
+            body: .empty,
             responseType: PaginatedAPIResponse<BookStory>.self
         )
     }
@@ -318,7 +325,7 @@ final class BookStoryService: BookStoryServiceProtocol {
     ) async throws -> PaginatedAPIResponse<BookStory> {
         return try await apiClient.request(
             endpoint: BookStoryEndpoints.fetchMyBookStoriesByKeyword(keyword: keyword, page: page, pageSize: pageSize),
-            body: EmptyData(),
+            body: .empty,
             responseType: PaginatedAPIResponse<BookStory>.self
         )
     }
@@ -330,7 +337,7 @@ final class BookStoryService: BookStoryServiceProtocol {
     ) async throws -> PaginatedAPIResponse<BookStory> {
         return try await apiClient.request(
             endpoint: BookStoryEndpoints.fetchPublicBookStoriesByTheme(themeId: themeId, page: page, pageSize: pageSize),
-            body: EmptyData(),
+            body: .empty,
             responseType: PaginatedAPIResponse<BookStory>.self
         )
     }
@@ -343,7 +350,7 @@ final class BookStoryService: BookStoryServiceProtocol {
     ) async throws -> PaginatedAPIResponse<BookStory> {
         return try await apiClient.request(
             endpoint: BookStoryEndpoints.fetchFriendBookStoriesByTheme(themeId: themeId, friendId: friendId, page: page, pageSize: pageSize),
-            body: EmptyData(),
+            body: .empty,
             responseType: PaginatedAPIResponse<BookStory>.self
         )
     }
@@ -355,7 +362,7 @@ final class BookStoryService: BookStoryServiceProtocol {
     ) async throws -> PaginatedAPIResponse<BookStory> {
         return try await apiClient.request(
             endpoint: BookStoryEndpoints.fetchMyBookStoriesByTheme(themeId: themeId, page: page, pageSize: pageSize),
-            body: EmptyData(),
+            body: .empty,
             responseType: PaginatedAPIResponse<BookStory>.self
         )
     }

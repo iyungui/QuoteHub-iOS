@@ -32,13 +32,10 @@ final class AuthService: AuthServiceProtocol {
     /// - Parameter authCode: Apple에서 받은 인증 코드
     /// - Returns: 로그인 응답 데이터
     func signInWithApple(authCode: String) async throws -> APIResponse<SignInWithAppleResponse> {
-        let requestBody: [String: String] = [
-            "code": authCode
-        ]
         
         return try await apiClient.request(
             endpoint: AuthEndpoints.appleLogin,
-            body: requestBody,
+            body: .dictionary(["code": authCode]),
             responseType: APIResponse<SignInWithAppleResponse>.self
         )
     }
@@ -58,7 +55,7 @@ final class AuthService: AuthServiceProtocol {
         
         return try await apiClient.request(
             endpoint: AuthEndpoints.validateAndRenewToken,
-            body: EmptyData(),
+            body: .empty,
             responseType: APIResponse<TokenValidationResponse>.self,
             customHeaders: headers
         )
@@ -79,7 +76,7 @@ final class AuthService: AuthServiceProtocol {
         
         return try await apiClient.request(
             endpoint: AuthEndpoints.checkNickname(nickname: nickname),
-            body: EmptyData(),
+            body: .empty,
             responseType: APIResponse<NicknameDuplicateResponse>.self,
             customHeaders: headers
         )
@@ -93,7 +90,7 @@ final class AuthService: AuthServiceProtocol {
         
         return try await apiClient.request(
             endpoint: AuthEndpoints.changeNickname,
-            body: requestBody,
+            body: .codable(requestBody),
             responseType: APIResponse<User>.self
         )
     }
@@ -102,7 +99,7 @@ final class AuthService: AuthServiceProtocol {
     func revokeAccount() async throws -> APIResponse<RevokeAccountResponse> {
         return try await apiClient.request(
             endpoint: AuthEndpoints.revokeAccount,
-            body: EmptyData(),
+            body: .empty,
             responseType: APIResponse<RevokeAccountResponse>.self
         )
     }
