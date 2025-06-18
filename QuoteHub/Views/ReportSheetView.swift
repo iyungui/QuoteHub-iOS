@@ -83,7 +83,6 @@ struct UserReportSheetView: View {
     
     @StateObject var reportViewModel = ReportViewModel()
     @EnvironmentObject var viewModel: FollowViewModel
-
     
     var body: some View {
         VStack {

@@ -12,7 +12,7 @@ struct CommonStoryDisplayView: View {
     let story: BookStory
     let isMyStory: Bool
     
-    @EnvironmentObject private var detailViewModel: BookStoryDetailViewModel
+    @Environment(BookStoryDetailViewModel.self) private var detailViewModel
     @EnvironmentObject private var commentViewModel: CommentViewModel
     
     var body: some View {
@@ -253,7 +253,7 @@ struct CommonStoryDisplayView: View {
     
     private var commentSheetToggleButton: some View {
         Button {
-            detailViewModel.isCommentSheetExpanded = true
+            detailViewModel.toggleCommentSheet()
         } label: {
             HStack(spacing: 12) {
                 Image(systemName: "bubble.left.and.bubble.right.fill")

@@ -17,10 +17,10 @@ struct BookStoryDetailView: View {
     let isMyStory: Bool
     
     // view model
-    @EnvironmentObject private var storiesViewModel: BookStoriesViewModel
+    @Environment(BookStoriesViewModel.self) private var storiesViewModel
     @EnvironmentObject private var userAuthManager: UserAuthenticationManager
     
-    @StateObject private var detailViewModel: BookStoryDetailViewModel
+    @State private var detailViewModel: BookStoryDetailViewModel
     @StateObject private var commentViewModel: CommentViewModel
     
     // 북스토리 삭제 시 뒤로가기
@@ -29,7 +29,7 @@ struct BookStoryDetailView: View {
     init(story: BookStory, isMyStory: Bool = false) {
         self.story = story
         self.isMyStory = isMyStory
-        self._detailViewModel = StateObject(wrappedValue: BookStoryDetailViewModel(storiesViewModel: BookStoriesViewModel()))
+        self._detailViewModel = State(wrappedValue: BookStoryDetailViewModel(storiesViewModel: BookStoriesViewModel()))
         self._commentViewModel = StateObject(wrappedValue: CommentViewModel(bookStoryId: story.id))
     }
     
@@ -66,8 +66,7 @@ struct BookStoryDetailView: View {
             detailViewModel.loadStoryDetail(storyId: story.id)
         }
         // 뷰가 나타날 때마다 서버로부터 최신 북스토리 가져오기
-        .onAppear {
-            print("ONAPPEAR")
+        .task {
             detailViewModel.loadStoryDetail(storyId: story.id)
         }
         .progressOverlay(viewModel: detailViewModel, opacity: false)
@@ -94,32 +93,29 @@ struct BookStoryDetailView: View {
     
     @ViewBuilder
     private var actionSheetView: some View {
-        Group {
-            if isMyStory {
-                // 내 스토리라면 편집, 삭제 시트를
-                NavigationLink {
-                    StoryQuotesRecordView(book: story.bookId, storyId: story.id)
-                        .environmentObject(storiesViewModel)
-                } label: {
-                    Text("수정하기")
-                }
-                
-                Button("삭제하기", role: .destructive) {
-                    storiesViewModel.deleteBookStory(storyID: story.id) { isSuccess in
-                        if isSuccess { dismiss() }
-                        else { // TODO: alert
-                        }
-                    }
-                }
-                
-                Button("취소", role: .cancel) { }
-                
-            } else {
-                // 친구 스토리라면 차단, 신고 시트를
-                Button("차단하기") {}
-                Button("신고하기") {}
-                Button("취소", role: .cancel) { }
+        if isMyStory {
+            // 내 스토리라면 편집, 삭제 시트를
+            NavigationLink {
+                StoryQuotesRecordView(book: story.bookId, storyId: story.id)
+            } label: {
+                Text("수정하기")
             }
+            
+            Button("삭제하기", role: .destructive) {
+                Task {
+                    let isSuccess = await storiesViewModel.deleteBookStory(storyID: story.id)
+                    if isSuccess { dismiss() }
+                    else { detailViewModel.showAlertWith(message: "북스토리를 삭제하지 못했습니다.") }
+                }
+            }
+            
+            Button("취소", role: .cancel) { }
+            
+        } else {
+            // 친구 스토리라면 차단, 신고 시트를
+            Button("차단하기") {}
+            Button("신고하기") {}
+            Button("취소", role: .cancel) { }
         }
     }
     
@@ -127,7 +123,7 @@ struct BookStoryDetailView: View {
         Group {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    detailViewModel.isCarouselView.toggle()
+                    detailViewModel.toggleViewMode()
                 } label: {
                     Image(systemName:
                             detailViewModel.isCarouselView ? "square.3.layers.3d.down.backward" : "list.bullet.below.rectangle")
@@ -138,7 +134,7 @@ struct BookStoryDetailView: View {
             if userAuthManager.isUserAuthenticated {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
-                        detailViewModel.showActionSheet = true
+                        detailViewModel.showActionSheetView()
                     } label: {
                         Image(systemName: "ellipsis")
                     }
