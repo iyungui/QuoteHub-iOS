@@ -59,7 +59,7 @@ struct ThemeDetailView: View {
                 }
             }
         }
-        .navigationTitle(isMy ? "내 테마" : "테마")
+        .navigationTitle(theme.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             if isMy {

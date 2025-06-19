@@ -212,11 +212,12 @@ struct LibraryView: View {
                         .padding(.top, 10)
                     }
                     .onChange(of: selectedView) { _, _ in
-                        if !stickyTabVisible {
-                            withAnimation(.easeInOut(duration: 0.3)) {
+//                        if !stickyTabVisible {
+                        // 이 조건을 빼면, 탭 전환 할 때마다 위로 스크롤 됨
+                            withAnimation(.easeInOut(duration: 0.1)) {
                                 proxy.scrollTo("tabSection", anchor: .top)
                             }
-                        }
+//                        }
                     }
                 }
                 
