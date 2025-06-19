@@ -31,7 +31,7 @@
 		C6D78A0A2AD03B2900F03FB8 /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6D78A092AD03B2900F03FB8 /* APIEndpoint.swift */; };
 		C6DE7F512AF76B480020F5CB /* BookStoryCommentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6DE7F502AF76B480020F5CB /* BookStoryCommentService.swift */; };
 		C6DE7F562AF76EA30020F5CB /* TabBar in Frameworks */ = {isa = PBXBuildFile; productRef = C6DE7F552AF76EA30020F5CB /* TabBar */; };
-		C6DE7F612AF7C2940020F5CB /* CommentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6DE7F602AF7C2940020F5CB /* CommentViewModel.swift */; };
+		C6DE7F612AF7C2940020F5CB /* BookStoryCommentsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6DE7F602AF7C2940020F5CB /* BookStoryCommentsViewModel.swift */; };
 		C6E465582ADEAB66002F5FA0 /* CheckboxStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E465572ADEAB66002F5FA0 /* CheckboxStyle.swift */; };
 		CE1100DB2E0275D6003C592E /* StoryBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100DA2E0275D6003C592E /* StoryBookView.swift */; };
 		CE1100E62E0280C3003C592E /* LoadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100E52E0280C3003C592E /* LoadingViewModel.swift */; };
@@ -48,6 +48,7 @@
 		CE1100FE2E03D022003C592E /* ThemeEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100FD2E03D022003C592E /* ThemeEndpoints.swift */; };
 		CE1101012E03D41F003C592E /* LoadType.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1101002E03D41F003C592E /* LoadType.swift */; };
 		CE1101032E03E28E003C592E /* BookStoryCommentEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1101022E03E28E003C592E /* BookStoryCommentEndpoints.swift */; };
+		CE1101052E040217003C592E /* timeAgoString.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1101042E040217003C592E /* timeAgoString.swift */; };
 		CE4FEF5B2DF925EE0072E8B9 /* RoundedCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */; };
 		CE4FEF5D2DF93F260072E8B9 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF5C2DF93F260072E8B9 /* HiddenModifier.swift */; };
 		CE4FEF812DFA90D80072E8B9 /* AchievementBadgesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */; };
@@ -167,7 +168,7 @@
 		C6B56FFD2AA8CC1B003905C3 /* QuoteHub.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QuoteHub.entitlements; sourceTree = "<group>"; };
 		C6D78A092AD03B2900F03FB8 /* APIEndpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIEndpoint.swift; sourceTree = "<group>"; };
 		C6DE7F502AF76B480020F5CB /* BookStoryCommentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookStoryCommentService.swift; sourceTree = "<group>"; };
-		C6DE7F602AF7C2940020F5CB /* CommentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewModel.swift; sourceTree = "<group>"; };
+		C6DE7F602AF7C2940020F5CB /* BookStoryCommentsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookStoryCommentsViewModel.swift; sourceTree = "<group>"; };
 		C6E465572ADEAB66002F5FA0 /* CheckboxStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckboxStyle.swift; sourceTree = "<group>"; };
 		CE1100DA2E0275D6003C592E /* StoryBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryBookView.swift; sourceTree = "<group>"; };
 		CE1100E52E0280C3003C592E /* LoadingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewModel.swift; sourceTree = "<group>"; };
@@ -184,6 +185,7 @@
 		CE1100FD2E03D022003C592E /* ThemeEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeEndpoints.swift; sourceTree = "<group>"; };
 		CE1101002E03D41F003C592E /* LoadType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadType.swift; sourceTree = "<group>"; };
 		CE1101022E03E28E003C592E /* BookStoryCommentEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookStoryCommentEndpoints.swift; sourceTree = "<group>"; };
+		CE1101042E040217003C592E /* timeAgoString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = timeAgoString.swift; sourceTree = "<group>"; };
 		CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorner.swift; sourceTree = "<group>"; };
 		CE4FEF5C2DF93F260072E8B9 /* HiddenModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenModifier.swift; sourceTree = "<group>"; };
 		CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementBadgesView.swift; sourceTree = "<group>"; };
@@ -318,7 +320,7 @@
 				C6691C592B0619C10083C678 /* UserSearchViewModel.swift */,
 				C667E97D2AC9DE7F006EE7A9 /* BookStoriesViewModel.swift */,
 				C60700CE2AFE14F1009D202A /* ThemesViewModel.swift */,
-				C6DE7F602AF7C2940020F5CB /* CommentViewModel.swift */,
+				C6DE7F602AF7C2940020F5CB /* BookStoryCommentsViewModel.swift */,
 				C6691C512B04DA8C0083C678 /* FollowViewModel.swift */,
 				C63DB3AF2B118C280026B668 /* ReportViewModel.swift */,
 				C67AA3CA2AE389F500490DDE /* BookSearchViewModel.swift */,
@@ -595,6 +597,7 @@
 				CE8C48722DEBECAC003188ED /* Spacer.swift */,
 				CE8C48742DEBECED003188ED /* NavBarLogo.swift */,
 				CE8C48662DEB0F53003188ED /* ButtonStyle.swift */,
+				CE1101042E040217003C592E /* timeAgoString.swift */,
 				CE8C488F2DEC96B6003188ED /* PhotoPickerAlertType.swift */,
 				CE8C48682DEB1972003188ED /* ThemeToggleButton.swift */,
 				CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */,
@@ -818,6 +821,7 @@
 				CE8C481E2DEA8DAE003188ED /* UserSearchView.swift in Sources */,
 				CE8C48202DEA8DAE003188ED /* KeywordGroupedStoriesView.swift in Sources */,
 				CE8C49452DF18B69003188ED /* ThemeGalleryGridView.swift in Sources */,
+				CE1101052E040217003C592E /* timeAgoString.swift in Sources */,
 				CE8C48222DEA8DAE003188ED /* MainView.swift in Sources */,
 				CE8C49712DF19111003188ED /* StoryGridCard.swift in Sources */,
 				CE8C48232DEA8DAE003188ED /* FollowListView.swift in Sources */,
@@ -857,7 +861,7 @@
 				C67AA3C92AE3839F00490DDE /* BookSearchService.swift in Sources */,
 				CE1100FA2E028257003C592E /* BookSearchResultRowView.swift in Sources */,
 				CE1100FC2E02F188003C592E /* RequestBody.swift in Sources */,
-				C6DE7F612AF7C2940020F5CB /* CommentViewModel.swift in Sources */,
+				C6DE7F612AF7C2940020F5CB /* BookStoryCommentsViewModel.swift in Sources */,
 				C697D1002AC9535B00F0111B /* BookStoryService.swift in Sources */,
 				CE8C48672DEB0F53003188ED /* ButtonStyle.swift in Sources */,
 				CE4FEF872DFB39080072E8B9 /* CarouselStoryQuotesDisplayView.swift in Sources */,

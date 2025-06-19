@@ -21,7 +21,8 @@ struct BookStoryDetailView: View {
     @EnvironmentObject private var userAuthManager: UserAuthenticationManager
     
     @State private var detailViewModel: BookStoryDetailViewModel
-    @StateObject private var commentViewModel: CommentViewModel
+    
+    @State private var commentViewModel: BookStoryCommentsViewModel
     
     // 북스토리 삭제 시 뒤로가기
     @Environment(\.dismiss) var dismiss
@@ -30,7 +31,7 @@ struct BookStoryDetailView: View {
         self.story = story
         self.isMyStory = isMyStory
         self._detailViewModel = State(wrappedValue: BookStoryDetailViewModel(storiesViewModel: BookStoriesViewModel()))
-        self._commentViewModel = StateObject(wrappedValue: CommentViewModel(bookStoryId: story.id))
+        self._commentViewModel = State(wrappedValue: BookStoryCommentsViewModel(bookStoryId: story.id))
     }
     
     // MARK: - BODY
@@ -58,16 +59,30 @@ struct BookStoryDetailView: View {
         } message: { Text(detailViewModel.alertMessage) }
         // 댓글창
         .sheet(isPresented: $detailViewModel.isCommentSheetExpanded) {
-            CommentView(viewModel: commentViewModel)
+            CommentView()
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
         }
         .refreshable {
-            detailViewModel.loadStoryDetail(storyId: story.id)
+            await withTaskGroup(of: Void.self) { group in
+                group.addTask {
+                    await detailViewModel.loadStoryDetail(storyId: story.id)
+                }
+                group.addTask {
+                    await commentViewModel.loadCommentCount()
+                }
+            }
         }
         // 뷰가 나타날 때마다 서버로부터 최신 북스토리 가져오기
         .task {
-            detailViewModel.loadStoryDetail(storyId: story.id)
+            await withTaskGroup(of: Void.self) { group in
+                group.addTask {
+                    await detailViewModel.loadStoryDetail(storyId: story.id)
+                }
+                group.addTask {
+                    await commentViewModel.loadCommentCount()
+                }
+            }
         }
         .progressOverlay(viewModel: detailViewModel, opacity: false)
         .environmentObject(detailViewModel)
@@ -133,10 +148,17 @@ struct BookStoryDetailView: View {
             
             if userAuthManager.isUserAuthenticated {
                 ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        detailViewModel.showActionSheetView()
-                    } label: {
-                        Image(systemName: "ellipsis")
+                    HStack {
+                        Button {
+                            detailViewModel.toggleCommentSheet()
+                        } label: {
+                            Image(systemName: "bubble.right")
+                        }
+                        Button {
+                            detailViewModel.showActionSheetView()
+                        } label: {
+                            Image(systemName: "ellipsis")
+                        }
                     }
                 }
             }

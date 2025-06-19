@@ -13,7 +13,7 @@ struct CommonStoryDisplayView: View {
     let isMyStory: Bool
     
     @Environment(BookStoryDetailViewModel.self) private var detailViewModel
-    @EnvironmentObject private var commentViewModel: CommentViewModel
+    @Environment(BookStoryCommentsViewModel.self) private var commentViewModel
     @EnvironmentObject private var authManager: UserAuthenticationManager
     
     var body: some View {
@@ -271,7 +271,7 @@ struct CommonStoryDisplayView: View {
                         .font(.scoreDream(.medium, size: .callout))
                         .foregroundColor(.primaryText)
                     
-                    Text("\(commentViewModel.totalCommentCount)")
+                    Text("\(commentViewModel.commentCount)")
                         .font(.scoreDream(.light, size: .caption))
                         .foregroundColor(.secondaryText)
                 }
