@@ -67,7 +67,7 @@ class StoryCommentService {
     // MARK: - get Comments Count
     
     func getCommentCountForStory(bookStoryId: String, completion: @escaping (Result<CommentCountResponse, Error>) -> Void) {
-        var urlString = APIEndpoint.getCommentCountForStoryURL + "/\(bookStoryId)"
+        let urlString = APIEndpoint.getCommentCountForStoryURL + "/\(bookStoryId)"
 
         guard let url = URL(string: urlString) else {
             completion(.failure(NSError(domain: "StoryCommentService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))

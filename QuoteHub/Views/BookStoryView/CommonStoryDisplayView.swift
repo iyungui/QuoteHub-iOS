@@ -44,6 +44,7 @@ struct CommonStoryDisplayView: View {
             
             // 댓글창 toggle 버튼
             commentSheetToggleButton
+                .padding(.bottom)
         }
     }
     

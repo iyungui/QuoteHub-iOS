@@ -36,10 +36,7 @@ struct BookStoryDetailView: View {
     // MARK: - BODY
     
     var body: some View {
-        ZStack {
-            // 배경 오버레이
-            GradientBackground()
-            
+        Group {
             // 여기서 분기처리 (북스토리 잘 불러와졌을 때(mainContent), 차단된 사용자일때, 못불러왔을 때
             if let currentStory = detailViewModel.story {
                 mainContent(currentStory)
@@ -47,6 +44,7 @@ struct BookStoryDetailView: View {
                 ContentUnavailableView("북스토리를 찾을 수 없습니다", systemImage: "book.closed.fill")
             }
         }
+        .backgroundGradient()
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle("북스토리")
         .toolbar {

@@ -11,22 +11,6 @@ struct APIEndpoint {
     
     static private let baseURL = "https://port-0-quotehub-server-m015aiy374b6cd11.sel4.cloudtype.app/"
     
-    // MARK: - BOOKSTORY
-    
-    static let createStoryURL = baseURL + "bookstories/createBookStory"
-    static let getPublicStoryURL = baseURL + "bookstories/public"   // ?page=2&pageSize=10
-    static let getFriendStoryURL = baseURL + "bookstories/friend"  // + /friendID
-    static let getMyStoryURL = baseURL + "bookstories/my"
-    
-    // 키워드 검색
-    static let getAllPublicStoriesKeywordURL = baseURL + "bookstories/public/search"
-    static let getFriendPublicStoriesKeywordURL = baseURL + "bookstories/friend/search"     // :friendID
-    static let getMyStoriesKeywordURL = baseURL + "bookstories/my/search"
-
-    static let updateStoryURL = baseURL + "bookstories/update"    // + /storyID
-    static let fetchSpecificStoryURL = baseURL + "bookstories"
-    static let deleteStoryURL = baseURL + "bookstories/delete"    // + /storyID
-    static let deleteMultipleStoryURL = baseURL + "bookstories/delete-multiple"    // + json 으로 storyId 들 받음
     
     // MARK: - BOOKSTORY COMMENT
     
@@ -35,23 +19,6 @@ struct APIEndpoint {
     static let getCommentCountForStoryURL = baseURL + "bookstoriesComments/count"   // + /bookStoryId
     static let deleteCommentStoryURL = baseURL + "bookstoriesComments"    // + /commentId
     
-    // MARK: - THEME
-    
-    // 폴더별 조회
-    static let getAllPublicStoriesByFolderURL = baseURL + "folder/public"   // + /:folderId
-    static let getFriendPublicStoriesByFolderURL = baseURL + "folder/friend"    // + /:friendId/:folderId
-    static let getMyStoriesByFolderURL = baseURL + "folder/my"  // + /folderId
-    
-    static let createFolderURL = baseURL + "folder/create"
-    
-    // 폴더 목록 조회
-    static let getAllFoldersURL = baseURL + "folder/all"
-    static let getUserFoldersURL = baseURL + "folder/user"  // + /userId
-    static let getMyFoldersURL = baseURL + "folder/myfolder"
-    
-    static let updateFolderURL = baseURL + "folder/update"  // + /folderId
-    static let deleteFolderURL = baseURL + "folder/delete"  // + /folderId
-
     // MARK: - FOLLOW
     
     static let followUserURL = baseURL + "follow"   // + /userId

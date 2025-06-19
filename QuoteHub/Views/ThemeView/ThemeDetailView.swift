@@ -246,6 +246,7 @@ struct ThemeDetailView: View {
                 ThemeGalleryListView(isMy: isMy, loadType: loadType)
             }
         }
+        .environment(storiesViewModel)
         .transition(.asymmetric(
             insertion: .opacity.combined(with: .slide),
             removal: .opacity
