@@ -45,6 +45,7 @@
 		CE1100F82E02816A003C592E /* ReadingProgressSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100F32E02816A003C592E /* ReadingProgressSection.swift */; };
 		CE1100FA2E028257003C592E /* BookSearchResultRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100F92E028257003C592E /* BookSearchResultRowView.swift */; };
 		CE1100FC2E02F188003C592E /* RequestBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100FB2E02F188003C592E /* RequestBody.swift */; };
+		CE1100FE2E03D022003C592E /* ThemeEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100FD2E03D022003C592E /* ThemeEndpoints.swift */; };
 		CE4FEF5B2DF925EE0072E8B9 /* RoundedCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */; };
 		CE4FEF5D2DF93F260072E8B9 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF5C2DF93F260072E8B9 /* HiddenModifier.swift */; };
 		CE4FEF812DFA90D80072E8B9 /* AchievementBadgesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */; };
@@ -180,6 +181,7 @@
 		CE1100F32E02816A003C592E /* ReadingProgressSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingProgressSection.swift; sourceTree = "<group>"; };
 		CE1100F92E028257003C592E /* BookSearchResultRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookSearchResultRowView.swift; sourceTree = "<group>"; };
 		CE1100FB2E02F188003C592E /* RequestBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestBody.swift; sourceTree = "<group>"; };
+		CE1100FD2E03D022003C592E /* ThemeEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeEndpoints.swift; sourceTree = "<group>"; };
 		CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorner.swift; sourceTree = "<group>"; };
 		CE4FEF5C2DF93F260072E8B9 /* HiddenModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenModifier.swift; sourceTree = "<group>"; };
 		CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementBadgesView.swift; sourceTree = "<group>"; };
@@ -678,6 +680,7 @@
 				CE8C479B2DEA8D97003188ED /* UserEndpoints.swift */,
 				CE8C47982DEA8D97003188ED /* BookSearchEndpoints.swift */,
 				CEA554E12E01B1660029A8A9 /* BookStoryEndpoints.swift */,
+				CE1100FD2E03D022003C592E /* ThemeEndpoints.swift */,
 			);
 			path = Endpoints;
 			sourceTree = "<group>";
@@ -786,6 +789,7 @@
 				CE1100F52E02816A003C592E /* HomeUserLevelBadge.swift in Sources */,
 				CE1100F62E02816A003C592E /* ReadingLevel.swift in Sources */,
 				CE1100F72E02816A003C592E /* ReadingLevelSection.swift in Sources */,
+				CE1100FE2E03D022003C592E /* ThemeEndpoints.swift in Sources */,
 				CE1100F82E02816A003C592E /* ReadingProgressSection.swift in Sources */,
 				CE8C478E2DEA8D93003188ED /* APIResponse.swift in Sources */,
 				CE8C478F2DEA8D93003188ED /* Book.swift in Sources */,
