@@ -247,7 +247,7 @@ struct CommentView: View {
         isInputFocused = false
         
         // 댓글 전송
-        let result = await commentViewModel.addComment(
+        _ = await commentViewModel.addComment(
             content: content,
             parentCommentId: parentId
         )
@@ -303,7 +303,7 @@ struct CommentRowView: View {
                                 showActionSheet = true
                             } label: {
                                 Image(systemName: "ellipsis")
-                                    .font(.caption)
+                                    .font(.callout)
                                     .foregroundColor(.secondary)
                                     .rotationEffect(.degrees(90))
                             }

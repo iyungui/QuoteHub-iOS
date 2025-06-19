@@ -44,12 +44,12 @@ final class APIClient {
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = endpoint.method.rawValue
         
-        // 인증이 필요한 request에는 인증 헤더 설정
-        if endpoint.requiresAuth {
-            guard let accessToken = tokenManager.getAccessToken() else {
-                throw NetworkError.unauthorized
-            }
+        if let accessToken = tokenManager.getAccessToken() {
+            // 토큰이 있으면 항상 헤더에 추가 (공개 API든 인증 API든)
             urlRequest.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        } else if endpoint.requiresAuth {
+            // 토큰이 없는데 인증이 필수면 에러
+            throw NetworkError.unauthorized
         }
         
         // 커스텀 헤더 설정

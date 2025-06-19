@@ -9,35 +9,6 @@ import Foundation
 import Alamofire
 
 class FollowService {
-    
-    func followUser(userId: String, completion: @escaping(Result<FollowResponse, Error>) -> Void) {
-        
-
-        guard let token = AuthService.shared.validAccessToken else {
-            return
-        }
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        
-        var urlString = APIEndpoint.followUserURL
-        urlString += "/\(userId)"
-        
-        guard let url = URL(string: urlString) else {
-            completion(.failure(NSError(domain: "FollowService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
-            return
-        }
-        
-        AF.request(url, method: .post, headers: headers)
-            .validate(statusCode: 200..<300)
-            .responseDecodable(of: FollowResponse.self) { response in
-                switch response.result {
-                case .success(let followResponse):
-                    completion(.success(followResponse))
-                case .failure(let error):
-                    completion(.failure(error))
-                }
-            }
-    }
-    
     // check status
     func checkFollowStatus(userId: String, completion: @escaping (Result<CheckFollowStatus, Error>) -> Void) {
 
@@ -57,68 +28,6 @@ class FollowService {
             switch response.result {
             case .success(let followStatusResponse):
                 completion(.success(followStatusResponse.data!))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-    
-    // 팔로워 목록 조회
-    func getFollowers(userId: String, page: Int, pageSize: Int, completion: @escaping (Result<FollowListResponse, Error>) -> Void) {
-        
-        var urlString = APIEndpoint.getFollowersURL
-
-        urlString += "/\(userId)?page=\(page)&pageSize=\(pageSize)"
-        
-        guard let url = URL(string: urlString) else {
-            completion(.failure(NSError(domain: "FollowService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
-            return
-        }
-        
-        AF.request(url, method: .get).responseDecodable(of: FollowListResponse.self) { response in
-            switch response.result {
-            case .success(let followListResponse):
-                completion(.success(followListResponse))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-    
-    // 팔로잉 목록 조회
-    func getFollowing(userId: String, page: Int, pageSize: Int, completion: @escaping (Result<FollowListResponse, Error>) -> Void) {
-        
-        var urlString = APIEndpoint.getFollowingURL
-
-        urlString += "/\(userId)?page=\(page)&pageSize=\(pageSize)"
-        
-        guard let url = URL(string: urlString) else {
-            completion(.failure(NSError(domain: "FollowService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
-            return
-        }
-        
-        AF.request(url, method: .get).responseDecodable(of: FollowListResponse.self) { response in
-            switch response.result {
-            case .success(let followListResponse):
-                completion(.success(followListResponse))
-            case .failure(let error):
-                completion(.failure(error))
-            }
-        }
-    }
-    
-    func getFollowCounts(userId: String, completion: @escaping (Result<FollowCount, Error>) -> Void) {
-        var urlString = APIEndpoint.getFollowCountsURL + "/\(userId)"
-
-        guard let url = URL(string: urlString) else {
-            completion(.failure(NSError(domain: "FollowService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
-            return
-        }
-        
-        AF.request(url, method: .get).responseDecodable(of: FollowCountResponse.self) { response in
-            switch response.result {
-            case .success(let followCountResponse):
-                completion(.success(followCountResponse.data!))
             case .failure(let error):
                 completion(.failure(error))
             }
@@ -152,35 +61,6 @@ class FollowService {
                 completion(.failure(error))
             }
         }
-    }
-    
-    
-    func unfolllowUser(userId: String, completion: @escaping(Result<FollowResponse, Error>) -> Void) {
-        
-        guard let token = AuthService.shared.validAccessToken else {
-            return
-        }
-
-        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
-        
-        var urlString = APIEndpoint.unfollowUserURL
-        urlString += "/\(userId)"
-        
-        guard let url = URL(string: urlString) else {
-            completion(.failure(NSError(domain: "FollowService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])))
-            return
-        }
-        
-        AF.request(url, method: .delete, headers: headers)
-            .validate(statusCode: 200..<300)
-            .responseDecodable(of: FollowResponse.self) { response in
-                switch response.result {
-                case .success(let followResponse):
-                    completion(.success(followResponse))
-                case .failure(let error):
-                    completion(.failure(error))
-                }
-            }
     }
     
     func getBlockedList(completion: @escaping (Result<[User], Error>) -> Void) {

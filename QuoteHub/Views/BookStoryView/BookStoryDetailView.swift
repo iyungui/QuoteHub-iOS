@@ -136,19 +136,16 @@ struct BookStoryDetailView: View {
     
     private var toolBarItems: some ToolbarContent {
         Group {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    detailViewModel.toggleViewMode()
-                } label: {
-                    Image(systemName:
-                            detailViewModel.isCarouselView ? "square.3.layers.3d.down.backward" : "list.bullet.below.rectangle")
-                    .scaleEffect(x: 1, y: detailViewModel.isCarouselView ? 1 : -1)
-                }
-            }
-            
-            if userAuthManager.isUserAuthenticated {
-                ToolbarItem(placement: .primaryAction) {
-                    HStack {
+            ToolbarItem(placement: .primaryAction) {
+                HStack {
+                    Button {
+                        detailViewModel.toggleViewMode()
+                    } label: {
+                        Image(systemName:
+                                detailViewModel.isCarouselView ? "square.3.layers.3d.down.backward" : "list.bullet.below.rectangle")
+                        .scaleEffect(x: 1, y: detailViewModel.isCarouselView ? 1 : -1)
+                    }
+                    if userAuthManager.isUserAuthenticated {
                         Button {
                             detailViewModel.toggleCommentSheet()
                         } label: {
