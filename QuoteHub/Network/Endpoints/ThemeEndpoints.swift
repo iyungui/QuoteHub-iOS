@@ -14,9 +14,14 @@ enum ThemeEndpoints: EndpointProtocol {
     case deleteTheme(themeId: String)
     
     // 테마(폴더) 목록 조회
-    case getAllThemes
-    case getUserThemes(userId: String)
-    case getMyThemes
+    case getAllThemes(page: Int, pageSize: Int)
+    case getUserThemes(userId: String, page: Int, pageSize: Int)
+    case getMyThemes(page: Int, pageSize: Int)
+    
+    // 테마별 스토리 조회
+    case getPublicStoriesByTheme(themeId: String)
+    case getFriendStoriesByTheme(friendId: String, themeId: String)
+    case getMyStoriesByTheme(themeId: String)
     
     var path: String {
         switch self {
@@ -27,12 +32,19 @@ enum ThemeEndpoints: EndpointProtocol {
         case .deleteTheme(let themeId):
             return "/folder/delete/\(themeId)"
             
-        case .getAllThemes:
-            return "/folder/all"
-        case .getUserThemes(let userId):
-            return "/folder/user/\(userId)"
-        case .getMyThemes:
-            return "/folder/myfolder"
+        case .getAllThemes(let page, let pageSize):
+            return "/folder/all?page=\(page)&pageSize=\(pageSize)"
+        case .getUserThemes(let userId, let page, let pageSize):
+            return "/folder/user/\(userId)?page=\(page)&pageSize=\(pageSize)"
+        case .getMyThemes(let page, let pageSize):
+            return "/folder/myfolder?page=\(page)&pageSize=\(pageSize)"
+            
+        case .getPublicStoriesByTheme(let themeId):
+            return "/folder/public/\(themeId)"
+        case .getFriendStoriesByTheme(let friendId, let themeId):
+            return "/folder/friend/\(friendId)/\(themeId)"
+        case .getMyStoriesByTheme(let themeId):
+            return "/folder/my/\(themeId)"
         }
     }
     
@@ -51,7 +63,7 @@ enum ThemeEndpoints: EndpointProtocol {
     
     var requiresAuth: Bool {
         switch self {
-        case .getAllThemes, .getUserThemes:
+        case .getAllThemes, .getPublicStoriesByTheme, .getFriendStoriesByTheme:
             return false
         default:
             return true

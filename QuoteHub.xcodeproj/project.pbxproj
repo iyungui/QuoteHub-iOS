@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C60700CD2AFE05D9009D202A /* FolderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60700CC2AFE05D9009D202A /* FolderService.swift */; };
+		C60700CD2AFE05D9009D202A /* ThemeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60700CC2AFE05D9009D202A /* ThemeService.swift */; };
 		C60700CF2AFE14F1009D202A /* ThemeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C60700CE2AFE14F1009D202A /* ThemeViewModel.swift */; };
 		C627C8CC2AE25831004D867B /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C627C8CB2AE25831004D867B /* Color+Extension.swift */; };
 		C6336CF32AAF1AA0007355EC /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6336CF22AAF1AA0007355EC /* ImagePicker.swift */; };
@@ -144,7 +144,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C60700CC2AFE05D9009D202A /* FolderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderService.swift; sourceTree = "<group>"; };
+		C60700CC2AFE05D9009D202A /* ThemeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeService.swift; sourceTree = "<group>"; };
 		C60700CE2AFE14F1009D202A /* ThemeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeViewModel.swift; sourceTree = "<group>"; };
 		C627C8CB2AE25831004D867B /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
 		C6336CF22AAF1AA0007355EC /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
@@ -332,7 +332,6 @@
 			children = (
 				C6D78A092AD03B2900F03FB8 /* APIEndpoint.swift */,
 				C6DE7F502AF76B480020F5CB /* StoryCommentService.swift */,
-				C60700CC2AFE05D9009D202A /* FolderService.swift */,
 				C65330342B02540300E6B283 /* FollowService.swift */,
 				C63DB3AB2B1188C50026B668 /* ReportService.swift */,
 			);
@@ -668,6 +667,7 @@
 				C694A2EC2AC5778400574D20 /* UserService.swift */,
 				C697D0FF2AC9535B00F0111B /* BookStoryService.swift */,
 				C67AA3C82AE3839F00490DDE /* BookSearchService.swift */,
+				C60700CC2AFE05D9009D202A /* ThemeService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -890,7 +890,7 @@
 				CED3795D2DFEE902001CE700 /* AuthService.swift in Sources */,
 				CE8C47A12DEA8D97003188ED /* NetworkError.swift in Sources */,
 				CE8C47A22DEA8D97003188ED /* UserEndpoints.swift in Sources */,
-				C60700CD2AFE05D9009D202A /* FolderService.swift in Sources */,
+				C60700CD2AFE05D9009D202A /* ThemeService.swift in Sources */,
 				C667E9802ACA388C006EE7A9 /* UserViewModel.swift in Sources */,
 				CE7274182DF8050300B09DC3 /* StoryFormViewModel.swift in Sources */,
 				CE8C48862DEBF39F003188ED /* CreateThemeView.swift in Sources */,
