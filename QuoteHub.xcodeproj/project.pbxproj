@@ -67,7 +67,7 @@
 		CE8C47912DEA8D93003188ED /* BookStoryComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47872DEA8D93003188ED /* BookStoryComment.swift */; };
 		CE8C47922DEA8D93003188ED /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47882DEA8D93003188ED /* Theme.swift */; };
 		CE8C47932DEA8D93003188ED /* Follow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47892DEA8D93003188ED /* Follow.swift */; };
-		CE8C47942DEA8D93003188ED /* ReportDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C478A2DEA8D93003188ED /* ReportDataModel.swift */; };
+		CE8C47942DEA8D93003188ED /* Report.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C478A2DEA8D93003188ED /* Report.swift */; };
 		CE8C47952DEA8D93003188ED /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C478B2DEA8D93003188ED /* User.swift */; };
 		CE8C479D2DEA8D97003188ED /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47962DEA8D97003188ED /* APIClient.swift */; };
 		CE8C479E2DEA8D97003188ED /* AuthEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47972DEA8D97003188ED /* AuthEndpoints.swift */; };
@@ -203,7 +203,7 @@
 		CE8C47872DEA8D93003188ED /* BookStoryComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookStoryComment.swift; sourceTree = "<group>"; };
 		CE8C47882DEA8D93003188ED /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		CE8C47892DEA8D93003188ED /* Follow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Follow.swift; sourceTree = "<group>"; };
-		CE8C478A2DEA8D93003188ED /* ReportDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportDataModel.swift; sourceTree = "<group>"; };
+		CE8C478A2DEA8D93003188ED /* Report.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Report.swift; sourceTree = "<group>"; };
 		CE8C478B2DEA8D93003188ED /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		CE8C47962DEA8D97003188ED /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		CE8C47972DEA8D97003188ED /* AuthEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthEndpoints.swift; sourceTree = "<group>"; };
@@ -452,7 +452,7 @@
 				CE8C47872DEA8D93003188ED /* BookStoryComment.swift */,
 				CE8C47882DEA8D93003188ED /* Theme.swift */,
 				CE8C47892DEA8D93003188ED /* Follow.swift */,
-				CE8C478A2DEA8D93003188ED /* ReportDataModel.swift */,
+				CE8C478A2DEA8D93003188ED /* Report.swift */,
 				CE8C478B2DEA8D93003188ED /* User.swift */,
 			);
 			path = Models;
@@ -808,7 +808,7 @@
 				CE8C47932DEA8D93003188ED /* Follow.swift in Sources */,
 				CE8C488C2DEC3E73003188ED /* LibraryStoriesListView.swift in Sources */,
 				CE8C49192DF15FF9003188ED /* DraftStory.swift in Sources */,
-				CE8C47942DEA8D93003188ED /* ReportDataModel.swift in Sources */,
+				CE8C47942DEA8D93003188ED /* Report.swift in Sources */,
 				CE8C47952DEA8D93003188ED /* User.swift in Sources */,
 				C67AA3CB2AE389F500490DDE /* BookSearchViewModel.swift in Sources */,
 				C694A2ED2AC5778400574D20 /* UserService.swift in Sources */,
