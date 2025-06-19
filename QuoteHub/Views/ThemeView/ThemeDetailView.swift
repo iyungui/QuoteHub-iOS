@@ -24,15 +24,16 @@ struct ThemeDetailView: View {
     init(theme: Theme, isMy: Bool) {
         self.theme = theme
         self.isMy = isMy
-        _storiesViewModel = StateObject(wrappedValue: BookStoriesViewModel(themeId: theme.id))
+        _storiesViewModel = State(wrappedValue: BookStoriesViewModel(themeId: theme.id))
     }
     
     @State private var selectedView: Int = 0  // 0: grid, 1: list
     @State private var showActionSheet: Bool = false
     
-    @EnvironmentObject private var themesViewModel: ThemesViewModel
-    @EnvironmentObject private var userViewModel: UserViewModel
-    @StateObject private var storiesViewModel: BookStoriesViewModel
+    @Environment(ThemesViewModel.self) private var themesViewModel
+    // TODO: - 테마 북스토리와 키워드 북스토리, 그냥 북스토리를 따로 해야하나?
+//    @Environment(BookStoriesViewModel.self) private var storiesViewModel
+    @State private var storiesViewModel: BookStoriesViewModel
 
     @State private var isEditing = false
     
@@ -69,7 +70,7 @@ struct ThemeDetailView: View {
             }
         }
         .progressOverlay(viewModel: storiesViewModel, animationName: "progressLottie", opacity: true)
-        .onAppear {
+        .task {
             storiesViewModel.loadBookStories(type: loadType)
         }
         .refreshable {
@@ -89,7 +90,7 @@ struct ThemeDetailView: View {
                 isEditing = true
             }
             Button("삭제하기", role: .destructive) {
-                deleteTheme()
+                Task { await deleteTheme() }
             }
         }
     }
@@ -241,12 +242,8 @@ struct ThemeDetailView: View {
         Group {
             if selectedView == 0 {
                 ThemeGalleryGridView(isMy: isMy, loadType: loadType)
-                    .environmentObject(userViewModel)
-                    .environmentObject(storiesViewModel)
             } else {
                 ThemeGalleryListView(isMy: isMy, loadType: loadType)
-                    .environmentObject(userViewModel)
-                    .environmentObject(storiesViewModel)
             }
         }
         .transition(.asymmetric(
@@ -265,14 +262,13 @@ struct ThemeDetailView: View {
     
     // MARK: - Methods
     
-    private func deleteTheme() {
-        themesViewModel.deleteFolder(folderId: theme.id) { isSuccess in
-            if isSuccess {
-                alertMessage = "테마가 성공적으로 삭제되었습니다."
-            } else {
-                alertMessage = "테마 삭제 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
-            }
-            showAlert = true
+    private func deleteTheme() async {
+        let isSuccess = await themesViewModel.deleteTheme(themeId: theme.id)
+        if isSuccess {
+            alertMessage = "테마가 성공적으로 삭제되었습니다."
+        } else {
+            alertMessage = themesViewModel.errorMessage ?? "테마 삭제 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
         }
+        showAlert = true
     }
 }

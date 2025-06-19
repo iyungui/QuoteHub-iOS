@@ -11,7 +11,8 @@ import SwiftUI
 struct LibraryThemesListView: View {
     let isMy: Bool
     let loadType: LoadType
-    
+    @Environment(ThemesViewModel.self) private var themesViewModel
+
     private let columns: [GridItem] = [
         GridItem(.flexible(), spacing: 16),
         GridItem(.flexible(), spacing: 16)
@@ -26,8 +27,6 @@ struct LibraryThemesListView: View {
         return availableWidth / 2 // 2열 그리드, 정사각형
     }
     
-    @EnvironmentObject private var themesViewModel: ThemesViewModel
-    
     var body: some View {
         LazyVGrid(columns: columns, spacing: spacing) {
             ForEach(Array(themesViewModel.themes(for: loadType).enumerated()), id: \.element.id) { index, theme in
@@ -38,94 +37,90 @@ struct LibraryThemesListView: View {
                     cardWidth: cardSize,
                     cardHeight: cardSize // 정사각형
                 )
-            }
-            
-            // 더 로딩할 테마가 있을 때 로딩 인디케이터
-            if !themesViewModel.isLastPage {
-                ForEach(0..<2, id: \.self) { _ in
-                    loadingThemeCard(size: cardSize)
-                }
-                .onAppear {
+                .task {
                     themesViewModel.loadMoreIfNeeded(
-                        currentItem: themesViewModel.themes(for: loadType).last,
+                        currentItem: theme,
                         type: loadType
                     )
                 }
+                // TODO: 다시 로딩 인디케이터나 로딩 뷰 적용하기
             }
         }
         .padding(.horizontal, horizontalPadding)
         .padding(.top, 8)
     }
-    
-    /// loadMoreIfNeeded 호출 시 보여질 로딩 카드 (테마)
-    private func loadingThemeCard(size: CGFloat) -> some View {
-        ZStack {
-            // 배경 placeholder
-            RoundedRectangle(cornerRadius: 20)
-                .fill(
-                    LinearGradient(
-                        gradient: Gradient(colors: [
-                            Color.paperBeige.opacity(0.3),
-                            Color.antiqueGold.opacity(0.2),
-                            Color.brownLeather.opacity(0.3)
-                        ]),
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-                .overlay(
-                    ProgressView()
-                        .scaleEffect(1.2)
-                        .tint(.brownLeather)
-                )
-            
-            // 하단 텍스트 placeholder 오버레이
-            VStack {
-                Spacer()
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack {
-                        RoundedRectangle(cornerRadius: 3)
-                            .fill(Color.white.opacity(0.8))
-                            .frame(height: 12)
-                            .frame(maxWidth: size * 0.7, alignment: .leading)
-                        
-                        Spacer()
-                        
-                        Circle()
-                            .fill(Color.white.opacity(0.6))
-                            .frame(width: 12, height: 12)
-                    }
-                    
-                    RoundedRectangle(cornerRadius: 3)
-                        .fill(Color.white.opacity(0.6))
-                        .frame(height: 8)
-                        .frame(maxWidth: size * 0.5, alignment: .leading)
-                    
-                    HStack {
-                        Spacer()
-                        RoundedRectangle(cornerRadius: 2)
-                            .fill(Color.white.opacity(0.5))
-                            .frame(height: 6)
-                            .frame(maxWidth: size * 0.3, alignment: .trailing)
-                    }
-                }
-                .padding(.horizontal, 16)
-                .padding(.bottom, 16)
-                .background(
-                    LinearGradient(
-                        gradient: Gradient(colors: [
-                            Color.clear,
-                            Color.black.opacity(0.3),
-                            Color.black.opacity(0.7)
-                        ]),
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                )
-            }
-        }
-        .frame(width: size, height: size) // 정사각형
-        .clipShape(RoundedRectangle(cornerRadius: 20))
-    }
 }
+
+/*
+ /// loadMoreIfNeeded 호출 시 보여질 로딩 카드 (테마)
+ private func loadingThemeCard(size: CGFloat) -> some View {
+     ZStack {
+         // 배경 placeholder
+         RoundedRectangle(cornerRadius: 20)
+             .fill(
+                 LinearGradient(
+                     gradient: Gradient(colors: [
+                         Color.paperBeige.opacity(0.3),
+                         Color.antiqueGold.opacity(0.2),
+                         Color.brownLeather.opacity(0.3)
+                     ]),
+                     startPoint: .topLeading,
+                     endPoint: .bottomTrailing
+                 )
+             )
+             .overlay(
+                 ProgressView()
+                     .scaleEffect(1.2)
+                     .tint(.brownLeather)
+             )
+         
+         // 하단 텍스트 placeholder 오버레이
+         VStack {
+             Spacer()
+             
+             VStack(alignment: .leading, spacing: 4) {
+                 HStack {
+                     RoundedRectangle(cornerRadius: 3)
+                         .fill(Color.white.opacity(0.8))
+                         .frame(height: 12)
+                         .frame(maxWidth: size * 0.7, alignment: .leading)
+                     
+                     Spacer()
+                     
+                     Circle()
+                         .fill(Color.white.opacity(0.6))
+                         .frame(width: 12, height: 12)
+                 }
+                 
+                 RoundedRectangle(cornerRadius: 3)
+                     .fill(Color.white.opacity(0.6))
+                     .frame(height: 8)
+                     .frame(maxWidth: size * 0.5, alignment: .leading)
+                 
+                 HStack {
+                     Spacer()
+                     RoundedRectangle(cornerRadius: 2)
+                         .fill(Color.white.opacity(0.5))
+                         .frame(height: 6)
+                         .frame(maxWidth: size * 0.3, alignment: .trailing)
+                 }
+             }
+             .padding(.horizontal, 16)
+             .padding(.bottom, 16)
+             .background(
+                 LinearGradient(
+                     gradient: Gradient(colors: [
+                         Color.clear,
+                         Color.black.opacity(0.3),
+                         Color.black.opacity(0.7)
+                     ]),
+                     startPoint: .top,
+                     endPoint: .bottom
+                 )
+             )
+         }
+     }
+     .frame(width: size, height: size) // 정사각형
+     .clipShape(RoundedRectangle(cornerRadius: 20))
+ }
+ */

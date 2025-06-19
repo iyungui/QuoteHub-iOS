@@ -22,7 +22,7 @@ struct CreateThemeView: View {
         self.mode = mode
     }
     
-    @EnvironmentObject private var themesViewModel: ThemesViewModel
+    @Environment(ThemesViewModel.self) private var themesViewModel
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) private var dismiss
     
@@ -435,13 +435,15 @@ struct CreateThemeView: View {
             return
         }
         
-        themesViewModel.createTheme(
-            image: inputImage,
-            name: title,
-            description: content.isEmpty ? nil : content,
-            isPublic: isPublic
-        ) { isSuccess in
-            if isSuccess {
+        Task {
+            let resultTheme: Theme? = await themesViewModel.createTheme(
+                image: inputImage,
+                name: title,
+                description: content.isEmpty ? nil : content,
+                isPublic: isPublic
+            )
+            
+            if let theme = resultTheme {
                 alertType = .make
                 alertMessage = "테마가 성공적으로 등록되었어요!"
                 showAlert = true
@@ -450,6 +452,8 @@ struct CreateThemeView: View {
                 alertMessage = themesViewModel.errorMessage ?? "테마 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
                 showAlert = true
             }
+            
+            // TODO: resultTheme를 어떻게 처리할지
         }
     }
     

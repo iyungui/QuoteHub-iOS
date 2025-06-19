@@ -13,8 +13,8 @@ struct ContentView: View {
     @State private var versionManager = AppVersionManager()
 
     @EnvironmentObject private var authManager: UserAuthenticationManager
-    @EnvironmentObject private var themesViewModel: ThemesViewModel
     @Environment(BookStoriesViewModel.self) private var storiesViewModel
+    @Environment(ThemesViewModel.self) private var themesViewModel
     @Environment(UserViewModel.self) private var userViewModel
 
     @State private var isSplashView = true  // 런치스크린 표시
@@ -52,7 +52,9 @@ struct ContentView: View {
                             group.addTask {
                                 await storiesViewModel.loadBookStories(type: .my)
                             }
-                            // 내 테마 불러오기
+                            group.addTask {
+                                await themesViewModel.loadThemes(type: .my)
+                            }
                             
                         }
                     }

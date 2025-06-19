@@ -39,7 +39,7 @@ struct LibraryView: View {
     // viewmodel
     @EnvironmentObject private var userAuthManager: UserAuthenticationManager
     @Environment(BookStoriesViewModel.self) private var storiesViewModel
-    @EnvironmentObject private var themesViewModel: ThemesViewModel
+    @Environment(ThemesViewModel.self) private var themesViewModel
     @Environment(UserViewModel.self) private var userViewModel
     @EnvironmentObject private var tabController: TabController
     
@@ -128,10 +128,11 @@ struct LibraryView: View {
                     group.addTask {
                         await storiesViewModel.refreshBookStories(type: loadType)
                     }
+                    group.addTask {
+                        await themesViewModel.refreshThemes(type: loadType)
+                    }
                 }
             }
-            
-            themesViewModel.refreshThemes(type: loadType)
         }
         
         .task {
@@ -147,11 +148,12 @@ struct LibraryView: View {
                     group.addTask {
                         await storiesViewModel.loadBookStories(type: loadType)
                     }
-                    // TODO: - 테마 뷰모델 async await로 만들면 여기에 병렬 실행 추가
+                    group.addTask {
+                        await themesViewModel.loadThemes(type: loadType)
+                    }
                 }
             }
             // 내 북스토리와 테마의 경우, 이미 ContentView 에서 불러온 상태이므로 한번 더 부르지 않음
-            themesViewModel.loadThemes(type: loadType)
         }
         
         // 친구 정보 초기화

@@ -9,7 +9,7 @@ import SwiftUI
 
 /// 홈뷰에서 보이는 공개된 테마 리스트 뷰
 struct PublicThemesListView: View {
-    @EnvironmentObject private var themesViewModel: ThemesViewModel
+    @Environment(ThemesViewModel.self) private var themesViewModel
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -20,34 +20,40 @@ struct PublicThemesListView: View {
                         index: index,
                         isCompact: false
                     )
-                }
-                
-                if !themesViewModel.isLastPage {
-                    loadingIndicator()
+                    .task {
+                        themesViewModel.loadMoreIfNeeded(
+                            currentItem: theme,
+                            type: .public
+                        )
+                    }
                 }
             }
             .frame(height: 200)
             .padding(.horizontal, 30)
         }
     }
-    
-    private func loadingIndicator() -> some View {
-        VStack {
-            ProgressView()
-                .scaleEffect(1.2)
-                .tint(.brownLeather)
-            
-            Text("테마 더 불러오는 중...")
-                .font(.scoreDream(.light, size: .caption))
-                .foregroundColor(.secondaryText)
-                .padding(.top, 8)
-        }
-        .frame(width: 120)
-        .onAppear {
-            themesViewModel.loadMoreIfNeeded(
-                currentItem: themesViewModel.themes(for: .public).last,
-                type: .public
-            )
-        }
-    }
 }
+
+/*
+ 
+ 
+ private func loadingIndicator() -> some View {
+     VStack {
+         ProgressView()
+             .scaleEffect(1.2)
+             .tint(.brownLeather)
+         
+         Text("더 불러오는 중...")
+             .font(.scoreDream(.light, size: .caption))
+             .foregroundColor(.secondaryText)
+             .padding(.top, 8)
+     }
+     .frame(width: 120)
+     .onAppear {
+         themesViewModel.loadMoreIfNeeded(
+             currentItem: themesViewModel.themes(for: .public).last,
+             type: .public
+         )
+     }
+ }
+ */

@@ -12,8 +12,8 @@ struct HomeView: View {
     @State private var booksViewModel = RandomBooksViewModel()
     @Environment(BookStoriesViewModel.self) private var storiesViewModel
     @Environment(UserViewModel.self) private var userViewModel
-    
-    @EnvironmentObject private var themesViewModel: ThemesViewModel
+    @Environment(ThemesViewModel.self) private var themesViewModel
+
     @EnvironmentObject private var userAuthManager: UserAuthenticationManager
 
     var body: some View {
@@ -84,9 +84,10 @@ struct HomeView: View {
                 group.addTask {
                     await storiesViewModel.refreshBookStories(type: .public)
                 }
-                // TODO: public 테마도 북스토리와 함께 병렬로 불러오기
+                group.addTask {
+                    await themesViewModel.refreshThemes(type: .public)
+                }
             }
-            themesViewModel.refreshThemes(type: .public)
         }
         .task {
             // randombooks, loadBookStories, loadThemes 병렬로 호출 (첫 페이지부터)
@@ -97,12 +98,10 @@ struct HomeView: View {
                 group.addTask {
                     await storiesViewModel.loadBookStories(type: .public)
                 }
-                
-                // TODO: public 테마도 북스토리와 함께 병렬로 불러오기
+                group.addTask {
+                    await themesViewModel.loadThemes(type: .public)
+                }
             }
-        }
-        .onAppear {
-            themesViewModel.loadThemes(type: .public)
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {

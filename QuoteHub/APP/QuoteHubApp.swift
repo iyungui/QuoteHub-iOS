@@ -14,7 +14,7 @@ struct QuoteHubApp: App {
     @StateObject private var authManager = UserAuthenticationManager()
     @State private var userViewModel = UserViewModel()
     @State private var storiesViewModel = BookStoriesViewModel()
-    @StateObject private var themesViewModel = ThemesViewModel()
+    @State private var themesViewModel = ThemesViewModel()
     @StateObject private var tabController = TabController()
 
     // SwiftData ModelContainer 설정
@@ -44,7 +44,7 @@ struct QuoteHubApp: App {
                 .environmentObject(authManager)
                 .environment(userViewModel)
                 .environment(storiesViewModel)
-                .environmentObject(themesViewModel)
+                .environment(themesViewModel)
                 .environmentObject(tabController)
 
         }

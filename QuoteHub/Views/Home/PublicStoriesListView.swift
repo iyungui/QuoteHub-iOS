@@ -9,7 +9,6 @@ import SwiftUI
 
 /// 홈뷰에서 보이는 공개된 북스토리 리스트 뷰
 struct PublicStoriesListView: View {
-    
     @Environment(BookStoriesViewModel.self) private var storiesViewModel
     
     var body: some View {

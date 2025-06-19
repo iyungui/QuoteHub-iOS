@@ -64,6 +64,7 @@ struct AppleLoginButton: View {
     @EnvironmentObject var authManager: UserAuthenticationManager
     @Environment(UserViewModel.self) var userViewModel
     @Environment(BookStoriesViewModel.self) var storiesViewModel
+    @Environment(ThemesViewModel.self) var themesViewModel
     
     var body: some View {
         SignInWithAppleButton(
@@ -109,6 +110,9 @@ struct AppleLoginButton: View {
             }
             group.addTask {
                 await storiesViewModel.loadBookStories(type: .my)
+            }
+            group.addTask {
+                await themesViewModel.loadThemes(type: .my)
             }
         }
     }

@@ -14,7 +14,7 @@ struct SetThemeView: View {
     // MARK: - PROPERTIES
     
     @Binding var selectedThemeIds: [String]
-    @StateObject private var themesViewModel = ThemesViewModel()
+    @Environment(ThemesViewModel.self) private var themesViewModel
     @Environment(\.dismiss) private var dismiss
     
     // 테마 선택 상태를 관리하는 Set
@@ -62,7 +62,7 @@ struct SetThemeView: View {
                 }
             }
             .progressOverlay(viewModel: themesViewModel, animationName: "progressLottie", opacity: true)
-            .onAppear {
+            .task {
                 setupInitialData()
             }
         }
@@ -74,7 +74,6 @@ struct SetThemeView: View {
         VStack(spacing: 16) {
             
             NavigationLink(destination: CreateThemeView(mode: .embedded)
-                .environmentObject(themesViewModel)
             ) {
                 HStack(spacing: 16) {
                     ZStack {
@@ -186,18 +185,14 @@ struct SetThemeView: View {
                         toggleThemeSelection(theme.id)
                     }
                 )
+                .task {
+                    themesViewModel.loadMoreIfNeeded(
+                        currentItem: theme,
+                        type: .my
+                    )
+                }
             }
-            
-            // 더 로드할 테마가 있을 때 로딩 인디케이터
-            if !themesViewModel.isLastPage {
-                GridLoadingView()
-                    .onAppear {
-                        themesViewModel.loadMoreIfNeeded(
-                            currentItem: themesViewModel.themes(for: .my).last,
-                            type: .my
-                        )
-                    }
-            }
+            // TODO: Loading Indicator
         }
     }
     
