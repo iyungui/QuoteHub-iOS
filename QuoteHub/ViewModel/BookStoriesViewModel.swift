@@ -7,13 +7,6 @@
 
 import SwiftUI
 
-// Sendable: A thread-safe type whose values can be shared across arbitrary concurrent contexts without introducing a risk of data races.
-enum LoadType: Equatable, Hashable, Sendable {
-    case my
-    case friend(String) // friendID
-    case `public`
-}
-
 @MainActor  // 클래스의 모든 메서드와 프로퍼티가 메인 스레드에서 실행됨을 보장
 @Observable // SwiftUI 뷰가 필요한 프로퍼티 변경시에만 리렌더링, 효율적
 class BookStoriesViewModel: LoadingViewModel {

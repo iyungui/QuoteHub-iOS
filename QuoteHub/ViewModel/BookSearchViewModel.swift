@@ -1,5 +1,5 @@
 //  
-//  BooksViewModel.swift
+//  BookSearchViewModel.swift
 //  QuoteHub
 //
 //  Created by 이융의 on 10/21/23.
@@ -9,7 +9,7 @@ import SwiftUI
 
 @MainActor
 @Observable
-class BookSearchViewModel: ObservableObject, LoadingViewModel {
+class BookSearchViewModel: LoadingViewModel {
     var books: [Book] = []
     
     // TODO: - isLoading 필요없는 것 같다
