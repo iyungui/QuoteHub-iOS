@@ -33,7 +33,7 @@ struct ProfileImage: View {
                 .frame(width: size, height: size)
                 .clipShape(Circle())
                 .overlay(Circle().stroke(Color.gray.opacity(0.5), lineWidth: 1))
-                .shadow(radius: 4)
+                .shadow(radius: 2)
         }
     }
 }

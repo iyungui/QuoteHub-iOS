@@ -21,7 +21,7 @@ struct LibraryView: View {
     var isMyLibrary: Bool {
         return otherUser == nil
     }
-
+    
     var loadType: LoadType {
         if let friendId = otherUser?.id, !isMyLibrary {
             return LoadType.friend(friendId)  // 여기서 해당 사용자 id로 북스토리와 테마 불러오도록 모드 설정
@@ -42,12 +42,12 @@ struct LibraryView: View {
     @EnvironmentObject private var themesViewModel: ThemesViewModel
     @Environment(UserViewModel.self) private var userViewModel
     @EnvironmentObject private var tabController: TabController
-
+    
     // 신고, 차단 기능을 위한
     @StateObject private var followViewModel: FollowViewModel
-
+    
     @State private var selectedView: Int = 0    // 테마, 스토리 탭
-
+    
     // 알림 관련
     @State private var showAlert: Bool = false
     @State private var alertType: AlertType = .loginRequired
@@ -57,6 +57,9 @@ struct LibraryView: View {
     @State private var reportReason = ""
     @State private var showReportSheet = false
     @State private var showActionSheet = false
+
+    @State private var stickyTabVisible = false
+    @State private var originalTabPosition: CGFloat = 0
 
     // MARK: - BODY
     
@@ -164,31 +167,70 @@ struct LibraryView: View {
         )
         .navigationBarTitleDisplayMode(.inline)
     }
-
+    
+    
     /// main 컨텐츠
     private var mainContent: some View {
-        ScrollViewReader { proxy in
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 20) {
-                    if let friend = userViewModel.currentOtherUser {   // 친구 프로필
-                        ProfileView(otherUser: friend)
-                    } else {    // 내 프로필
-                        ProfileView()
+        GeometryReader { geometry in
+            ZStack(alignment: .top) {
+                ScrollViewReader { proxy in
+                    ScrollView(showsIndicators: false) {
+                        VStack(spacing: 20) {
+                            // 프로필 섹션
+                            if let friend = userViewModel.currentOtherUser {
+                                ProfileView(otherUser: friend)
+                            } else {
+                                ProfileView()
+                            }
+                            
+                            // 탭 섹션 (원본)
+                            VStack(spacing: 0) {
+                                LibraryTabButtonView(selectedView: $selectedView)
+                                    .id("tabSection")
+                                TabIndicator(height: 3, selectedView: selectedView, tabCount: 3)
+                            }
+//                            .background(Color(.systemGroupedBackground))
+                            .background(
+                                GeometryReader { tabGeometry in
+                                    Color.clear
+                                        .onAppear {
+                                            // 초기 위치 기록
+                                            originalTabPosition = tabGeometry.frame(in: .global).minY
+                                        }
+                                        .onChange(of: tabGeometry.frame(in: .global).minY) { _, newY in
+                                            updateStickyState(currentY: newY)
+                                        }
+                                }
+                            )
+                            .opacity(stickyTabVisible ? 0 : 1)
+                            
+                            // 콘텐츠 섹션
+                            contentSection
+                            
+                            Spacer().frame(height: 100)
+                        }
+                        .padding(.top, 10)
                     }
-                    
-                    LibraryTabButtonView(selectedView: $selectedView)
-                        .id("tabSection")
-                    
-                    TabIndicator(height: 2, selectedView: selectedView, tabCount: 3)
-                    contentSection
-                    
-                    Spacer().frame(height: 100)
+                    .onChange(of: selectedView) { _, _ in
+                        if !stickyTabVisible {
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                proxy.scrollTo("tabSection", anchor: .top)
+                            }
+                        }
+                    }
                 }
-                .padding(.top, 10)
-            }
-            .onChange(of: selectedView) { _, _ in
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    proxy.scrollTo("tabSection", anchor: .top)
+                
+                // Sticky 탭 (조건부로만 표시)
+                if stickyTabVisible {
+                    VStack(spacing: 0) {
+                        LibraryTabButtonView(selectedView: $selectedView)
+                        TabIndicator(height: 3, selectedView: selectedView, tabCount: 3)
+                    }
+                    .background(Color(.systemGroupedBackground))
+                    .shadow(color: .black.opacity(0.1), radius: 2, y: 1)
+                    .frame(maxWidth: .infinity)
+                    .transition(.opacity)
+                    .zIndex(999)
                 }
             }
         }
@@ -211,7 +253,7 @@ struct LibraryView: View {
                 LibraryThemesListView(isMy: isMyLibrary, loadType: loadType)
             }
         } else if selectedView == 2 {   // 키워드별 북스토리 기록
-//            KeywordGroupedStoriesView(isMy: isMyLibrary, loadType: loadType)
+            //            KeywordGroupedStoriesView(isMy: isMyLibrary, loadType: loadType)
             EmptyView()
         }
     }
@@ -229,7 +271,7 @@ struct LibraryView: View {
         /// 내 라이브러리에는 '내 기록을 키워드로 찾을 수 있는 뷰와, 설정' 버튼
         HStack(spacing: 15) {
             ThemeToggleButton()
-
+            
             NavigationLink(
                 destination: SettingView()
             ) {
@@ -313,6 +355,25 @@ struct LibraryView: View {
                 self.alertType = .blocked
                 self.alertMessage = "오류: \(error.localizedDescription)"
                 self.showAlert = true
+            }
+        }
+    }
+    
+    private func getSafeAreaTop() -> CGFloat {
+        return UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .first?.windows.first?.safeAreaInsets.top ?? 0
+    }
+
+    private func updateStickyState(currentY: CGFloat) {
+        let safeAreaTop = getSafeAreaTop()
+        
+        // 탭이 safe area에 도달하거나 넘어가면 sticky 활성화
+        let shouldShowSticky = currentY <= safeAreaTop + 44
+        
+        if shouldShowSticky != stickyTabVisible {
+            withAnimation(.none) {
+                stickyTabVisible = shouldShowSticky
             }
         }
     }

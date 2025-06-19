@@ -7,12 +7,11 @@
 
 import SwiftUI
 
-/// 라이브러리에서 쓰는 테마/스토리 탭 전환 버튼
 struct LibraryTabButtonView: View {
     @Binding var selectedView: Int
 
     var body: some View {
-        HStack {
+        HStack(spacing: 0) {
             CustomTabButton(title: "스토리", isSelected: selectedView == 0) {
                 selectedView = 0
             }
@@ -20,11 +19,13 @@ struct LibraryTabButtonView: View {
             CustomTabButton(title: "테마", isSelected: selectedView == 1) {
                 selectedView = 1
             }
+            
             CustomTabButton(title: "키워드", isSelected: selectedView == 2) {
                 selectedView = 2
             }
         }
-        .padding()
+        .padding(.horizontal, 20)
+        .padding(.vertical, 12)
     }
 }
 
@@ -37,15 +38,11 @@ struct CustomTabButton: View {
         Button(action: action) {
             Text(title)
                 .font(isSelected ? .scoreDream(.bold, size: .body) : .scoreDreamBody)
-                .padding(.vertical, 10)
-                .padding(.horizontal, 20)
-                .foregroundColor(isSelected ? .white : .secondary)
-                .background(isSelected ? Color.appAccent : Color.clear)
-                .frame(minWidth: 70, minHeight: 40)
-                .cornerRadius(4)
+                .foregroundColor(isSelected ? .primary : .secondary)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
         }
         .buttonStyle(PlainButtonStyle())
-        .padding(10)
     }
 }
 
