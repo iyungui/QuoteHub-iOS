@@ -67,14 +67,5 @@ typealias RandomBooksResponse = APIResponse<[Book]>
 
 typealias BookStoryResponse = APIResponse<BookStory>
 typealias BookStoriesResponse = PaginatedAPIResponse<BookStory>
-
-
 typealias SearchUserResponse = APIResponse<[User]>
-
-typealias FollowListResponse = PaginatedAPIResponse<User>
-typealias FollowCountResponse = APIResponse<FollowCount>
-typealias FollowResponse = APIResponse<User>
-typealias FollowStatusResponse = APIResponse<Follow> // 팔로우 차단 및 차단 해제
-typealias CheckFollowStatusResponse = APIResponse<CheckFollowStatus>    // 차단상태 확인
-
 

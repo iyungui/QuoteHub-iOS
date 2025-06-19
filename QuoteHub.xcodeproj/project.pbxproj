@@ -329,7 +329,6 @@
 				C667E97D2AC9DE7F006EE7A9 /* BookStoriesViewModel.swift */,
 				C60700CE2AFE14F1009D202A /* ThemesViewModel.swift */,
 				C6DE7F602AF7C2940020F5CB /* BookStoryCommentsViewModel.swift */,
-				C63DB3AF2B118C280026B668 /* ReportViewModel.swift */,
 				C67AA3CA2AE389F500490DDE /* BookSearchViewModel.swift */,
 				CE8C48EC2DF1134C003188ED /* RandomBooksViewModel.swift */,
 			);
@@ -664,6 +663,7 @@
 				C6D78A092AD03B2900F03FB8 /* APIEndpoint.swift */,
 				CEA554D02E018AF50029A8A9 /* symbolExampleView.swift */,
 				C65330342B02540300E6B283 /* FollowService.swift */,
+				C63DB3AF2B118C280026B668 /* ReportViewModel.swift */,
 				C63DB3AB2B1188C50026B668 /* ReportService.swift */,
 				C6691C512B04DA8C0083C678 /* FollowViewModel.swift */,
 				CE8C47FB2DEA8DAE003188ED /* FollowListView.swift */,

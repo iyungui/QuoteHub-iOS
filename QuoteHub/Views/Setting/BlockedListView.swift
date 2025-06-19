@@ -50,29 +50,29 @@ struct BlockedListView: View {
     }
 
     private func loadBlockedList() {
-        FollowService().getBlockedList { result in
-            isLoading = false
-            switch result {
-            case .success(let users):
-                self.blockedUsers = users
-            case .failure(let error):
-                self.errorMessage = error.localizedDescription
-            }
-        }
+//        FollowService().getBlockedList { result in
+//            isLoading = false
+//            switch result {
+//            case .success(let users):
+//                self.blockedUsers = users
+//            case .failure(let error):
+//                self.errorMessage = error.localizedDescription
+//            }
+//        }
     }
     
     private func unblockUser(userId: String) {
-        FollowService().updateFollowStatus(userId: userId, status: "FOLLOWING") { result in
-            switch result {
-            case .success(let response):
-                print("Unblock Success: \(response)")
-                if let index = blockedUsers.firstIndex(where: { $0.id == userId }) {
-                    blockedUsers.remove(at: index)
-                }
-            case .failure(let error):
-                print("Unblock Error: \(error.localizedDescription)")
-                // 오류 처리
-            }
-        }
+//        FollowService().updateFollowStatus(userId: userId, status: "FOLLOWING") { result in
+//            switch result {
+//            case .success(let response):
+//                print("Unblock Success: \(response)")
+//                if let index = blockedUsers.firstIndex(where: { $0.id == userId }) {
+//                    blockedUsers.remove(at: index)
+//                }
+//            case .failure(let error):
+//                print("Unblock Error: \(error.localizedDescription)")
+//                // 오류 처리
+//            }
+//        }
     }
 }

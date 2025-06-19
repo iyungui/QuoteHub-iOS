@@ -14,8 +14,7 @@ struct ReportSheetView: View {
     @State private var showAlert = false
     @State private var alertMessage = ""
     
-    @StateObject var reportViewModel = ReportViewModel()
-    @EnvironmentObject var viewModel: FollowViewModel
+//    @StateObject var reportViewModel = ReportViewModel()
     
     var body: some View {
         VStack {
@@ -33,19 +32,19 @@ struct ReportSheetView: View {
                 .padding()
 
             Button(action: {
-                reportViewModel.reportBookStory(targetId: story.id, reason: reportReason) { result in
-                    switch result {
-                    case .success:
-                        DispatchQueue.main.async {
-                            viewModel.updateFollowStatus(forUserId: story.userId.id, withStatus: .blocked) { _,_  in }
-                            alertMessage = "신고가 성공적으로 접수되었습니다."
-                            showAlert = true
-                        }
-                    case .failure:
-                        alertMessage = "신고 중 오류가 발생했습니다."
-                        showAlert = true
-                    }
-                }
+//                reportViewModel.reportBookStory(targetId: story.id, reason: reportReason) { result in
+//                    switch result {
+//                    case .success:
+//                        DispatchQueue.main.async {
+//                            viewModel.updateFollowStatus(forUserId: story.userId.id, withStatus: .blocked) { _,_  in }
+//                            alertMessage = "신고가 성공적으로 접수되었습니다."
+//                            showAlert = true
+//                        }
+//                    case .failure:
+//                        alertMessage = "신고 중 오류가 발생했습니다."
+//                        showAlert = true
+//                    }
+//                }
             }) {
                 Text("신고하기")
                     .foregroundColor(.white)
@@ -81,8 +80,8 @@ struct UserReportSheetView: View {
     @State private var showAlert = false
     @State private var alertMessage = ""
     
-    @StateObject var reportViewModel = ReportViewModel()
-    @EnvironmentObject var viewModel: FollowViewModel
+//    @StateObject var reportViewModel = ReportViewModel()
+//    @EnvironmentObject var viewModel: FollowViewModel
     
     var body: some View {
         VStack {
@@ -100,19 +99,19 @@ struct UserReportSheetView: View {
                 .padding()
 
             Button(action: {
-                reportViewModel.reportUser(targetId: userId, reason: reportReason) { result in
-                    switch result {
-                    case .success:
-                        DispatchQueue.main.async {
-                            viewModel.updateFollowStatus(forUserId: userId, withStatus: .blocked) { _,_  in }
-                            alertMessage = "신고가 성공적으로 접수되었습니다."
-                            showAlert = true
-                        }
-                    case .failure:
-                        alertMessage = "신고 중 오류가 발생했습니다."
-                        showAlert = true
-                    }
-                }
+//                reportViewModel.reportUser(targetId: userId, reason: reportReason) { result in
+//                    switch result {
+//                    case .success:
+//                        DispatchQueue.main.async {
+//                            viewModel.updateFollowStatus(forUserId: userId, withStatus: .blocked) { _,_  in }
+//                            alertMessage = "신고가 성공적으로 접수되었습니다."
+//                            showAlert = true
+//                        }
+//                    case .failure:
+//                        alertMessage = "신고 중 오류가 발생했습니다."
+//                        showAlert = true
+//                    }
+//                }
             }) {
                 Text("신고하기")
                     .foregroundColor(.white)

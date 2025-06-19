@@ -33,7 +33,6 @@ struct LibraryView: View {
     // 초기화
     init(otherUser: User? = nil) {
         self.otherUser = otherUser
-        self._followViewModel = StateObject(wrappedValue: FollowViewModel(userId: otherUser?.id))
     }
     
     // viewmodel
@@ -43,14 +42,10 @@ struct LibraryView: View {
     @Environment(UserViewModel.self) private var userViewModel
     @EnvironmentObject private var tabController: TabController
     
-    // 신고, 차단 기능을 위한
-    @StateObject private var followViewModel: FollowViewModel
-    
     @State private var selectedView: Int = 0    // 테마, 스토리 탭
     
     // 알림 관련
     @State private var showAlert: Bool = false
-    @State private var alertType: AlertType = .loginRequired
     @State private var alertMessage = ""
     
     // 신고 관련 (친구 프로필에서만 사용)
@@ -64,16 +59,8 @@ struct LibraryView: View {
     // MARK: - BODY
     
     var body: some View {
-        ZStack {
-            GradientBackground()
-            
-            // 친구의 라이브러리이고 해당 친구가 차단된 사용자일 때
-            if !isMyLibrary && followViewModel.isBlocked {
-                ContentUnavailableView("차단된 사용자", systemImage: "person.crop.circle.badge.xmark.fill", description: Text("설정의 차단 목록을 확인해주세요."))
-            } else {
-                mainContent
-            }
-        }
+        mainContent
+        .backgroundGradient()
         // 북스토리 생성, 업데이트 후 tabController에서 네비게이션 트리거
         .navigationDestination(isPresented: $tabController.shouldNavigateToStoryDetail) {
             if let story = tabController.selectedStory {
@@ -86,9 +73,11 @@ struct LibraryView: View {
                 navBarItems
             }
         }
-        
-        // 알림창 (비로그인, 오류, 블럭?)
-        .alert(isPresented: $showAlert) { alertView }
+        .alert("로그인 필요", isPresented: $showAlert) {
+            Button("확인") {}
+        } message: {
+            Text("이 기능을 사용하려면 로그인이 필요합니다.")
+        }
         
         // 차단, 신고하기 버튼 시트
         .confirmationDialog(Text(""), isPresented: $showActionSheet) { actionSheetView }
@@ -161,7 +150,6 @@ struct LibraryView: View {
             userViewModel.currentOtherUser = nil
             userViewModel.currentOtherUserStoryCount = nil
         }
-        .environmentObject(followViewModel)
         // 여러 ViewModel 의 로딩 상태를 동시에 추적하고 로딩뷰 표시하는 모디파이어
         .progressOverlay(
             viewModels: userViewModel, storiesViewModel, themesViewModel,
@@ -297,36 +285,12 @@ struct LibraryView: View {
     }
     
     
-    private var alertView: Alert {
-        switch alertType {
-        case .loginRequired:
-            return Alert(
-                title: Text("로그인 필요"),
-                message: Text("이 기능을 사용하려면 로그인이 필요합니다."),
-                dismissButton: .default(Text("확인"))
-            )
-        case .followError:
-            return Alert(
-                title: Text("오류 발생"),
-                message: Text(followViewModel.errorMessage ?? "알 수 없는 오류가 발생했습니다."),
-                dismissButton: .default(Text("확인"))
-            )
-        case .blocked:
-            return Alert(
-                title: Text("알림"),
-                message: Text(alertMessage),
-                dismissButton: .default(Text("확인"))
-            )
-        }
-    }
-    
     @ViewBuilder
     private var actionSheetView: some View {
         Button("차단하기") {
             if userAuthManager.isUserAuthenticated {
                 blockUser()
             } else {
-                alertType = .loginRequired
                 showAlert = true
             }
         }
@@ -335,7 +299,6 @@ struct LibraryView: View {
             if userAuthManager.isUserAuthenticated {
                 showReportSheet = true
             } else {
-                alertType = .loginRequired
                 showAlert = true
             }
         }
@@ -346,20 +309,22 @@ struct LibraryView: View {
     private func blockUser() {
         guard let friend = userViewModel.currentOtherUser else { return }
         
-        FollowService().updateFollowStatus(userId: friend.id, status: "BLOCKED") { result in
-            switch result {
-            case .success(_):
-                DispatchQueue.main.async {
-                    self.alertType = .blocked
-                    self.followViewModel.updateFollowStatus(userId: friend.id)
-                    self.followViewModel.loadFollowCounts()
-                }
-            case .failure(let error):
-                self.alertType = .blocked
-                self.alertMessage = "오류: \(error.localizedDescription)"
-                self.showAlert = true
-            }
-        }
+//        
+//        
+//        FollowService().updateFollowStatus(userId: friend.id, status: "BLOCKED") { result in
+//            switch result {
+//            case .success(_):
+//                DispatchQueue.main.async {
+//                    self.alertType = .blocked
+//                    self.followViewModel.updateFollowStatus(userId: friend.id)
+//                    self.followViewModel.loadFollowCounts()
+//                }
+//            case .failure(let error):
+//                self.alertType = .blocked
+//                self.alertMessage = "오류: \(error.localizedDescription)"
+//                self.showAlert = true
+//            }
+//        }
     }
     
     private func getSafeAreaTop() -> CGFloat {
