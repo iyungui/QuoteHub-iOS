@@ -40,16 +40,17 @@ struct LibraryView: View {
     @Environment(BookStoriesViewModel.self) private var storiesViewModel
     @Environment(ThemesViewModel.self) private var themesViewModel
     @Environment(UserViewModel.self) private var userViewModel
+    @Environment(BlockReportViewModel.self) private var blockReportViewModel
+    
     @EnvironmentObject private var tabController: TabController
     
     @State private var selectedView: Int = 0    // 테마, 스토리 탭
     
     // 알림 관련
     @State private var showAlert: Bool = false
-    @State private var alertMessage = ""
+    @State private var alertMessage: String? = nil
     
     // 신고 관련 (친구 프로필에서만 사용)
-    @State private var reportReason = ""
     @State private var showReportSheet = false
     @State private var showActionSheet = false
 
@@ -73,10 +74,14 @@ struct LibraryView: View {
                 navBarItems
             }
         }
-        .alert("로그인 필요", isPresented: $showAlert) {
+        .alert("알림", isPresented: $showAlert) {
             Button("확인") {}
         } message: {
-            Text("이 기능을 사용하려면 로그인이 필요합니다.")
+            if alertMessage != nil {
+                Text(alertMessage!)
+            } else {    // 로그인 alert 인 경우 alertMessage 이 nil
+                Text("이 기능을 사용하려면 로그인이 필요합니다.")
+            }
         }
         
         // 차단, 신고하기 버튼 시트
@@ -85,10 +90,12 @@ struct LibraryView: View {
         // 유저 신고하기 창
         .sheet(isPresented: $showReportSheet) {
             if let friend = userViewModel.currentOtherUser {
-                UserReportSheetView(
-                    userId: friend.id,
-                    reportReason: $reportReason
+                ReportSheetView(
+                    targetId: friend.id,
+                    reportType: .user
                 )
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
             }
         }
         
@@ -259,7 +266,7 @@ struct LibraryView: View {
     }
     
     private var myLibraryNavBarItems: some View {
-        /// 내 라이브러리에는 '내 기록을 키워드로 찾을 수 있는 뷰와, 설정' 버튼
+        /// 내 라이브러리에는 '다크,라이트테마 토글버튼'와, 설정' 버튼
         HStack(spacing: 15) {
             ThemeToggleButton()
             
@@ -289,7 +296,7 @@ struct LibraryView: View {
     private var actionSheetView: some View {
         Button("차단하기") {
             if userAuthManager.isUserAuthenticated {
-                blockUser()
+                Task { await blockUser() }
             } else {
                 showAlert = true
             }
@@ -306,25 +313,12 @@ struct LibraryView: View {
         Button("취소", role: .cancel) { }
     }
     
-    private func blockUser() {
+    private func blockUser() async {
         guard let friend = userViewModel.currentOtherUser else { return }
         
-//        
-//        
-//        FollowService().updateFollowStatus(userId: friend.id, status: "BLOCKED") { result in
-//            switch result {
-//            case .success(_):
-//                DispatchQueue.main.async {
-//                    self.alertType = .blocked
-//                    self.followViewModel.updateFollowStatus(userId: friend.id)
-//                    self.followViewModel.loadFollowCounts()
-//                }
-//            case .failure(let error):
-//                self.alertType = .blocked
-//                self.alertMessage = "오류: \(error.localizedDescription)"
-//                self.showAlert = true
-//            }
-//        }
+        let isSuccess = await blockReportViewModel.blockUser(friend.id)
+        alertMessage = isSuccess ? blockReportViewModel.successMessage : blockReportViewModel.errorMessage
+        showAlert = true
     }
     
     private func getSafeAreaTop() -> CGFloat {

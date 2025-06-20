@@ -27,6 +27,7 @@ final class BookStoryDetailViewModel: LoadingViewModel {
     var isCommentSheetExpanded: Bool = false
     // 북스토리 수정 (그리고 차단) 위한 액션시트
     var showActionSheet: Bool = false
+    var showReportSheet: Bool = false
     
     // 알림 관련
     var showAlert: Bool = false
@@ -63,7 +64,11 @@ final class BookStoryDetailViewModel: LoadingViewModel {
     func toggleCommentSheet() {
         isCommentSheetExpanded.toggle()
     }
-    
+    /// 신고 시트 토글
+    func toggleReportSheet() {
+        showReportSheet.toggle()
+    }
+
     /// 액션 시트 표시
     func showActionSheetView() {
         showActionSheet = true

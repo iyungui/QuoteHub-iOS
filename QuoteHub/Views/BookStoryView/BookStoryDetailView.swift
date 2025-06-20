@@ -20,6 +20,7 @@ struct BookStoryDetailView: View {
     @Environment(BookStoriesViewModel.self) private var storiesViewModel
     @EnvironmentObject private var userAuthManager: UserAuthenticationManager
     
+    @Environment(BlockReportViewModel.self) private var blockReportViewModel
     @State private var detailViewModel: BookStoryDetailViewModel
     
     @State private var commentViewModel: BookStoryCommentsViewModel
@@ -62,6 +63,17 @@ struct BookStoryDetailView: View {
             CommentView()
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
+        }
+        
+        // 북스토 신고하기 창
+        .sheet(isPresented: $detailViewModel.showReportSheet) {
+            ReportSheetView(
+                targetId: story.id,
+                reportType: .bookstory
+            )
+            .presentationDetents([.medium, .large])
+            .presentationDragIndicator(.visible)
+
         }
         .refreshable {
             await withTaskGroup(of: Void.self) { group in
@@ -128,8 +140,12 @@ struct BookStoryDetailView: View {
             
         } else {
             // 친구 스토리라면 차단, 신고 시트를
-            Button("차단하기") {}
-            Button("신고하기") {}
+            Button("차단하기") {
+                Task { await blockUser() }
+            }
+            Button("신고하기") {
+                detailViewModel.toggleReportSheet()
+            }
             Button("취소", role: .cancel) { }
         }
     }
@@ -160,5 +176,10 @@ struct BookStoryDetailView: View {
                 }
             }
         }
+    }
+    private func blockUser() async {
+        let isSuccess = await blockReportViewModel.blockUser(story.userId.id)
+        let alertMessage = isSuccess ? blockReportViewModel.successMessage : blockReportViewModel.errorMessage
+        detailViewModel.showAlertWith(message: alertMessage ?? "")
     }
 }

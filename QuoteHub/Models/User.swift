@@ -22,7 +22,7 @@ struct User: Codable, Identifiable, Equatable {
     let nickname: String
     let profileImage: String
     let statusMessage: String?
-    let blockedUsers: [User]
+    let blockedUsers: [User]?
     static func ==(lhs: User, rhs: User) -> Bool {
         return lhs.id == rhs.id
     }
