@@ -340,9 +340,19 @@ struct BookDetailView: View {
                 NavigationLink(destination: StoryQuotesRecordView(book: book)) {
                     HStack(spacing: 10) {
                         Image(systemName: "highlighter")
+                            .font(.body.weight(.medium))
+                            .foregroundColor(.white)
+
                         Text("북스토리 기록")
+                            .font(.scoreDream(.medium, size: .subheadline))
+                            .foregroundColor(.white)
+
                         Spacer()
+                        
                         Image(systemName: "arrow.right")
+                            .font(.caption2.weight(.bold))
+                            .foregroundColor(.white.opacity(0.8))
+
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
