@@ -13,7 +13,7 @@ struct UserSearchView: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.presentationMode) var presentationMode
     @State private var isActioned: Bool = false
-    @StateObject var viewModel = UserSearchViewModel()
+    @State var viewModel = UserSearchViewModel()
 
     enum Field: Hashable {
         case searchNickname

@@ -20,20 +20,17 @@ struct ThemeDetailView: View {
         return isMy ? .my : .public
     }
     
-    // MARK: - TODO: _storiesViewModel
+    // MARK: - ViewModels
     init(theme: Theme, isMy: Bool) {
         self.theme = theme
         self.isMy = isMy
-        _storiesViewModel = State(wrappedValue: BookStoriesViewModel(themeId: theme.id))
     }
     
     @State private var selectedView: Int = 0  // 0: grid, 1: list
     @State private var showActionSheet: Bool = false
     
     @Environment(ThemesViewModel.self) private var themesViewModel
-    // TODO: - 테마 북스토리와 키워드 북스토리, 그냥 북스토리를 따로 해야하나?
-//    @Environment(BookStoriesViewModel.self) private var storiesViewModel
-    @State private var storiesViewModel: BookStoriesViewModel
+    @Environment(BookStoriesViewModel.self) private var storiesViewModel
 
     @State private var isEditing = false
     
@@ -71,6 +68,8 @@ struct ThemeDetailView: View {
         }
         .progressOverlay(viewModel: storiesViewModel, animationName: "progressLottie", opacity: true)
         .task {
+            // 테마 ID 설정 후 로드
+            storiesViewModel.setThemeId(theme.id)
             storiesViewModel.loadBookStories(type: loadType)
         }
         .refreshable {
@@ -92,6 +91,11 @@ struct ThemeDetailView: View {
             Button("삭제하기", role: .destructive) {
                 Task { await deleteTheme() }
             }
+        }
+        .fullScreenCover(isPresented: $isEditing) {
+//            ThemeEditView(theme: theme) { updatedTheme in
+//                isEditing = false
+//            }
         }
     }
     
@@ -160,8 +164,7 @@ struct ThemeDetailView: View {
                         Spacer()
                         
                         Button(action: {
-                                selectedView = 0
-                            
+                            selectedView = 0
                         }) {
                             HStack(spacing: 6) {
                                 Image(systemName: "square.grid.2x2")
@@ -184,9 +187,7 @@ struct ThemeDetailView: View {
                         }
                         
                         Button(action: {
-//                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                                selectedView = 1
-//                            }
+                            selectedView = 1
                         }) {
                             HStack(spacing: 6) {
                                 Image(systemName: "list.bullet")

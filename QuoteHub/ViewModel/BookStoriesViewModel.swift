@@ -49,26 +49,9 @@ class BookStoriesViewModel: LoadingViewModel {
     
     
     // MARK: - Initialization
-    init(
-        service: BookStoryServiceProtocol = BookStoryService(),
-        themeId: String? = nil,
-        searchKeyword: String? = nil
-    ) {
+    init(service: BookStoryServiceProtocol = BookStoryService()) {
         self.service = service
-        self.themeId = themeId
-        self.searchKeyword = searchKeyword
     }
-    
-    /// 메모리누수 방지위해, 뷰모델이 해제될 때 모든 실행 중인 Task 취소
-//    deinit {
-//        for task in loadingTasks.values {
-//            task.cancel()
-//        }
-//        
-//        for task in operationTasks {
-//            task.cancel()
-//        }
-//    }
     
     // MARK: - PUBLIC METHODS
     
@@ -77,9 +60,44 @@ class BookStoriesViewModel: LoadingViewModel {
         return storiesByType[type] ?? []
     }
     
-    /// 검색키워드 업데이트
-    func updateSearchKeyword(_ keyword: String) {
-        self.searchKeyword = keyword
+    /// 검색키워드 설정 및 관련 상태 초기화
+    func setSearchKeyword(_ keyword: String?) {
+        // 키워드가 변경되면 테마는 클리어
+        if self.searchKeyword != keyword {
+            self.themeId = nil
+            self.searchKeyword = keyword
+            clearAllData()
+        }
+    }
+    
+    /// 테마 ID 설정 및 관련 상태 초기화
+    func setThemeId(_ themeId: String?) {
+        // 테마가 변경되면 검색 키워드는 클리어
+        if self.themeId != themeId {
+            self.searchKeyword = nil
+            self.themeId = themeId
+            clearAllData()
+        }
+    }
+    
+    /// 모든 필터 클리어 (일반 북스토리 조회 모드)
+    func clearAllFilters() {
+        if self.themeId != nil || self.searchKeyword != nil {
+            self.themeId = nil
+            self.searchKeyword = nil
+            clearAllData()
+        }
+    }
+    
+    /// 현재 설정된 필터 상태 확인
+    var currentFilterMode: FilterMode {
+        if let _ = themeId {
+            return .theme
+        } else if let _ = searchKeyword {
+            return .search
+        } else {
+            return .none
+        }
     }
     
     /// 새로고침 (북스토리 로드 타입 파라미터로 받음)
@@ -440,6 +458,13 @@ class BookStoriesViewModel: LoadingViewModel {
     }
 }
 
+// MARK: - FilterMode Enum
+enum FilterMode {
+    case none     // 일반 북스토리 조회
+    case theme    // 테마별 조회
+    case search   // 키워드별 조회
+}
+
 // MARK: - Private Helper Methods
 
 private extension BookStoriesViewModel {
@@ -510,6 +535,22 @@ private extension BookStoriesViewModel {
                 )
             }
         }
+    }
+    
+    /// 모든 데이터 및 상태 초기화
+    func clearAllData() {
+        // 모든 Task 취소
+        cancelAllTasks()
+        
+        // 데이터 초기화
+        storiesByType.removeAll()
+        
+        // 페이지네이션 상태 초기화
+        currentPage = 1
+        isLastPage = false
+        
+        // 에러 메시지 초기화
+        clearErrorMessage()
     }
     
     /// 스토리를 my 타입과 (isPublic일 경우) public 타입에 추가
