@@ -145,6 +145,7 @@
 		CEA554D62E018E290029A8A9 /* GradientBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554D52E018E290029A8A9 /* GradientBackground.swift */; };
 		CEA554DD2E01931F0029A8A9 /* ProfileImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554DC2E01931F0029A8A9 /* ProfileImage.swift */; };
 		CEA554E22E01B1660029A8A9 /* BookStoryEndpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554E12E01B1660029A8A9 /* BookStoryEndpoints.swift */; };
+		CECBB4742E05B408004C7856 /* BookStoryNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4732E05B408004C7856 /* BookStoryNotifications.swift */; };
 		CED3795D2DFEE902001CE700 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED3795C2DFEE902001CE700 /* AuthService.swift */; };
 /* End PBXBuildFile section */
 
@@ -284,6 +285,7 @@
 		CEA554D52E018E290029A8A9 /* GradientBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientBackground.swift; sourceTree = "<group>"; };
 		CEA554DC2E01931F0029A8A9 /* ProfileImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImage.swift; sourceTree = "<group>"; };
 		CEA554E12E01B1660029A8A9 /* BookStoryEndpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookStoryEndpoints.swift; sourceTree = "<group>"; };
+		CECBB4732E05B408004C7856 /* BookStoryNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookStoryNotifications.swift; sourceTree = "<group>"; };
 		CED3795C2DFEE902001CE700 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -449,6 +451,7 @@
 			isa = PBXGroup;
 			children = (
 				CE8C47842DEA8D93003188ED /* APIResponse.swift */,
+				CECBB4732E05B408004C7856 /* BookStoryNotifications.swift */,
 				CE1101002E03D41F003C592E /* LoadType.swift */,
 				CE8C47852DEA8D93003188ED /* Book.swift */,
 				CE8C47862DEA8D93003188ED /* BookStory.swift */,
@@ -909,6 +912,7 @@
 				CEA554BF2E003BFD0029A8A9 /* ThoughtInputCard.swift in Sources */,
 				CE8C47A02DEA8D97003188ED /* EndpointProtocol.swift in Sources */,
 				CED3795D2DFEE902001CE700 /* AuthService.swift in Sources */,
+				CECBB4742E05B408004C7856 /* BookStoryNotifications.swift in Sources */,
 				CE8C47A12DEA8D97003188ED /* NetworkError.swift in Sources */,
 				CE8C47A22DEA8D97003188ED /* UserEndpoints.swift in Sources */,
 				C60700CD2AFE05D9009D202A /* ThemeService.swift in Sources */,
