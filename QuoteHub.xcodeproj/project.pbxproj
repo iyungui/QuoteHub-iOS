@@ -292,6 +292,7 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		CE8C48472DEADAAC003188ED /* Font */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Font; sourceTree = "<group>"; };
 		CE8C48E92DF05884003188ED /* Lottie */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Lottie; sourceTree = "<group>"; };
+		CECBB4752E05B4E6004C7856 /* protocol */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = protocol; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -324,6 +325,7 @@
 		C676F5252AAC02CB00EC7241 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				CECBB4752E05B4E6004C7856 /* protocol */,
 				CE1101082E0475DC003C592E /* DetailViewModel */,
 				C667E97F2ACA388C006EE7A9 /* UserViewModel.swift */,
 				CE11010F2E04775D003C592E /* BlockReportViewModel.swift */,
@@ -721,6 +723,7 @@
 			fileSystemSynchronizedGroups = (
 				CE8C48472DEADAAC003188ED /* Font */,
 				CE8C48E92DF05884003188ED /* Lottie */,
+				CECBB4752E05B4E6004C7856 /* protocol */,
 			);
 			name = QuoteHub;
 			packageProductDependencies = (
