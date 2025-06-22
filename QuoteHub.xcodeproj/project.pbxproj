@@ -194,6 +194,7 @@
 		CECBB5092E082BBE004C7856 /* CommentEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB5082E082BBE004C7856 /* CommentEditView.swift */; };
 		CECBB50B2E082C7E004C7856 /* FriendLibraryKeywordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB50A2E082C7E004C7856 /* FriendLibraryKeywordsView.swift */; };
 		CECBB50D2E082C89004C7856 /* MyLibraryKeywordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB50C2E082C89004C7856 /* MyLibraryKeywordsView.swift */; };
+		CECBB5152E084369004C7856 /* ThemeNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB5142E084369004C7856 /* ThemeNotifications.swift */; };
 		CED3795D2DFEE902001CE700 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED3795C2DFEE902001CE700 /* AuthService.swift */; };
 /* End PBXBuildFile section */
 
@@ -382,12 +383,14 @@
 		CECBB5082E082BBE004C7856 /* CommentEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentEditView.swift; sourceTree = "<group>"; };
 		CECBB50A2E082C7E004C7856 /* FriendLibraryKeywordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendLibraryKeywordsView.swift; sourceTree = "<group>"; };
 		CECBB50C2E082C89004C7856 /* MyLibraryKeywordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLibraryKeywordsView.swift; sourceTree = "<group>"; };
+		CECBB5142E084369004C7856 /* ThemeNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeNotifications.swift; sourceTree = "<group>"; };
 		CED3795C2DFEE902001CE700 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		CE8C48472DEADAAC003188ED /* Font */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Font; sourceTree = "<group>"; };
 		CE8C48E92DF05884003188ED /* Lottie */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Lottie; sourceTree = "<group>"; };
+		CECBB50E2E0842BF004C7856 /* Theme */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Theme; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -420,6 +423,7 @@
 		C676F5252AAC02CB00EC7241 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				CECBB50E2E0842BF004C7856 /* Theme */,
 				CECBB4A12E079EA6004C7856 /* BookStory */,
 				CE1101082E0475DC003C592E /* DetailViewModel */,
 				C667E97F2ACA388C006EE7A9 /* UserViewModel.swift */,
@@ -549,6 +553,7 @@
 			children = (
 				CE8C47842DEA8D93003188ED /* APIResponse.swift */,
 				CECBB4732E05B408004C7856 /* BookStoryNotifications.swift */,
+				CECBB5142E084369004C7856 /* ThemeNotifications.swift */,
 				CE1101002E03D41F003C592E /* LoadType.swift */,
 				CE8C47852DEA8D93003188ED /* Book.swift */,
 				CE8C47862DEA8D93003188ED /* BookStory.swift */,
@@ -969,6 +974,7 @@
 			fileSystemSynchronizedGroups = (
 				CE8C48472DEADAAC003188ED /* Font */,
 				CE8C48E92DF05884003188ED /* Lottie */,
+				CECBB50E2E0842BF004C7856 /* Theme */,
 			);
 			name = QuoteHub;
 			packageProductDependencies = (
@@ -1067,6 +1073,7 @@
 				CE1100F82E02816A003C592E /* ReadingProgressSection.swift in Sources */,
 				CECBB4A92E07AAFE004C7856 /* MyLibraryView.swift in Sources */,
 				CE8C478E2DEA8D93003188ED /* APIResponse.swift in Sources */,
+				CECBB5152E084369004C7856 /* ThemeNotifications.swift in Sources */,
 				CECBB4FA2E082992004C7856 /* ThemeEmptyStateView.swift in Sources */,
 				CECBB4E62E0826B2004C7856 /* StoryGridCardContent.swift in Sources */,
 				CECBB4D82E08260C004C7856 /* MyThemeGalleryListView.swift in Sources */,
