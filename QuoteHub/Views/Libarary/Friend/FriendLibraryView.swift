@@ -26,6 +26,8 @@ struct FriendLibraryView: View {
     @State private var showActionSheet = false
     
     // MARK: - Initialization
+    
+    // 친구 북스토리 뷰모델은 친구 라이브러리 뷰 들어올 때마다 생성
     init(friendUser: User) {
         self.friendUser = friendUser
         self._friendBookStoriesViewModel = State(
@@ -54,10 +56,13 @@ struct FriendLibraryView: View {
                     },
                     themesView: {
                         FriendLibraryThemesView(friendId: friendUser.id)
+                    },
+                    keywordsView: {
+                        FriendLibraryKeywordsView()
                     }
                 )
             },
-            navigationItems: {
+            navigationBarItems: {
                 FriendLibraryNavigationItems(
                     showActionSheet: $showActionSheet
                 )

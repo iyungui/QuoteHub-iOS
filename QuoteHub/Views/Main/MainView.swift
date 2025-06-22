@@ -75,7 +75,7 @@ struct MainView: View {
     private var mainContent: some View {
         switch tabController.selectedTab {
         case 0:
-            LibraryView(otherUser: nil)
+            MyLibraryView()
         case 2:
             HomeView()
         default:

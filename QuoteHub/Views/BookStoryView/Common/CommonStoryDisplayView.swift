@@ -115,7 +115,7 @@ struct CommonStoryDisplayView: View {
     
     private var profileSection: some View {
         NavigationLink {
-            LibraryView(otherUser: isMyStory ? nil : story.userId)
+            FriendLibraryView(friendUser: story.userId)
         } label: {
             HStack(spacing: 16) {
                 ProfileImage(profileImageURL: story.userId.profileImage, size: 60)

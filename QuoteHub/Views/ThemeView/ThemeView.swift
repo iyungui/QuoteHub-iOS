@@ -145,9 +145,9 @@ struct ThemeView: View {
     @ViewBuilder
     private var destinationView: some View {
         if theme.userId.id == userViewModel.currentUser?.id {
-            ThemeDetailView(theme: theme, isMy: true)
+            MyThemeDetailView(theme: theme)
         } else {
-            ThemeDetailView(theme: theme, isMy: false)
+            PublicThemeDetailView(theme: theme)
         }
     }
 }

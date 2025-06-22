@@ -115,8 +115,8 @@
 		CE8C48812DEBF39D003188ED /* SearchBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C487C2DEBF39D003188ED /* SearchBookView.swift */; };
 		CE8C48822DEBF39D003188ED /* SetThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C487D2DEBF39D003188ED /* SetThemeView.swift */; };
 		CE8C48862DEBF39F003188ED /* CreateThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48832DEBF39F003188ED /* CreateThemeView.swift */; };
-		CE8C488A2DEC3BF2003188ED /* LibraryThemesView(My+Friend).swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48892DEC3BF2003188ED /* LibraryThemesView(My+Friend).swift */; };
-		CE8C488C2DEC3E73003188ED /* LibraryStoriesView(My+Friend).swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C488B2DEC3E73003188ED /* LibraryStoriesView(My+Friend).swift */; };
+		CE8C488A2DEC3BF2003188ED /* MyLibraryThemesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48892DEC3BF2003188ED /* MyLibraryThemesView.swift */; };
+		CE8C488C2DEC3E73003188ED /* FriendLibraryStoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C488B2DEC3E73003188ED /* FriendLibraryStoriesView.swift */; };
 		CE8C488E2DEC46E9003188ED /* TabIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C488D2DEC46E9003188ED /* TabIndicator.swift */; };
 		CE8C48902DEC96B6003188ED /* PhotoPickerAlertType.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C488F2DEC96B6003188ED /* PhotoPickerAlertType.swift */; };
 		CE8C48E12DF04BD8003188ED /* CustomProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C48E02DF04BD8003188ED /* CustomProgressView.swift */; };
@@ -160,6 +160,40 @@
 		CECBB4B32E07B3AF004C7856 /* LibraryTabSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4B22E07B3AF004C7856 /* LibraryTabSection.swift */; };
 		CECBB4B52E07B410004C7856 /* LibraryContentSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4B42E07B410004C7856 /* LibraryContentSection.swift */; };
 		CECBB4B72E07B420004C7856 /* LibraryNavigationItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4B62E07B420004C7856 /* LibraryNavigationItems.swift */; };
+		CECBB4BD2E07BBFD004C7856 /* ThemeDetailBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4BC2E07BBFD004C7856 /* ThemeDetailBaseView.swift */; };
+		CECBB4BF2E07BC0A004C7856 /* ThemeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4BE2E07BC0A004C7856 /* ThemeHeaderView.swift */; };
+		CECBB4C12E07BC16004C7856 /* ThemeInfoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4C02E07BC16004C7856 /* ThemeInfoSection.swift */; };
+		CECBB4C32E07BC2F004C7856 /* ThemeVisibilityTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4C22E07BC2F004C7856 /* ThemeVisibilityTag.swift */; };
+		CECBB4C52E07BC47004C7856 /* ViewToggleButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4C42E07BC47004C7856 /* ViewToggleButtons.swift */; };
+		CECBB4C72E07BC84004C7856 /* MyThemeContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4C62E07BC84004C7856 /* MyThemeContentView.swift */; };
+		CECBB4C92E07BCA7004C7856 /* ThemeDetailNavigationItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4C82E07BCA7004C7856 /* ThemeDetailNavigationItems.swift */; };
+		CECBB4CB2E081A87004C7856 /* MyBookStoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4CA2E081A87004C7856 /* MyBookStoryDetailView.swift */; };
+		CECBB4CD2E081CD6004C7856 /* PublicBookStoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4CC2E081CD6004C7856 /* PublicBookStoryDetailView.swift */; };
+		CECBB4CF2E081CF2004C7856 /* BookStoryDetailBaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4CE2E081CF2004C7856 /* BookStoryDetailBaseView.swift */; };
+		CECBB4D12E081D0C004C7856 /* BookStoryContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4D02E081D0C004C7856 /* BookStoryContentView.swift */; };
+		CECBB4D32E081D1C004C7856 /* BookStoryToolbarItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4D22E081D1C004C7856 /* BookStoryToolbarItems.swift */; };
+		CECBB4D62E0825F0004C7856 /* MyThemeGalleryGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4D52E0825F0004C7856 /* MyThemeGalleryGridView.swift */; };
+		CECBB4D82E08260C004C7856 /* MyThemeGalleryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4D72E08260C004C7856 /* MyThemeGalleryListView.swift */; };
+		CECBB4DA2E082628004C7856 /* PublicThemeGalleryGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4D92E082628004C7856 /* PublicThemeGalleryGridView.swift */; };
+		CECBB4DC2E082636004C7856 /* PublicThemeGalleryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4DB2E082636004C7856 /* PublicThemeGalleryListView.swift */; };
+		CECBB4DE2E08265D004C7856 /* MyStoryGridCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4DD2E08265D004C7856 /* MyStoryGridCard.swift */; };
+		CECBB4E02E082674004C7856 /* PublicStoryGridCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4DF2E082674004C7856 /* PublicStoryGridCard.swift */; };
+		CECBB4E22E08268C004C7856 /* MyStoryListCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4E12E08268C004C7856 /* MyStoryListCard.swift */; };
+		CECBB4E42E08269B004C7856 /* PublicStoryListCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4E32E08269B004C7856 /* PublicStoryListCard.swift */; };
+		CECBB4E62E0826B2004C7856 /* StoryGridCardContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4E52E0826B2004C7856 /* StoryGridCardContent.swift */; };
+		CECBB4E82E0826C2004C7856 /* StoryListCardContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4E72E0826C2004C7856 /* StoryListCardContent.swift */; };
+		CECBB4ED2E08270C004C7856 /* MyThemeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4EB2E08270C004C7856 /* MyThemeDetailView.swift */; };
+		CECBB4F02E08270C004C7856 /* PublicThemeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4EE2E08270C004C7856 /* PublicThemeDetailView.swift */; };
+		CECBB4F42E082759004C7856 /* PublicThemeContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4F32E082759004C7856 /* PublicThemeContentView.swift */; };
+		CECBB4F62E08295E004C7856 /* ViewType.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4F52E08295E004C7856 /* ViewType.swift */; };
+		CECBB4F82E082981004C7856 /* MyThemeNavigationItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4F72E082981004C7856 /* MyThemeNavigationItems.swift */; };
+		CECBB4FA2E082992004C7856 /* ThemeEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4F92E082992004C7856 /* ThemeEmptyStateView.swift */; };
+		CECBB4FE2E082A18004C7856 /* FriendLibraryThemesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4FD2E082A18004C7856 /* FriendLibraryThemesView.swift */; };
+		CECBB5022E082A3A004C7856 /* MyLibraryStoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB5012E082A3A004C7856 /* MyLibraryStoriesView.swift */; };
+		CECBB5072E082BA8004C7856 /* CommentRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB5062E082BA8004C7856 /* CommentRowView.swift */; };
+		CECBB5092E082BBE004C7856 /* CommentEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB5082E082BBE004C7856 /* CommentEditView.swift */; };
+		CECBB50B2E082C7E004C7856 /* FriendLibraryKeywordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB50A2E082C7E004C7856 /* FriendLibraryKeywordsView.swift */; };
+		CECBB50D2E082C89004C7856 /* MyLibraryKeywordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB50C2E082C89004C7856 /* MyLibraryKeywordsView.swift */; };
 		CED3795D2DFEE902001CE700 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED3795C2DFEE902001CE700 /* AuthService.swift */; };
 /* End PBXBuildFile section */
 
@@ -270,8 +304,8 @@
 		CE8C487C2DEBF39D003188ED /* SearchBookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBookView.swift; sourceTree = "<group>"; };
 		CE8C487D2DEBF39D003188ED /* SetThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetThemeView.swift; sourceTree = "<group>"; };
 		CE8C48832DEBF39F003188ED /* CreateThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateThemeView.swift; sourceTree = "<group>"; };
-		CE8C48892DEC3BF2003188ED /* LibraryThemesView(My+Friend).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryThemesView(My+Friend).swift"; sourceTree = "<group>"; };
-		CE8C488B2DEC3E73003188ED /* LibraryStoriesView(My+Friend).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStoriesView(My+Friend).swift"; sourceTree = "<group>"; };
+		CE8C48892DEC3BF2003188ED /* MyLibraryThemesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLibraryThemesView.swift; sourceTree = "<group>"; };
+		CE8C488B2DEC3E73003188ED /* FriendLibraryStoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendLibraryStoriesView.swift; sourceTree = "<group>"; };
 		CE8C488D2DEC46E9003188ED /* TabIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabIndicator.swift; sourceTree = "<group>"; };
 		CE8C488F2DEC96B6003188ED /* PhotoPickerAlertType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerAlertType.swift; sourceTree = "<group>"; };
 		CE8C48E02DF04BD8003188ED /* CustomProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomProgressView.swift; sourceTree = "<group>"; };
@@ -314,6 +348,40 @@
 		CECBB4B22E07B3AF004C7856 /* LibraryTabSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTabSection.swift; sourceTree = "<group>"; };
 		CECBB4B42E07B410004C7856 /* LibraryContentSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryContentSection.swift; sourceTree = "<group>"; };
 		CECBB4B62E07B420004C7856 /* LibraryNavigationItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryNavigationItems.swift; sourceTree = "<group>"; };
+		CECBB4BC2E07BBFD004C7856 /* ThemeDetailBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeDetailBaseView.swift; sourceTree = "<group>"; };
+		CECBB4BE2E07BC0A004C7856 /* ThemeHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeHeaderView.swift; sourceTree = "<group>"; };
+		CECBB4C02E07BC16004C7856 /* ThemeInfoSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeInfoSection.swift; sourceTree = "<group>"; };
+		CECBB4C22E07BC2F004C7856 /* ThemeVisibilityTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeVisibilityTag.swift; sourceTree = "<group>"; };
+		CECBB4C42E07BC47004C7856 /* ViewToggleButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewToggleButtons.swift; sourceTree = "<group>"; };
+		CECBB4C62E07BC84004C7856 /* MyThemeContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyThemeContentView.swift; sourceTree = "<group>"; };
+		CECBB4C82E07BCA7004C7856 /* ThemeDetailNavigationItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeDetailNavigationItems.swift; sourceTree = "<group>"; };
+		CECBB4CA2E081A87004C7856 /* MyBookStoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBookStoryDetailView.swift; sourceTree = "<group>"; };
+		CECBB4CC2E081CD6004C7856 /* PublicBookStoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicBookStoryDetailView.swift; sourceTree = "<group>"; };
+		CECBB4CE2E081CF2004C7856 /* BookStoryDetailBaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookStoryDetailBaseView.swift; sourceTree = "<group>"; };
+		CECBB4D02E081D0C004C7856 /* BookStoryContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookStoryContentView.swift; sourceTree = "<group>"; };
+		CECBB4D22E081D1C004C7856 /* BookStoryToolbarItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookStoryToolbarItems.swift; sourceTree = "<group>"; };
+		CECBB4D52E0825F0004C7856 /* MyThemeGalleryGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyThemeGalleryGridView.swift; sourceTree = "<group>"; };
+		CECBB4D72E08260C004C7856 /* MyThemeGalleryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyThemeGalleryListView.swift; sourceTree = "<group>"; };
+		CECBB4D92E082628004C7856 /* PublicThemeGalleryGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicThemeGalleryGridView.swift; sourceTree = "<group>"; };
+		CECBB4DB2E082636004C7856 /* PublicThemeGalleryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicThemeGalleryListView.swift; sourceTree = "<group>"; };
+		CECBB4DD2E08265D004C7856 /* MyStoryGridCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyStoryGridCard.swift; sourceTree = "<group>"; };
+		CECBB4DF2E082674004C7856 /* PublicStoryGridCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicStoryGridCard.swift; sourceTree = "<group>"; };
+		CECBB4E12E08268C004C7856 /* MyStoryListCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyStoryListCard.swift; sourceTree = "<group>"; };
+		CECBB4E32E08269B004C7856 /* PublicStoryListCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicStoryListCard.swift; sourceTree = "<group>"; };
+		CECBB4E52E0826B2004C7856 /* StoryGridCardContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryGridCardContent.swift; sourceTree = "<group>"; };
+		CECBB4E72E0826C2004C7856 /* StoryListCardContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryListCardContent.swift; sourceTree = "<group>"; };
+		CECBB4EB2E08270C004C7856 /* MyThemeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyThemeDetailView.swift; sourceTree = "<group>"; };
+		CECBB4EE2E08270C004C7856 /* PublicThemeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicThemeDetailView.swift; sourceTree = "<group>"; };
+		CECBB4F32E082759004C7856 /* PublicThemeContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicThemeContentView.swift; sourceTree = "<group>"; };
+		CECBB4F52E08295E004C7856 /* ViewType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewType.swift; sourceTree = "<group>"; };
+		CECBB4F72E082981004C7856 /* MyThemeNavigationItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyThemeNavigationItems.swift; sourceTree = "<group>"; };
+		CECBB4F92E082992004C7856 /* ThemeEmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeEmptyStateView.swift; sourceTree = "<group>"; };
+		CECBB4FD2E082A18004C7856 /* FriendLibraryThemesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendLibraryThemesView.swift; sourceTree = "<group>"; };
+		CECBB5012E082A3A004C7856 /* MyLibraryStoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLibraryStoriesView.swift; sourceTree = "<group>"; };
+		CECBB5062E082BA8004C7856 /* CommentRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentRowView.swift; sourceTree = "<group>"; };
+		CECBB5082E082BBE004C7856 /* CommentEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentEditView.swift; sourceTree = "<group>"; };
+		CECBB50A2E082C7E004C7856 /* FriendLibraryKeywordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendLibraryKeywordsView.swift; sourceTree = "<group>"; };
+		CECBB50C2E082C89004C7856 /* MyLibraryKeywordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLibraryKeywordsView.swift; sourceTree = "<group>"; };
 		CED3795C2DFEE902001CE700 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -538,21 +606,9 @@
 		CE8C47FF2DEA8DAE003188ED /* Libarary */ = {
 			isa = PBXGroup;
 			children = (
-				CE8C47FE2DEA8DAE003188ED /* LibraryView.swift */,
-				CECBB4A82E07AAFE004C7856 /* MyLibraryView.swift */,
-				CECBB4AC2E07B03D004C7856 /* FriendLibraryView.swift */,
-				CECBB4AE2E07B19E004C7856 /* LibraryBaseView.swift */,
-				CECBB4B02E07B399004C7856 /* LibraryProfileSection.swift */,
-				CECBB4B42E07B410004C7856 /* LibraryContentSection.swift */,
-				CECBB4B62E07B420004C7856 /* LibraryNavigationItems.swift */,
-				CECBB4AA2E07ABD9004C7856 /* LibraryTab.swift */,
-				CECBB4B22E07B3AF004C7856 /* LibraryTabSection.swift */,
-				CE8C48702DEB5190003188ED /* ProfileView.swift */,
-				CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */,
-				CE8C486E2DEB2E39003188ED /* LibraryTabButtonView.swift */,
-				CE8C48892DEC3BF2003188ED /* LibraryThemesView(My+Friend).swift */,
-				CE8C488B2DEC3E73003188ED /* LibraryStoriesView(My+Friend).swift */,
-				CE1100DA2E0275D6003C592E /* StoryBookView.swift */,
+				CECBB4FC2E0829D3004C7856 /* Common */,
+				CECBB4FF2E082A29004C7856 /* My */,
+				CECBB5002E082A30004C7856 /* Friend */,
 			);
 			path = Libarary;
 			sourceTree = "<group>";
@@ -583,11 +639,9 @@
 		CE8C48122DEA8DAE003188ED /* BookStoryView */ = {
 			isa = PBXGroup;
 			children = (
-				CE8C480F2DEA8DAE003188ED /* BookStoryDetailView.swift */,
-				CE4FEF862DFB39080072E8B9 /* CarouselStoryQuotesDisplayView.swift */,
-				CE4FEF882DFB391F0072E8B9 /* ListStoryQuotesDisplayView.swift */,
-				CE4FEF8A2DFB3EFC0072E8B9 /* CommonStoryDisplayView.swift */,
-				CE8C480E2DEA8DAE003188ED /* CommentView.swift */,
+				CECBB5042E082A73004C7856 /* Common */,
+				CECBB4CA2E081A87004C7856 /* MyBookStoryDetailView.swift */,
+				CECBB4CC2E081CD6004C7856 /* PublicBookStoryDetailView.swift */,
 				CE8C49762DF1D132003188ED /* StoryView.swift */,
 			);
 			path = BookStoryView;
@@ -596,11 +650,10 @@
 		CE8C48172DEA8DAE003188ED /* ThemeView */ = {
 			isa = PBXGroup;
 			children = (
-				CE8C48152DEA8DAE003188ED /* ThemeDetailView.swift */,
-				CE8C49442DF18B68003188ED /* ThemeGalleryGridView.swift */,
-				CE8C49462DF18B89003188ED /* ThemeGalleryListView.swift */,
-				CE8C49702DF19111003188ED /* StoryGridCard.swift */,
-				CE8C49722DF19133003188ED /* StoryListCard.swift */,
+				CECBB4F22E082720004C7856 /* Common */,
+				CECBB4EC2E08270C004C7856 /* My */,
+				CECBB4EF2E08270C004C7856 /* Public */,
+				CECBB4C82E07BCA7004C7856 /* ThemeDetailNavigationItems.swift */,
 				CE8C49782DF1DB4E003188ED /* ThemeView.swift */,
 				CE8C48162DEA8DAE003188ED /* UpdateThemaView.swift */,
 			);
@@ -617,6 +670,7 @@
 				CE8C48062DEA8DAE003188ED /* Record */,
 				CE8C480D2DEA8DAE003188ED /* Setting */,
 				CE8C48122DEA8DAE003188ED /* BookStoryView */,
+				CECBB5052E082A99004C7856 /* Comment */,
 				CE8C48172DEA8DAE003188ED /* ThemeView */,
 				CE8C48182DEA8DAE003188ED /* ReportSheetView.swift */,
 				CE8C48192DEA8DAE003188ED /* WebView.swift */,
@@ -700,13 +754,18 @@
 		CEA554D12E018AF50029A8A9 /* Legacy */ = {
 			isa = PBXGroup;
 			children = (
+				CECBB4D42E0825B2004C7856 /* Theme */,
 				C6D78A092AD03B2900F03FB8 /* APIEndpoint.swift */,
+				CE8C480F2DEA8DAE003188ED /* BookStoryDetailView.swift */,
+				CE8C48702DEB5190003188ED /* ProfileView.swift */,
+				CE8C486E2DEB2E39003188ED /* LibraryTabButtonView.swift */,
 				CEA554D02E018AF50029A8A9 /* symbolExampleView.swift */,
 				C65330342B02540300E6B283 /* FollowService.swift */,
 				C63DB3AF2B118C280026B668 /* ReportViewModel.swift */,
 				C63DB3AB2B1188C50026B668 /* ReportService.swift */,
 				C6691C512B04DA8C0083C678 /* FollowViewModel.swift */,
 				CE8C47FB2DEA8DAE003188ED /* FollowListView.swift */,
+				CE8C47FE2DEA8DAE003188ED /* LibraryView.swift */,
 			);
 			path = Legacy;
 			sourceTree = "<group>";
@@ -775,6 +834,121 @@
 				CECBB4A02E079EA6004C7856 /* PublicBookStory */,
 			);
 			path = BookStory;
+			sourceTree = "<group>";
+		};
+		CECBB4D42E0825B2004C7856 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				CE8C49702DF19111003188ED /* StoryGridCard.swift */,
+				CE8C49722DF19133003188ED /* StoryListCard.swift */,
+				CE8C48152DEA8DAE003188ED /* ThemeDetailView.swift */,
+				CE8C49442DF18B68003188ED /* ThemeGalleryGridView.swift */,
+				CE8C49462DF18B89003188ED /* ThemeGalleryListView.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		CECBB4EC2E08270C004C7856 /* My */ = {
+			isa = PBXGroup;
+			children = (
+				CECBB4EB2E08270C004C7856 /* MyThemeDetailView.swift */,
+				CECBB4C62E07BC84004C7856 /* MyThemeContentView.swift */,
+				CECBB4D52E0825F0004C7856 /* MyThemeGalleryGridView.swift */,
+				CECBB4D72E08260C004C7856 /* MyThemeGalleryListView.swift */,
+				CECBB4F72E082981004C7856 /* MyThemeNavigationItems.swift */,
+				CECBB4DD2E08265D004C7856 /* MyStoryGridCard.swift */,
+				CECBB4E12E08268C004C7856 /* MyStoryListCard.swift */,
+			);
+			path = My;
+			sourceTree = "<group>";
+		};
+		CECBB4EF2E08270C004C7856 /* Public */ = {
+			isa = PBXGroup;
+			children = (
+				CECBB4EE2E08270C004C7856 /* PublicThemeDetailView.swift */,
+				CECBB4F32E082759004C7856 /* PublicThemeContentView.swift */,
+				CECBB4D92E082628004C7856 /* PublicThemeGalleryGridView.swift */,
+				CECBB4DB2E082636004C7856 /* PublicThemeGalleryListView.swift */,
+				CECBB4E32E08269B004C7856 /* PublicStoryListCard.swift */,
+				CECBB4DF2E082674004C7856 /* PublicStoryGridCard.swift */,
+			);
+			path = Public;
+			sourceTree = "<group>";
+		};
+		CECBB4F22E082720004C7856 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				CECBB4BC2E07BBFD004C7856 /* ThemeDetailBaseView.swift */,
+				CECBB4F52E08295E004C7856 /* ViewType.swift */,
+				CECBB4BE2E07BC0A004C7856 /* ThemeHeaderView.swift */,
+				CECBB4C02E07BC16004C7856 /* ThemeInfoSection.swift */,
+				CECBB4E72E0826C2004C7856 /* StoryListCardContent.swift */,
+				CECBB4E52E0826B2004C7856 /* StoryGridCardContent.swift */,
+				CECBB4F92E082992004C7856 /* ThemeEmptyStateView.swift */,
+				CECBB4C22E07BC2F004C7856 /* ThemeVisibilityTag.swift */,
+				CECBB4C42E07BC47004C7856 /* ViewToggleButtons.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		CECBB4FC2E0829D3004C7856 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				CECBB4AE2E07B19E004C7856 /* LibraryBaseView.swift */,
+				CECBB4B02E07B399004C7856 /* LibraryProfileSection.swift */,
+				CECBB4B42E07B410004C7856 /* LibraryContentSection.swift */,
+				CECBB4B62E07B420004C7856 /* LibraryNavigationItems.swift */,
+				CECBB4AA2E07ABD9004C7856 /* LibraryTab.swift */,
+				CECBB4B22E07B3AF004C7856 /* LibraryTabSection.swift */,
+				CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */,
+				CE1100DA2E0275D6003C592E /* StoryBookView.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		CECBB4FF2E082A29004C7856 /* My */ = {
+			isa = PBXGroup;
+			children = (
+				CECBB4A82E07AAFE004C7856 /* MyLibraryView.swift */,
+				CE8C48892DEC3BF2003188ED /* MyLibraryThemesView.swift */,
+				CECBB5012E082A3A004C7856 /* MyLibraryStoriesView.swift */,
+				CECBB50C2E082C89004C7856 /* MyLibraryKeywordsView.swift */,
+			);
+			path = My;
+			sourceTree = "<group>";
+		};
+		CECBB5002E082A30004C7856 /* Friend */ = {
+			isa = PBXGroup;
+			children = (
+				CECBB4AC2E07B03D004C7856 /* FriendLibraryView.swift */,
+				CECBB50A2E082C7E004C7856 /* FriendLibraryKeywordsView.swift */,
+				CECBB4FD2E082A18004C7856 /* FriendLibraryThemesView.swift */,
+				CE8C488B2DEC3E73003188ED /* FriendLibraryStoriesView.swift */,
+			);
+			path = Friend;
+			sourceTree = "<group>";
+		};
+		CECBB5042E082A73004C7856 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				CECBB4CE2E081CF2004C7856 /* BookStoryDetailBaseView.swift */,
+				CECBB4D02E081D0C004C7856 /* BookStoryContentView.swift */,
+				CE4FEF862DFB39080072E8B9 /* CarouselStoryQuotesDisplayView.swift */,
+				CE4FEF882DFB391F0072E8B9 /* ListStoryQuotesDisplayView.swift */,
+				CE4FEF8A2DFB3EFC0072E8B9 /* CommonStoryDisplayView.swift */,
+				CECBB4D22E081D1C004C7856 /* BookStoryToolbarItems.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		CECBB5052E082A99004C7856 /* Comment */ = {
+			isa = PBXGroup;
+			children = (
+				CE8C480E2DEA8DAE003188ED /* CommentView.swift */,
+				CECBB5082E082BBE004C7856 /* CommentEditView.swift */,
+				CECBB5062E082BA8004C7856 /* CommentRowView.swift */,
+			);
+			path = Comment;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -871,13 +1045,17 @@
 				C667E97E2AC9DE7F006EE7A9 /* BookStoriesViewModel.swift in Sources */,
 				CE8C49772DF1D132003188ED /* StoryView.swift in Sources */,
 				CE1101102E04775D003C592E /* BlockReportViewModel.swift in Sources */,
+				CECBB4BF2E07BC0A004C7856 /* ThemeHeaderView.swift in Sources */,
+				CECBB4CD2E081CD6004C7856 /* PublicBookStoryDetailView.swift in Sources */,
 				C6B56FDF2AA8B60B003905C3 /* ContentView.swift in Sources */,
 				CE4FEF5D2DF93F260072E8B9 /* HiddenModifier.swift in Sources */,
 				CE1100EC2E02816A003C592E /* CustomTextEditor.swift in Sources */,
 				CE1100ED2E02816A003C592E /* FeedbackView.swift in Sources */,
 				CE1100EE2E02816A003C592E /* StoryCharacterCountView.swift in Sources */,
+				CECBB4E42E08269B004C7856 /* PublicStoryListCard.swift in Sources */,
 				CE1100EF2E02816A003C592E /* StoryCreateGuideSection.swift in Sources */,
 				C6DE7F512AF76B480020F5CB /* BookStoryCommentService.swift in Sources */,
+				CECBB4CF2E081CF2004C7856 /* BookStoryDetailBaseView.swift in Sources */,
 				CE1101012E03D41F003C592E /* LoadType.swift in Sources */,
 				CEA554D22E018AF50029A8A9 /* symbolExampleView.swift in Sources */,
 				CEA554D42E018D9C0029A8A9 /* View+Extensions.swift in Sources */,
@@ -885,28 +1063,38 @@
 				CE1100F62E02816A003C592E /* ReadingLevel.swift in Sources */,
 				CE1100F72E02816A003C592E /* ReadingLevelSection.swift in Sources */,
 				CE1100FE2E03D022003C592E /* ThemeEndpoints.swift in Sources */,
+				CECBB4DC2E082636004C7856 /* PublicThemeGalleryListView.swift in Sources */,
 				CE1100F82E02816A003C592E /* ReadingProgressSection.swift in Sources */,
 				CECBB4A92E07AAFE004C7856 /* MyLibraryView.swift in Sources */,
 				CE8C478E2DEA8D93003188ED /* APIResponse.swift in Sources */,
+				CECBB4FA2E082992004C7856 /* ThemeEmptyStateView.swift in Sources */,
+				CECBB4E62E0826B2004C7856 /* StoryGridCardContent.swift in Sources */,
+				CECBB4D82E08260C004C7856 /* MyThemeGalleryListView.swift in Sources */,
 				CE8C478F2DEA8D93003188ED /* Book.swift in Sources */,
+				CECBB4F42E082759004C7856 /* PublicThemeContentView.swift in Sources */,
 				CE8C47902DEA8D93003188ED /* BookStory.swift in Sources */,
 				CE11010E2E047641003C592E /* BlockReportEndpoints.swift in Sources */,
 				CE8C47912DEA8D93003188ED /* BookStoryComment.swift in Sources */,
+				CECBB4ED2E08270C004C7856 /* MyThemeDetailView.swift in Sources */,
+				CECBB4F82E082981004C7856 /* MyThemeNavigationItems.swift in Sources */,
 				CE8C47922DEA8D93003188ED /* Theme.swift in Sources */,
+				CECBB5072E082BA8004C7856 /* CommentRowView.swift in Sources */,
 				CE8C48652DEAE2A9003188ED /* FontManager.swift in Sources */,
 				CE8C48ED2DF1134C003188ED /* RandomBooksViewModel.swift in Sources */,
-				CE8C488C2DEC3E73003188ED /* LibraryStoriesView(My+Friend).swift in Sources */,
+				CE8C488C2DEC3E73003188ED /* FriendLibraryStoriesView.swift in Sources */,
 				CE8C49192DF15FF9003188ED /* DraftStory.swift in Sources */,
 				CE8C47942DEA8D93003188ED /* Report.swift in Sources */,
 				CE8C47952DEA8D93003188ED /* User.swift in Sources */,
 				C67AA3CB2AE389F500490DDE /* BookSearchViewModel.swift in Sources */,
 				C694A2ED2AC5778400574D20 /* UserService.swift in Sources */,
+				CECBB4CB2E081A87004C7856 /* MyBookStoryDetailView.swift in Sources */,
 				C60700CF2AFE14F1009D202A /* ThemesViewModel.swift in Sources */,
 				CE8C481B2DEA8DAE003188ED /* HomeView.swift in Sources */,
 				CE8C481C2DEA8DAE003188ED /* PublicStoriesListView.swift in Sources */,
 				CE1100E62E0280C3003C592E /* LoadingViewModel.swift in Sources */,
 				CE8C481D2DEA8DAE003188ED /* PublicThemesListView.swift in Sources */,
 				CE1100DB2E0275D6003C592E /* StoryBookView.swift in Sources */,
+				CECBB4F62E08295E004C7856 /* ViewType.swift in Sources */,
 				CE8C481E2DEA8DAE003188ED /* UserSearchView.swift in Sources */,
 				CE8C48202DEA8DAE003188ED /* KeywordGroupedStoriesView.swift in Sources */,
 				CE8C49452DF18B69003188ED /* ThemeGalleryGridView.swift in Sources */,
@@ -916,11 +1104,14 @@
 				CE8C48232DEA8DAE003188ED /* FollowListView.swift in Sources */,
 				CE8C486D2DEB2A62003188ED /* LaunchScreenView.swift in Sources */,
 				CE8C48262DEA8DAE003188ED /* LibraryView.swift in Sources */,
+				CECBB4C12E07BC16004C7856 /* ThemeInfoSection.swift in Sources */,
 				CE8C48772DEBEDE0003188ED /* RandomBookListView.swift in Sources */,
 				CE4FEF5B2DF925EE0072E8B9 /* RoundedCorner.swift in Sources */,
 				CE8C48692DEB1972003188ED /* ThemeToggleButton.swift in Sources */,
-				CE8C488A2DEC3BF2003188ED /* LibraryThemesView(My+Friend).swift in Sources */,
+				CE8C488A2DEC3BF2003188ED /* MyLibraryThemesView.swift in Sources */,
 				CE8C48732DEBECAC003188ED /* Spacer.swift in Sources */,
+				CECBB4FE2E082A18004C7856 /* FriendLibraryThemesView.swift in Sources */,
+				CECBB4E02E082674004C7856 /* PublicStoryGridCard.swift in Sources */,
 				CEA554CC2E01230D0029A8A9 /* UIImage+Extension.swift in Sources */,
 				CE8C482D2DEA8DAE003188ED /* BlockedListView.swift in Sources */,
 				CECBB4AB2E07ABD9004C7856 /* LibraryTab.swift in Sources */,
@@ -933,20 +1124,26 @@
 				CECBB4AF2E07B19E004C7856 /* LibraryBaseView.swift in Sources */,
 				CECBB4B12E07B399004C7856 /* LibraryProfileSection.swift in Sources */,
 				CE8C48312DEA8DAE003188ED /* UpdateProfileView.swift in Sources */,
+				CECBB50D2E082C89004C7856 /* MyLibraryKeywordsView.swift in Sources */,
 				CE8C48322DEA8DAE003188ED /* VersionInfoView.swift in Sources */,
 				CE8C48332DEA8DAE003188ED /* CommentView.swift in Sources */,
 				CE8C48E12DF04BD8003188ED /* CustomProgressView.swift in Sources */,
+				CECBB4D62E0825F0004C7856 /* MyThemeGalleryGridView.swift in Sources */,
 				CE4FEFAA2DFDC0350072E8B9 /* TabController.swift in Sources */,
 				CE4FEF8B2DFB3EFC0072E8B9 /* CommonStoryDisplayView.swift in Sources */,
 				CE8C48712DEB5190003188ED /* ProfileView.swift in Sources */,
 				CE8C48342DEA8DAE003188ED /* BookStoryDetailView.swift in Sources */,
+				CECBB4BD2E07BBFD004C7856 /* ThemeDetailBaseView.swift in Sources */,
+				CECBB4C32E07BC2F004C7856 /* ThemeVisibilityTag.swift in Sources */,
 				CE8C487F2DEBF39D003188ED /* BookDetailView.swift in Sources */,
 				CEA554D62E018E290029A8A9 /* GradientBackground.swift in Sources */,
+				CECBB4F02E08270C004C7856 /* PublicThemeDetailView.swift in Sources */,
 				CEA554DD2E01931F0029A8A9 /* ProfileImage.swift in Sources */,
 				CE8C49472DF18B89003188ED /* ThemeGalleryListView.swift in Sources */,
 				CE8C48812DEBF39D003188ED /* SearchBookView.swift in Sources */,
 				CE1101032E03E28E003C592E /* BookStoryCommentEndpoints.swift in Sources */,
 				CECBB4B72E07B420004C7856 /* LibraryNavigationItems.swift in Sources */,
+				CECBB4DE2E08265D004C7856 /* MyStoryGridCard.swift in Sources */,
 				CE8C48822DEBF39D003188ED /* SetThemeView.swift in Sources */,
 				CE8C48392DEA8DAE003188ED /* ThemeDetailView.swift in Sources */,
 				CEA554C12E003C670029A8A9 /* CardHeader.swift in Sources */,
@@ -969,21 +1166,28 @@
 				CE8C488E2DEC46E9003188ED /* TabIndicator.swift in Sources */,
 				C6691C5A2B0619C10083C678 /* UserSearchViewModel.swift in Sources */,
 				CE8C486F2DEB2E39003188ED /* LibraryTabButtonView.swift in Sources */,
+				CECBB4E22E08268C004C7856 /* MyStoryListCard.swift in Sources */,
 				CE8C477F2DEA8D84003188ED /* LoginView.swift in Sources */,
+				CECBB4C52E07BC47004C7856 /* ViewToggleButtons.swift in Sources */,
 				CE8C49732DF19133003188ED /* StoryListCard.swift in Sources */,
 				CE8C47802DEA8D84003188ED /* OnboardingView.swift in Sources */,
+				CECBB5092E082BBE004C7856 /* CommentEditView.swift in Sources */,
 				CE8C47822DEA8D84003188ED /* KeyChainTokenManager.swift in Sources */,
+				CECBB4E82E0826C2004C7856 /* StoryListCardContent.swift in Sources */,
 				CE8C47832DEA8D84003188ED /* UserAuthenticationManager.swift in Sources */,
 				CE4FEF892DFB391F0072E8B9 /* ListStoryQuotesDisplayView.swift in Sources */,
 				CE8C479D2DEA8D97003188ED /* APIClient.swift in Sources */,
+				CECBB4C92E07BCA7004C7856 /* ThemeDetailNavigationItems.swift in Sources */,
 				CEA554E22E01B1660029A8A9 /* BookStoryEndpoints.swift in Sources */,
 				CE8C48402DEAB3FE003188ED /* AnimatedText.swift in Sources */,
 				CE8C48442DEAD467003188ED /* CustomTabbar.swift in Sources */,
 				CE8C479E2DEA8D97003188ED /* AuthEndpoints.swift in Sources */,
+				CECBB50B2E082C7E004C7856 /* FriendLibraryKeywordsView.swift in Sources */,
 				CE8C479F2DEA8D97003188ED /* BookSearchEndpoints.swift in Sources */,
 				CE11010C2E047608003C592E /* BlockReportService.swift in Sources */,
 				CEA554B82E003BFD0029A8A9 /* CarouselQuotesRecordView.swift in Sources */,
 				CEA554BA2E003BFD0029A8A9 /* KeywordInputSection.swift in Sources */,
+				CECBB4DA2E082628004C7856 /* PublicThemeGalleryGridView.swift in Sources */,
 				CEA554BB2E003BFD0029A8A9 /* ListQuotesRecordView.swift in Sources */,
 				CEA554CF2E018AF30029A8A9 /* DraftManager.swift in Sources */,
 				CEA554BC2E003BFD0029A8A9 /* StoryQuotesRecordView.swift in Sources */,
@@ -993,6 +1197,7 @@
 				CE8C47A02DEA8D97003188ED /* EndpointProtocol.swift in Sources */,
 				CED3795D2DFEE902001CE700 /* AuthService.swift in Sources */,
 				CECBB4742E05B408004C7856 /* BookStoryNotifications.swift in Sources */,
+				CECBB4C72E07BC84004C7856 /* MyThemeContentView.swift in Sources */,
 				CE8C47A12DEA8D97003188ED /* NetworkError.swift in Sources */,
 				CE8C47A22DEA8D97003188ED /* UserEndpoints.swift in Sources */,
 				C60700CD2AFE05D9009D202A /* ThemeService.swift in Sources */,
@@ -1003,7 +1208,9 @@
 				CECBB4A52E079EA6004C7856 /* BookStoriesViewModelProtocols.swift in Sources */,
 				CECBB4A62E079EA6004C7856 /* PublicBookStoriesViewModel.swift in Sources */,
 				CECBB4A72E079EA6004C7856 /* ReadOnlyBookStoriesViewModels.swift in Sources */,
+				CECBB5022E082A3A004C7856 /* MyLibraryStoriesView.swift in Sources */,
 				C667E9802ACA388C006EE7A9 /* UserViewModel.swift in Sources */,
+				CECBB4D12E081D0C004C7856 /* BookStoryContentView.swift in Sources */,
 				CE8C48862DEBF39F003188ED /* CreateThemeView.swift in Sources */,
 				CE8C48902DEC96B6003188ED /* PhotoPickerAlertType.swift in Sources */,
 				CE8C49792DF1DB4E003188ED /* ThemeView.swift in Sources */,
@@ -1012,6 +1219,7 @@
 				C627C8CC2AE25831004D867B /* Color+Extension.swift in Sources */,
 				C6691C522B04DA8C0083C678 /* FollowViewModel.swift in Sources */,
 				C6E465582ADEAB66002F5FA0 /* CheckboxStyle.swift in Sources */,
+				CECBB4D32E081D1C004C7856 /* BookStoryToolbarItems.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

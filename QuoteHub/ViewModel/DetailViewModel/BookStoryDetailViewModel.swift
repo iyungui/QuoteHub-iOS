@@ -37,13 +37,12 @@ final class BookStoryDetailViewModel: LoadingViewModel {
     private var loadingTask: Task<Void, Never>?
     private var imageLoadingTask: Task<Void, Never>?
     
-    // 여기서 BookStoriesViewModel을 주입받음(의존)
-    private let storiesViewModel: BookStoriesViewModel
-    
-    init(storiesViewModel: BookStoriesViewModel) {
-        self.storiesViewModel = storiesViewModel
+    private let service: BookStoryServiceProtocol
+
+    init(service: BookStoryServiceProtocol = BookStoryService()) {
+        self.service = service
     }
-    
+
     // MARK: - Public Methods
     
     /// 북스토리 id를 통해 서버로부터 해당 최신 북스토리 받아오는 메서드
@@ -106,23 +105,18 @@ private extension BookStoryDetailViewModel {
             // Task 취소 확인
             try Task.checkCancellation()
             
-            // BookStoriesViewModel을 통해 스토리 fetch
-            let fetchedStory = await storiesViewModel.fetchSpecificBookStory(storyId: storyId)
+            let response = try await service.fetchSpecificBookStory(storyId: storyId)
             
-            try Task.checkCancellation()
-            
-            guard let fetchedStory = fetchedStory else {
+            if response.success {
+                story = response.data
+                // 이미지 로드 시작
+                await loadImagesFromStory(story!)
+
+            } else {
                 errorMessage = "북스토리를 찾을 수 없습니다."
-                alertMessage = "북스토리를 불러오지 못했어요."
-                showAlert = true
+                showAlertWith(message: "북스토리를 불러오지 못했어요.")
                 return
             }
-            
-            // 스토리 업데이트
-            story = fetchedStory
-            
-            // 이미지 로드 시작
-            await loadImagesFromStory(fetchedStory)
             
         } catch is CancellationError {
             // Task가 취소된 경우 - 아무것도 하지 않고 리턴
@@ -130,8 +124,7 @@ private extension BookStoryDetailViewModel {
         } catch {
             print("북스토리 로드 실패: \(error)")
             handleError(error)
-            alertMessage = "북스토리를 불러오지 못했어요."
-            showAlert = true
+            showAlertWith(message: "북스토리를 불러오지 못했어요.")
         }
     }
     

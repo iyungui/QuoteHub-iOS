@@ -7,10 +7,11 @@
 
 import SwiftUI
 
-struct LibraryContentSection<StoriesView: View, ThemesView: View>: View {
+struct LibraryContentSection<StoriesView: View, ThemesView: View, KeywordView: View>: View {
     let selectedTab: LibraryTab
     let storiesView: () -> StoriesView
     let themesView: () -> ThemesView
+    let keywordsView: () -> KeywordView
     
     var body: some View {
         switch selectedTab {
@@ -20,11 +21,7 @@ struct LibraryContentSection<StoriesView: View, ThemesView: View>: View {
             themesView()
         case .keywords:
             // TODO: 키워드 뷰 추가
-            ContentUnavailableView(
-                "준비 중인 기능입니다",
-                systemImage: "hammer",
-                description: Text("키워드별 북스토리 기능을 준비 중입니다")
-            )
+            keywordsView()
         }
     }
 }

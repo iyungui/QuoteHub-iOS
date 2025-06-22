@@ -54,9 +54,9 @@ struct StoryView: View {
     @ViewBuilder
     private var destinationView: some View {
         if story.userId.id == userViewModel.currentUser?.id {
-            BookStoryDetailView(story: story, isMyStory: true)
+            MyBookStoryDetailView(story: story)
         } else {
-            BookStoryDetailView(story: story)
+            PublicBookStoryDetailView(story: story)
         }
     }
 

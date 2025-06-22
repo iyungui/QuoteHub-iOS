@@ -22,6 +22,8 @@ struct MyLibraryView: View {
     @State private var showAlert = false
     @State private var alertMessage: String?
     
+    // MARK: - Body
+    
     var body: some View {
         LibraryBaseView(
             selectedTab: $selectedTab,
@@ -40,8 +42,10 @@ struct MyLibraryView: View {
                     },
                     themesView: {
                         MyLibraryThemesView()
+                    },
+                    keywordsView: {
+                        MyLibraryKeywordsView()
                     }
-                    // keyword
                 )
             },
             navigationBarItems: {
@@ -50,7 +54,7 @@ struct MyLibraryView: View {
         )
         .navigationDestination(isPresented: $tabController.shouldNavigateToStoryDetail) {
             if let story = tabController.selectedStory {
-                BookStoryDetailView(story: story, isMyStory: true)
+                MyBookStoryDetailView(story: story)
             }
         }
         .alert("알림", isPresented: $showAlert) {
