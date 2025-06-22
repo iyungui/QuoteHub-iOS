@@ -22,7 +22,7 @@ struct CreateThemeView: View {
         self.mode = mode
     }
     
-    @Environment(ThemesViewModel.self) private var themesViewModel
+    @Environment(MyThemesViewModel.self) private var myThemesViewModel
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) private var dismiss
     
@@ -105,7 +105,7 @@ struct CreateThemeView: View {
                 }
             }
         }
-        .progressOverlay(viewModel: themesViewModel, animationName: "progressLottie", opacity: true)
+        .progressOverlay(viewModel: myThemesViewModel, opacity: true)
         .alert(isPresented: $showAlert) { alertView }
         .sheet(isPresented: $showingImagePicker) {
             SingleImagePicker(selectedImage: self.$inputImage)
@@ -436,7 +436,7 @@ struct CreateThemeView: View {
         }
         
         Task {
-            let resultTheme: Theme? = await themesViewModel.createTheme(
+            let resultTheme: Theme? = await myThemesViewModel.createTheme(
                 image: inputImage,
                 name: title,
                 description: content.isEmpty ? nil : content,
@@ -449,7 +449,7 @@ struct CreateThemeView: View {
                 showAlert = true
             } else {
                 alertType = .make
-                alertMessage = themesViewModel.errorMessage ?? "테마 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+                alertMessage = myThemesViewModel.errorMessage ?? "테마 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
                 showAlert = true
             }
             
@@ -495,6 +495,6 @@ struct CreateThemeView: View {
 #Preview {
     NavigationStack {
         CreateThemeView(mode: .fullScreenSheet)
-            .environmentObject(ThemesViewModel())
+            .environmentObject(MyThemesViewModel())
     }
 }

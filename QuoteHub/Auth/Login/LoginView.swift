@@ -66,9 +66,8 @@ struct AppleLoginButton: View {
     
     @Environment(MyBookStoriesViewModel.self) private var myBookStoriesViewModel
     @Environment(PublicBookStoriesViewModel.self) private var publicBookStoriesViewModel
-    
-    @Environment(ThemesViewModel.self) var themesViewModel
-    
+    @Environment(MyThemesViewModel.self) private var myThemesViewModel
+
     var body: some View {
         SignInWithAppleButton(
             .continue,
@@ -120,7 +119,7 @@ struct AppleLoginButton: View {
                 await publicBookStoriesViewModel.loadBookStories()
             }
             group.addTask {
-                await themesViewModel.loadThemes(type: .my)
+                await myThemesViewModel.loadThemes()
             }
         }
     }

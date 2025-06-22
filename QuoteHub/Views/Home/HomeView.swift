@@ -12,7 +12,7 @@ struct HomeView: View {
     @State private var booksViewModel = RandomBooksViewModel()
     @Environment(PublicBookStoriesViewModel.self) private var publicBookStoriesViewModel
     @Environment(UserViewModel.self) private var userViewModel
-    @Environment(ThemesViewModel.self) private var themesViewModel
+    @Environment(PublicThemesViewModel.self) private var publicThemesViewModel
 
     @EnvironmentObject private var userAuthManager: UserAuthenticationManager
 
@@ -85,21 +85,22 @@ struct HomeView: View {
                     await publicBookStoriesViewModel.refreshBookStories()
                 }
                 group.addTask {
-                    await themesViewModel.refreshThemes(type: .public)
+                    await publicThemesViewModel.refreshThemes()
                 }
             }
         }
         .task {
-            // randombooks, loadBookStories, loadThemes 병렬로 호출 (첫 페이지부터)
+            // randombooks 병렬로 호출
+            // TODO: 여기서 호출 한번 더??
             await withTaskGroup(of: Void.self) { group in
                 group.addTask {
                     await booksViewModel.fetchRandomBooks()
                 }
-//                group.addTask {
-//                    await publicBookStoriesViewModel.loadBookStories()
-//                }
                 group.addTask {
-                    await themesViewModel.loadThemes(type: .public)
+                    await publicBookStoriesViewModel.loadBookStories()
+                }
+                group.addTask {
+                    await publicThemesViewModel.loadThemes()
                 }
             }
         }

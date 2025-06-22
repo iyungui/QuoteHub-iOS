@@ -12,12 +12,12 @@ struct FriendLibraryView: View {
     let friendUser: User
     
     // MARK: - ViewModels
-    @Environment(ThemesViewModel.self) private var themesViewModel
     @Environment(UserViewModel.self) private var userViewModel
     @Environment(BlockReportViewModel.self) private var blockReportViewModel
     @EnvironmentObject private var userAuthManager: UserAuthenticationManager
     @State private var friendBookStoriesViewModel: FriendBookStoriesViewModel
-    
+    @State private var friendThemesViewModel: FriendThemesViewModel
+
     // MARK: - State
     @State private var selectedTab: LibraryTab = .stories
     @State private var showAlert = false
@@ -32,6 +32,9 @@ struct FriendLibraryView: View {
         self.friendUser = friendUser
         self._friendBookStoriesViewModel = State(
             initialValue: FriendBookStoriesViewModel(friendId: friendUser.id)
+        )
+        self._friendThemesViewModel = State(
+            initialValue: FriendThemesViewModel(friendId: friendUser.id)
         )
     }
     
@@ -101,7 +104,7 @@ struct FriendLibraryView: View {
             userViewModel.currentOtherUserStoryCount = nil
         }
         .progressOverlay(
-            viewModels: userViewModel, friendBookStoriesViewModel, themesViewModel,
+            viewModels: userViewModel, friendBookStoriesViewModel, friendThemesViewModel,
             opacity: false
         )
     }
@@ -139,7 +142,7 @@ struct FriendLibraryView: View {
                 await friendBookStoriesViewModel.refreshBookStories()
             }
             group.addTask {
-                await themesViewModel.refreshThemes(type: .friend(friendUser.id))
+                await friendThemesViewModel.refreshThemes()
             }
         }
     }
@@ -156,7 +159,7 @@ struct FriendLibraryView: View {
                 await friendBookStoriesViewModel.loadBookStories()
             }
             group.addTask {
-                await themesViewModel.loadThemes(type: .friend(friendUser.id))
+                await friendThemesViewModel.loadThemes()
             }
         }
     }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FriendLibraryThemesView: View {
     let friendId: String
-    @Environment(ThemesViewModel.self) private var themesViewModel
+    @Environment(FriendThemesViewModel.self) private var friendThemesViewModel
     
     private let columns: [GridItem] = [
         GridItem(.flexible(), spacing: 16),
@@ -30,7 +30,7 @@ struct FriendLibraryThemesView: View {
     }
     
     var body: some View {
-        if themesViewModel.themes(for: loadType).isEmpty {
+        if friendThemesViewModel.themes.isEmpty {
             ContentUnavailableView(
                 "아직 테마가 없어요",
                 systemImage: "tray",
@@ -38,7 +38,7 @@ struct FriendLibraryThemesView: View {
             )
         } else {
             LazyVGrid(columns: columns, spacing: spacing) {
-                ForEach(Array(themesViewModel.themes(for: loadType).enumerated()), id: \.element.id) { index, theme in
+                ForEach(Array(friendThemesViewModel.themes.enumerated()), id: \.element.id) { index, theme in
                     ThemeView(
                         theme: theme,
                         index: index,
@@ -47,10 +47,7 @@ struct FriendLibraryThemesView: View {
                         cardHeight: cardSize
                     )
                     .task {
-                        themesViewModel.loadMoreIfNeeded(
-                            currentItem: theme,
-                            type: loadType
-                        )
+                        await friendThemesViewModel.loadMoreIfNeeded(currentItem: theme)
                     }
                 }
             }

@@ -13,7 +13,7 @@ struct MyThemeDetailView: View {
     let theme: Theme
     
     // MARK: - ViewModels
-    @Environment(ThemesViewModel.self) private var themesViewModel
+    @Environment(MyThemesViewModel.self) private var myThemesViewModel
     @State private var themeBookStoriesViewModel: MyThemeBookStoriesViewModel
     
     // MARK: - State
@@ -87,11 +87,11 @@ struct MyThemeDetailView: View {
     }
     
     private func deleteTheme() async {
-        let isSuccess = await themesViewModel.deleteTheme(themeId: theme.id)
+        let isSuccess = await myThemesViewModel.deleteTheme(themeId: theme.id)
         if isSuccess {
             alertMessage = "테마가 성공적으로 삭제되었습니다."
         } else {
-            alertMessage = themesViewModel.errorMessage ?? "테마 삭제 중 오류가 발생했습니다."
+            alertMessage = myThemesViewModel.errorMessage ?? "테마 삭제 중 오류가 발생했습니다."
         }
         showAlert = true
     }

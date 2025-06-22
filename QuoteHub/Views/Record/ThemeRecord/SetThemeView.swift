@@ -14,7 +14,7 @@ struct SetThemeView: View {
     // MARK: - PROPERTIES
     
     @Binding var selectedThemeIds: [String]
-    @Environment(ThemesViewModel.self) private var themesViewModel
+    @Environment(MyThemesViewModel.self) private var myThemesViewModel
     @Environment(\.dismiss) private var dismiss
     
     // 테마 선택 상태를 관리하는 Set
@@ -61,9 +61,9 @@ struct SetThemeView: View {
                     .fontWeight(.semibold)
                 }
             }
-            .progressOverlay(viewModel: themesViewModel, animationName: "progressLottie", opacity: true)
+            .progressOverlay(viewModel: myThemesViewModel, opacity: true)
             .task {
-                setupInitialData()
+                await setupInitialData()
             }
         }
     }
@@ -137,7 +137,7 @@ struct SetThemeView: View {
                 }
             }
             
-            if themesViewModel.themes(for: .my).isEmpty && !themesViewModel.isLoading {
+            if myThemesViewModel.themes.isEmpty && !myThemesViewModel.isLoading {
                 emptyThemeView
             } else {
                 themeGridView
@@ -177,7 +177,7 @@ struct SetThemeView: View {
             ],
             spacing: 20
         ) {
-            ForEach(themesViewModel.themes(for: .my), id: \.id) { theme in
+            ForEach(myThemesViewModel.themes, id: \.id) { theme in
                 ThemeGridCard(
                     theme: theme,
                     isSelected: selectedSet.contains(theme.id),
@@ -186,10 +186,7 @@ struct SetThemeView: View {
                     }
                 )
                 .task {
-                    themesViewModel.loadMoreIfNeeded(
-                        currentItem: theme,
-                        type: .my
-                    )
+                    await myThemesViewModel.loadMoreIfNeeded(currentItem: theme)
                 }
             }
             // TODO: Loading Indicator
@@ -213,12 +210,12 @@ struct SetThemeView: View {
     
     // MARK: - Methods
     
-    private func setupInitialData() {
+    private func setupInitialData() async {
         // 기존 선택된 테마들을 Set에 추가
         selectedSet = Set(selectedThemeIds)
         
         // 내 테마 목록 로드
-        themesViewModel.loadThemes(type: .my)
+        await myThemesViewModel.loadThemes()
     }
     
     private func toggleThemeSelection(_ themeId: String) {

@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - MY LIBRARY
 /// 라이브러리 -> 테마 탭뷰에서 보이는 내 테마 리스트 뷰
 struct MyLibraryThemesView: View {
-    @Environment(ThemesViewModel.self) private var themesViewModel
+    @Environment(MyThemesViewModel.self) private var myThemesViewModel
 
     private let columns: [GridItem] = [
         GridItem(.flexible(), spacing: 16),
@@ -27,7 +27,7 @@ struct MyLibraryThemesView: View {
     }
     
     var body: some View {
-        if themesViewModel.themes(for: .my).isEmpty {
+        if myThemesViewModel.themes.isEmpty {
             ContentUnavailableView(
                 "아직 테마가 없어요",
                 systemImage: "tray",
@@ -35,7 +35,7 @@ struct MyLibraryThemesView: View {
             )
         } else {
             LazyVGrid(columns: columns, spacing: spacing) {
-                ForEach(Array(themesViewModel.themes(for: .my).enumerated()), id: \.element.id) { index, theme in
+                ForEach(Array(myThemesViewModel.themes.enumerated()), id: \.element.id) { index, theme in
                     ThemeView(
                         theme: theme,
                         index: index,
@@ -44,10 +44,7 @@ struct MyLibraryThemesView: View {
                         cardHeight: cardSize
                     )
                     .task {
-                        themesViewModel.loadMoreIfNeeded(
-                            currentItem: theme,
-                            type: .my
-                        )
+                        await myThemesViewModel.loadMoreIfNeeded(currentItem: theme)
                     }
                 }
             }

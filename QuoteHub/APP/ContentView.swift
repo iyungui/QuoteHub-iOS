@@ -13,10 +13,11 @@ struct ContentView: View {
     @State private var versionManager = AppVersionManager()
 
     @EnvironmentObject private var authManager: UserAuthenticationManager
-    @Environment(ThemesViewModel.self) private var themesViewModel
     @Environment(UserViewModel.self) private var userViewModel
     @Environment(MyBookStoriesViewModel.self) private var myBookStoriesViewModel
     @Environment(PublicBookStoriesViewModel.self) private var publicBookStoriesViewModel
+    @Environment(MyThemesViewModel.self) private var myThemesViewModel
+    @Environment(PublicThemesViewModel.self) private var publicThemesViewModel
     
     @State private var isSplashView = true  // 런치스크린 표시
 
@@ -53,7 +54,7 @@ struct ContentView: View {
                                 await myBookStoriesViewModel.loadBookStories()
                             }
                             group.addTask {
-                                await themesViewModel.loadThemes(type: .my)
+                                await myThemesViewModel.loadThemes()
                             }
                         }
                     }
@@ -63,11 +64,10 @@ struct ContentView: View {
                         group.addTask {
                             await publicBookStoriesViewModel.loadBookStories()
                         }
-                     
-                        // TODO: - public 테마 로드
+                        group.addTask {
+                            await publicThemesViewModel.loadThemes()
+                        }
                     }
-                    
-                    
                     
                     // 지연 (나중에 지울 코드)
                     try? await Task.sleep(nanoseconds: 1_000_000_000)

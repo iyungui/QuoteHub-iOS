@@ -11,8 +11,8 @@ struct MyLibraryView: View {
     
     // MARK: - VIEWMODELS
     @Environment(MyBookStoriesViewModel.self) private var myBookStoriesViewModel
-    // TODO: - ThemesViewModel -> MyThemesViewModel
-    @Environment(ThemesViewModel.self) private var themesViewModel
+
+    @Environment(MyThemesViewModel.self) private var myThemesViewModel
     @Environment(UserViewModel.self) private var userViewModel
     @EnvironmentObject private var userAuthManager: UserAuthenticationManager
     @EnvironmentObject private var tabController: TabController
@@ -72,7 +72,7 @@ struct MyLibraryView: View {
 //        .task {
 //            /// 내 라이브러리의 경우 ContentView or LoginView 에서 로드된 상태
 //        }
-        .progressOverlay(viewModels: userViewModel, myBookStoriesViewModel, themesViewModel, opacity: false)
+        .progressOverlay(viewModels: userViewModel, myBookStoriesViewModel, myThemesViewModel, opacity: false)
     }
     
     private func refreshMyLibrary() async {
@@ -88,7 +88,7 @@ struct MyLibraryView: View {
             }
             group.addTask {
                 // TODO: - refac
-                await themesViewModel.refreshThemes(type: .my)
+                await myThemesViewModel.refreshThemes()
             }
         }
     }

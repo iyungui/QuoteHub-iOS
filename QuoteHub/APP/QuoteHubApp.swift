@@ -19,7 +19,9 @@ struct QuoteHubApp: App {
     @State private var publicBookStoriesViewModel = PublicBookStoriesViewModel()
 
     // 테마
-    @State private var themesViewModel = ThemesViewModel()
+    @State private var myThemesViewModel = MyThemesViewModel()
+    @State private var publicThemesViewModel = PublicThemesViewModel()
+    
     @State private var blockReportViewModel = BlockReportViewModel()
     @StateObject private var tabController = TabController()
 
@@ -49,7 +51,8 @@ struct QuoteHubApp: App {
             ContentView()
                 .environmentObject(authManager)
                 .environment(userViewModel)
-                .environment(themesViewModel)
+                .environment(myThemesViewModel)
+                .environment(publicThemesViewModel)
                 .environmentObject(tabController)
                 .environment(blockReportViewModel)
                 .environment(myBookStoriesViewModel)
