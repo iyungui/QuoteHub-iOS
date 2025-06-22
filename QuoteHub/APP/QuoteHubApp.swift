@@ -13,7 +13,12 @@ import SwiftUI
 struct QuoteHubApp: App {
     @StateObject private var authManager = UserAuthenticationManager()
     @State private var userViewModel = UserViewModel()
-    @State private var storiesViewModel = BookStoriesViewModel()
+    
+    // 북스토리
+    @State private var myBookStoriesViewModel = MyBookStoriesViewModel()
+    @State private var publicBookStoriesViewModel = PublicBookStoriesViewModel()
+
+    // 테마
     @State private var themesViewModel = ThemesViewModel()
     @State private var blockReportViewModel = BlockReportViewModel()
     @StateObject private var tabController = TabController()
@@ -44,10 +49,11 @@ struct QuoteHubApp: App {
             ContentView()
                 .environmentObject(authManager)
                 .environment(userViewModel)
-                .environment(storiesViewModel)
                 .environment(themesViewModel)
                 .environmentObject(tabController)
                 .environment(blockReportViewModel)
+                .environment(myBookStoriesViewModel)
+                .environment(publicBookStoriesViewModel)
         }
 //        .modelContainer(sharedModelContainer)
     }

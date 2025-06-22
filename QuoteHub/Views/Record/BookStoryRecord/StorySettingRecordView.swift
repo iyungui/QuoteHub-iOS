@@ -14,7 +14,7 @@ struct StorySettingRecordView: View {
     
     @EnvironmentObject private var formViewModel: StoryFormViewModel
     
-    @Environment(BookStoriesViewModel.self) private var storiesViewModel
+    @Environment(MyBookStoriesViewModel.self) private var myBookStoriesViewModel
     @EnvironmentObject var tabController: TabController
     
     var body: some View {
@@ -45,7 +45,7 @@ struct StorySettingRecordView: View {
             ThoughtInputCard(book: book)
                 .environmentObject(formViewModel)
         }
-        .progressOverlay(viewModel: storiesViewModel, opacity: true)
+        .progressOverlay(viewModel: myBookStoriesViewModel, opacity: true)
     }
     
     private var thoughtSheetButton: some View {
@@ -121,8 +121,8 @@ extension StorySettingRecordView {
         
         // 모드에 따라 resultStory에 담기. nil이면 fail
         if isEditMode, let storyId = storyId {
-            resultStory = await storiesViewModel.updateBookStory(
-                storyID: storyId,
+            resultStory = await myBookStoriesViewModel.updateBookStory(
+                storyId: storyId,
                 quotes: validQuotes,
                 images: retImages,
                 content: retContent,
@@ -131,7 +131,7 @@ extension StorySettingRecordView {
                 themeIds: retThemeIds
             )
         } else {
-            resultStory = await storiesViewModel.createBookStory(
+            resultStory = await myBookStoriesViewModel.createBookStory(
                 bookId: book.id,
                 quotes: validQuotes,
                 images: retImages,
@@ -183,6 +183,6 @@ extension StorySettingRecordView {
     NavigationStack {
         StorySettingRecordView(book: Book.previewBook, storyId: nil)
         .environmentObject(StoryFormViewModel())
-        .environmentObject(BookStoriesViewModel())
+        .environmentObject(MyBookStoriesViewModel())
     }
 }

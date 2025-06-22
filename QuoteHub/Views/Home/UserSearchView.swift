@@ -80,7 +80,6 @@ struct UserSearchView: View {
                         destination: LibraryView(user: user)
                             .environmentObject(userAuthManager)
                             .environmentObject(userViewModel)
-                            .environmentObject(storiesViewModel)
                             .environmentObject(themesViewModel)
                     ) {
                         ProfileRowView(user: user)

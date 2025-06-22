@@ -27,7 +27,7 @@ struct StoryQuotesRecordView: View {
         self.storyId = storyId
     }
 
-    @Environment(BookStoriesViewModel.self) private var storiesViewModel
+    @Environment(MyBookStoriesViewModel.self) private var myBookStoriesViewModel
     
     @StateObject private var formViewModel = StoryFormViewModel()
     
@@ -62,7 +62,7 @@ struct StoryQuotesRecordView: View {
             await loadStoryDataIfNeeded()
         }
         .environmentObject(formViewModel)
-        .progressOverlay(viewModel: storiesViewModel, opacity: false)
+        .progressOverlay(viewModel: myBookStoriesViewModel, opacity: false)
     }
     
     private var toolBarItems: some ToolbarContent {
@@ -124,11 +124,11 @@ struct StoryQuotesRecordView: View {
             return
         }
         
-        let loadedStory = await storiesViewModel.fetchSpecificBookStory(storyId: storyId)
+        let loadedStory = await myBookStoriesViewModel.fetchSpecificBookStory(storyId: storyId)
         
         guard let loadedStory = loadedStory else {
             formViewModel.showAlert = true
-            formViewModel.alertMessage = storiesViewModel.errorMessage ?? "북스토리를 불러오지 못했어요."
+            formViewModel.alertMessage = myBookStoriesViewModel.errorMessage ?? "북스토리를 불러오지 못했어요."
             return
         }
         
@@ -140,6 +140,6 @@ struct StoryQuotesRecordView: View {
     NavigationStack {
         StoryQuotesRecordView(book: Book.previewBook)
             .environmentObject(StoryFormViewModel())
-            .environmentObject(BookStoriesViewModel())
+            .environmentObject(MyBookStoriesViewModel())
     }
 }

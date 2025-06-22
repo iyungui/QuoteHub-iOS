@@ -63,7 +63,10 @@ struct LoginView: View {
 struct AppleLoginButton: View {
     @EnvironmentObject var authManager: UserAuthenticationManager
     @Environment(UserViewModel.self) var userViewModel
-    @Environment(BookStoriesViewModel.self) var storiesViewModel
+    
+    @Environment(MyBookStoriesViewModel.self) private var myBookStoriesViewModel
+    @Environment(PublicBookStoriesViewModel.self) private var publicBookStoriesViewModel
+    
     @Environment(ThemesViewModel.self) var themesViewModel
     
     var body: some View {
@@ -93,6 +96,8 @@ struct AppleLoginButton: View {
                 let success = await authManager.handleAppleLogin(authCode: authCodeString)
                 
                 if success { await loadLoginUserData() }
+                
+                authManager.isLoading = false
                 authManager.goToMainView()
             }
         case .failure(let error):
@@ -109,7 +114,10 @@ struct AppleLoginButton: View {
                 await userViewModel.loadStoryCount(userId: nil)
             }
             group.addTask {
-                await storiesViewModel.loadBookStories(type: .my)
+                await myBookStoriesViewModel.loadBookStories()
+            }
+            group.addTask {
+                await publicBookStoriesViewModel.loadBookStories()
             }
             group.addTask {
                 await themesViewModel.loadThemes(type: .my)

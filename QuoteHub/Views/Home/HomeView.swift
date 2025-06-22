@@ -10,7 +10,7 @@ import SwiftUI
 /// 첫번째 탭 뷰
 struct HomeView: View {
     @State private var booksViewModel = RandomBooksViewModel()
-    @Environment(BookStoriesViewModel.self) private var storiesViewModel
+    @Environment(PublicBookStoriesViewModel.self) private var publicBookStoriesViewModel
     @Environment(UserViewModel.self) private var userViewModel
     @Environment(ThemesViewModel.self) private var themesViewModel
 
@@ -82,7 +82,7 @@ struct HomeView: View {
                     await booksViewModel.fetchRandomBooks()
                 }
                 group.addTask {
-                    await storiesViewModel.refreshBookStories(type: .public)
+                    await publicBookStoriesViewModel.refreshBookStories()
                 }
                 group.addTask {
                     await themesViewModel.refreshThemes(type: .public)
@@ -95,9 +95,9 @@ struct HomeView: View {
                 group.addTask {
                     await booksViewModel.fetchRandomBooks()
                 }
-                group.addTask {
-                    await storiesViewModel.loadBookStories(type: .public)
-                }
+//                group.addTask {
+//                    await publicBookStoriesViewModel.loadBookStories()
+//                }
                 group.addTask {
                     await themesViewModel.loadThemes(type: .public)
                 }

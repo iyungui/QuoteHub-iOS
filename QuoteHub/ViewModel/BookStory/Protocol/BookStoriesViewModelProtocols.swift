@@ -8,6 +8,7 @@
 import SwiftUI
 
 // MARK: - 기본 읽기 전용 프로토콜
+@MainActor
 protocol BookStoriesViewModelProtocol: LoadingViewModel {
     
     // MARK: - Published Properties
@@ -34,6 +35,7 @@ protocol BookStoriesViewModelProtocol: LoadingViewModel {
 }
 
 // MARK: - CRUD 확장 프로토콜 (My 뷰모델들만)
+@MainActor
 protocol EditableBookStoriesViewModelProtocol: BookStoriesViewModelProtocol {
     
     // MARK: - Create

@@ -13,10 +13,11 @@ struct ContentView: View {
     @State private var versionManager = AppVersionManager()
 
     @EnvironmentObject private var authManager: UserAuthenticationManager
-    @Environment(BookStoriesViewModel.self) private var storiesViewModel
     @Environment(ThemesViewModel.self) private var themesViewModel
     @Environment(UserViewModel.self) private var userViewModel
-
+    @Environment(MyBookStoriesViewModel.self) private var myBookStoriesViewModel
+    @Environment(PublicBookStoriesViewModel.self) private var publicBookStoriesViewModel
+    
     @State private var isSplashView = true  // 런치스크린 표시
 
     var body: some View {
@@ -37,7 +38,7 @@ struct ContentView: View {
                         }
                     }
                     // 여기까지 오면 isUserAuthenticated 여부 확인됨.
-                    // 인증된 사용자는 프로필, 게시물 불러오고 mainView로 이동
+                    // 인증된 사용자는 프로필, 내 북스토리와 내 테마 불러오기
                     if authManager.isUserAuthenticated {
                         await withTaskGroup(of: Void.self) { group in
                             // 현재 사용자 정보 가져오기 (유저모델의 currentUser 업데이트)
@@ -48,18 +49,25 @@ struct ContentView: View {
                             group.addTask {
                                 await userViewModel.loadStoryCount(userId: nil)
                             }
-                            
                             group.addTask {
-                                await storiesViewModel.loadBookStories(type: .my)
+                                await myBookStoriesViewModel.loadBookStories()
                             }
                             group.addTask {
                                 await themesViewModel.loadThemes(type: .my)
                             }
-                            
                         }
                     }
-                    // public 북스토리, 테마는 HomeView에서 load
-                    // 인증된 사용자 아니면 바로 isSplashView를 false로
+                    
+                    // 인증되지 않은 사용자 + 인증된 사용자는 homeview에 표시될 public 북스토리와 테마 불러오기
+                    await withTaskGroup(of: Void.self) { group in
+                        group.addTask {
+                            await publicBookStoriesViewModel.loadBookStories()
+                        }
+                     
+                        // TODO: - public 테마 로드
+                    }
+                    
+                    
                     
                     // 지연 (나중에 지울 코드)
                     try? await Task.sleep(nanoseconds: 1_000_000_000)

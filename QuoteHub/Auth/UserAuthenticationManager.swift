@@ -29,9 +29,9 @@ final class UserAuthenticationManager: ObservableObject, LoadingViewModel {
     func handleAppleLogin(authCode: String) async -> Bool {
         isLoading = true
         
-        defer {
-            isLoading = false
-        }
+//        defer {
+//            isLoading = false   // isLoading 은 북스토리, 테마 로드가 끝난 후에 해제
+//        }
         
         do {
             // 서버로 Apple 로그인 요청(백그라운드 스레드)
