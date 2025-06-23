@@ -284,7 +284,7 @@ final class APIClient {
     /// 이미지 데이터 준비 (리사이징 및 압축)
     private func prepareImageData(_ image: UIImage) -> Data? {
         let processedImage = image.resizeWithWidth(width: 400) ?? image
-        return processedImage.jpegData(compressionQuality: 0.8)
+        return processedImage.jpegData(compressionQuality: 0.9)
     }
 
     /// 토큰 리프레시

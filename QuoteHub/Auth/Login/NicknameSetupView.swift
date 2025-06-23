@@ -16,6 +16,7 @@ struct NicknameSetupView: View {
     @State private var feedbackColor: Color = .gray
     @State private var isCheckingNickname: Bool = false
     @State private var isGeneratingNickname: Bool = false
+    @State private var wantsExampleBookStoryData: Bool = false
     
     @Environment(UserAuthenticationManager.self) private var authManager
     @Environment(UserViewModel.self) var userViewModel
@@ -45,7 +46,7 @@ struct NicknameSetupView: View {
             
             // 설명
             HStack {
-                Text("나중에 설정에서 변경할 수 있어요")
+                Text("나중에 설정에서도 변경할 수 있어요")
                     .font(.scoreDreamBody)
                     .foregroundColor(.gray)
                     .multilineTextAlignment(.leading)
@@ -89,12 +90,12 @@ struct NicknameSetupView: View {
                                 .scaleEffect(0.8)
                         } else {
                             Text("중복확인")
-                                .font(.scoreDream(.medium, size: .subheadline))
+                                .font(.scoreDream(.regular, size: .subheadline))
                         }
                     }
-                    .padding(.vertical, 4)
-                    .padding(.horizontal, 8)
-                    .background(nickname.isEmpty ? Color.gray.opacity(0.3) : Color.blue)
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 12)
+                    .background(nickname.isEmpty ? Color.gray.opacity(0.3) : Color.appAccent)
                     .foregroundColor(.white)
                     .cornerRadius(8)
                     .disabled(nickname.isEmpty || isCheckingNickname)
@@ -116,13 +117,37 @@ struct NicknameSetupView: View {
             
             Spacer()
             
+            Toggle(isOn: $wantsExampleBookStoryData) {
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text("예시 북스토리와 함께 시작할까요?")
+                            .font(.scoreDream(.regular, size: .footnote))
+                        
+                        Text("권장")
+                            .font(.scoreDream(.bold, size: .caption2))
+                            .foregroundStyle(Color.white)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(Color.appAccent)
+                            .cornerRadius(4)
+                        
+                    }
+                    Text("처음에 앱을 쉽게 둘러볼 수 있도록,\n샘플 북스토리를 넣어드릴게요.")
+                        .font(.scoreDream(.light, size: .caption))
+                        .foregroundColor(.gray)
+                }
+            }
+            .padding(.horizontal, 50)
+            .toggleStyle(CheckboxStyle())
+//            .toggleStyle(SwitchToggleStyle(tint: .appAccent))
+            
             // 다음 버튼
             Button(action: completeNicknameSetup) {
                 Text("다음")
                     .font(.scoreDream(.extraBold, size: .medium))
                     .foregroundColor(.white)
                     .frame(width: 280, height: 60, alignment: .center)
-                    .background(isNicknameChecked ? Color.black : Color.gray.opacity(0.3))
+                    .background(isNicknameChecked ? Color.appAccent : Color.gray.opacity(0.3))
                     .cornerRadius(8)
                     .padding(.bottom, 10)
             }
