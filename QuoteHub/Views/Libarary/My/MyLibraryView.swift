@@ -27,6 +27,7 @@ struct MyLibraryView: View {
     var body: some View {
         LibraryBaseView(
             selectedTab: $selectedTab,
+            showKeywords: true,
             profileSection: {
                 LibraryProfileSection(
                     user: userViewModel.currentUser,

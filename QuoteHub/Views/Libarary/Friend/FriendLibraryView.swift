@@ -42,6 +42,7 @@ struct FriendLibraryView: View {
     var body: some View {
         LibraryBaseView(
             selectedTab: $selectedTab,
+            showKeywords: false,
             profileSection: {
                 LibraryProfileSection(
                     user: userViewModel.currentOtherUser ?? friendUser,

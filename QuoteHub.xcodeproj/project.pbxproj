@@ -20,7 +20,6 @@
 		C6691C5A2B0619C10083C678 /* UserSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6691C592B0619C10083C678 /* UserSearchViewModel.swift */; };
 		C67AA3C92AE3839F00490DDE /* BookSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67AA3C82AE3839F00490DDE /* BookSearchService.swift */; };
 		C67AA3CB2AE389F500490DDE /* BookSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C67AA3CA2AE389F500490DDE /* BookSearchViewModel.swift */; };
-		C694A2DF2AC3FFBA00574D20 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = C694A2DE2AC3FFBA00574D20 /* Alamofire */; };
 		C694A2ED2AC5778400574D20 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C694A2EC2AC5778400574D20 /* UserService.swift */; };
 		C697D0F82AC8F64400F0111B /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = C697D0F72AC8F64400F0111B /* SDWebImageSwiftUI */; };
 		C697D1002AC9535B00F0111B /* BookStoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C697D0FF2AC9535B00F0111B /* BookStoryService.swift */; };
@@ -30,7 +29,6 @@
 		C6B56FE42AA8B60D003905C3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C6B56FE32AA8B60D003905C3 /* Preview Assets.xcassets */; };
 		C6D78A0A2AD03B2900F03FB8 /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6D78A092AD03B2900F03FB8 /* APIEndpoint.swift */; };
 		C6DE7F512AF76B480020F5CB /* BookStoryCommentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6DE7F502AF76B480020F5CB /* BookStoryCommentService.swift */; };
-		C6DE7F562AF76EA30020F5CB /* TabBar in Frameworks */ = {isa = PBXBuildFile; productRef = C6DE7F552AF76EA30020F5CB /* TabBar */; };
 		C6DE7F612AF7C2940020F5CB /* BookStoryCommentsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6DE7F602AF7C2940020F5CB /* BookStoryCommentsViewModel.swift */; };
 		C6E465582ADEAB66002F5FA0 /* CheckboxStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E465572ADEAB66002F5FA0 /* CheckboxStyle.swift */; };
 		CE1100DB2E0275D6003C592E /* StoryBookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1100DA2E0275D6003C592E /* StoryBookView.swift */; };
@@ -414,9 +412,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C6DE7F562AF76EA30020F5CB /* TabBar in Frameworks */,
 				C697D0F82AC8F64400F0111B /* SDWebImageSwiftUI in Frameworks */,
-				C694A2DF2AC3FFBA00574D20 /* Alamofire in Frameworks */,
 				CE8C48E42DF05290003188ED /* Lottie in Frameworks */,
 				CE4FEFAD2DFEABA20072E8B9 /* KeychainAccess in Frameworks */,
 			);
@@ -1018,9 +1014,7 @@
 			);
 			name = QuoteHub;
 			packageProductDependencies = (
-				C694A2DE2AC3FFBA00574D20 /* Alamofire */,
 				C697D0F72AC8F64400F0111B /* SDWebImageSwiftUI */,
-				C6DE7F552AF76EA30020F5CB /* TabBar */,
 				CE8C48E32DF05290003188ED /* Lottie */,
 				CE4FEFAC2DFEABA20072E8B9 /* KeychainAccess */,
 			);
@@ -1053,9 +1047,7 @@
 			);
 			mainGroup = C6B56FD02AA8B60B003905C3;
 			packageReferences = (
-				C694A2DD2AC3FFBA00574D20 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				C697D0F62AC8F64400F0111B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
-				C6DE7F542AF76EA30020F5CB /* XCRemoteSwiftPackageReference "TabBar" */,
 				CE8C48E22DF05290003188ED /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				CE4FEFAB2DFEABA20072E8B9 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 			);
@@ -1407,54 +1399,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 2;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEPLOYMENT_POSTPROCESSING = NO;
-				DEVELOPMENT_ASSET_PATHS = "\"QuoteHub/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 285ZKW5MPR;
-				ENABLE_DEBUG_DYLIB = YES;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = QuoteHub/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "문장모아";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
-				INFOPLIST_KEY_NSCameraUsageDescription = "이 앱은 사용자가 새로운 사진을 촬영하여 게시물로 바로 사용할 수 있도록 카메라 접근 권한을 요청합니다. 이 권한을 허용하면, 앱 내에서 직접 카메라를 활성화하여 새로운 이미지를 촬영하고 업로드할 수 있습니다. 카메라 권한은 오직 이 목적으로만 사용됩니다.";
-				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "앱에서 촬영한 사진을 저장하려면 권한이 필요합니다.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앱에서 게시물에 사용할 사진을 선택하려면 사진 라이브러리 접근 권한이 필요합니다. 이 권한을 허용하면, 귀하의 기기에 저장된 사진들 중에서 원하는 이미지를 선택하여 앱 내에서 업로드하고 공유할 수 있습니다.";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.01;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yungui.QuoteHub;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "quote hub_doc";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Debug;
-		};
-		C6B56FE92AA8B60D003905C3 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = QuoteHub/QuoteHub.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEPLOYMENT_POSTPROCESSING = NO;
 				DEVELOPMENT_ASSET_PATHS = "\"QuoteHub/Preview Content\"";
@@ -1479,7 +1424,54 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.01;
+				MARKETING_VERSION = 2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yungui.QuoteHub;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "quote hub_doc";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		C6B56FE92AA8B60D003905C3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = QuoteHub/QuoteHub.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 3;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEPLOYMENT_POSTPROCESSING = NO;
+				DEVELOPMENT_ASSET_PATHS = "\"QuoteHub/Preview Content\"";
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 285ZKW5MPR;
+				ENABLE_DEBUG_DYLIB = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = QuoteHub/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "문장모아";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
+				INFOPLIST_KEY_NSCameraUsageDescription = "이 앱은 사용자가 새로운 사진을 촬영하여 게시물로 바로 사용할 수 있도록 카메라 접근 권한을 요청합니다. 이 권한을 허용하면, 앱 내에서 직접 카메라를 활성화하여 새로운 이미지를 촬영하고 업로드할 수 있습니다. 카메라 권한은 오직 이 목적으로만 사용됩니다.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "앱에서 촬영한 사진을 저장하려면 권한이 필요합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "앱에서 게시물에 사용할 사진을 선택하려면 사진 라이브러리 접근 권한이 필요합니다. 이 권한을 허용하면, 귀하의 기기에 저장된 사진들 중에서 원하는 이미지를 선택하여 앱 내에서 업로드하고 공유할 수 있습니다.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yungui.QuoteHub;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1516,28 +1508,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		C694A2DD2AC3FFBA00574D20 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.0.0;
-			};
-		};
 		C697D0F62AC8F64400F0111B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 2.0.0;
-			};
-		};
-		C6DE7F542AF76EA30020F5CB /* XCRemoteSwiftPackageReference "TabBar" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/onl1ner/TabBar.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.3.0;
 			};
 		};
 		CE4FEFAB2DFEABA20072E8B9 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
@@ -1559,20 +1535,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		C694A2DE2AC3FFBA00574D20 /* Alamofire */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C694A2DD2AC3FFBA00574D20 /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = Alamofire;
-		};
 		C697D0F72AC8F64400F0111B /* SDWebImageSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C697D0F62AC8F64400F0111B /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
 			productName = SDWebImageSwiftUI;
-		};
-		C6DE7F552AF76EA30020F5CB /* TabBar */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C6DE7F542AF76EA30020F5CB /* XCRemoteSwiftPackageReference "TabBar" */;
-			productName = TabBar;
 		};
 		CE4FEFAC2DFEABA20072E8B9 /* KeychainAccess */ = {
 			isa = XCSwiftPackageProductDependency;

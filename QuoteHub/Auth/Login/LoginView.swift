@@ -7,7 +7,6 @@
 
 import SwiftUI
 import AuthenticationServices
-import Alamofire
 
 struct LoginView: View {
     /// 온보딩뷰를 통해 LoginView로 접근했다면 true, 그 외 뷰에서 LoginView로 왔다면 false

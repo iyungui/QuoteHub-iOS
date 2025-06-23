@@ -12,6 +12,7 @@ struct LibraryBaseView<ProfileContent: View, ContentSectionContent: View, Naviga
     
     // MARK: - Properties
     @Binding var selectedTab: LibraryTab
+    let showKeywords: Bool // 키워드 탭 표시 여부 추가
     
     let profileSection: () -> ProfileContent
     let contentSection: () -> ContentSectionContent
@@ -20,6 +21,11 @@ struct LibraryBaseView<ProfileContent: View, ContentSectionContent: View, Naviga
     // MARK: - State
     @State private var stickyTabVisible = false
     @State private var originalTabPosition: CGFloat = 0
+    
+    // MARK: - Computed Properties
+    private var availableTabs: [LibraryTab] {
+        LibraryTab.availableTabs(showKeywords: showKeywords)
+    }
     
     // MARK: - BODY
     var body: some View {
@@ -32,22 +38,24 @@ struct LibraryBaseView<ProfileContent: View, ContentSectionContent: View, Naviga
                                 // 프로필 섹션
                                 profileSection()
                                 
-                                
                                 // 탭 섹션 (원본)
-                                LibraryTabSection(selectedTab: $selectedTab)
-                                    .id("tabSection")
-                                    .background(
-                                        GeometryReader { tabGeometry in
-                                            Color.clear
-                                                .onAppear {
-                                                    originalTabPosition = tabGeometry.frame(in: .global).minY
-                                                }
-                                                .onChange(of: tabGeometry.frame(in: .global).minY) { _, newY in
-                                                    updateStickyState(currentY: newY)
-                                                }
-                                        }
-                                    )
-                                    .opacity(stickyTabVisible ? 0 : 1)
+                                LibraryTabSection(
+                                    selectedTab: $selectedTab,
+                                    showKeywords: showKeywords
+                                )
+                                .id("tabSection")
+                                .background(
+                                    GeometryReader { tabGeometry in
+                                        Color.clear
+                                            .onAppear {
+                                                originalTabPosition = tabGeometry.frame(in: .global).minY
+                                            }
+                                            .onChange(of: tabGeometry.frame(in: .global).minY) { _, newY in
+                                                updateStickyState(currentY: newY)
+                                            }
+                                    }
+                                )
+                                .opacity(stickyTabVisible ? 0 : 1)
                                 
                                 // 콘텐츠 섹션
                                 contentSection()
@@ -56,7 +64,12 @@ struct LibraryBaseView<ProfileContent: View, ContentSectionContent: View, Naviga
                             }
                             .padding(.top, 10)
                         }
-                        .onChange(of: selectedTab) { _, _ in
+                        .onChange(of: selectedTab) { _, newTab in
+                            // 선택된 탭이 사용 가능한 탭이 아니라면 첫 번째 탭으로 변경
+                            if !availableTabs.contains(newTab) {
+                                selectedTab = availableTabs.first ?? .stories
+                            }
+                            
                             withAnimation(.easeInOut(duration: 0.1)) {
                                 proxy.scrollTo("tabSection", anchor: .top)
                             }
@@ -67,12 +80,15 @@ struct LibraryBaseView<ProfileContent: View, ContentSectionContent: View, Naviga
                 
                 // Sticky 탭 (조건부로만 표시)
                 if stickyTabVisible {
-                    LibraryTabSection(selectedTab: $selectedTab)
-                        .background(Color(.systemGroupedBackground))
-                        .shadow(color: .black.opacity(0.1), radius: 2, y: 1)
-                        .frame(maxWidth: .infinity)
-                        .transition(.opacity)
-                        .zIndex(999)
+                    LibraryTabSection(
+                        selectedTab: $selectedTab,
+                        showKeywords: showKeywords
+                    )
+                    .background(Color(.systemGroupedBackground))
+                    .shadow(color: .black.opacity(0.1), radius: 2, y: 1)
+                    .frame(maxWidth: .infinity)
+                    .transition(.opacity)
+                    .zIndex(999)
                 }
             }
         }
@@ -83,6 +99,12 @@ struct LibraryBaseView<ProfileContent: View, ContentSectionContent: View, Naviga
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            // 뷰가 나타날 때 선택된 탭이 유효한지 확인
+            if !availableTabs.contains(selectedTab) {
+                selectedTab = availableTabs.first ?? .stories
+            }
+        }
     }
     
     private func updateStickyState(currentY: CGFloat) {

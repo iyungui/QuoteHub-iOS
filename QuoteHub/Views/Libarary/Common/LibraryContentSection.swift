@@ -11,7 +11,7 @@ struct LibraryContentSection<StoriesView: View, ThemesView: View, KeywordView: V
     let selectedTab: LibraryTab
     let storiesView: () -> StoriesView
     let themesView: () -> ThemesView
-    let keywordsView: () -> KeywordView?
+    let keywordsView: (() -> KeywordView)?
     
     var body: some View {
         switch selectedTab {
@@ -21,7 +21,9 @@ struct LibraryContentSection<StoriesView: View, ThemesView: View, KeywordView: V
             themesView()
         case .keywords:
             // TODO: 키워드 뷰 추가
-            keywordsView()
+            if let keywordsView = keywordsView {
+                keywordsView()
+            }
         }
     }
 }

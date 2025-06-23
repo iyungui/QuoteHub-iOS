@@ -19,4 +19,11 @@ enum LibraryTab: Int, CaseIterable {
         case .keywords: return "키워드"
         }
     }
+    static func availableTabs(showKeywords: Bool) -> [LibraryTab] {
+        if showKeywords {
+            return LibraryTab.allCases
+        } else {
+            return [.stories, .themes]
+        }
+    }
 }
