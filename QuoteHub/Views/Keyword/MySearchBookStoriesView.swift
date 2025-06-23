@@ -47,7 +47,7 @@ struct MySearchBookStoriesView: View {
         }
         .progressOverlay(
             viewModels: searchViewModel,
-            opacity: true
+            opacity: false
         )
     }
     
@@ -73,6 +73,7 @@ struct MySearchBookStoriesView: View {
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 20)
+        .background(Color.softBeige)
     }
     
     // MARK: - Content Section

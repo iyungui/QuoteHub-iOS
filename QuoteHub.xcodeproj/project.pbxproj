@@ -201,6 +201,8 @@
 		CECBB5292E0932EB004C7856 /* KeywordTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB5282E0932EB004C7856 /* KeywordTagView.swift */; };
 		CECBB52B2E0932F9004C7856 /* MyLibraryKeywordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB52A2E0932F9004C7856 /* MyLibraryKeywordsView.swift */; };
 		CECBB52D2E093343004C7856 /* MySearchBookStoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB52C2E093343004C7856 /* MySearchBookStoriesView.swift */; };
+		CECBB52F2E09584F004C7856 /* SampleDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB52E2E09584F004C7856 /* SampleDataManager.swift */; };
+		CECBB5312E095A77004C7856 /* SampleData.json in Resources */ = {isa = PBXBuildFile; fileRef = CECBB5302E095A77004C7856 /* SampleData.json */; };
 		CED3795D2DFEE902001CE700 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED3795C2DFEE902001CE700 /* AuthService.swift */; };
 /* End PBXBuildFile section */
 
@@ -396,6 +398,8 @@
 		CECBB5282E0932EB004C7856 /* KeywordTagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordTagView.swift; sourceTree = "<group>"; };
 		CECBB52A2E0932F9004C7856 /* MyLibraryKeywordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLibraryKeywordsView.swift; sourceTree = "<group>"; };
 		CECBB52C2E093343004C7856 /* MySearchBookStoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MySearchBookStoriesView.swift; sourceTree = "<group>"; };
+		CECBB52E2E09584F004C7856 /* SampleDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleDataManager.swift; sourceTree = "<group>"; };
+		CECBB5302E095A77004C7856 /* SampleData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = SampleData.json; sourceTree = "<group>"; };
 		CED3795C2DFEE902001CE700 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -605,6 +609,7 @@
 				CECBB52C2E093343004C7856 /* MySearchBookStoriesView.swift */,
 				CECBB5282E0932EB004C7856 /* KeywordTagView.swift */,
 				CECBB5262E0932CA004C7856 /* KeywordInfo.swift */,
+				CECBB5322E0983EB004C7856 /* Friend */,
 			);
 			path = Keyword;
 			sourceTree = "<group>";
@@ -740,6 +745,7 @@
 				C6B56FE02AA8B60D003905C3 /* Assets.xcassets */,
 				CE8C48E92DF05884003188ED /* Lottie */,
 				CE8C48472DEADAAC003188ED /* Font */,
+				CECBB5302E095A77004C7856 /* SampleData.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -760,6 +766,7 @@
 				C6336CF22AAF1AA0007355EC /* ImagePicker.swift */,
 				CE1100E52E0280C3003C592E /* LoadingViewModel.swift */,
 				CEA554CD2E018AF30029A8A9 /* DraftManager.swift */,
+				CECBB52E2E09584F004C7856 /* SampleDataManager.swift */,
 				CE8C48642DEAE2A9003188ED /* FontManager.swift */,
 				CE4FEFA92DFDC0350072E8B9 /* TabController.swift */,
 			);
@@ -936,7 +943,6 @@
 			isa = PBXGroup;
 			children = (
 				CECBB4AC2E07B03D004C7856 /* FriendLibraryView.swift */,
-				CECBB50A2E082C7E004C7856 /* FriendLibraryKeywordsView.swift */,
 				CECBB4FD2E082A18004C7856 /* FriendLibraryThemesView.swift */,
 				CE8C488B2DEC3E73003188ED /* FriendLibraryStoriesView.swift */,
 			);
@@ -980,6 +986,14 @@
 				CE1100EA2E02816A003C592E /* StoryCreateGuideSection.swift */,
 			);
 			path = BookStory;
+			sourceTree = "<group>";
+		};
+		CECBB5322E0983EB004C7856 /* Friend */ = {
+			isa = PBXGroup;
+			children = (
+				CECBB50A2E082C7E004C7856 /* FriendLibraryKeywordsView.swift */,
+			);
+			path = Friend;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1060,6 +1074,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C6B56FE42AA8B60D003905C3 /* Preview Assets.xcassets in Resources */,
+				CECBB5312E095A77004C7856 /* SampleData.json in Resources */,
 				C6B56FE12AA8B60D003905C3 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1210,6 +1225,7 @@
 				CE8C49732DF19133003188ED /* StoryListCard.swift in Sources */,
 				CE8C47802DEA8D84003188ED /* OnboardingView.swift in Sources */,
 				CECBB5092E082BBE004C7856 /* CommentEditView.swift in Sources */,
+				CECBB52F2E09584F004C7856 /* SampleDataManager.swift in Sources */,
 				CE8C47822DEA8D84003188ED /* KeyChainTokenManager.swift in Sources */,
 				CECBB4E82E0826C2004C7856 /* StoryListCardContent.swift in Sources */,
 				CE8C47832DEA8D84003188ED /* UserAuthenticationManager.swift in Sources */,

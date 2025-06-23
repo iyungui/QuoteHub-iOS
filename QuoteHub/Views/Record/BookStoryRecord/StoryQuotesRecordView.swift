@@ -67,7 +67,7 @@ struct StoryQuotesRecordView: View {
     
     private var toolBarItems: some ToolbarContent {
         Group {
-            // TODO: 임시저장 버튼
+            // TODO: 좌측에 임시저장 버튼
             
             ToolbarItem(placement: .topBarTrailing) {
                 Button {

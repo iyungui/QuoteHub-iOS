@@ -397,3 +397,4 @@ final class FriendBookStoriesViewModel: BookStoriesViewModelProtocol {
         }
     }
 }
+

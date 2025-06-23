@@ -57,6 +57,10 @@ struct QuoteHubApp: App {
                 .environment(blockReportViewModel)
                 .environment(myBookStoriesViewModel)
                 .environment(publicBookStoriesViewModel)
+            
+//            MySearchBookStoriesView(keyword: "삶")
+//                .environment(myBookStoriesViewModel)
+//                .environment(userViewModel)
         }
 //        .modelContainer(sharedModelContainer)
     }

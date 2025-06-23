@@ -11,7 +11,7 @@ struct LibraryContentSection<StoriesView: View, ThemesView: View, KeywordView: V
     let selectedTab: LibraryTab
     let storiesView: () -> StoriesView
     let themesView: () -> ThemesView
-    let keywordsView: () -> KeywordView
+    let keywordsView: () -> KeywordView?
     
     var body: some View {
         switch selectedTab {

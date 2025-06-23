@@ -2,7 +2,7 @@
 //  StoryFormViewModel.swift
 //  QuoteHub
 //
-//  Created by AI Assistant on 6/9/25.
+//  Created by 이융의 on 6/5/25.
 //
 
 import SwiftUI

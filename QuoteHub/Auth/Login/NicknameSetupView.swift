@@ -25,6 +25,7 @@ struct NicknameSetupView: View {
     @Environment(MyThemesViewModel.self) private var myThemesViewModel
     
     private let authService = AuthService.shared
+    private let sampleDataManager = SampleDataManager()
     
     init(initialNickname: String) {
         self.initialNickname = initialNickname
@@ -61,6 +62,7 @@ struct NicknameSetupView: View {
                 // 텍스트필드와 버튼들
                 HStack(spacing: 10) {
                     TextField("닉네임을 입력하세요", text: $nickname)
+                        .font(.scoreDream(.regular, size: .subheadline))
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .onChange(of: nickname) { _, _ in
                             // 닉네임이 변경되면 체크 상태 초기화
@@ -139,7 +141,6 @@ struct NicknameSetupView: View {
             }
             .padding(.horizontal, 50)
             .toggleStyle(CheckboxStyle())
-//            .toggleStyle(SwitchToggleStyle(tint: .appAccent))
             
             // 다음 버튼
             Button(action: completeNicknameSetup) {
@@ -230,14 +231,21 @@ struct NicknameSetupView: View {
     }
     
     private func completeNicknameSetup() {
-        // 닉네임 변경 API 호출 후 데이터 로딩 및 라이브러리뷰로 이동
         authManager.isLoading = true
+        authManager.loadingMessage = wantsExampleBookStoryData ?
+            "계정 설정 및 예시 데이터 생성 중..." : "계정 설정 중..."
         
         Task {
             do {
+                // 1. 닉네임 변경
                 let _ = try await authService.changeNickname(nickname)
                 
-                // 닉네임 변경 성공 후 사용자 데이터 로딩
+                // 2. 예시 데이터 생성 (선택적)
+                if wantsExampleBookStoryData {
+                    await createSampleData()
+                }
+                
+                // 3. 사용자 데이터 로딩
                 await loadLoginUserData()
                 
                 await MainActor.run {
@@ -246,6 +254,7 @@ struct NicknameSetupView: View {
             } catch {
                 await MainActor.run {
                     authManager.isLoading = false
+                    authManager.loadingMessage = nil
                     feedbackMessage = "닉네임 변경에 실패했습니다"
                     feedbackColor = .red
                 }
@@ -255,15 +264,103 @@ struct NicknameSetupView: View {
     
     private func skipNicknameSetup() {
         authManager.isLoading = true
+        authManager.loadingMessage = wantsExampleBookStoryData ?
+            "예시 데이터 생성 중..." : "데이터 로딩 중..."
         
         Task {
-            // 건너뛰기해도 사용자 데이터는 로딩
+            // 예시 데이터 생성 (선택적)
+            if wantsExampleBookStoryData {
+                await createSampleData()
+            }
+            
+            // 사용자 데이터 로딩
             await loadLoginUserData()
             
             await MainActor.run {
                 authManager.completeLoginProcess()
             }
         }
+    }
+    
+    // MARK: - 샘플 데이터 생성
+    
+    private func createSampleData() async {
+        print("🎯 샘플 데이터 생성 시작...")
+        
+        // 1. 샘플 테마 생성
+        guard let sampleTheme = await createSampleTheme() else {
+            print("❌ 샘플 데이터 생성 건너뛰기 (JSON 파일 없음 또는 테마 생성 실패)")
+            return
+        }
+        
+        print("✅ 샘플 테마 생성 완료: \(sampleTheme.name)")
+        
+        // 2. 샘플 북스토리들 생성
+        await createSampleBookStories(themeId: sampleTheme.id)
+        
+        print("✅ 모든 샘플 데이터 생성 완료")
+    }
+    
+    private func createSampleTheme() async -> Theme? {
+        guard let themeData = sampleDataManager.getSampleThemeData() else {
+            print("❌ JSON에서 테마 데이터를 로드할 수 없습니다.")
+            return nil
+        }
+        
+        return await myThemesViewModel.createTheme(
+            image: loadImageFromBundle(themeData.imageName),
+            name: themeData.name,
+            description: themeData.description,
+            isPublic: false
+        )
+    }
+    
+    private func createSampleBookStories(themeId: String) async {
+        let bookStoriesData = sampleDataManager.getSampleBookStoriesData()
+        
+        guard !bookStoriesData.isEmpty else {
+            print("❌ JSON에서 북스토리 데이터를 로드할 수 없습니다.")
+            return
+        }
+        
+        var successCount = 0
+        
+        for (index, bookStoryData) in bookStoriesData.enumerated() {
+            print("📚 북스토리 \(index + 1)/\(bookStoriesData.count) 생성 중...")
+            
+            // 이미지 로드
+            let images = bookStoryData.imageNames?.compactMap { imageName in
+                loadImageFromBundle(imageName)
+            }
+            
+            // 북스토리 생성
+            let result = await myBookStoriesViewModel.createBookStory(
+                bookId: bookStoryData.bookId,
+                quotes: bookStoryData.quotes,
+                images: images?.isEmpty == true ? nil : images,
+                content: bookStoryData.content,
+                isPublic: false,
+                keywords: bookStoryData.keywords,
+                themeIds: [themeId]
+            )
+            
+            if result != nil {
+                successCount += 1
+                print("✅ 샘플 북스토리 \(index + 1) 생성 완료")
+            } else {
+                print("❌ 샘플 북스토리 \(index + 1) 생성 실패")
+            }
+            
+            // 서버 부하 방지를 위한 딜레이
+            try? await Task.sleep(nanoseconds: 300_000_000) // 0.3초
+        }
+        
+        print("📊 샘플 북스토리 생성 결과: \(successCount)/\(bookStoriesData.count)개 성공")
+    }
+    
+    private func loadImageFromBundle(_ imageName: String?) -> UIImage? {
+        guard let imageName = imageName else { return nil }
+        return UIImage(named: imageName)
     }
     
     private func loadLoginUserData() async {
@@ -286,9 +383,8 @@ struct NicknameSetupView: View {
         }
     }
 }
-
 #Preview {
-    NicknameSetupView(initialNickname: "테스트닉네임")
+    NicknameSetupView(initialNickname: "")
         .environment(UserAuthenticationManager())
         .environment(UserViewModel())
         .environment(MyBookStoriesViewModel())

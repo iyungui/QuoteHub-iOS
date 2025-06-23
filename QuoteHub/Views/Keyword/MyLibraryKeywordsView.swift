@@ -15,7 +15,9 @@ struct MyLibraryKeywordsView: View {
     
     // MARK: - State
     @State private var showSortOptions = false
-    
+    @State private var selectedKeyword: String?
+    @State private var showSearchView = false
+
     // MARK: - Grid Layout
     private let columns = [
         GridItem(.adaptive(minimum: 120), spacing: 8)
@@ -28,6 +30,11 @@ struct MyLibraryKeywordsView: View {
             
             // 컨텐츠 섹션
             contentSection
+        }
+        .navigationDestination(isPresented: $showSearchView) {
+            if let keyword = selectedKeyword {
+                MySearchBookStoriesView(keyword: keyword)
+            }
         }
         .onAppear {
             setupViewModelIfNeeded()
@@ -130,10 +137,11 @@ struct MyLibraryKeywordsView: View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: 12) {
                 ForEach(viewModel.keywords) { keywordInfo in
-                    NavigationLink(destination: MySearchBookStoriesView(keyword: keywordInfo.keyword)) {
-                        KeywordTagView(keywordInfo: keywordInfo)
+                    KeywordTagView(keywordInfo: keywordInfo) {
+                        // 키워드 선택 시 네비게이션
+                        selectedKeyword = keywordInfo.keyword
+                        showSearchView = true
                     }
-                    .buttonStyle(PlainButtonStyle())
                 }
             }
             .padding(.horizontal, 20)

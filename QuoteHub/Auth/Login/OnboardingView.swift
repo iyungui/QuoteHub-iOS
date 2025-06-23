@@ -57,10 +57,11 @@ struct OnboardingContentView: View {
             .padding(.leading, 50)
             
             HStack {
-                AnimatedText(.constant(onboardingPages[index].description),
-                             currentPage: $currentPage,
-                             targetPage: index)
-                .font(.scoreDreamBody)
+//                AnimatedText(.constant(),
+//                             currentPage: $currentPage,
+//                             targetPage: index)
+                Text(onboardingPages[index].description)
+                    .font(.scoreDreamBody)
                 
                 .multilineTextAlignment(.leading)
                 Spacer()
