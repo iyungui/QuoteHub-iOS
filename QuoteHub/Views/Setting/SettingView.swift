@@ -28,29 +28,29 @@ struct SettingView: View {
         List {
             Section(header: Text("내 정보")) {
                 NavigationLink {
-                    EmptyView() // TODO: - UpdateProfileView로 변경
+                    UpdateProfileView()
                 } label: {
                     HStack {
                         Image(systemName: "person.circle")
                         Text("내 프로필 수정")
                     }
                 }
-                NavigationLink {
-                    BlockedListView()
-                } label: {
-                    HStack {
-                        Image(systemName: "person.crop.circle.badge.xmark")
-                        Text("차단 목록")
-                    }
-                }
-                NavigationLink {
-                    ReportListView()
-                } label: {
-                    HStack {
-                        Image(systemName: "exclamationmark.bubble")
-                        Text("신고 목록")
-                    }
-                }
+//                NavigationLink {
+//                    BlockedListView()
+//                } label: {
+//                    HStack {
+//                        Image(systemName: "person.crop.circle.badge.xmark")
+//                        Text("차단 목록")
+//                    }
+//                }
+//                NavigationLink {
+//                    ReportListView()
+//                } label: {
+//                    HStack {
+//                        Image(systemName: "exclamationmark.bubble")
+//                        Text("신고 목록")
+//                    }
+//                }
             }
             
             Section(header: Text("지원")) {

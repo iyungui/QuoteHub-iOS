@@ -13,6 +13,7 @@ struct SignInWithAppleResponse: Codable {
     let user: User
     let accessToken: String
     let refreshToken: String
+    let isNewUser: Bool
 }
 
 /// 사용자 정보
@@ -38,6 +39,11 @@ struct TokenValidationResponse: Codable {
     let valid: Bool
     let accessToken: String?
     let refreshToken: String?
+}
+
+// 닉네임 생성 응답
+struct GenerateNicknameResponse: Codable {
+    let nickname: String
 }
 
 /// 닉네임 중복 체크 응답

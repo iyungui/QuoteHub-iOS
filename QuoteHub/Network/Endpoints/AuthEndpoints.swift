@@ -14,6 +14,7 @@ enum AuthEndpoints: EndpointProtocol {
     case revokeAccount
     case checkNickname(nickname: String)
     case changeNickname
+    case generateNickname
     
     var path: String {
         switch self {
@@ -29,12 +30,16 @@ enum AuthEndpoints: EndpointProtocol {
             return "/auth/check-nickname?nickname=\(nickname.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")"
         case .changeNickname:
             return "/auth/change-nickname"
+        case .generateNickname:
+            return "/auth/generate-nickname"
+
         }
     }
     
     var method: HTTPMethod {
         switch self {
-        case .changeNickname: return .GET
+        case .checkNickname, .generateNickname: return .GET
+        case .changeNickname: return .PUT
         default: return .POST
         }
     }

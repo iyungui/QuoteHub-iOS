@@ -11,6 +11,9 @@ protocol AuthServiceProtocol {
     func signInWithApple(authCode: String) async throws -> APIResponse<SignInWithAppleResponse>
     func validateAndRenewToken() async throws -> APIResponse<TokenValidationResponse>
     func revokeAccount() async throws -> APIResponse<RevokeAccountResponse>
+    func generateUniqueNickname() async throws -> APIResponse<GenerateNicknameResponse>  // 추가
+    func checkNickname(_ nickname: String, withAuth: Bool) async throws -> APIResponse<NicknameDuplicateResponse>  // 추가
+    func changeNickname(_ nickname: String) async throws -> APIResponse<User>
 }
 
 final class AuthService: AuthServiceProtocol {
@@ -58,6 +61,16 @@ final class AuthService: AuthServiceProtocol {
             body: .empty,
             responseType: APIResponse<TokenValidationResponse>.self,
             customHeaders: headers
+        )
+    }
+    
+    /// 고유한 닉네임 생성
+    /// - Returns: 생성된 고유 닉네임
+    func generateUniqueNickname() async throws -> APIResponse<GenerateNicknameResponse> {
+        return try await apiClient.request(
+            endpoint: AuthEndpoints.generateNickname,
+            body: .empty,
+            responseType: APIResponse<GenerateNicknameResponse>.self
         )
     }
     

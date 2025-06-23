@@ -24,8 +24,8 @@ struct ContentView: View {
     var body: some View {
         if isSplashView {
             LaunchScreenView()
-                // LaunchScreenView 나타날 때 토큰 검증 및 앱 버전 체크
-                // TODO: - 여기서 .task 로 (유저, 북스토리, 테마) 데이터 모델을 미리 로드하고 전달하기.
+            // LaunchScreenView 나타날 때 토큰 검증 및 앱 버전 체크
+            // TODO: - 여기서 .task 로 (유저, 북스토리, 테마) 데이터 모델을 미리 로드하고 전달하기.
                 .task {
                     // 각 작업이 독립적이므로 병렬 실행
                     await withTaskGroup(of: Void.self) { group in
@@ -75,6 +75,8 @@ struct ContentView: View {
                         isSplashView = false
                     }
                 }
+        } else if authManager.showingNicknameSetup {
+            NicknameSetupView(initialNickname: authManager.initialNickname)
         } else {
             Group {
                 // 앱을 시작할 때, 인증된 사용자라면 또는 게스트로그인 사용자라면 MainView로 가고,

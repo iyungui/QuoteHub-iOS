@@ -1,166 +1,196 @@
-////
-////  UpdateProfileView.swift
-////  QuoteHub
-////
-////  Created by 이융의 on 2023/10/02.
-////
 //
-//import SwiftUI
-//import SDWebImageSwiftUI
+//  UpdateProfileView.swift
+//  QuoteHub
 //
-//struct UserProfileImage: View {
-//    let profileImageURL: String?
-//    @Binding var inputImage: UIImage?
-//    @State private var showingImagePicker = false
-//    @State private var showingPermissionAlert = false
-//    @State private var permissionAlertMessage = ""
-//    
-//    var body: some View {
-//        Group {
-//            if let inputImg = inputImage { // User has selected a new image to upload
-//                Image(uiImage: inputImg)
-//                    .resizable()
-//                    .scaledToFill()
-//                    .frame(width: 120, height: 120)
-//                    .clipShape(Circle())
-//                    .overlay(Circle().stroke(Color.gray, lineWidth: 1))
-//            } else if let urlString = profileImageURL, let url = URL(string: urlString) { // Existing profile image
-//                WebImage(url: url)
-//                    .resizable()
-//                    .scaledToFill()
-//                    .frame(width: 120, height: 120)
-//                    .clipShape(Circle())
-//                    .overlay(Circle().stroke(Color.gray, lineWidth: 1))
-//            } else {
-//                Circle()
-//                    .stroke(Color.gray, lineWidth: 1)
-//                    .frame(width: 120, height: 120)
-//                    .overlay(
-//                        Image(systemName: "photo.badge.plus")
-//                            .font(.title)
-//                            .foregroundColor(Color.gray),
-//                        alignment: .center
-//                    )
-//            }
-//        }
-//        .onTapGesture {
-//            PermissionsManager.shared.checkPhotosAuthorization { authorized in
-//                if authorized {
-//                    self.showingImagePicker = true
-//                } else {
-//                    self.permissionAlertMessage = "프로필 이미지를 업로드하려면 사진 라이브러리 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요."
-//                    self.showingPermissionAlert = true
-//                }
-//            }
-//        }
-//        .sheet(isPresented: $showingImagePicker) {
-//            SingleImagePicker(selectedImage: self.$inputImage)
-//                .ignoresSafeArea(.all)
-//        }
-//        .alert(isPresented: $showingPermissionAlert) {
-//            Alert(
-//                title: Text("권한 필요"),
-//                message: Text(permissionAlertMessage),
-//                primaryButton: .default(Text("설정으로 이동"), action: {
-//                    // 사용자를 설정 앱으로 이동
-//                    if let settingsUrl = URL(string: UIApplication.openSettingsURLString),
-//                       UIApplication.shared.canOpenURL(settingsUrl) {
-//                        UIApplication.shared.open(settingsUrl)
-//                    }
-//                }),
-//                secondaryButton: .cancel()
-//            )
-//        }
-//    }
-//}
+//  Created by 이융의 on 6/23/25.
 //
-//
-//struct UpdateProfileView: View {
-//    @EnvironmentObject var userViewModel: UserViewModel
-//    
-//    @State private var inputImage: UIImage?
-//    @State private var nickname: String = ""
-//    @State private var statusMessage: String = ""
-//    
-//    @State private var showAlert: Bool = false
-//    @State private var alertMessage: String = ""
-//    
-//    @Environment(\.presentationMode) var presentationMode
-//    
-//    var body: some View {
-//        VStack(alignment: .center, spacing: 10) {
-//            Spacer()
-//            UserProfileImage(profileImageURL: userViewModel.user?.profileImage, inputImage: $inputImage)
-//            Spacer()
-//            
-//            Group {
-//                TextField("닉네임", text: $nickname)
-//                    .font(.system(size: 14))
-//                    .foregroundColor(.primary)
-//                    .padding()
-//                    .cornerRadius(4.0)
-//                    .overlay(RoundedRectangle(cornerRadius: 4.0).stroke(Color.secondary, lineWidth: 1))
-//                    .frame(width: 280)
-//                
-//                TextField("상태메시지", text: $statusMessage)
-//                    .font(.system(size: 14))
-//                    .foregroundColor(.primary)
-//                    .padding()
-//                    .cornerRadius(4.0)
-//                    .overlay(RoundedRectangle(cornerRadius: 4.0).stroke(Color.secondary, lineWidth: 1))
-//                    .frame(width: 280)
-//                
-//            
-//                
-//            }
-//            Spacer()
-//            
-//            Button(action: updateProfile) {
-//                Text("완료")
-//                    .font(.system(size: 20, weight: .bold))
-//                    .foregroundColor(.white)
-//                    .padding()
-//                    .frame(maxWidth: .infinity, alignment: .center)
-//                    .background(Color.appAccent)
-//                    .cornerRadius(6)
-//            }
-//            .buttonStyle(PlainButtonStyle())
-//            .padding(.horizontal, 30)
-//            .padding(.bottom)
-//        }
-//        .navigationBarTitle("내 프로필", displayMode: .inline)
-//        
-//        .onAppear {
-//            if let user = userViewModel.user {
-//                self.nickname = user.nickname
-//                self.statusMessage = user.statusMessage ?? ""
-//            }
-//        }
-//        .alert(isPresented: $showAlert, content: {
-//            Alert(title: Text("알림"), message: Text(alertMessage), dismissButton: .default(Text("확인")) {
-//                if alertMessage == "프로필이 성공적으로 업데이트되었습니다." {
-//                    presentationMode.wrappedValue.dismiss()
-//                }
-//            })
-//        })
-//    }
-//    
-//    
-//    func updateProfile() {
-//        print(#fileID, #function, #line, "- ")
-//        userViewModel.updateProfile(nickname: nickname, profileImage: inputImage, statusMessage: statusMessage, monthlyReadingGoal: monthlyReadingGoal) { result in
-//            switch result {
-//            case .success:
-//                alertMessage = "프로필이 성공적으로 업데이트되었습니다."
-//                showAlert = true
-//            case .failure(let error as NSError):
-//                if error.domain == "UserService" && error.code == 400 {
-//                    alertMessage = "이미 사용 중인 닉네임입니다. 다른 닉네임을 사용해주세요."
-//                } else {
-//                    alertMessage = "프로필 수정 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
-//                }
-//                showAlert = true
-//            }
-//        }
-//    }
-//}
+
+import SwiftUI
+import PhotosUI
+
+struct UpdateProfileView: View {
+    @Environment(\.dismiss) private var dismiss
+    @Environment(UserViewModel.self) private var userViewModel
+    
+    // 폼 상태
+    @State private var nickname: String = ""
+    @State private var statusMessage: String = ""
+    @State private var selectedPhoto: PhotosPickerItem?
+    @State private var selectedUIImage: UIImage?
+    @State private var profileImageURL: String = ""
+    
+    // UI 상태
+    @State private var showErrorAlert = false
+    @State private var showSuccessAlert = false
+    
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 30) {
+                profileImageSection
+                
+                inputFieldsSection
+                
+                Spacer(minLength: 50)
+            }
+            .padding(.horizontal, 25)
+            .padding(.top, 20)
+        }
+        .navigationTitle("프로필 수정")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button("취소") {
+                    dismiss()
+                }
+                .foregroundColor(.primary)
+            }
+            
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("저장") {
+                    Task {
+                        await saveProfile()
+                    }
+                }
+                .foregroundColor(.blue)
+                .disabled(userViewModel.isLoadingProfile || nickname.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            }
+        }
+        .onAppear {
+            loadCurrentUserData()
+        }
+        .onChange(of: selectedPhoto) { _, newValue in
+            Task {
+                await loadSelectedImage(from: newValue)
+            }
+        }
+        .alert("오류", isPresented: $showErrorAlert) {
+            Button("확인", role: .cancel) { }
+        } message: {
+            Text(/*userViewModel.errorMessage ??*/ "알 수 없는 오류가 발생했습니다.")
+        }
+        .alert("성공", isPresented: $showSuccessAlert) {
+            Button("확인", role: .cancel) {
+                dismiss()
+            }
+        } message: {
+            Text(/*userViewModel.successMessage ??*/ "프로필이 업데이트되었습니다.")
+        }
+    }
+    
+    // MARK: - Profile Image Section
+    
+    private var profileImageSection: some View {
+        VStack(spacing: 15) {
+            if let selectedUIImage = selectedUIImage {
+                Image(uiImage: selectedUIImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 100, height: 100)
+                    .clipShape(Circle())
+            } else {
+                ProfileImage(
+                    profileImageURL: profileImageURL,
+                    size: 100
+                )
+            }
+            
+            PhotosPicker(
+                selection: $selectedPhoto,
+                matching: .images,
+                photoLibrary: .shared()
+            ) {
+                Text("사진 변경")
+                    .font(.scoreDream(.medium, size: .subheadline))
+                    .foregroundColor(.blue)
+            }
+            .disabled(userViewModel.isLoadingProfile)
+        }
+        .progressOverlay(viewModel: userViewModel, opacity: true)
+    }
+    
+    // MARK: - Input Fields Section
+    
+    private var inputFieldsSection: some View {
+        VStack(alignment: .leading, spacing: 25) {
+            // 닉네임 입력
+            VStack(alignment: .leading, spacing: 8) {
+                Text("닉네임")
+                    .font(.scoreDream(.medium, size: .subheadline))
+                    .foregroundColor(.primary)
+                
+                TextField("닉네임을 입력하세요", text: $nickname)
+                    .font(.scoreDream(.regular, size: .body))
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .disabled(userViewModel.isLoadingProfile)
+            }
+            
+            // 상태메시지 입력
+            VStack(alignment: .leading, spacing: 8) {
+                Text("상태메시지")
+                    .font(.scoreDream(.medium, size: .subheadline))
+                    .foregroundColor(.primary)
+                
+                TextField("상태메시지를 입력하세요", text: $statusMessage, axis: .vertical)
+                    .font(.scoreDream(.regular, size: .body))
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .lineLimit(2...4)
+                    .disabled(userViewModel.isLoadingProfile)
+            }
+            
+            // 로딩 메시지
+            if userViewModel.isLoadingProfile {
+                HStack {
+                    ProgressView()
+                        .scaleEffect(0.8)
+                    
+                    Text(userViewModel.loadingMessage ?? "저장 중...")
+                        .font(.scoreDream(.regular, size: .subheadline))
+                        .foregroundColor(.secondary)
+                }
+                .padding(.top, 10)
+            }
+        }
+    }
+    
+    // MARK: - Helper Methods
+    
+    private func loadCurrentUserData() {
+        if let currentUser = userViewModel.currentUser {
+            nickname = currentUser.nickname ?? ""
+            statusMessage = currentUser.statusMessage ?? ""
+            profileImageURL = currentUser.profileImage ?? ""
+        }
+    }
+    
+    private func loadSelectedImage(from item: PhotosPickerItem?) async {
+        guard let item = item else { return }
+        
+        do {
+            if let data = try await item.loadTransferable(type: Data.self),
+               let uiImage = UIImage(data: data) {
+                selectedUIImage = uiImage
+            }
+        } catch {
+            print("이미지 로드 실패: \(error)")
+        }
+    }
+    
+    private func saveProfile() async {
+        let success = await userViewModel.updateProfile(
+            nickname: nickname,
+            profileImage: selectedUIImage,
+            statusMessage: statusMessage
+        )
+        
+        if success {
+            showSuccessAlert = true
+        } else {
+            showErrorAlert = true
+        }
+    }
+}
+
+#Preview {
+    UpdateProfileView()
+        .environment(UserViewModel())
+}

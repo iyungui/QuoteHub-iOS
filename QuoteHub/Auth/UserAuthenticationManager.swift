@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 @Observable
 final class UserAuthenticationManager: LoadingViewModel {
     var isUserAuthenticated: Bool = false
@@ -15,6 +14,14 @@ final class UserAuthenticationManager: LoadingViewModel {
     var showingLoginView: Bool = false
     var isLoading: Bool = false
     var loadingMessage: String?
+    
+    // 닉네임 설정 관련 상태 추가
+    var showingNicknameSetup: Bool = false {
+        didSet {
+            print("show nickname: \(showingNicknameSetup)")
+        }
+    }
+    var initialNickname: String = ""
     
     private let authService: AuthService
     private let tabController: TabController
@@ -28,12 +35,8 @@ final class UserAuthenticationManager: LoadingViewModel {
     
     /// 애플 로그인 시 응답처리 (토큰저장)
     @MainActor
-    func handleAppleLogin(authCode: String) async -> Bool {
+    func handleAppleLogin(authCode: String) async -> (success: Bool, isNewUser: Bool, nickname: String) {
         isLoading = true
-        
-//        defer {
-//            isLoading = false   // isLoading 은 북스토리, 테마 로드가 끝난 후에 해제
-//        }
         
         do {
             // 서버로 Apple 로그인 요청(백그라운드 스레드)
@@ -41,26 +44,37 @@ final class UserAuthenticationManager: LoadingViewModel {
             
             guard response.success, let loginData = response.data else {
                 print("Apple 로그인 실패: \(response.message)")
-                return false
+                return (false, false, "")
             }
-            
-//            // 토큰 저장
-//            try await Task.detached { // 토큰 저장 완료되면 Task는 자동으로 메모리에서 해제
-//                try await self.authService.saveTokens(loginData)
-//            }.value
             
             try authService.saveTokens(loginData)
             
             print("Apple 로그인 성공: \(loginData.user.nickname)")
+            return (true, loginData.isNewUser, loginData.user.nickname)
+            
         } catch {
             print("Apple 로그인 에러: \(error.localizedDescription)")
-            return false
+            return (false, false, "")
         }
-        return true
+    }
+    
+    /// 닉네임 설정 화면 표시
+    @MainActor
+    func showNicknameSetup(nickname: String) {
+        initialNickname = nickname
+        showingNicknameSetup = true
+        showingLoginView = false
+        isLoading = false
+    }
+    
+    /// 로그인 완료 후 라이브러리뷰 이동 (데이터 로딩은 외부에서 처리)
+    @MainActor
+    func completeLoginProcess() {
+        goToLibraryView()
+        isLoading = false
     }
     
     /// 토큰 검증 및 토큰 재발급 후 메인뷰로 이동 (자동 로그인)
-    // TODO: 하나의 메서드로 하기 보다는 기능 나누기
     @MainActor
     func validateAndRenewTokenNeeded() async {
         // 저장된 액세스 토큰이 있는지 먼저 확인
@@ -169,6 +183,7 @@ final class UserAuthenticationManager: LoadingViewModel {
         isUserAuthenticated = false
         isGuestMode = false
         showingLoginView = false
+        showingNicknameSetup = false  // 닉네임 설정 상태도 초기화
         print("온보딩뷰로 이동!")
     }
     
@@ -178,6 +193,7 @@ final class UserAuthenticationManager: LoadingViewModel {
 
         isUserAuthenticated = true
         showingLoginView = false
+        showingNicknameSetup = false  // 닉네임 설정 상태도 초기화
         
         print("라이브러리뷰로 이동!")
     }

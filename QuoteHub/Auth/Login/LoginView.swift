@@ -92,12 +92,26 @@ struct AppleLoginButton: View {
             
             // User Auth Manager에서 네트워크 요청 및 로그인 처리
             Task {
-                let success = await authManager.handleAppleLogin(authCode: authCodeString)
+                let result = await authManager.handleAppleLogin(authCode: authCodeString)
                 
-                if success { await loadLoginUserData() }
-                
-                authManager.isLoading = false
-                authManager.goToLibraryView()
+                if result.success {
+                    if result.isNewUser {
+                        // 새 사용자 - 닉네임 설정 화면으로
+                        await MainActor.run {
+                            authManager.showNicknameSetup(nickname: result.nickname)
+                        }
+                    } else {
+                        // 기존 사용자 - 데이터 로딩 후 라이브러리뷰로
+                        await loadLoginUserData()
+                        await MainActor.run {
+                            authManager.completeLoginProcess()
+                        }
+                    }
+                } else {
+                    await MainActor.run {
+                        authManager.isLoading = false
+                    }
+                }
             }
         case .failure(let error):
             print("Apple 로그인 실패: \(error.localizedDescription)")

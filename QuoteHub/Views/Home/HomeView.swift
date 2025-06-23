@@ -177,23 +177,23 @@ struct HomeView: View {
             // 테마 토글 버튼
             ThemeToggleButton()
             
-            if userAuthManager.isUserAuthenticated {
-                NavigationLink(destination: UserSearchView()
-                ) {
-                    Image(systemName: "person.2")
-                        .foregroundColor(.brownLeather)
-                        .font(.system(size: 16, weight: .medium))
-                }
-            }
+//            if userAuthManager.isUserAuthenticated {
+//                NavigationLink(destination: UserSearchView()
+//                ) {
+//                    Image(systemName: "person.2")
+//                        .foregroundColor(.brownLeather)
+//                        .font(.system(size: 16, weight: .medium))
+//                }
+//            }
             
-            NavigationLink {
-//                KeywordGroupedStoriesView(isMy: false, loadType: .public)
-                EmptyView()
-            } label: {
-                Image(systemName: "number")
-                    .foregroundColor(.brownLeather)
-                    .font(.system(size: 16, weight: .medium))
-            }
+//            NavigationLink {
+////                KeywordGroupedStoriesView(isMy: false, loadType: .public)
+//                EmptyView()
+//            } label: {
+//                Image(systemName: "number")
+//                    .foregroundColor(.brownLeather)
+//                    .font(.system(size: 16, weight: .medium))
+//            }
         }
     }
 }
