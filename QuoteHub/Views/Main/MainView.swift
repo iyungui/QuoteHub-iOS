@@ -12,7 +12,7 @@ import SwiftUI
 
 struct MainView: View {
     @EnvironmentObject private var tabController: TabController
-    @EnvironmentObject private var authManager: UserAuthenticationManager
+    @Environment(UserAuthenticationManager.self) private var authManager
 
     @State private var showAlert: Bool = false
     @State private var showActionButtons: Bool = false
@@ -65,7 +65,7 @@ struct MainView: View {
         .fullScreenCover(item: $tabController.activeSheet) { sheet in
             destinationView(for: sheet)
         }
-        .fullScreenCover(isPresented: $authManager.showingLoginView) {
+        .fullScreenCover(isPresented: .constant(authManager.showingLoginView)) {
             LoginView(isOnboarding: false)
         }
     }

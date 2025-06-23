@@ -17,8 +17,8 @@ struct BookDetailView: View {
     @Environment(\.dismiss) var dismiss
 //    @Environment(\.modelContext) private var modelContext
     
-    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
-    
+    @Environment(UserAuthenticationManager.self) private var userAuthManager
+
     // 임시저장 관련
 //    @State private var draftManager: DraftManager?
 //    @State private var showDraftAlert: Bool = false

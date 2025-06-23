@@ -7,12 +7,14 @@
 
 import Foundation
 
-final class UserAuthenticationManager: ObservableObject, LoadingViewModel {
-    @Published var isUserAuthenticated: Bool = false
-    @Published var isGuestMode: Bool = false
-    @Published var showingLoginView: Bool = false
-    @Published var isLoading: Bool = false
-    @Published var loadingMessage: String?
+
+@Observable
+final class UserAuthenticationManager: LoadingViewModel {
+    var isUserAuthenticated: Bool = false
+    var isGuestMode: Bool = false
+    var showingLoginView: Bool = false
+    var isLoading: Bool = false
+    var loadingMessage: String?
     
     private let authService: AuthService
     private let tabController: TabController

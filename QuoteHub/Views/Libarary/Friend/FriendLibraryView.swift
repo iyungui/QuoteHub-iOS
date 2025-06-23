@@ -14,7 +14,7 @@ struct FriendLibraryView: View {
     // MARK: - ViewModels
     @Environment(UserViewModel.self) private var userViewModel
     @Environment(BlockReportViewModel.self) private var blockReportViewModel
-    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
+    @Environment(UserAuthenticationManager.self) private var userAuthManager
     @State private var friendBookStoriesViewModel: FriendBookStoriesViewModel
     @State private var friendThemesViewModel: FriendThemesViewModel
 

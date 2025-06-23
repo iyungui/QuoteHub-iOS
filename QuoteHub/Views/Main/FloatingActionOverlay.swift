@@ -11,8 +11,8 @@ struct FloatingActionOverlay: View {
     @Binding var showActionButtons: Bool
     @Binding var activeSheet: ActiveSheet?
     var showAlert: () -> Void
-    @EnvironmentObject var userAuthManager: UserAuthenticationManager
-    
+    @Environment(UserAuthenticationManager.self) private var userAuthManager
+
     var body: some View {
         ZStack {
             // 블러 배경
@@ -131,5 +131,5 @@ struct FloatingActionItem: View {
 
 
 #Preview {
-    FloatingActionOverlay(showActionButtons: .constant(true), activeSheet: .constant(.search), showAlert: {}).environmentObject(UserAuthenticationManager())
+    FloatingActionOverlay(showActionButtons: .constant(true), activeSheet: .constant(.search), showAlert: {}).environment(UserAuthenticationManager())
 }

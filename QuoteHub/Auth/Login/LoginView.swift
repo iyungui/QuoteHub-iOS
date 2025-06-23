@@ -15,7 +15,7 @@ struct LoginView: View {
     
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var authManager: UserAuthenticationManager
+    @Environment(UserAuthenticationManager.self) private var authManager
     
     var body: some View {
         VStack(alignment: .center, spacing: 15) {
@@ -61,7 +61,7 @@ struct LoginView: View {
 }
 
 struct AppleLoginButton: View {
-    @EnvironmentObject var authManager: UserAuthenticationManager
+    @Environment(UserAuthenticationManager.self) private var authManager
     @Environment(UserViewModel.self) var userViewModel
     
     @Environment(MyBookStoriesViewModel.self) private var myBookStoriesViewModel

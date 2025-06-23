@@ -14,7 +14,7 @@ struct PublicBookStoryDetailView: View {
     let story: BookStory
     
     // MARK: - ViewModels
-    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
+    @Environment(UserAuthenticationManager.self) private var userAuthManager
     @Environment(BlockReportViewModel.self) private var blockReportViewModel
     @State private var detailViewModel = BookStoryDetailViewModel()
     @State private var commentViewModel: BookStoryCommentsViewModel

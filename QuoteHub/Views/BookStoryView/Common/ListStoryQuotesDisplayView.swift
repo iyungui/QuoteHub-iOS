@@ -11,7 +11,6 @@ import SwiftUI
 
 struct ListStoryQuotesDisplayView: View {
     let story: BookStory
-//    @EnvironmentObject private var detailViewModel: BookStoryDetailViewModel
     
     var body: some View {
         LazyVStack(spacing: 12) {

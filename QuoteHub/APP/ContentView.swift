@@ -12,8 +12,8 @@ import SwiftUI
 struct ContentView: View {
     @State private var versionManager = AppVersionManager()
 
-    @EnvironmentObject private var authManager: UserAuthenticationManager
     @Environment(UserViewModel.self) private var userViewModel
+    @Environment(UserAuthenticationManager.self) private var authManager
     @Environment(MyBookStoriesViewModel.self) private var myBookStoriesViewModel
     @Environment(PublicBookStoriesViewModel.self) private var publicBookStoriesViewModel
     @Environment(MyThemesViewModel.self) private var myThemesViewModel

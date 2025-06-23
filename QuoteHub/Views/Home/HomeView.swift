@@ -14,7 +14,7 @@ struct HomeView: View {
     @Environment(UserViewModel.self) private var userViewModel
     @Environment(PublicThemesViewModel.self) private var publicThemesViewModel
 
-    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
+    @Environment(UserAuthenticationManager.self) private var userAuthManager
 
     var body: some View {
         ScrollView {

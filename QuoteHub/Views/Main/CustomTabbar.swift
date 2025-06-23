@@ -11,8 +11,8 @@ struct CustomTabbar: View {
     @Binding var selectedTab: Int
     @Binding var showActionButtons: Bool
     var showAlert: () -> Void
-    @EnvironmentObject var userAuthManager: UserAuthenticationManager
-    
+    @Environment(UserAuthenticationManager.self) private var userAuthManager
+
     var body: some View {
         VStack(spacing: 0) {
             // 상단 여백 (투명 영역)
@@ -144,5 +144,5 @@ struct FloatingActionButton: View {
 
 #Preview {
     CustomTabbar(selectedTab: .constant(1), showActionButtons: .constant(true), showAlert: {})
-        .environmentObject(UserAuthenticationManager())
+        .environment(UserAuthenticationManager())
 }

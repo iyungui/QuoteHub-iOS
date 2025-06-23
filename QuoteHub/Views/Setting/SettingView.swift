@@ -12,8 +12,8 @@ struct SettingView: View {
     @State private var showLogoutActionSheet: Bool = false
     @State private var showDeleteUserActionSheet: Bool = false
     
-    @EnvironmentObject private var userAuthManager: UserAuthenticationManager
-    
+    @Environment(UserAuthenticationManager.self) private var userAuthManager
+
     private let introURL: String = "https://obtainable-postage-df4.notion.site/c4e2df8b16e643bfa05d61cadd238ba2?pvs=4"
     private let termsURL: String = "https://obtainable-postage-df4.notion.site/31236e89fe8942858a7b5a06f458e2ba?pvs=4"
     private let privacyURL: String = "https://obtainable-postage-df4.notion.site/6f8d432d3e5e417b9fa72d1121ec4011?pvs=4"

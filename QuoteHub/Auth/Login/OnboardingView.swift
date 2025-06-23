@@ -20,7 +20,7 @@ let onboardingPages: [OnboardingData] = [
 
 struct OnboardingView: View {
     @State private var currentPage = 0
-    @EnvironmentObject var userAuthManager: UserAuthenticationManager
+    @Environment(UserAuthenticationManager.self) private var userAuthManager
     
     var body: some View {
         VStack {
@@ -104,5 +104,5 @@ struct OnboardingContentView: View {
     Group {
         OnboardingView()
     }
-    .environmentObject(UserAuthenticationManager())
+    .environment(UserAuthenticationManager())
 }

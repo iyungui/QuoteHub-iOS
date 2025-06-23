@@ -14,8 +14,8 @@ struct CommonStoryDisplayView: View {
     
     @Environment(BookStoryDetailViewModel.self) private var detailViewModel
     @Environment(BookStoryCommentsViewModel.self) private var commentViewModel
-    @EnvironmentObject private var authManager: UserAuthenticationManager
-    
+    @Environment(UserAuthenticationManager.self) private var authManager
+
     var body: some View {
         LazyVStack(alignment: .leading, spacing: 20) {
             // 이미지 섹션
