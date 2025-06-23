@@ -14,7 +14,6 @@ struct BookDetailView: View {
     let book: Book
     @State private var showAlert: Bool = false
     @State private var isImageLoaded: Bool = false
-    @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
 //    @Environment(\.modelContext) private var modelContext
     

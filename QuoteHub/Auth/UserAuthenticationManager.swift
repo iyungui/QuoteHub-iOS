@@ -81,7 +81,7 @@ final class UserAuthenticationManager: ObservableObject, LoadingViewModel {
             
             // 토큰이 이미 유효함 (토큰 갱신 필요없음 -> 바로 로그인)
             if validationData.valid {
-                goToMainView()
+                goToLibraryView()
                 print("토큰 유효 - 자동 로그인 성공")
                 
             // 액세스 토큰이 만료되었지만 리프레시 토큰을 통해 토큰 재발급에 성공하였다면
@@ -95,7 +95,7 @@ final class UserAuthenticationManager: ObservableObject, LoadingViewModel {
                     )
                 }
                 
-                goToMainView()
+                goToLibraryView()
                 print("새 토큰 발급 - 자동 로그인 성공")
             } else {
                 // 액세스토큰도 만료되었고, validateAndRenewToken 요청을 했지만 리프레시 토큰도 만료되었을 때 -> 토큰 갱신 실패
@@ -167,13 +167,16 @@ final class UserAuthenticationManager: ObservableObject, LoadingViewModel {
         isUserAuthenticated = false
         isGuestMode = false
         showingLoginView = false
+        print("온보딩뷰로 이동!")
     }
     
     @MainActor
-    func goToMainView() {
+    func goToLibraryView() {
         tabController.selectedTab = 0   // 라이브러리뷰로 이동
 
         isUserAuthenticated = true
         showingLoginView = false
+        
+        print("라이브러리뷰로 이동!")
     }
 }

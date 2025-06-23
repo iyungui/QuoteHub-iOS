@@ -14,10 +14,11 @@ struct PublicThemeDetailView: View {
     
     // MARK: - ViewModels
     @State private var themeBookStoriesViewModel: PublicThemeBookStoriesViewModel
-    
+    @State private var themeDetailViewModel = ThemeDetailViewModel()
+
     // MARK: - State
-    @State private var selectedView: Int = 0  // 0: grid, 1: list
-    
+    @Environment(\.dismiss) private var dismiss
+
     // MARK: - Initialization
     init(theme: Theme) {
         self.theme = theme
@@ -27,28 +28,49 @@ struct PublicThemeDetailView: View {
     }
     
     var body: some View {
-        ThemeDetailBaseView(
-            theme: theme,
-            selectedView: $selectedView,
-            contentView: {
-                PublicThemeContentView(
-                    selectedView: selectedView,
-                    themeBookStoriesViewModel: themeBookStoriesViewModel
+        Group {
+            if let currentTheme = themeDetailViewModel.theme {
+                ThemeDetailBaseView(
+                    theme: currentTheme,
+                    selectedView: $themeDetailViewModel.selectedView,
+                    contentView: {
+                        PublicThemeContentView(
+                            selectedView: themeDetailViewModel.selectedView,
+                            themeBookStoriesViewModel: themeBookStoriesViewModel
+                        )
+                    },
+                    navigationBarItems: {
+                        EmptyView() // 공개 테마는 관리 버튼 없음
+                    }
                 )
-            },
-            navigationBarItems: {
-                EmptyView() // 공개 테마는 관리 버튼 없음
+            } else if !themeDetailViewModel.isLoading {
+                ContentUnavailableView("테마를 찾을 수 없습니다", systemImage: "folder.badge.questionmark")
+
             }
-        )
+        }
         .task {
-            await themeBookStoriesViewModel.loadBookStories()
+            await withTaskGroup(of: Void.self) { group in
+                group.addTask {
+                    await themeBookStoriesViewModel.loadBookStories()
+                }
+                group.addTask {
+                    await themeDetailViewModel.loadThemeDetail(themeId: theme.id)
+                }
+            }
         }
         .refreshable {
-            await themeBookStoriesViewModel.refreshBookStories()
+            await withTaskGroup(of: Void.self) { group in
+                group.addTask {
+                    await themeBookStoriesViewModel.refreshBookStories()
+                }
+                group.addTask {
+                    await themeDetailViewModel.loadThemeDetail(themeId: theme.id)
+                }
+            }
         }
         .progressOverlay(
             viewModels: themeBookStoriesViewModel,
-            opacity: true
+            opacity: false
         )
     }
 }

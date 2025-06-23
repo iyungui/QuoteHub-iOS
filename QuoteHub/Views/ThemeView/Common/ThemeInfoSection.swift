@@ -17,8 +17,8 @@ struct ThemeInfoSection: View {
                 .foregroundColor(.white)
                 .shadow(color: .black.opacity(0.5), radius: 4, x: 0, y: 2)
             
-            if !theme.description.isEmpty {
-                Text(theme.description)
+            if let description = theme.description, !description.isEmpty {
+                Text(description)
                     .font(.scoreDream(.medium, size: .body))
                     .foregroundColor(.white.opacity(0.9))
                     .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)

@@ -23,6 +23,7 @@ struct ThemeDetailBaseView<ContentView: View, NavigationItems: View>: View {
                 VStack(spacing: 0) {
                     // 테마 헤더
                     ThemeHeaderView(theme: theme, selectedView: $selectedView)
+                        .id(theme.id + "_\(theme.updatedAt)")
                     
                     // 탭 인디케이터
                     TabIndicator(height: 3, selectedView: selectedView, tabCount: 2)

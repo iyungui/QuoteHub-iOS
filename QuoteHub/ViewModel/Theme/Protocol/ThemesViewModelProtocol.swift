@@ -27,6 +27,12 @@ protocol ThemesViewModelProtocol: LoadingViewModel {
     /// 무한 스크롤을 위한 추가 로드
     /// - Parameter currentItem: 현재 표시 중인 아이템
     func loadMoreIfNeeded(currentItem: Theme?) async
+    
+    /// 특정 테마 상세 조회
+    /// - Parameter themeId: 조회할 테마 ID
+    /// - Returns: 조회된 테마 (실패시 nil)
+    func fetchSpecificTheme(themeId: String) async -> Theme?
+
 }
 
 // MARK: - CRUD 확장 프로토콜 (My 뷰모델만)

@@ -15,7 +15,6 @@ struct CommentRowView: View {
     
     @Environment(BookStoryCommentsViewModel.self) private var commentViewModel
     @Environment(UserViewModel.self) private var userViewModel
-    @Environment(\.colorScheme) private var colorScheme
     
     @State private var showActionSheet = false
     @State private var showEditSheet = false

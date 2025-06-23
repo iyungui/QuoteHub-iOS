@@ -243,8 +243,9 @@ struct ThemeGridCard: View {
         Button(action: onTap) {
             ZStack {
                 // 배경 이미지
-                backgroundImage
-                
+                if let imageURL = theme.themeImageURL {
+                    backgroundImage(imageURL: imageURL)
+                }
                 // 그라데이션 오버레이
                 gradientOverlay
                 
@@ -280,8 +281,8 @@ struct ThemeGridCard: View {
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isSelected)
     }
     
-    private var backgroundImage: some View {
-        WebImage(url: URL(string: theme.themeImageURL))
+    private func backgroundImage(imageURL: String) -> some View {
+        WebImage(url: URL(string: imageURL))
             .placeholder {
                 Rectangle()
                     .fill(
@@ -329,8 +330,8 @@ struct ThemeGridCard: View {
                     .lineLimit(1)
                     .shadow(color: .black.opacity(0.5), radius: 2, x: 0, y: 1)
                 
-                if !theme.description.isEmpty {
-                    Text(theme.description)
+                if let description = theme.description, !description.isEmpty {
+                    Text(description)
                         .font(.scoreDream(.light, size: .caption))
                         .foregroundColor(.white.opacity(0.9))
                         .lineLimit(2)

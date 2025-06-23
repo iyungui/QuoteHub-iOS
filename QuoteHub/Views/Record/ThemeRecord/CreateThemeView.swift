@@ -11,6 +11,9 @@ struct CreateThemeView: View {
     
     // MARK: - PROPERTIES
     
+    let themeId: String?    // 테마 수정 시 사용
+    var isEditMode: Bool { themeId != nil }
+    
     enum DisplayMode {
         case fullScreenSheet    // 홈뷰에서 접근했을 때
         case embedded   // record뷰의 setTheme 뷰에서 접근했을 때
@@ -18,32 +21,16 @@ struct CreateThemeView: View {
     
     let mode: DisplayMode
     
-    init(mode: DisplayMode) {
+    init(mode: DisplayMode, themeId: String? = nil) {
         self.mode = mode
+        self.themeId = themeId
     }
     
     @Environment(MyThemesViewModel.self) private var myThemesViewModel
-    @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) private var dismiss
     
-    // 알림 관련
-    @State private var showAlert: Bool = false
-    @State private var alertMessage: String = ""
-    @State private var alertType: PhotoPickerAlertType = .authorized
-    @State private var feedbackMessage: String? = nil
-
-    // 테마 입력 프로퍼티들
-    @State private var title: String = ""
-    @State private var content: String = ""
-    @State private var inputImage: UIImage?
-    @State private var showingImagePicker = false
-    @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
-    @State private var isPublic: Bool = true
-
-    // 글자수 제한
-    private let titleMaxLength = 20
-    private let contentMaxLength = 100
-
+    @State private var formViewModel = ThemeFormViewModel()
+    
     // focus
     enum Field: Hashable {
         case title
@@ -51,11 +38,6 @@ struct CreateThemeView: View {
     }
     
     @FocusState private var focusField: Field?
-    
-    /// 폼 유효성 검사
-    private var isFormValid: Bool {
-        !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-    }
     
     // MARK: - BODY
     
@@ -81,7 +63,7 @@ struct CreateThemeView: View {
                 .padding(.top, 20)
             }
         }
-        .navigationTitle("새 테마 만들기")
+        .navigationTitle(isEditMode ? "테마 수정" : "새 테마 만들기")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             // 취소 버튼 (fullScreenSheet 모드에서)
@@ -100,15 +82,18 @@ struct CreateThemeView: View {
             
             // 피드백 메시지
             ToolbarItem(placement: .bottomBar) {
-                if let message = feedbackMessage, !isFormValid {
+                if let message = formViewModel.feedbackMessage, !formViewModel.isFormValid {
                     feedbackView(message: message)
                 }
             }
         }
+        .task {
+            await loadThemeDataIfNeeded()
+        }
         .progressOverlay(viewModel: myThemesViewModel, opacity: true)
-        .alert(isPresented: $showAlert) { alertView }
-        .sheet(isPresented: $showingImagePicker) {
-            SingleImagePicker(selectedImage: self.$inputImage)
+        .alert(isPresented: $formViewModel.showAlert) { alertView }
+        .sheet(isPresented: $formViewModel.showingImagePicker) {
+            SingleImagePicker(selectedImage: $formViewModel.inputImage)
                 .ignoresSafeArea(.all)
         }
         .onTapGesture {
@@ -122,11 +107,11 @@ struct CreateThemeView: View {
         Button(action: submitTheme) {
             HStack {
                 Image(systemName: "checkmark.circle.fill")
-                    .foregroundColor(isFormValid ? .appAccent : .gray)
-                    .scaleEffect(isFormValid ? 1.1 : 1.0)
-                    .animation(.spring(response: 0.3, dampingFraction: 0.7), value: isFormValid)
-                if isFormValid {
-                    Text("등록")
+                    .foregroundColor(formViewModel.isFormValid ? .appAccent : .gray)
+                    .scaleEffect(formViewModel.isFormValid ? 1.1 : 1.0)
+                    .animation(.spring(response: 0.3, dampingFraction: 0.7), value: formViewModel.isFormValid)
+                if formViewModel.isFormValid {
+                    Text(isEditMode ? "수정" : "등록")
                         .fontWeight(.medium)
                         .foregroundStyle(Color.appAccent)
                 }
@@ -154,7 +139,7 @@ struct CreateThemeView: View {
     
     private var imageDisplayArea: some View {
         ZStack {
-            if let inputImage = inputImage {
+            if let inputImage = formViewModel.inputImage {
                 Image(uiImage: inputImage)
                     .resizable()
                     .scaledToFill()
@@ -188,13 +173,13 @@ struct CreateThemeView: View {
     }
     
     private var imageSelectButton: some View {
-        Button(action: selectImage) {
+        Button(action: { formViewModel.selectImage() }) {
             HStack(spacing: 12) {
-                Image(systemName: inputImage == nil ? "plus.circle.fill" : "arrow.triangle.2.circlepath.circle.fill")
+                Image(systemName: formViewModel.inputImage == nil ? "plus.circle.fill" : "arrow.triangle.2.circlepath.circle.fill")
                     .font(.body.weight(.medium))
                     .foregroundColor(.brownLeather)
                 
-                Text(inputImage == nil ? "이미지 선택" : "이미지 변경")
+                Text(formViewModel.inputImage == nil ? "이미지 선택" : "이미지 변경")
                     .font(.scoreDream(.medium, size: .subheadline))
                     .foregroundColor(.primaryText)
                 
@@ -227,13 +212,11 @@ struct CreateThemeView: View {
                             .foregroundColor(.brownLeather.opacity(0.7))
                             .frame(width: 20)
                         
-                        TextField("예: 인생 명언, 사랑 이야기", text: $title)
+                        TextField("예: 인생 명언, 사랑 이야기", text: $formViewModel.title)
                             .focused($focusField, equals: .title)
                             .submitLabel(.next)
-                            .onChange(of: title) { _, newValue in
-                                if newValue.count > titleMaxLength {
-                                    title = String(newValue.prefix(titleMaxLength))
-                                }
+                            .onChange(of: formViewModel.title) { _, newValue in
+                                formViewModel.validateTitleLength(newValue)
                             }
                             .onSubmit {
                                 focusField = .content
@@ -255,9 +238,9 @@ struct CreateThemeView: View {
                     // 글자수 표시
                     HStack {
                         Spacer()
-                        Text("\(title.count)/\(titleMaxLength)")
+                        Text("\(formViewModel.titleCount)/\(formViewModel.titleMaxCount)")
                             .font(.scoreDream(.light, size: .caption2))
-                            .foregroundColor(title.count >= titleMaxLength ? .orange : .secondaryText)
+                            .foregroundColor(formViewModel.titleCount >= formViewModel.titleMaxCount ? .orange : .secondaryText)
                     }
                 }
             }
@@ -277,7 +260,7 @@ struct CreateThemeView: View {
                             .frame(minHeight: 120)
                             .animation(.easeInOut(duration: 0.2), value: focusField)
                         
-                        if content.isEmpty {
+                        if formViewModel.content.isEmpty {
                             Text("이 테마는 어떤 내용을 담고 있나요?")
                                 .font(.scoreDream(.light, size: .body))
                                 .foregroundColor(.secondaryText.opacity(0.7))
@@ -286,26 +269,24 @@ struct CreateThemeView: View {
                                 .allowsHitTesting(false)
                         }
                         
-                        TextEditor(text: $content)
+                        TextEditor(text: $formViewModel.content)
                             .font(.scoreDream(.regular, size: .body))
                             .padding(.horizontal, 12)
                             .padding(.vertical, 12)
                             .background(Color.clear)
                             .focused($focusField, equals: .content)
                             .scrollContentBackground(.hidden)
-                            .onChange(of: content) { _, newValue in
-                                if newValue.count > contentMaxLength {
-                                    content = String(newValue.prefix(contentMaxLength))
-                                }
+                            .onChange(of: formViewModel.content) { _, newValue in
+                                formViewModel.validateContentLength(newValue)
                             }
                     }
                     
                     // 글자수 표시
                     HStack {
                         Spacer()
-                        Text("\(content.count)/\(contentMaxLength)")
+                        Text("\(formViewModel.contentCount)/\(formViewModel.contentMaxCount)")
                             .font(.scoreDream(.light, size: .caption2))
-                            .foregroundColor(content.count >= contentMaxLength ? .orange : .secondaryText)
+                            .foregroundColor(formViewModel.contentCount >= formViewModel.contentMaxCount ? .orange : .secondaryText)
                     }
                 }
             }
@@ -322,18 +303,18 @@ struct CreateThemeView: View {
             
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(isPublic ? "공개 테마" : "비공개 테마")
+                    Text(formViewModel.isPublic ? "공개 테마" : "비공개 테마")
                         .font(.scoreDream(.medium, size: .body))
                         .foregroundColor(.primaryText)
                     
-                    Text(isPublic ? "다른 사용자들도 볼 수 있습니다" : "나만 볼 수 있습니다")
+                    Text(formViewModel.isPublic ? "다른 사용자들도 볼 수 있습니다" : "나만 볼 수 있습니다")
                         .font(.scoreDream(.light, size: .caption))
                         .foregroundColor(.secondaryText)
                 }
                 
                 Spacer()
                 
-                Toggle("", isOn: $isPublic)
+                Toggle("", isOn: $formViewModel.isPublic)
                     .toggleStyle(SwitchToggleStyle())
                     .scaleEffect(0.9)
             }
@@ -373,7 +354,7 @@ struct CreateThemeView: View {
                 )
         )
         .transition(.asymmetric(insertion: .opacity, removal: .slide))
-        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: feedbackMessage)
+        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: formViewModel.feedbackMessage)
     }
     
     // MARK: - Helper Views
@@ -417,61 +398,46 @@ struct CreateThemeView: View {
     
     // MARK: - Methods
     
-    private func selectImage() {
-        PermissionsManager.shared.checkPhotosAuthorization { authorized in
-            if authorized {
-                self.showingImagePicker = true
-            } else {
-                self.alertType = .authorized
-                self.alertMessage = "테마에 이미지를 업로드하려면 사진 라이브러리 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요."
-                self.showAlert = true
-            }
-        }
-    }
-    
     private func submitTheme() {
-        guard isFormValid else {
-            updateFeedbackMessage()
+        guard formViewModel.validateForSubmission() else {
             return
         }
         
         Task {
-            let resultTheme: Theme? = await myThemesViewModel.createTheme(
-                image: inputImage,
-                name: title,
-                description: content.isEmpty ? nil : content,
-                isPublic: isPublic
-            )
+            let themeData = formViewModel.prepareThemeData()
             
-            if let theme = resultTheme {
-                alertType = .make
-                alertMessage = "테마가 성공적으로 등록되었어요!"
-                showAlert = true
+            let resultTheme: Theme?
+            
+            if isEditMode, let themeId = themeId {
+                resultTheme = await myThemesViewModel.updateTheme(
+                    themeId: themeId,
+                    image: themeData.image,
+                    name: themeData.name,
+                    description: themeData.description,
+                    isPublic: themeData.isPublic
+                )
             } else {
-                alertType = .make
-                alertMessage = myThemesViewModel.errorMessage ?? "테마 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
-                showAlert = true
+                resultTheme = await myThemesViewModel.createTheme(
+                    image: themeData.image,
+                    name: themeData.name,
+                    description: themeData.description,
+                    isPublic: themeData.isPublic
+                )
             }
             
-            // TODO: resultTheme를 어떻게 처리할지
-        }
-    }
-    
-    private func updateFeedbackMessage() {
-        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-            if title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                feedbackMessage = "테마 제목을 입력해주세요."
+            if resultTheme != nil {
+                formViewModel.showSuccessAlert()
             } else {
-                feedbackMessage = nil
+                formViewModel.showErrorAlert(myThemesViewModel.errorMessage)
             }
         }
     }
     
     private var alertView: Alert {
-        switch alertType {
+        switch formViewModel.alertType {
         case .authorized:
             return Alert(title: Text("권한 필요"),
-                         message: Text(alertMessage),
+                         message: Text(formViewModel.alertMessage),
                          primaryButton: .default(Text("설정으로 이동"), action: {
                              if let settingsUrl = URL(string: UIApplication.openSettingsURLString),
                                 UIApplication.shared.canOpenURL(settingsUrl) {
@@ -482,19 +448,34 @@ struct CreateThemeView: View {
             )
         case .make:
             return Alert(title: Text("알림"),
-                         message: Text(alertMessage),
+                         message: Text(formViewModel.alertMessage),
                          dismissButton: .default(Text("확인"), action: {
-                             if alertMessage.contains("성공적으로") {
+                             if formViewModel.alertMessage.contains("성공적으로") {
                                  dismiss()
                              }
                          }))
         }
+    }
+    
+    private func loadThemeDataIfNeeded() async {
+        guard let themeId = themeId else {
+            return
+        }
+        
+        let loadedTheme = await myThemesViewModel.fetchSpecificTheme(themeId: themeId)
+        
+        guard let loadedTheme = loadedTheme else {
+            formViewModel.showLoadErrorAlert(myThemesViewModel.errorMessage)
+            return
+        }
+        
+        formViewModel.loadFromTheme(loadedTheme)
     }
 }
 
 #Preview {
     NavigationStack {
         CreateThemeView(mode: .fullScreenSheet)
-            .environmentObject(MyThemesViewModel())
+            .environment(MyThemesViewModel())
     }
 }

@@ -10,7 +10,6 @@ import SwiftUI
 struct BookStoryDetailBaseView<ContentView: View, ActionSheet: View, ToolbarItems: View>: View {
     
     // MARK: - Properties
-    let story: BookStory
     @Bindable var detailViewModel: BookStoryDetailViewModel
     @Bindable var commentViewModel: BookStoryCommentsViewModel
     let contentView: (BookStory) -> ContentView
@@ -21,6 +20,11 @@ struct BookStoryDetailBaseView<ContentView: View, ActionSheet: View, ToolbarItem
         Group {
             if let currentStory = detailViewModel.story {
                 contentView(currentStory)
+                    .sheet(isPresented: $detailViewModel.showReportSheet) {
+                        ReportSheetView(targetId: currentStory.id, reportType: .bookstory)
+                            .presentationDetents([.medium, .large])
+                            .presentationDragIndicator(.visible)
+                    }
             } else if detailViewModel.isLoading == false {
                 ContentUnavailableView("북스토리를 찾을 수 없습니다", systemImage: "book.closed.fill")
             }
@@ -45,14 +49,6 @@ struct BookStoryDetailBaseView<ContentView: View, ActionSheet: View, ToolbarItem
             CommentView()
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
-        }
-        .sheet(isPresented: $detailViewModel.showReportSheet) {
-            ReportSheetView(
-                targetId: story.id,
-                reportType: .bookstory
-            )
-            .presentationDetents([.medium, .large])
-            .presentationDragIndicator(.visible)
         }
         .progressOverlay(viewModels: detailViewModel, opacity: false)
         .environment(detailViewModel)

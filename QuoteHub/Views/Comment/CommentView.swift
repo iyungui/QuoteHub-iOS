@@ -10,7 +10,6 @@ import SwiftUI
 struct CommentView: View {
     @Environment(BookStoryCommentsViewModel.self) private var commentViewModel
     @Environment(UserViewModel.self) private var userViewModel
-    @Environment(\.colorScheme) private var colorScheme
     
     @State private var newComment: String = ""
     @State private var replyingTo: BookStoryComment?

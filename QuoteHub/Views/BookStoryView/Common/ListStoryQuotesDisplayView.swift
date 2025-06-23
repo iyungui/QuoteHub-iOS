@@ -25,26 +25,20 @@ struct ListStoryQuotesDisplayView: View {
     private func quoteItemCard(quote: Quote, index: Int) -> some View {
         VStack(spacing: 0) {
             // 페이지 정보
-            HStack {
-                if let page = quote.page {
+            if let page = quote.page {
+                HStack {
                     Text("p. \(page)")
                         .font(.scoreDream(.light, size: .caption))
                         .foregroundColor(.secondaryText)
+                    Spacer()
                 }
-                
-                Spacer()
-                
-                // 현재 quotes 총 페이지 수 표시
-                Text("\(index + 1) / \(story.quotes.count)")
-                    .font(.scoreDream(.light, size: .caption))
-                    .foregroundColor(.secondaryText.opacity(0.7))
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+                .background(
+                    Rectangle()
+                        .fill(Color.paperBeige.opacity(0.3))
+                )
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
-            .background(
-                Rectangle()
-                    .fill(Color.paperBeige.opacity(0.3))
-            )
             
             // Quote 텍스트
             VStack(alignment: .leading, spacing: 8) {
@@ -61,7 +55,7 @@ struct ListStoryQuotesDisplayView: View {
         .clipShape(RoundedRectangle(cornerRadius: 10))
         .overlay(
             RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.lightPaper, lineWidth: 1)
+                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
         )
         .padding(.horizontal, 25)
     }

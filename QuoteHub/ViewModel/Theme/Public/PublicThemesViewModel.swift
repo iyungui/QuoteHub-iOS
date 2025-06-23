@@ -138,6 +138,31 @@ extension PublicThemesViewModel {
         await loadThemes()
     }
     
+    func fetchSpecificTheme(themeId: String) async -> Theme? {
+        isLoading = true
+        loadingMessage = "테마를 불러오는 중..."
+        clearErrorMessage()
+        
+        defer {
+            isLoading = false
+            loadingMessage = nil
+        }
+        
+        do {
+            let response = try await service.fetchSpecificTheme(themeId: themeId)
+            
+            if response.success {
+                return response.data
+            } else {
+                errorMessage = response.message
+                return nil
+            }
+        } catch {
+            handleError(error)
+            return nil
+        }
+    }
+    
     private func performLoadThemes() async {
         isLoading = true
         loadingMessage = "공개 테마를 불러오는 중..."

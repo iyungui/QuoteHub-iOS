@@ -11,7 +11,6 @@ import SwiftUI
 
 struct CarouselStoryQuotesDisplayView: View {
     let story: BookStory
-//    @EnvironmentObject private var detailViewModel: BookStoryDetailViewModel
     
     let width: CGFloat = UIScreen.main.bounds.width
     
@@ -69,7 +68,7 @@ struct CarouselStoryQuotesDisplayView: View {
         .clipShape(RoundedRectangle(cornerRadius: 10))
         .overlay(
             RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.lightPaper, lineWidth: 1)
+                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
         )
     }
 }

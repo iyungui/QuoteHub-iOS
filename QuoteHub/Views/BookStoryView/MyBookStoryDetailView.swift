@@ -30,7 +30,6 @@ struct MyBookStoryDetailView: View {
     
     var body: some View {
         BookStoryDetailBaseView(
-            story: story,
             detailViewModel: detailViewModel,
             commentViewModel: commentViewModel,
             contentView: { currentStory in

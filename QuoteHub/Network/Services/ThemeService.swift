@@ -48,6 +48,12 @@ protocol ThemeServiceProtocol {
         page: Int,
         pageSize: Int
     ) async throws -> PaginatedAPIResponse<Theme>
+    
+    /// 특정 테마 하나 조회
+    func fetchSpecificTheme(
+        themeId: String
+    ) async throws -> APIResponse<Theme>
+    
 }
 
 final class ThemeService: ThemeServiceProtocol {
@@ -200,6 +206,14 @@ final class ThemeService: ThemeServiceProtocol {
             endpoint: ThemeEndpoints.getMyThemes(page: page, pageSize: pageSize),
             body: .empty,
             responseType: PaginatedAPIResponse<Theme>.self
+        )
+    }
+    
+    func fetchSpecificTheme(themeId: String) async throws -> APIResponse<Theme> {
+        return try await apiClient.request(
+            endpoint: ThemeEndpoints.fetchSpecificTheme(themeId: themeId),
+            body: .empty,
+            responseType: APIResponse<Theme>.self
         )
     }
 }

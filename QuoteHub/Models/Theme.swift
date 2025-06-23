@@ -13,8 +13,8 @@ struct Theme: Codable, Identifiable, Equatable {
     var userId: User
     
     var name: String
-    var description: String
-    var themeImageURL: String
+    var description: String?
+    var themeImageURL: String?
     var isPublic: Bool
 
     var createdAt: String

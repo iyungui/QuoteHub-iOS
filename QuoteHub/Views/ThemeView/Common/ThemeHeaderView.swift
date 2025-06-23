@@ -15,7 +15,9 @@ struct ThemeHeaderView: View {
     var body: some View {
         ZStack {
             // 배경 이미지
-            themeBackgroundImage
+            if let imageURL = theme.themeImageURL {
+                themeBackgroundImage(imageURL)
+            }
             
             // 그라데이션 오버레이
             LinearGradient(
@@ -46,8 +48,8 @@ struct ThemeHeaderView: View {
         .frame(height: 300)
     }
     
-    private var themeBackgroundImage: some View {
-        WebImage(url: URL(string: theme.themeImageURL))
+    private func themeBackgroundImage(_ imageURL: String) -> some View {
+        WebImage(url: URL(string: imageURL))
             .placeholder {
                 Rectangle()
                     .fill(

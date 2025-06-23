@@ -44,7 +44,9 @@ struct ThemeView: View {
         NavigationLink(destination: destinationView) {
             ZStack {
                 // 배경 이미지
-                backgroundImage
+                if let imageURL = theme.themeImageURL {
+                    backgroundImage(imageURL)
+                }
                 
                 // 어둡게 처리
                 darkOverlay
@@ -58,8 +60,8 @@ struct ThemeView: View {
         .buttonStyle(CardButtonStyle())
     }
     
-    private var backgroundImage: some View {
-        WebImage(url: URL(string: theme.themeImageURL))
+    private func backgroundImage(_ imageURL: String) -> some View {
+        WebImage(url: URL(string: imageURL))
             .placeholder {
                 Rectangle()
                     .fill(themeColors[0])
@@ -108,13 +110,13 @@ struct ThemeView: View {
                         .foregroundColor(.white.opacity(0.9))
                         .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
                 }
-                
-                Text(theme.description)
-                    .font(.scoreDream(.light, size: isCompact ? .footnote : .caption))
-                    .foregroundColor(.white.opacity(0.95))
-                    .lineLimit(2)
-                    .shadow(color: .black.opacity(0.5), radius: 2, x: 0, y: 1)
-                
+                if let description = theme.description {
+                    Text(description)
+                        .font(.scoreDream(.light, size: isCompact ? .footnote : .caption))
+                        .foregroundColor(.white.opacity(0.95))
+                        .lineLimit(2)
+                        .shadow(color: .black.opacity(0.5), radius: 2, x: 0, y: 1)
+                }
                 HStack {
                     Spacer()
                     

@@ -15,13 +15,9 @@ struct MyThemeDetailView: View {
     // MARK: - ViewModels
     @Environment(MyThemesViewModel.self) private var myThemesViewModel
     @State private var themeBookStoriesViewModel: MyThemeBookStoriesViewModel
-    
+    @State private var themeDetailViewModel = ThemeDetailViewModel()
+
     // MARK: - State
-    @State private var selectedView: Int = 0  // 0: grid, 1: list
-    @State private var showActionSheet = false
-    @State private var isEditing = false
-    @State private var showAlert = false
-    @State private var alertMessage = ""
     @Environment(\.dismiss) private var dismiss
     
     // MARK: - Initialization
@@ -33,52 +29,73 @@ struct MyThemeDetailView: View {
     }
     
     var body: some View {
-        ThemeDetailBaseView(
-            theme: theme,
-            selectedView: $selectedView,
-            contentView: {
-                MyThemeContentView(
-                    selectedView: selectedView,
-                    themeBookStoriesViewModel: themeBookStoriesViewModel
+        Group {
+            if let currentTheme = themeDetailViewModel.theme {
+                ThemeDetailBaseView(
+                    theme: currentTheme,
+                    selectedView: $themeDetailViewModel.selectedView,
+                    contentView: {
+                        MyThemeContentView(
+                            selectedView: themeDetailViewModel.selectedView,
+                            themeBookStoriesViewModel: themeBookStoriesViewModel
+                        )
+                    },
+                    navigationBarItems: {
+                        MyThemeNavigationItems(showActionSheet: $themeDetailViewModel.showActionSheet)
+                    }
                 )
-            },
-            navigationBarItems: {
-                MyThemeNavigationItems(showActionSheet: $showActionSheet)
+            } else if !themeDetailViewModel.isLoading {
+                ContentUnavailableView("테마를 찾을 수 없습니다", systemImage: "folder.badge.questionmark")
             }
-        )
-        .confirmationDialog("테마 관리", isPresented: $showActionSheet, titleVisibility: .visible) {
+        }
+        .confirmationDialog("테마 관리", isPresented: $themeDetailViewModel.showActionSheet, titleVisibility: .visible) {
             myThemeActionSheet
         }
-        .fullScreenCover(isPresented: $isEditing) {
-            // ThemeEditView(theme: theme) { updatedTheme in
-            //     isEditing = false
-            // }
-        }
-        .alert("알림", isPresented: $showAlert) {
-            Button("확인") {
-                if alertMessage.contains("삭제") {
-                    dismiss()
-                }
+        .fullScreenCover(
+            isPresented: $themeDetailViewModel.isEditing,
+            onDismiss: {
+                themeDetailViewModel.loadThemeDetail(themeId: theme.id)
             }
+        ) {
+            NavigationStack {
+                CreateThemeView(mode: .fullScreenSheet, themeId: theme.id)
+            }
+        }
+        .alert("알림", isPresented: $themeDetailViewModel.showAlert) {
+            Button("확인") { dismiss() }
         } message: {
-            Text(alertMessage)
+            Text(themeDetailViewModel.alertMessage)
         }
         .task {
-            await themeBookStoriesViewModel.loadBookStories()
+            await withTaskGroup(of: Void.self) { group in
+                group.addTask {
+                    await themeBookStoriesViewModel.loadBookStories()
+                }
+                group.addTask {
+                    await themeDetailViewModel.loadThemeDetail(themeId: theme.id)
+                }
+            }
         }
         .refreshable {
-            await themeBookStoriesViewModel.refreshBookStories()
+            await withTaskGroup(of: Void.self) { group in
+                group.addTask {
+                    await themeBookStoriesViewModel.refreshBookStories()
+                }
+                group.addTask {
+                    await themeDetailViewModel.loadThemeDetail(themeId: theme.id)
+                }
+            }
         }
         .progressOverlay(
             viewModels: themeBookStoriesViewModel,
-            opacity: true
+            opacity: false
         )
     }
     
     @ViewBuilder
     private var myThemeActionSheet: some View {
         Button("수정하기") {
-            isEditing = true
+            themeDetailViewModel.isEditing = true
         }
         Button("삭제하기", role: .destructive) {
             Task { await deleteTheme() }
@@ -89,11 +106,10 @@ struct MyThemeDetailView: View {
     private func deleteTheme() async {
         let isSuccess = await myThemesViewModel.deleteTheme(themeId: theme.id)
         if isSuccess {
-            alertMessage = "테마가 성공적으로 삭제되었습니다."
+            themeDetailViewModel.showAlertWith(message: "테마가 성공적으로 삭제되었습니다.")
         } else {
-            alertMessage = myThemesViewModel.errorMessage ?? "테마 삭제 중 오류가 발생했습니다."
+            let errorMessage = myThemesViewModel.errorMessage ?? "테마 삭제 중 오류가 발생했습니다."
+            themeDetailViewModel.showAlertWith(message: errorMessage)
         }
-        showAlert = true
     }
 }
-

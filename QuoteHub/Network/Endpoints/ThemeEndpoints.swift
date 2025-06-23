@@ -23,6 +23,9 @@ enum ThemeEndpoints: EndpointProtocol {
     case getFriendStoriesByTheme(friendId: String, themeId: String)
     case getMyStoriesByTheme(themeId: String)
     
+    // 단일 테마 조회
+    case fetchSpecificTheme(themeId: String)
+
     var path: String {
         switch self {
         case .createTheme:
@@ -45,6 +48,8 @@ enum ThemeEndpoints: EndpointProtocol {
             return "/folder/friend/\(friendId)/\(themeId)"
         case .getMyStoriesByTheme(let themeId):
             return "/folder/my/\(themeId)"
+        case .fetchSpecificTheme(let themeId):
+            return "/folder/\(themeId)"
         }
     }
     
@@ -63,7 +68,7 @@ enum ThemeEndpoints: EndpointProtocol {
     
     var requiresAuth: Bool {
         switch self {
-        case .getAllThemes, .getPublicStoriesByTheme, .getFriendStoriesByTheme:
+        case .getAllThemes, .getPublicStoriesByTheme, .getFriendStoriesByTheme, .fetchSpecificTheme:
             return false
         default:
             return true

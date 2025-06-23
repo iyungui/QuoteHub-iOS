@@ -97,7 +97,7 @@ struct AppleLoginButton: View {
                 if success { await loadLoginUserData() }
                 
                 authManager.isLoading = false
-                authManager.goToMainView()
+                authManager.goToLibraryView()
             }
         case .failure(let error):
             print("Apple 로그인 실패: \(error.localizedDescription)")
