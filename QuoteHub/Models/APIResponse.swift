@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - Base Response Models
-
+/// 모든 API에서 사용하는 공통 구조 정의
 protocol APIResponseProtocol {
     var success: Bool { get }
     var message: String { get }
@@ -28,7 +28,6 @@ struct Pagination: Codable {
     let totalItems: Int
 }
 
-// 만약 에러 시 APIResponse 로...
 struct PaginatedAPIResponse<T: Codable>: Codable, APIResponseProtocol {
     let success: Bool
     let message: String
@@ -36,36 +35,5 @@ struct PaginatedAPIResponse<T: Codable>: Codable, APIResponseProtocol {
     let pagination: Pagination
 }
 
-// Kakao API Response
-struct BooksResponse: Codable {
-    let documents: [Book]
-    let meta: Meta
-}
-
-struct Meta: Codable {
-    let is_end: Bool
-    let pageable_count: Int
-    let total_count: Int
-}
-
-// data를 전달하지 않는 api 위한 모델
+/// data를 전달하지 않는 api 위한 모델
 struct EmptyData: Codable {}
-
-// MARK: - Specific Response Type Aliases
-
-typealias UserResponse = APIResponse<User>
-
-typealias BookStoryCommentsResponse = PaginatedAPIResponse<BookStoryComment>    // 댓글 조회
-typealias BookStoryCommentResponse = APIResponse<BookStoryComment>  // 댓글 올리기
-
-typealias CommentCountResponse = APIResponse<Int>
-
-typealias ThemeResponse = APIResponse<Theme>
-typealias ThemesListResponse = PaginatedAPIResponse<Theme>
-
-typealias RandomBooksResponse = APIResponse<[Book]>
-
-typealias BookStoryResponse = APIResponse<BookStory>
-typealias BookStoriesResponse = PaginatedAPIResponse<BookStory>
-typealias SearchUserResponse = APIResponse<[User]>
-

@@ -60,6 +60,7 @@
 		CE4FEF8B2DFB3EFC0072E8B9 /* CommonStoryDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF8A2DFB3EFC0072E8B9 /* CommonStoryDisplayView.swift */; };
 		CE4FEFAA2DFDC0350072E8B9 /* TabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEFA92DFDC0350072E8B9 /* TabController.swift */; };
 		CE4FEFAD2DFEABA20072E8B9 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = CE4FEFAC2DFEABA20072E8B9 /* KeychainAccess */; };
+		CE7416CC2E0CE33200CB2594 /* KakaoBookAPIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7416CB2E0CE33200CB2594 /* KakaoBookAPIResponse.swift */; };
 		CE8C477F2DEA8D84003188ED /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47782DEA8D84003188ED /* LoginView.swift */; };
 		CE8C47802DEA8D84003188ED /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47792DEA8D84003188ED /* OnboardingView.swift */; };
 		CE8C47822DEA8D84003188ED /* KeyChainTokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C477C2DEA8D84003188ED /* KeyChainTokenManager.swift */; };
@@ -258,6 +259,7 @@
 		CE4FEF882DFB391F0072E8B9 /* ListStoryQuotesDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListStoryQuotesDisplayView.swift; sourceTree = "<group>"; };
 		CE4FEF8A2DFB3EFC0072E8B9 /* CommonStoryDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonStoryDisplayView.swift; sourceTree = "<group>"; };
 		CE4FEFA92DFDC0350072E8B9 /* TabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabController.swift; sourceTree = "<group>"; };
+		CE7416CB2E0CE33200CB2594 /* KakaoBookAPIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoBookAPIResponse.swift; sourceTree = "<group>"; };
 		CE8C47782DEA8D84003188ED /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		CE8C47792DEA8D84003188ED /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		CE8C477C2DEA8D84003188ED /* KeyChainTokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainTokenManager.swift; sourceTree = "<group>"; };
@@ -559,6 +561,7 @@
 			isa = PBXGroup;
 			children = (
 				CE8C47842DEA8D93003188ED /* APIResponse.swift */,
+				CE7416CB2E0CE33200CB2594 /* KakaoBookAPIResponse.swift */,
 				CECBB4732E05B408004C7856 /* BookStoryNotifications.swift */,
 				CECBB5142E084369004C7856 /* ThemeNotifications.swift */,
 				CE1101002E03D41F003C592E /* LoadType.swift */,
@@ -1206,6 +1209,7 @@
 				CECBB5252E09224B004C7856 /* NicknameSetupView.swift in Sources */,
 				CE8C497F2DF1E874003188ED /* AppVersionManager.swift in Sources */,
 				C63DB3AC2B1188C50026B668 /* ReportService.swift in Sources */,
+				CE7416CC2E0CE33200CB2594 /* KakaoBookAPIResponse.swift in Sources */,
 				C6D78A0A2AD03B2900F03FB8 /* APIEndpoint.swift in Sources */,
 				CE4FEF812DFA90D80072E8B9 /* AchievementBadgesView.swift in Sources */,
 				CE8C488E2DEC46E9003188ED /* TabIndicator.swift in Sources */,
