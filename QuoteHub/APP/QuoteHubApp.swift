@@ -15,7 +15,7 @@ struct QuoteHubApp: App {
     // 북스토리
     @State private var myBookStoriesViewModel = MyBookStoriesViewModel()
     @State private var publicBookStoriesViewModel = PublicBookStoriesViewModel()
-
+    
     // 테마
     @State private var myThemesViewModel = MyThemesViewModel()
     @State private var publicThemesViewModel = PublicThemesViewModel()

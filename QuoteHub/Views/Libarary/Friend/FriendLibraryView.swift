@@ -103,6 +103,8 @@ struct FriendLibraryView: View {
             userViewModel.currentOtherUser = nil
             userViewModel.currentOtherUserStoryCount = nil
         }
+        .environment(friendThemesViewModel)
+        .environment(friendBookStoriesViewModel)
         .progressOverlay(
             viewModels: userViewModel, friendBookStoriesViewModel, friendThemesViewModel,
             opacity: false
