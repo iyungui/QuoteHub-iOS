@@ -6,9 +6,7 @@
 //
 
 import SwiftUI
-//import SwiftData
 
-// QuoteHubApp 에서는 SwiftData ModelContainer 설정을 담당
 @main
 struct QuoteHubApp: App {
     @State private var authManager = UserAuthenticationManager()
@@ -25,6 +23,8 @@ struct QuoteHubApp: App {
     @State private var blockReportViewModel = BlockReportViewModel()
     @StateObject private var tabController = TabController()
 
+    // TODO: - SwiftData -> CoreData
+    
     // SwiftData ModelContainer 설정
 //    var sharedModelContainer: ModelContainer = {
 //        let schema = Schema([
@@ -57,10 +57,6 @@ struct QuoteHubApp: App {
                 .environment(blockReportViewModel)
                 .environment(myBookStoriesViewModel)
                 .environment(publicBookStoriesViewModel)
-            
-//            MySearchBookStoriesView(keyword: "삶")
-//                .environment(myBookStoriesViewModel)
-//                .environment(userViewModel)
         }
 //        .modelContainer(sharedModelContainer)
     }

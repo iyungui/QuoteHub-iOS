@@ -7,6 +7,8 @@
 
 import Foundation
 
+// TODO: - refac
+
 @Observable
 final class UserAuthenticationManager: LoadingViewModel {
     var isUserAuthenticated: Bool = false

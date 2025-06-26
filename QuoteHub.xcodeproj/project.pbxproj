@@ -61,6 +61,8 @@
 		CE4FEFAA2DFDC0350072E8B9 /* TabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEFA92DFDC0350072E8B9 /* TabController.swift */; };
 		CE4FEFAD2DFEABA20072E8B9 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = CE4FEFAC2DFEABA20072E8B9 /* KeychainAccess */; };
 		CE7416CC2E0CE33200CB2594 /* KakaoBookAPIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7416CB2E0CE33200CB2594 /* KakaoBookAPIResponse.swift */; };
+		CE7416CE2E0CEDB200CB2594 /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7416CD2E0CEDB200CB2594 /* Data+Extension.swift */; };
+		CE7416D02E0CEDF100CB2594 /* AuthResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7416CF2E0CEDF100CB2594 /* AuthResponse.swift */; };
 		CE8C477F2DEA8D84003188ED /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47782DEA8D84003188ED /* LoginView.swift */; };
 		CE8C47802DEA8D84003188ED /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47792DEA8D84003188ED /* OnboardingView.swift */; };
 		CE8C47822DEA8D84003188ED /* KeyChainTokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C477C2DEA8D84003188ED /* KeyChainTokenManager.swift */; };
@@ -260,6 +262,8 @@
 		CE4FEF8A2DFB3EFC0072E8B9 /* CommonStoryDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonStoryDisplayView.swift; sourceTree = "<group>"; };
 		CE4FEFA92DFDC0350072E8B9 /* TabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabController.swift; sourceTree = "<group>"; };
 		CE7416CB2E0CE33200CB2594 /* KakaoBookAPIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoBookAPIResponse.swift; sourceTree = "<group>"; };
+		CE7416CD2E0CEDB200CB2594 /* Data+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
+		CE7416CF2E0CEDF100CB2594 /* AuthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResponse.swift; sourceTree = "<group>"; };
 		CE8C47782DEA8D84003188ED /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		CE8C47792DEA8D84003188ED /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		CE8C477C2DEA8D84003188ED /* KeyChainTokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainTokenManager.swift; sourceTree = "<group>"; };
@@ -427,6 +431,7 @@
 			isa = PBXGroup;
 			children = (
 				C627C8CB2AE25831004D867B /* Color+Extension.swift */,
+				CE7416CD2E0CEDB200CB2594 /* Data+Extension.swift */,
 				CEA554CB2E01230D0029A8A9 /* UIImage+Extension.swift */,
 				CEA554D32E018D9C0029A8A9 /* View+Extensions.swift */,
 				CE4FEF5C2DF93F260072E8B9 /* HiddenModifier.swift */,
@@ -562,6 +567,7 @@
 			children = (
 				CE8C47842DEA8D93003188ED /* APIResponse.swift */,
 				CE7416CB2E0CE33200CB2594 /* KakaoBookAPIResponse.swift */,
+				CE7416CF2E0CEDF100CB2594 /* AuthResponse.swift */,
 				CECBB4732E05B408004C7856 /* BookStoryNotifications.swift */,
 				CECBB5142E084369004C7856 /* ThemeNotifications.swift */,
 				CE1101002E03D41F003C592E /* LoadType.swift */,
@@ -1183,6 +1189,7 @@
 				CE8C487F2DEBF39D003188ED /* BookDetailView.swift in Sources */,
 				CEA554D62E018E290029A8A9 /* GradientBackground.swift in Sources */,
 				CECBB4F02E08270C004C7856 /* PublicThemeDetailView.swift in Sources */,
+				CE7416D02E0CEDF100CB2594 /* AuthResponse.swift in Sources */,
 				CECBB5202E08DA44004C7856 /* ThemeFormViewModel.swift in Sources */,
 				CEA554DD2E01931F0029A8A9 /* ProfileImage.swift in Sources */,
 				CE8C49472DF18B89003188ED /* ThemeGalleryListView.swift in Sources */,
@@ -1259,6 +1266,7 @@
 				CECBB4A62E079EA6004C7856 /* PublicBookStoriesViewModel.swift in Sources */,
 				CECBB4A72E079EA6004C7856 /* ReadOnlyBookStoriesViewModels.swift in Sources */,
 				CECBB5022E082A3A004C7856 /* MyLibraryStoriesView.swift in Sources */,
+				CE7416CE2E0CEDB200CB2594 /* Data+Extension.swift in Sources */,
 				C667E9802ACA388C006EE7A9 /* UserViewModel.swift in Sources */,
 				CECBB4D12E081D0C004C7856 /* BookStoryContentView.swift in Sources */,
 				CE8C48862DEBF39F003188ED /* CreateThemeView.swift in Sources */,
