@@ -9,16 +9,11 @@ import SwiftUI
 
 struct LibraryTabSection: View {
     @Binding var selectedTab: LibraryTab
-    let showKeywords: Bool // 키워드 탭 표시 여부
-    
-    private var availableTabs: [LibraryTab] {
-        LibraryTab.availableTabs(showKeywords: showKeywords)
-    }
     
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 0) {
-                ForEach(availableTabs, id: \.self) { tab in
+                ForEach(LibraryTab.allCases, id: \.self) { tab in
                     LibraryTabButton(
                         title: tab.title,
                         isSelected: selectedTab == tab
@@ -32,15 +27,10 @@ struct LibraryTabSection: View {
             
             TabIndicator(
                 height: 3,
-                selectedView: selectedTabIndex,
-                tabCount: availableTabs.count
+                selectedView: selectedTab.rawValue,
+                tabCount: LibraryTab.allCases.count
             )
         }
-    }
-    
-    // 현재 선택된 탭의 인덱스를 사용 가능한 탭들 중에서 찾기
-    private var selectedTabIndex: Int {
-        return availableTabs.firstIndex(of: selectedTab) ?? 0
     }
 }
 

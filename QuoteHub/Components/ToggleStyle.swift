@@ -1,11 +1,13 @@
 //
-//  CheckboxStyle.swift
+//  ToggleStyle.swift
 //  QuoteHub
 //
 //  Created by 이융의 on 10/17/23.
 //
 
 import SwiftUI
+
+// MARK: - Check Box Toggle Style
 
 struct CheckboxStyle: ToggleStyle {
     func makeBody(configuration: Configuration) -> some View {
@@ -30,7 +32,7 @@ struct CheckboxStyle: ToggleStyle {
     }
 }
 
-// MARK: - Custom Toggle Styles
+// MARK: - Privacy Toggle Styles
 
 struct PrivacyToggleStyle: ToggleStyle {
     func makeBody(configuration: Configuration) -> some View {
