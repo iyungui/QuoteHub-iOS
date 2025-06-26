@@ -25,10 +25,6 @@ struct FriendLibraryThemesView: View {
         return availableWidth / 2
     }
     
-    private var loadType: LoadType {
-        .friend(friendId)
-    }
-    
     var body: some View {
         if friendThemesViewModel.themes.isEmpty {
             ContentUnavailableView(
