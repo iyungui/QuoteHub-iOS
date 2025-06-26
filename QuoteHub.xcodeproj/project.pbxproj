@@ -185,7 +185,7 @@
 		CECBB4ED2E08270C004C7856 /* MyThemeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4EB2E08270C004C7856 /* MyThemeDetailView.swift */; };
 		CECBB4F02E08270C004C7856 /* PublicThemeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4EE2E08270C004C7856 /* PublicThemeDetailView.swift */; };
 		CECBB4F42E082759004C7856 /* PublicThemeContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4F32E082759004C7856 /* PublicThemeContentView.swift */; };
-		CECBB4F62E08295E004C7856 /* ViewType.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4F52E08295E004C7856 /* ViewType.swift */; };
+		CECBB4F62E08295E004C7856 /* ThemeViewType.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4F52E08295E004C7856 /* ThemeViewType.swift */; };
 		CECBB4F82E082981004C7856 /* MyThemeNavigationItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4F72E082981004C7856 /* MyThemeNavigationItems.swift */; };
 		CECBB4FA2E082992004C7856 /* ThemeEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4F92E082992004C7856 /* ThemeEmptyStateView.swift */; };
 		CECBB4FE2E082A18004C7856 /* FriendLibraryThemesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CECBB4FD2E082A18004C7856 /* FriendLibraryThemesView.swift */; };
@@ -383,7 +383,7 @@
 		CECBB4EB2E08270C004C7856 /* MyThemeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyThemeDetailView.swift; sourceTree = "<group>"; };
 		CECBB4EE2E08270C004C7856 /* PublicThemeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicThemeDetailView.swift; sourceTree = "<group>"; };
 		CECBB4F32E082759004C7856 /* PublicThemeContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicThemeContentView.swift; sourceTree = "<group>"; };
-		CECBB4F52E08295E004C7856 /* ViewType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewType.swift; sourceTree = "<group>"; };
+		CECBB4F52E08295E004C7856 /* ThemeViewType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeViewType.swift; sourceTree = "<group>"; };
 		CECBB4F72E082981004C7856 /* MyThemeNavigationItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyThemeNavigationItems.swift; sourceTree = "<group>"; };
 		CECBB4F92E082992004C7856 /* ThemeEmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeEmptyStateView.swift; sourceTree = "<group>"; };
 		CECBB4FD2E082A18004C7856 /* FriendLibraryThemesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendLibraryThemesView.swift; sourceTree = "<group>"; };
@@ -939,7 +939,7 @@
 			isa = PBXGroup;
 			children = (
 				CECBB4BC2E07BBFD004C7856 /* ThemeDetailBaseView.swift */,
-				CECBB4F52E08295E004C7856 /* ViewType.swift */,
+				CECBB4F52E08295E004C7856 /* ThemeViewType.swift */,
 				CECBB4BE2E07BC0A004C7856 /* ThemeHeaderView.swift */,
 				CECBB4C02E07BC16004C7856 /* ThemeInfoSection.swift */,
 				CECBB4E72E0826C2004C7856 /* StoryListCardContent.swift */,
@@ -1166,7 +1166,7 @@
 				CE1100E62E0280C3003C592E /* LoadingViewModel.swift in Sources */,
 				CE8C481D2DEA8DAE003188ED /* PublicThemesListView.swift in Sources */,
 				CE1100DB2E0275D6003C592E /* StoryBookView.swift in Sources */,
-				CECBB4F62E08295E004C7856 /* ViewType.swift in Sources */,
+				CECBB4F62E08295E004C7856 /* ThemeViewType.swift in Sources */,
 				CE8C481E2DEA8DAE003188ED /* UserSearchView.swift in Sources */,
 				CE8C48202DEA8DAE003188ED /* MyLibraryKeywordsViewModel.swift in Sources */,
 				CE8C49452DF18B69003188ED /* ThemeGalleryGridView.swift in Sources */,

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ThemeEmptyStateView: View {
     let isMy: Bool
-    let viewType: ViewType
+    let viewType: ThemeViewType
     
     var body: some View {
         VStack(spacing: 24) {
