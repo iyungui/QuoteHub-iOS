@@ -71,7 +71,7 @@ struct AppleLoginButton: View {
         SignInWithAppleButton(
             .continue,
             onRequest: { request in
-                request.requestedScopes = [.email, .fullName]
+                request.requestedScopes = []
             },
             onCompletion: { result in
                 handleAuthorization(result)
