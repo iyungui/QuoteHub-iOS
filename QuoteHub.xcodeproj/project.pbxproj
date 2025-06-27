@@ -52,6 +52,8 @@
 		CE1FCB712E0EFD7400C02C75 /* FriendBookStoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1FCB6F2E0EFD7400C02C75 /* FriendBookStoriesViewModel.swift */; };
 		CE1FCB732E0EFEE000C02C75 /* FriendSearchBookStoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1FCB722E0EFEE000C02C75 /* FriendSearchBookStoriesViewModel.swift */; };
 		CE1FCB7B2E0F011400C02C75 /* FriendSearchBookStoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1FCB7A2E0F011400C02C75 /* FriendSearchBookStoriesView.swift */; };
+		CE1FCB7F2E0F060B00C02C75 /* FriendLibraryKeywordsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1FCB7C2E0F060B00C02C75 /* FriendLibraryKeywordsViewModel.swift */; };
+		CE1FCB802E0F060B00C02C75 /* MyLibraryKeywordsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1FCB7D2E0F060B00C02C75 /* MyLibraryKeywordsViewModel.swift */; };
 		CE4FEF5B2DF925EE0072E8B9 /* RoundedCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */; };
 		CE4FEF5D2DF93F260072E8B9 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF5C2DF93F260072E8B9 /* HiddenModifier.swift */; };
 		CE4FEF812DFA90D80072E8B9 /* AchievementBadgesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */; };
@@ -255,6 +257,8 @@
 		CE1FCB6F2E0EFD7400C02C75 /* FriendBookStoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendBookStoriesViewModel.swift; sourceTree = "<group>"; };
 		CE1FCB722E0EFEE000C02C75 /* FriendSearchBookStoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSearchBookStoriesViewModel.swift; sourceTree = "<group>"; };
 		CE1FCB7A2E0F011400C02C75 /* FriendSearchBookStoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSearchBookStoriesView.swift; sourceTree = "<group>"; };
+		CE1FCB7C2E0F060B00C02C75 /* FriendLibraryKeywordsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendLibraryKeywordsViewModel.swift; sourceTree = "<group>"; };
+		CE1FCB7D2E0F060B00C02C75 /* MyLibraryKeywordsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLibraryKeywordsViewModel.swift; sourceTree = "<group>"; };
 		CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorner.swift; sourceTree = "<group>"; };
 		CE4FEF5C2DF93F260072E8B9 /* HiddenModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenModifier.swift; sourceTree = "<group>"; };
 		CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementBadgesView.swift; sourceTree = "<group>"; };
@@ -410,7 +414,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		CE1FCB772E0EFFB100C02C75 /* ViewModel */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ViewModel; sourceTree = "<group>"; };
 		CE8C48472DEADAAC003188ED /* Font */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Font; sourceTree = "<group>"; };
 		CE8C48E92DF05884003188ED /* Lottie */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Lottie; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -567,6 +570,15 @@
 			path = Friend;
 			sourceTree = "<group>";
 		};
+		CE1FCB7E2E0F060B00C02C75 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				CE1FCB7C2E0F060B00C02C75 /* FriendLibraryKeywordsViewModel.swift */,
+				CE1FCB7D2E0F060B00C02C75 /* MyLibraryKeywordsViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		CE7416D22E0D863A00CB2594 /* Friend */ = {
 			isa = PBXGroup;
 			children = (
@@ -687,7 +699,7 @@
 		CE8C47F82DEA8DAE003188ED /* Keyword */ = {
 			isa = PBXGroup;
 			children = (
-				CE1FCB772E0EFFB100C02C75 /* ViewModel */,
+				CE1FCB7E2E0F060B00C02C75 /* ViewModel */,
 				CE1FCB752E0EFF4C00C02C75 /* My */,
 				CE1FCB762E0EFF5100C02C75 /* Friend */,
 				CE1FCB742E0EFF3E00C02C75 /* Common */,
@@ -1084,7 +1096,6 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				CE1FCB772E0EFFB100C02C75 /* ViewModel */,
 				CE8C48472DEADAAC003188ED /* Font */,
 				CE8C48E92DF05884003188ED /* Lottie */,
 			);
@@ -1186,6 +1197,8 @@
 				CECBB4FA2E082992004C7856 /* ThemeEmptyStateView.swift in Sources */,
 				CECBB4E62E0826B2004C7856 /* StoryGridCardContent.swift in Sources */,
 				CECBB4D82E08260C004C7856 /* MyThemeGalleryListView.swift in Sources */,
+				CE1FCB7F2E0F060B00C02C75 /* FriendLibraryKeywordsViewModel.swift in Sources */,
+				CE1FCB802E0F060B00C02C75 /* MyLibraryKeywordsViewModel.swift in Sources */,
 				CECBB52D2E093343004C7856 /* MySearchBookStoriesView.swift in Sources */,
 				CE8C478F2DEA8D93003188ED /* Book.swift in Sources */,
 				CECBB4F42E082759004C7856 /* PublicThemeContentView.swift in Sources */,

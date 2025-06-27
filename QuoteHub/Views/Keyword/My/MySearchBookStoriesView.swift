@@ -73,7 +73,16 @@ struct MySearchBookStoriesView: View {
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 20)
-        .background(Color.softBeige)
+        .background(
+            LinearGradient(
+                gradient: Gradient(colors: [
+                    Color.brownLeather.opacity(0.8),
+                    Color.brownLeather.opacity(0.6)
+                ]),
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
     }
     
     // MARK: - Content Section
