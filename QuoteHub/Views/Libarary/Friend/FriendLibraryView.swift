@@ -61,7 +61,7 @@ struct FriendLibraryView: View {
                         FriendLibraryThemesView(friendId: friendUser.id)
                     },
                     keywordsView: {
-                        FriendLibraryKeywordsView()
+                        FriendLibraryKeywordsView(friendId: friendUser.id)
                     }
                 )
             },

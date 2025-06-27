@@ -51,6 +51,7 @@
 		CE1FCB6D2E0EFD3800C02C75 /* PublicThemeBookStoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1FCB6C2E0EFD3800C02C75 /* PublicThemeBookStoriesViewModel.swift */; };
 		CE1FCB712E0EFD7400C02C75 /* FriendBookStoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1FCB6F2E0EFD7400C02C75 /* FriendBookStoriesViewModel.swift */; };
 		CE1FCB732E0EFEE000C02C75 /* FriendSearchBookStoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1FCB722E0EFEE000C02C75 /* FriendSearchBookStoriesViewModel.swift */; };
+		CE1FCB7B2E0F011400C02C75 /* FriendSearchBookStoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1FCB7A2E0F011400C02C75 /* FriendSearchBookStoriesView.swift */; };
 		CE4FEF5B2DF925EE0072E8B9 /* RoundedCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */; };
 		CE4FEF5D2DF93F260072E8B9 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF5C2DF93F260072E8B9 /* HiddenModifier.swift */; };
 		CE4FEF812DFA90D80072E8B9 /* AchievementBadgesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */; };
@@ -253,6 +254,7 @@
 		CE1FCB6C2E0EFD3800C02C75 /* PublicThemeBookStoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicThemeBookStoriesViewModel.swift; sourceTree = "<group>"; };
 		CE1FCB6F2E0EFD7400C02C75 /* FriendBookStoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendBookStoriesViewModel.swift; sourceTree = "<group>"; };
 		CE1FCB722E0EFEE000C02C75 /* FriendSearchBookStoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSearchBookStoriesViewModel.swift; sourceTree = "<group>"; };
+		CE1FCB7A2E0F011400C02C75 /* FriendSearchBookStoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSearchBookStoriesView.swift; sourceTree = "<group>"; };
 		CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorner.swift; sourceTree = "<group>"; };
 		CE4FEF5C2DF93F260072E8B9 /* HiddenModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenModifier.swift; sourceTree = "<group>"; };
 		CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementBadgesView.swift; sourceTree = "<group>"; };
@@ -560,6 +562,7 @@
 			isa = PBXGroup;
 			children = (
 				CE7416DE2E0D88D100CB2594 /* FriendLibraryKeywordsView.swift */,
+				CE1FCB7A2E0F011400C02C75 /* FriendSearchBookStoriesView.swift */,
 			);
 			path = Friend;
 			sourceTree = "<group>";
@@ -1177,6 +1180,7 @@
 				CECBB4DC2E082636004C7856 /* PublicThemeGalleryListView.swift in Sources */,
 				CE1100F82E02816A003C592E /* ReadingProgressSection.swift in Sources */,
 				CECBB4A92E07AAFE004C7856 /* MyLibraryView.swift in Sources */,
+				CE1FCB7B2E0F011400C02C75 /* FriendSearchBookStoriesView.swift in Sources */,
 				CE8C478E2DEA8D93003188ED /* APIResponse.swift in Sources */,
 				CECBB5152E084369004C7856 /* ThemeNotifications.swift in Sources */,
 				CECBB4FA2E082992004C7856 /* ThemeEmptyStateView.swift in Sources */,
