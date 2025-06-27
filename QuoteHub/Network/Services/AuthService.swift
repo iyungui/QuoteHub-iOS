@@ -142,7 +142,12 @@ final class AuthService: AuthServiceProtocol {
     var validAccessToken: String? {
         return tokenManager.getAccessToken()
     }
-
+    
+    /// 리프레시 토큰 존재 여부 확인
+    var hasRefreshToken: Bool {
+        return tokenManager.getRefreshToken() != nil
+    }
+    
     /// 저장된 모든 토큰 삭제 (로그아웃)
     func clearAllTokens() throws {
         try tokenManager.clearAll()

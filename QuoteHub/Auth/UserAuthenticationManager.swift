@@ -13,7 +13,7 @@ import Foundation
 final class UserAuthenticationManager: LoadingViewModel {
     var isUserAuthenticated: Bool = false
     var isGuestMode: Bool = false
-    var showingLoginView: Bool = false
+    var showingLoginView: Bool = false  // 게스트모드 상태에서 바로 로그인 창으로 네비게이션하기 위한 프로퍼티
     var isLoading: Bool = false
     var loadingMessage: String?
     
@@ -79,30 +79,31 @@ final class UserAuthenticationManager: LoadingViewModel {
     /// 토큰 검증 및 토큰 재발급 후 메인뷰로 이동 (자동 로그인)
     @MainActor
     func validateAndRenewTokenNeeded() async {
-        // 저장된 액세스 토큰이 있는지 먼저 확인
-        guard authService.hasValidToken else {
+        // 리프레시 토큰이 있다면 무조건 서버에 검증 요청
+        
+        // 리프레시 토큰이 아예 없다면 로그아웃
+        guard authService.hasRefreshToken else {
             isUserAuthenticated = false
             return
         }
         
-        // 저장된 액세스 토큰이 있어도 서버 통신을 통해 액세스토큰이 유효한지 확인
+        // 저장된 액세스 토큰이 있어도 서버 통신을 통해 액세스토큰 혹은 리프레시 토큰이 유효한지 확인
         do {
             // 네트워크 요청(백그라운드 스레드에서 실행)
             let response = try await authService.validateAndRenewToken()
             
             guard response.success, let validationData = response.data else {
-                // 토큰 검증 실패
+                // 토큰 검증 실패 (액세스, 리프레시 토큰 모두 만료된 경우)
                 isUserAuthenticated = false
-                showingLoginView = true
                 return
             }
             
-            // 토큰이 이미 유효함 (토큰 갱신 필요없음 -> 바로 로그인)
+            // 액세스 토큰이 아직 유효함 (토큰 갱신 필요없음 -> 바로 로그인)
             if validationData.valid {
                 goToLibraryView()
                 print("토큰 유효 - 자동 로그인 성공")
                 
-            // 액세스 토큰이 만료되었지만 리프레시 토큰을 통해 토큰 재발급에 성공하였다면
+            // 액세스 토큰은 만료되었지만 리프레시 토큰을 통해 토큰 재발급에 성공하였다면
             } else if let newAccessToken = validationData.accessToken,
                     let newRefreshToken = validationData.refreshToken {
                 // 새 토큰 Keychain에 업데이트
@@ -116,15 +117,13 @@ final class UserAuthenticationManager: LoadingViewModel {
                 goToLibraryView()
                 print("새 토큰 발급 - 자동 로그인 성공")
             } else {
-                // 액세스토큰도 만료되었고, validateAndRenewToken 요청을 했지만 리프레시 토큰도 만료되었을 때 -> 토큰 갱신 실패
+                // validateAndRenewToken 요청을 했지만 액세스와 리프레시 토큰 모두 만료되었을 때 -> 토큰 갱신 실패
                 isUserAuthenticated = false
-                showingLoginView = true
                 print("토큰 갱신 실패 - 재로그인 필요")
             }
         } catch {
             print("토큰 검증 에러: \(error.localizedDescription)")
             isUserAuthenticated = false
-            showingLoginView = true
         }
     }
     

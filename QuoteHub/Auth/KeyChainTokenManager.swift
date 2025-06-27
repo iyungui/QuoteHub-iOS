@@ -68,7 +68,7 @@ final class KeyChainTokenManager {
         }
     }
     
-    /// 5분 여유 두었을 때, 액세스 토큰이 만료되었는지 확인
+    /// 1분 여유 두었을 때, 액세스 토큰이 만료되었는지 확인
     private func isAccessTokenExpired() -> Bool {
         do {
             // 로그인 시 저장했던 만료 시간 가져오기
@@ -80,9 +80,9 @@ final class KeyChainTokenManager {
             // timestamp를 Date로 변환
             let expiryDate = Date(timeIntervalSince1970: expiryTimestamp)
             
-            // 현재 시간이 (만료시간 - 5분)보다 크거나 같으면 만료로 판단
-            // 5분 여유두고 체크하는 이유는 네트워크 지연 가능성을 위해 미리 만료 체크
-            return Date() >= expiryDate.addingTimeInterval(-300)
+            // 현재 시간이 (만료시간 - 1분)보다 크거나 같으면 만료로 판단
+            // 1분 여유두고 체크하는 이유는 네트워크 지연 가능성을 위해 미리 만료 체크
+            return Date() >= expiryDate.addingTimeInterval(-60)
         } catch {
             return true
         }

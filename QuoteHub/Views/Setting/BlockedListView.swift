@@ -11,7 +11,7 @@ struct BlockedListView: View {
     @State private var blockedUsers: [User] = []
     @State private var isLoading: Bool = true
     @State private var errorMessage: String?
-
+    
     var body: some View {
         List(blockedUsers) { user in
             HStack {
