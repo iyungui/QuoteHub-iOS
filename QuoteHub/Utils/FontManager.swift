@@ -78,8 +78,8 @@ struct FontManager {
     static var currentFontType: FontType {
         get {
             // 기본폰트는 scoreDream
-            let saved = UserDefaults.standard.string(forKey: "selectedFontType") ?? FontType.scoreDream.rawValue
-            return FontType(rawValue: saved) ?? .scoreDream
+            let saved = UserDefaults.standard.string(forKey: "selectedFontType") ?? FontType.gowunBatang.rawValue
+            return FontType(rawValue: saved) ?? .gowunBatang
         }
         set {
             UserDefaults.standard.set(newValue.rawValue, forKey: "selectedFontType")
@@ -131,7 +131,49 @@ struct FontManager {
         let fontName = mapWeight(weight, for: fontType)
         return Font.custom(fontName, fixedSize: size)
     }
+    
+    /// UIFont 생성 메서드 (시스템 UI용)
+    private static func uiFont(_ weight: FontWeight, size: CGFloat, for fontType: FontType) -> UIFont {
+        let fontName = mapWeight(weight, for: fontType)
+        return UIFont(name: fontName, size: size) ?? UIFont.systemFont(ofSize: size)
+    }
+    
+    // MARK: - 시스템 UI 폰트 업데이트 메서드
+    static func updateSystemFonts() {
+        // Navigation Bar 제목 폰트
+        UINavigationBar.appearance().titleTextAttributes = [
+            .font: uiFont(.medium, size: 17, for: currentFontType)
+        ]
+        
+        // Navigation Bar 큰 제목 폰트
+        UINavigationBar.appearance().largeTitleTextAttributes = [
+            .font: uiFont(.bold, size: 34, for: currentFontType)
+        ]
+        
+        // 뒤로가기 버튼 폰트
+        UIBarButtonItem.appearance().setTitleTextAttributes([
+            .font: uiFont(.regular, size: 17, for: currentFontType)
+        ], for: .normal)
+        
+        // Tab Bar 폰트
+        UITabBarItem.appearance().setTitleTextAttributes([
+            .font: uiFont(.regular, size: 10, for: currentFontType)
+        ], for: .normal)
+        
+        UITabBarItem.appearance().setTitleTextAttributes([
+            .font: uiFont(.medium, size: 10, for: currentFontType)
+        ], for: .selected)
+    }
+    
+    /// 앱 시작시 시스템폰트 초기화
+    static func initialize() {
+        Task { @MainActor in
+            updateSystemFonts()
+        }
+    }
 }
+
+// MARK: - Extension Font
 
 extension Font {
     static func appFont(_ weight: FontWeight, size: FontSize) -> Font {
@@ -148,6 +190,9 @@ extension Font {
     }
     static var appBody: Font {
         FontManager.font(.regular, size: .body)
+    }
+    static var appHeadline: Font {
+        FontManager.font(.bold, size: .body)
     }
     static var appCaption: Font {
         FontManager.font(.light, size: .caption)

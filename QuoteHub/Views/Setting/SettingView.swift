@@ -26,15 +26,34 @@ struct SettingView: View {
 
     var body: some View {
         List {
-            Section(header: Text("내 정보")) {
-                NavigationLink {
-                    UpdateProfileView()
-                } label: {
-                    HStack {
-                        Image(systemName: "person.circle")
-                        Text("내 프로필 수정")
-                    }
+            appSettingSection
+            supportSection
+            manageAccountSection
+        }
+        .listStyle(GroupedListStyle())
+        .navigationTitle("설정")
+    }
+    
+    private var appSettingSection: some View {
+        Section {
+            NavigationLink {
+                FontSettingsView()
+            } label: {
+                HStack {
+                    Image(systemName: "textformat.size.larger.ko")
+                    Text("폰트 변경")
+                        .fontWeight(.semibold)
                 }
+            }
+
+            NavigationLink {
+                UpdateProfileView()
+            } label: {
+                HStack {
+                    Image(systemName: "person.circle")
+                    Text("내 프로필 수정")
+                }
+            }
 //                NavigationLink {
 //                    BlockedListView()
 //                } label: {
@@ -51,142 +70,162 @@ struct SettingView: View {
 //                        Text("신고 목록")
 //                    }
 //                }
-            }
-            
-            Section(header: Text("지원")) {
-                
-                Button(action: {
-                    isPresentIntroWebView = true
-                }) {
-                    HStack {
-                        Image(systemName: "info.circle")
-                        Text("서비스 소개 및 이용방법")
-                    }
-                }
-                .fullScreenCover(isPresented: $isPresentIntroWebView) {
-                    if let url = URL(string: introURL) {
-                        WebView(url: url)
-                            .ignoresSafeArea()
-                    } else {
-                        Text("Invalid URL")
-                    }
-                }
-                
-                Button(action: {
-                    isPresentTermsWebView = true
-                }) {
-                    HStack {
-                        Image(systemName: "doc.text")
-                        Text("서비스 이용약관")
-                    }
-                }
-                .fullScreenCover(isPresented: $isPresentTermsWebView) {
-                    if let url = URL(string: termsURL) {
-                        WebView(url: url)
-                            .ignoresSafeArea()
-                    } else {
-                        Text("Invalid URL")
-                    }
-                }
+        } header: {
+            Text("앱 설정").font(.appHeadline)
+        }
+        .font(.appBody)
 
-                Button(action: {
-                    isPresentPrivacyWebView = true
-                }) {
-                    HStack {
-                        Image(systemName: "shield.lefthalf.filled")
-                        Text("개인정보 처리방침")
-                            .fontWeight(.semibold)
-                    }
+        
+    }
+    
+    private var supportSection: some View {
+        Section {
+            
+            Button(action: {
+                isPresentIntroWebView = true
+            }) {
+                HStack {
+                    Image(systemName: "info.circle")
+                    Text("서비스 소개 및 이용방법")
+                        .fontWeight(.semibold)
                 }
-                .fullScreenCover(isPresented: $isPresentPrivacyWebView) {
-                    if let url = URL(string: privacyURL) {
-                        WebView(url: url)
-                            .ignoresSafeArea()
-                    } else {
-                        Text("Invalid URL")
-                    }
-                }
-                
-                Button(action: {
-                    isPresentSupportWebView = true
-                }) {
-                    HStack {
-                        Image(systemName: "message")
-                        Text("문의하기")
-                    }
-                }
-                .fullScreenCover(isPresented: $isPresentSupportWebView) {
-                    if let url = URL(string: supportURL) {
-                        WebView(url: url)
-                            .ignoresSafeArea()
-                    } else {
-                        Text("Invalid URL")
-                    }
-                }
-                
-                
-                
-                NavigationLink(destination: DeveloperInfoView()) {
-                    HStack {
-                        Image(systemName: "hammer.circle")
-                        Text("개발자 정보")
-                    }
-                }
-                
-                NavigationLink(destination: VersionInfoView()) {
-                    HStack {
-                        Image(systemName: "number.circle")
-                        Text("버전 정보")
-                    }
+            }
+            .fullScreenCover(isPresented: $isPresentIntroWebView) {
+                if let url = URL(string: introURL) {
+                    WebView(url: url)
+                        .ignoresSafeArea()
+                } else {
+                    Text("Invalid URL")
                 }
             }
             
-            Section(header: Text("계정 관리")) {
+            Button(action: {
+                isPresentTermsWebView = true
+            }) {
+                HStack {
+                    Image(systemName: "doc.text")
+                    Text("서비스 이용약관")
+                }
+            }
+            .fullScreenCover(isPresented: $isPresentTermsWebView) {
+                if let url = URL(string: termsURL) {
+                    WebView(url: url)
+                        .ignoresSafeArea()
+                } else {
+                    Text("Invalid URL")
+                }
+            }
 
-                Button(action: {
-                    showLogoutActionSheet = true
-                }) {
-                    HStack {
-                        Image(systemName: "power")
-                        Text("로그아웃")
-                    }
+            Button(action: {
+                isPresentPrivacyWebView = true
+            }) {
+                HStack {
+                    Image(systemName: "shield.lefthalf.filled")
+                    Text("개인정보 처리방침")
                 }
-                .actionSheet(isPresented: $showLogoutActionSheet) {
-                    ActionSheet(title: Text("로그아웃"), message: Text("정말로 로그아웃 하시겠습니까?"), buttons: [
-                        .destructive(Text("로그아웃")) {
-                            Task {
-                                await userAuthManager.logout()
-                            }
-                        },
-                        .cancel()
-                    ])
+            }
+            .fullScreenCover(isPresented: $isPresentPrivacyWebView) {
+                if let url = URL(string: privacyURL) {
+                    WebView(url: url)
+                        .ignoresSafeArea()
+                } else {
+                    Text("Invalid URL")
                 }
-                
-                Button(action: {
-                    showDeleteUserActionSheet = true
-                }) {
-                    HStack {
-                        Image(systemName: "xmark.circle")
-                        Text("계정 탈퇴")
-                            .foregroundColor(.red)
-                    }
+            }
+            
+            Button(action: {
+                isPresentSupportWebView = true
+            }) {
+                HStack {
+                    Image(systemName: "message")
+                    Text("문의하기")
                 }
-                .alert("계정 탈퇴", isPresented: $showDeleteUserActionSheet) {
-                    Button("취소", role: .cancel) {}
-                    Button("탈퇴", role: .destructive) {
+            }
+            .fullScreenCover(isPresented: $isPresentSupportWebView) {
+                if let url = URL(string: supportURL) {
+                    WebView(url: url)
+                        .ignoresSafeArea()
+                } else {
+                    Text("Invalid URL")
+                }
+            }
+            
+            
+            
+            NavigationLink(destination: DeveloperInfoView()) {
+                HStack {
+                    Image(systemName: "hammer.circle")
+                    Text("개발자 정보")
+                }
+            }
+            
+            NavigationLink(destination: VersionInfoView()) {
+                HStack {
+                    Image(systemName: "number.circle")
+                    Text("버전 정보")
+                }
+            }
+        } header: {
+            Text("지원").font(.appHeadline)
+        }
+        .font(.appBody)
+    }
+    
+    private var manageAccountSection: some View {
+        Section {
+
+            Button(action: {
+                showLogoutActionSheet = true
+            }) {
+                HStack {
+                    Image(systemName: "door.left.hand.open")
+                    Text("로그아웃")
+                }
+            }
+            .actionSheet(isPresented: $showLogoutActionSheet) {
+                ActionSheet(title: Text("로그아웃"), message: Text("정말로 로그아웃 하시겠습니까?"), buttons: [
+                    .destructive(Text("로그아웃")) {
                         Task {
-                            let deletingSuccess = await userAuthManager.revokeAccount()
-                            if !deletingSuccess {
-                                print("계정 탈퇴 실패")
-                            }
+                            await userAuthManager.logout()
+                        }
+                    },
+                    .cancel()
+                ])
+            }
+            
+            Button(action: {
+                showDeleteUserActionSheet = true
+            }) {
+                HStack {
+                    Image(systemName: "xmark.circle")
+                    Text("계정 탈퇴")
+                        .foregroundColor(.red)
+                }
+            }
+            .alert("계정 탈퇴", isPresented: $showDeleteUserActionSheet) {
+                Button("취소", role: .cancel) {}
+                Button("탈퇴", role: .destructive) {
+                    Task {
+                        let deletingSuccess = await userAuthManager.revokeAccount()
+                        if !deletingSuccess {
+                            print("계정 탈퇴 실패")
                         }
                     }
-                } message: {
-                    Text("회원 탈퇴를 진행하면 모든 개인 데이터와 정보가 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다. 정말로 계속하시겠습니까?")
                 }
+            } message: {
+                Text("회원 탈퇴를 진행하면 모든 개인 데이터와 정보가 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다. 정말로 계속하시겠습니까?")
             }
+        } header: {
+            Text("계정 관리").font(.appHeadline)
         }
-        .listStyle(GroupedListStyle())
-        .navigationTitle("설정")
+        .font(.appBody)
+    }
+}
+
+#Preview {
+    NavigationStack {
+        SettingView()
+            .environment(UserAuthenticationManager())
+            .navigationBarTitleDisplayMode(.inline)
     }
 }

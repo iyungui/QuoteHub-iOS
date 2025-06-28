@@ -77,6 +77,7 @@
 		CE1FCBC32E0F263900C02C75 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCBB92E0F263900C02C75 /* Pretendard-Regular.otf */; };
 		CE1FCBC42E0F263900C02C75 /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCBBA2E0F263900C02C75 /* Pretendard-SemiBold.otf */; };
 		CE1FCBC52E0F263900C02C75 /* Pretendard-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCBBB2E0F263900C02C75 /* Pretendard-Thin.otf */; };
+		CE1FCBC72E0F819C00C02C75 /* FontSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1FCBC62E0F819C00C02C75 /* FontSettingsView.swift */; };
 		CE4FEF5B2DF925EE0072E8B9 /* RoundedCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */; };
 		CE4FEF5D2DF93F260072E8B9 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF5C2DF93F260072E8B9 /* HiddenModifier.swift */; };
 		CE4FEF812DFA90D80072E8B9 /* AchievementBadgesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */; };
@@ -305,6 +306,7 @@
 		CE1FCBB92E0F263900C02C75 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
 		CE1FCBBA2E0F263900C02C75 /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
 		CE1FCBBB2E0F263900C02C75 /* Pretendard-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Thin.otf"; sourceTree = "<group>"; };
+		CE1FCBC62E0F819C00C02C75 /* FontSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontSettingsView.swift; sourceTree = "<group>"; };
 		CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorner.swift; sourceTree = "<group>"; };
 		CE4FEF5C2DF93F260072E8B9 /* HiddenModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenModifier.swift; sourceTree = "<group>"; };
 		CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementBadgesView.swift; sourceTree = "<group>"; };
@@ -835,6 +837,7 @@
 				CE8C48082DEA8DAE003188ED /* DeveloperInfoView.swift */,
 				CE8C48092DEA8DAE003188ED /* ReportListView.swift */,
 				CE8C480A2DEA8DAE003188ED /* SettingView.swift */,
+				CE1FCBC62E0F819C00C02C75 /* FontSettingsView.swift */,
 				CE8C480B2DEA8DAE003188ED /* UpdateProfileView.swift */,
 				CE8C480C2DEA8DAE003188ED /* VersionInfoView.swift */,
 			);
@@ -1294,6 +1297,7 @@
 				CECBB4E42E08269B004C7856 /* PublicStoryListCard.swift in Sources */,
 				CE1100EF2E02816A003C592E /* StoryCreateGuideSection.swift in Sources */,
 				C6DE7F512AF76B480020F5CB /* BookStoryCommentService.swift in Sources */,
+				CE1FCBC72E0F819C00C02C75 /* FontSettingsView.swift in Sources */,
 				CECBB4CF2E081CF2004C7856 /* BookStoryDetailBaseView.swift in Sources */,
 				CEA554D22E018AF50029A8A9 /* symbolExampleView.swift in Sources */,
 				CEA554D42E018D9C0029A8A9 /* View+Extensions.swift in Sources */,
