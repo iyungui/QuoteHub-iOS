@@ -11,24 +11,24 @@ import SwiftUI
 
 struct CheckboxStyle: ToggleStyle {
     func makeBody(configuration: Configuration) -> some View {
-        HStack {
-            configuration.label
-            
-            Spacer()
-            
-            Button(action: {
-                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                    configuration.isOn.toggle()
-                }
-            }) {
+        Button(action: {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                configuration.isOn.toggle()
+            }
+        }) {
+            HStack {
+                configuration.label
+                
+                Spacer()
+                
                 Image(systemName: configuration.isOn ? "checkmark.circle.fill" : "circle")
                     .resizable()
                     .frame(width: 24, height: 24)
                     .foregroundColor(configuration.isOn ? .appAccent : .secondaryText.opacity(0.6))
                     .font(.system(size: 20, weight: .medium, design: .default))
-            }
-            .buttonStyle(PlainButtonStyle())
+            }.contentShape(Rectangle()) // spacer 포함해서 전체 행 터치 가능하도록 만듦
         }
+        .buttonStyle(PlainButtonStyle())
     }
 }
 

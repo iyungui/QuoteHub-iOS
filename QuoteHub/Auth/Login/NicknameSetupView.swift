@@ -125,7 +125,7 @@ struct NicknameSetupView: View {
                         Text("예시 북스토리와 함께 시작할까요?")
                             .font(.scoreDream(.regular, size: .footnote))
                         
-                        Text("권장")
+                        Text("추천")
                             .font(.scoreDream(.bold, size: .caption2))
                             .foregroundStyle(Color.white)
                             .padding(.horizontal, 6)

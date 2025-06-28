@@ -71,8 +71,8 @@ struct FontSettingsView: View {
             } header: {
                 Text("폰트 선택")
             }
-
         }
+        .listStyle(.grouped)
     }
 }
 
