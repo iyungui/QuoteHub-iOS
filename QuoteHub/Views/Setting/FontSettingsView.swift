@@ -9,23 +9,46 @@ import SwiftUI
 
 struct FontSettingsView: View {
     @State private var selectedFont: FontType = FontManager.currentFontType
+    @Environment(\.dismiss) private var dismiss
+    
+    let isOnboarding: Bool
+    let onComplete: (() -> Void)?
+    
+    init(isOnboarding: Bool = false, onComplete: (() -> Void)? = nil) {
+        self.isOnboarding = isOnboarding
+        self.onComplete = onComplete
+    }
     
     var body: some View {
-        VStack(spacing: 20) {
-            selectedFontPreview
-                .padding()
-            selectFontSection
-        }
-        .navigationTitle("폰트 설정")
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button {
-                    FontManager.changeFontType(to: selectedFont)
-                } label: {
-                    Text("확인")
-                        .font(.appHeadline)
+        NavigationStack {
+            VStack(spacing: 0) {
+                selectedFontPreview
+                    .padding([.horizontal, .top])
+                    .padding(.bottom, 5)
+                selectFontSection
+            }
+            .navigationTitle(isOnboarding ? "폰트 선택" : "폰트 설정")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                if isOnboarding {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button("건너뛰기") { onComplete?() }
+                    }
+                } else {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("취소") { dismiss() }
+                    }
                 }
-
+                
+                ToolbarItem(placement: .confirmationAction) {
+                    Button {
+                        FontManager.changeFontType(to: selectedFont)
+                        if isOnboarding { onComplete?() }
+                    } label: {
+                        Text("확인")
+                            .font(.appHeadline)
+                    }
+                }
             }
         }
     }
@@ -48,7 +71,7 @@ struct FontSettingsView: View {
                 .foregroundStyle(Color.secondary)
         }
         .padding()
-        .frame(maxWidth: .infinity, maxHeight: 230)
+        .frame(maxWidth: .infinity, maxHeight: 200)
         .background(Color.warmBeige.opacity(0.7))
         .cornerRadius(30, corners: [.bottomRight, .topLeft])
     }
@@ -69,10 +92,29 @@ struct FontSettingsView: View {
                     .toggleStyle(CheckboxStyle())
                 }
             } header: {
-                Text("폰트 선택")
+                Text("폰트 선택").font(.appCaption)
+            } footer: {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(
+                        """
+                        모든 폰트는 해당 저작권자의 라이선스를 따릅니다.
+                        
+                        - 프리텐다드 (길형진 (orioncactus))
+                        - 에스코어드림 (S-Core)
+                        - 고운바탕 (류양희)
+                        - 리디바탕 (리디주식회사)
+                        - 조선일보명조체 (조선일보)
+                        """
+                    )
+                        .font(.appFont(.thin, size: .caption2))
+                        .multilineTextAlignment(.leading)
+                        .foregroundStyle(Color.secondary)
+                }
+                .padding(.top, 12)
             }
         }
-        .listStyle(.grouped)
+//        .listStyle(.grouped)
+        .scrollDisabled(FontType.allCases.count <= 5)   // 폰트가 5개 미만일 때 리스트뷰에서 스크롤 비활성화
     }
 }
 

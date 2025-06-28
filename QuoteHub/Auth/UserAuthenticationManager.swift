@@ -23,6 +23,9 @@ final class UserAuthenticationManager: LoadingViewModel {
             print("show nickname: \(showingNicknameSetup)")
         }
     }
+    
+    var showingFontSetup: Bool = false
+    
     var initialNickname: String = ""
     
     private let authService: AuthService
@@ -72,7 +75,16 @@ final class UserAuthenticationManager: LoadingViewModel {
     /// 로그인 완료 후 라이브러리뷰 이동 (데이터 로딩은 외부에서 처리)
     @MainActor
     func completeLoginProcess() {
+        showingFontSetup = false
+        
         goToLibraryView()
+        isLoading = false
+    }
+    
+    @MainActor
+    func goToFontSettingView() {
+        showingNicknameSetup = false
+        showingFontSetup = true
         isLoading = false
     }
     
@@ -195,6 +207,7 @@ final class UserAuthenticationManager: LoadingViewModel {
         isUserAuthenticated = true
         showingLoginView = false
         showingNicknameSetup = false  // 닉네임 설정 상태도 초기화
+        showingFontSetup = false
         
         print("라이브러리뷰로 이동!")
     }

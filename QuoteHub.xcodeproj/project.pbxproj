@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -161,6 +161,8 @@
 		CE8C49772DF1D132003188ED /* StoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C49762DF1D132003188ED /* StoryView.swift */; };
 		CE8C49792DF1DB4E003188ED /* ThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C49782DF1DB4E003188ED /* ThemeView.swift */; };
 		CE8C497F2DF1E874003188ED /* AppVersionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C497E2DF1E874003188ED /* AppVersionManager.swift */; };
+		CE93C0AC2E0FA87400CF4AB5 /* progressLottie.json in Resources */ = {isa = PBXBuildFile; fileRef = CE93C0A92E0FA87400CF4AB5 /* progressLottie.json */; };
+		CE93C0AD2E0FA87400CF4AB5 /* quotehub_logo.json in Resources */ = {isa = PBXBuildFile; fileRef = CE93C0AA2E0FA87400CF4AB5 /* quotehub_logo.json */; };
 		CEA554B82E003BFD0029A8A9 /* CarouselQuotesRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554AE2E003BFD0029A8A9 /* CarouselQuotesRecordView.swift */; };
 		CEA554BA2E003BFD0029A8A9 /* KeywordInputSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554B02E003BFD0029A8A9 /* KeywordInputSection.swift */; };
 		CEA554BB2E003BFD0029A8A9 /* ListQuotesRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554B12E003BFD0029A8A9 /* ListQuotesRecordView.swift */; };
@@ -389,6 +391,8 @@
 		CE8C49762DF1D132003188ED /* StoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryView.swift; sourceTree = "<group>"; };
 		CE8C49782DF1DB4E003188ED /* ThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeView.swift; sourceTree = "<group>"; };
 		CE8C497E2DF1E874003188ED /* AppVersionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionManager.swift; sourceTree = "<group>"; };
+		CE93C0A92E0FA87400CF4AB5 /* progressLottie.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = progressLottie.json; sourceTree = "<group>"; };
+		CE93C0AA2E0FA87400CF4AB5 /* quotehub_logo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = quotehub_logo.json; sourceTree = "<group>"; };
 		CEA554AE2E003BFD0029A8A9 /* CarouselQuotesRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselQuotesRecordView.swift; sourceTree = "<group>"; };
 		CEA554B02E003BFD0029A8A9 /* KeywordInputSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordInputSection.swift; sourceTree = "<group>"; };
 		CEA554B12E003BFD0029A8A9 /* ListQuotesRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListQuotesRecordView.swift; sourceTree = "<group>"; };
@@ -462,10 +466,6 @@
 		CECBB5302E095A77004C7856 /* SampleData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = SampleData.json; sourceTree = "<group>"; };
 		CED3795C2DFEE902001CE700 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		CE8C48E92DF05884003188ED /* Lottie */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Lottie; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		C6B56FD62AA8B60B003905C3 /* Frameworks */ = {
@@ -648,11 +648,11 @@
 		CE1FCB8E2E0F257A00C02C75 /* Font */ = {
 			isa = PBXGroup;
 			children = (
+				CE1FCBBC2E0F263900C02C75 /* Pretendart_Font */,
+				CE1FCB8B2E0F257A00C02C75 /* S-Dream_Font */,
 				CE1FCBAD2E0F263600C02C75 /* GowunBatang-Bold.ttf */,
 				CE1FCBAE2E0F263600C02C75 /* GowunBatang-Regular.ttf */,
 				CE1FCBAF2E0F263600C02C75 /* RIDIBatang.otf */,
-				CE1FCBBC2E0F263900C02C75 /* Pretendart_Font */,
-				CE1FCB8B2E0F257A00C02C75 /* S-Dream_Font */,
 				CE1FCB8C2E0F257A00C02C75 /* ChosunNm.ttf */,
 				CE1FCB8D2E0F257A00C02C75 /* EF_jejudoldam(OTF).otf */,
 			);
@@ -933,11 +933,20 @@
 			isa = PBXGroup;
 			children = (
 				C6B56FE02AA8B60D003905C3 /* Assets.xcassets */,
-				CE8C48E92DF05884003188ED /* Lottie */,
+				CE93C0AB2E0FA87400CF4AB5 /* Lottie */,
 				CE1FCB8E2E0F257A00C02C75 /* Font */,
 				CECBB5302E095A77004C7856 /* SampleData.json */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		CE93C0AB2E0FA87400CF4AB5 /* Lottie */ = {
+			isa = PBXGroup;
+			children = (
+				CE93C0A92E0FA87400CF4AB5 /* progressLottie.json */,
+				CE93C0AA2E0FA87400CF4AB5 /* quotehub_logo.json */,
+			);
+			path = Lottie;
 			sourceTree = "<group>";
 		};
 		CEA554AB2E003BE10029A8A9 /* Book */ = {
@@ -1192,9 +1201,6 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				CE8C48E92DF05884003188ED /* Lottie */,
-			);
 			name = QuoteHub;
 			packageProductDependencies = (
 				C697D0F72AC8F64400F0111B /* SDWebImageSwiftUI */,
@@ -1248,6 +1254,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE93C0AC2E0FA87400CF4AB5 /* progressLottie.json in Resources */,
+				CE93C0AD2E0FA87400CF4AB5 /* quotehub_logo.json in Resources */,
 				CE1FCB8F2E0F257A00C02C75 /* SCDream1.otf in Resources */,
 				CE1FCB902E0F257A00C02C75 /* SCDream2.otf in Resources */,
 				CE1FCB912E0F257A00C02C75 /* SCDream3.otf in Resources */,

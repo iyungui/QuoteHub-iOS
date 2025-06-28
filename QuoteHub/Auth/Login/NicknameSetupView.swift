@@ -32,142 +32,142 @@ struct NicknameSetupView: View {
     }
     
     var body: some View {
-        VStack(alignment: .center, spacing: 15) {
-            Spacer()
-            
-            // 제목
-            HStack {
-                Text("닉네임을 설정해주세요")
-                    .font(.appTitle)
-                    .padding(.top)
+        NavigationStack {
+            VStack(alignment: .center, spacing: 10) {
                 Spacer()
-            }
-            .padding(.leading, 50)
-            
-            // 설명
-            HStack {
-                Text("나중에 설정에서도 변경할 수 있어요")
-                    .font(.appBody)
-                    .foregroundColor(.gray)
-                    .multilineTextAlignment(.leading)
-                Spacer()
-            }
-            .padding(.leading, 50)
-            
-            Spacer().frame(height: 20)
-            
-            // 닉네임 입력 영역
-            VStack(spacing: 10) {
-                // 텍스트필드와 버튼들
-                HStack(spacing: 10) {
-                    TextField("닉네임을 입력하세요", text: $nickname)
-                        .font(.appFont(.regular, size: .subheadline))
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .onChange(of: nickname) { _, _ in
-                            // 닉네임이 변경되면 체크 상태 초기화
-                            isNicknameChecked = false
-                            feedbackMessage = ""
-                        }
-                    
-                    // 랜덤 닉네임 버튼
-//                    Button(action: generateRandomNickname) {
-//                        if isGeneratingNickname {
-//                            ProgressView()
-//                                .scaleEffect(0.8)
-//                        } else {
-//                            Text("🎲")
-//                                .font(.title2)
-//                        }
-//                    }
-//                    .frame(width: 44, height: 44)
-//                    .background(Color.gray.opacity(0.1))
-//                    .cornerRadius(8)
-//                    .disabled(isGeneratingNickname)
-                    
-                    // 중복확인 버튼
-                    Button(action: checkNicknameDuplicate) {
-                        if isCheckingNickname {
-                            ProgressView()
-                                .scaleEffect(0.8)
-                        } else {
+                // 제목
+                HStack {
+                    Text("닉네임을 설정해주세요")
+                        .font(.appTitle)
+                        .padding(.top)
+                    Spacer()
+                }
+                .overlay(alignment: .topLeading) {
+                    Image(systemName: "quote.bubble")
+                        .font(.title2)
+                        .foregroundColor(.appAccent)
+                        .rotationEffect(.degrees(-15))
+                        .offset(y: -25)
+                }
+                .padding(.leading, 50)
+
+                // 설명
+                HStack {
+                    Text("나중에 설정에서도 변경할 수 있어요")
+                        .font(.appBody)
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.leading)
+                    Spacer()
+                }
+                .padding(.leading, 50)
+                
+                Spacer().frame(height: 20)
+                
+                // 닉네임 입력 영역
+                VStack(spacing: 10) {
+                    // 텍스트필드와 버튼들
+                    HStack(spacing: 10) {
+                        TextField("닉네임을 입력하세요", text: $nickname)
+                            .font(.appFont(.regular, size: .subheadline))
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .onChange(of: nickname) { _, _ in
+                                // 닉네임이 변경되면 체크 상태 초기화
+                                isNicknameChecked = false
+                                feedbackMessage = ""
+                            }
+                        
+                        // 중복확인 버튼
+                        Button(action: checkNicknameDuplicate) {
                             Text("중복확인")
                                 .font(.appFont(.regular, size: .subheadline))
                         }
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 12)
+                        .background(nickname.isEmpty ? Color.gray.opacity(0.3) : Color.appAccent)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                        .disabled(nickname.isEmpty || isCheckingNickname)
                     }
-                    .padding(.vertical, 8)
-                    .padding(.horizontal, 12)
-                    .background(nickname.isEmpty ? Color.gray.opacity(0.3) : Color.appAccent)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
-                    .disabled(nickname.isEmpty || isCheckingNickname)
-                }
-                .padding(.horizontal, 50)
-                
-                // 피드백 메시지
-                HStack {
-                    if !feedbackMessage.isEmpty {
-                        Text(feedbackMessage)
-                            .font(.appFont(.regular, size: .caption))
-                            .foregroundColor(feedbackColor)
-                    }
-                    Spacer()
-                }
-                .padding(.horizontal, 50)
-                .frame(height: 20)
-            }
-            
-            Spacer()
-            
-            Toggle(isOn: $wantsExampleBookStoryData) {
-                VStack(alignment: .leading) {
+                    .padding(.horizontal, 50)
+                    
+                    // 피드백 메시지
                     HStack {
-                        Text("예시 북스토리와 함께 시작할까요?")
-                            .font(.appFont(.regular, size: .footnote))
-                        
-                        Text("추천")
-                            .font(.appFont(.bold, size: .caption2))
-                            .foregroundStyle(Color.white)
-                            .padding(.horizontal, 6)
-                            .padding(.vertical, 2)
-                            .background(Color.appAccent)
-                            .cornerRadius(4)
-                        
+                        if !feedbackMessage.isEmpty {
+                            Text(feedbackMessage)
+                                .font(.appFont(.regular, size: .caption))
+                                .foregroundColor(feedbackColor)
+                        }
+                        Spacer()
                     }
-                    Text("처음에 앱을 쉽게 둘러볼 수 있도록,\n샘플 북스토리를 넣어드릴게요.")
-                        .font(.appFont(.light, size: .caption))
+                    .padding(.horizontal, 50)
+                    .frame(height: 20)
+                }
+                
+                Spacer()
+                
+                Toggle(isOn: $wantsExampleBookStoryData) {
+                    VStack(alignment: .leading) {
+                        HStack {
+                            Text("예시 북스토리와 함께 시작할까요?")
+                                .font(.appFont(.regular, size: .footnote))
+                            
+                            Text("추천")
+                                .font(.appFont(.bold, size: .caption2))
+                                .foregroundStyle(Color.white)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(Color.appAccent)
+                                .cornerRadius(4)
+                            
+                        }
+                        Text("처음에 앱을 쉽게 둘러볼 수 있도록,\n샘플 북스토리를 넣어드릴게요.")
+                            .font(.appFont(.light, size: .caption))
+                            .foregroundColor(.gray)
+                    }
+                }
+                .padding(.horizontal, 50)
+                .toggleStyle(CheckboxStyle())
+                
+                // 다음 버튼
+                Button(action: completeNicknameSetup) {
+                    Text("다음")
+                        .font(.appFont(.extraBold, size: .medium))
+                        .foregroundColor(.white)
+                        .frame(width: 280, height: 60, alignment: .center)
+                        .background(isNicknameChecked ? Color.black : Color.gray.opacity(0.6))
+                        .cornerRadius(8)
+                        .padding(.bottom, 10)
+                }
+                .buttonStyle(PlainButtonStyle())
+                .disabled(!isNicknameChecked)
+                .padding(.top)
+
+                // 건너뛰기 버튼
+                Button(action: skipNicknameSetup) {
+                    Text("건너뛰기")
+                        .font(.appFont(.regular, size: .callout))
+                        .underline()
                         .foregroundColor(.gray)
                 }
+                
+                Spacer()
             }
-            .padding(.horizontal, 50)
-            .toggleStyle(CheckboxStyle())
-            
-            // 다음 버튼
-            Button(action: completeNicknameSetup) {
-                Text("다음")
-                    .font(.appFont(.extraBold, size: .medium))
-                    .foregroundColor(.white)
-                    .frame(width: 280, height: 60, alignment: .center)
-                    .background(isNicknameChecked ? Color.appAccent : Color.gray.opacity(0.3))
-                    .cornerRadius(8)
-                    .padding(.bottom, 10)
+            .toolbar {
+                Button {
+                    completeNicknameSetup()
+                } label: {
+                    Text("다음")
+                        .font(.appBody)
+                }
+                .disabled(!isNicknameChecked)
             }
-            .buttonStyle(PlainButtonStyle())
-            .disabled(!isNicknameChecked)
-            
-            // 건너뛰기 버튼
-            Button(action: skipNicknameSetup) {
-                Text("건너뛰기")
-                    .font(.appFont(.regular, size: .callout))
-                    .underline()
-                    .foregroundColor(.gray)
+            // 메인 VStack에 적용할 배경
+            .backgroundGradient()
+            .onAppear {
+                nickname = initialNickname
             }
-            
-            Spacer()
+            .progressOverlay(viewModel: authManager, opacity: true)
         }
-        .onAppear {
-            nickname = initialNickname
-        }
-        .progressOverlay(viewModel: authManager, opacity: true)
     }
     
     // MARK: - Actions
@@ -232,7 +232,7 @@ struct NicknameSetupView: View {
     private func completeNicknameSetup() {
         authManager.isLoading = true
         authManager.loadingMessage = wantsExampleBookStoryData ?
-            "계정 설정 및 예시 데이터 생성 중..." : "계정 설정 중..."
+        "계정 설정 및 예시 데이터 생성 중..." : "계정 설정 중..."
         
         Task {
             do {
@@ -248,7 +248,7 @@ struct NicknameSetupView: View {
                 await loadLoginUserData()
                 
                 await MainActor.run {
-                    authManager.completeLoginProcess()
+                    authManager.goToFontSettingView()
                 }
             } catch {
                 await MainActor.run {
@@ -264,7 +264,7 @@ struct NicknameSetupView: View {
     private func skipNicknameSetup() {
         authManager.isLoading = true
         authManager.loadingMessage = wantsExampleBookStoryData ?
-            "예시 데이터 생성 중..." : "데이터 로딩 중..."
+        "예시 데이터 생성 중..." : "데이터 로딩 중..."
         
         Task {
             // 예시 데이터 생성 (선택적)
@@ -276,7 +276,7 @@ struct NicknameSetupView: View {
             await loadLoginUserData()
             
             await MainActor.run {
-                authManager.completeLoginProcess()
+                authManager.goToLibraryView()   // 폰트 설정 화면도 스킵
             }
         }
     }
