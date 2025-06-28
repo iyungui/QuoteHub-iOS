@@ -38,8 +38,7 @@ struct NicknameSetupView: View {
             // 제목
             HStack {
                 Text("닉네임을 설정해주세요")
-                    .font(ScoreDreamFont.font(.medium, size: .title1))
-                    .fontWeight(.black)
+                    .font(.appTitle)
                     .padding(.top)
                 Spacer()
             }
@@ -48,7 +47,7 @@ struct NicknameSetupView: View {
             // 설명
             HStack {
                 Text("나중에 설정에서도 변경할 수 있어요")
-                    .font(.scoreDreamBody)
+                    .font(.appBody)
                     .foregroundColor(.gray)
                     .multilineTextAlignment(.leading)
                 Spacer()
@@ -62,7 +61,7 @@ struct NicknameSetupView: View {
                 // 텍스트필드와 버튼들
                 HStack(spacing: 10) {
                     TextField("닉네임을 입력하세요", text: $nickname)
-                        .font(.scoreDream(.regular, size: .subheadline))
+                        .font(.appFont(.regular, size: .subheadline))
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .onChange(of: nickname) { _, _ in
                             // 닉네임이 변경되면 체크 상태 초기화
@@ -92,7 +91,7 @@ struct NicknameSetupView: View {
                                 .scaleEffect(0.8)
                         } else {
                             Text("중복확인")
-                                .font(.scoreDream(.regular, size: .subheadline))
+                                .font(.appFont(.regular, size: .subheadline))
                         }
                     }
                     .padding(.vertical, 8)
@@ -108,7 +107,7 @@ struct NicknameSetupView: View {
                 HStack {
                     if !feedbackMessage.isEmpty {
                         Text(feedbackMessage)
-                            .font(.scoreDream(.regular, size: .caption))
+                            .font(.appFont(.regular, size: .caption))
                             .foregroundColor(feedbackColor)
                     }
                     Spacer()
@@ -123,10 +122,10 @@ struct NicknameSetupView: View {
                 VStack(alignment: .leading) {
                     HStack {
                         Text("예시 북스토리와 함께 시작할까요?")
-                            .font(.scoreDream(.regular, size: .footnote))
+                            .font(.appFont(.regular, size: .footnote))
                         
                         Text("추천")
-                            .font(.scoreDream(.bold, size: .caption2))
+                            .font(.appFont(.bold, size: .caption2))
                             .foregroundStyle(Color.white)
                             .padding(.horizontal, 6)
                             .padding(.vertical, 2)
@@ -135,7 +134,7 @@ struct NicknameSetupView: View {
                         
                     }
                     Text("처음에 앱을 쉽게 둘러볼 수 있도록,\n샘플 북스토리를 넣어드릴게요.")
-                        .font(.scoreDream(.light, size: .caption))
+                        .font(.appFont(.light, size: .caption))
                         .foregroundColor(.gray)
                 }
             }
@@ -145,7 +144,7 @@ struct NicknameSetupView: View {
             // 다음 버튼
             Button(action: completeNicknameSetup) {
                 Text("다음")
-                    .font(.scoreDream(.extraBold, size: .medium))
+                    .font(.appFont(.extraBold, size: .medium))
                     .foregroundColor(.white)
                     .frame(width: 280, height: 60, alignment: .center)
                     .background(isNicknameChecked ? Color.appAccent : Color.gray.opacity(0.3))
@@ -158,7 +157,7 @@ struct NicknameSetupView: View {
             // 건너뛰기 버튼
             Button(action: skipNicknameSetup) {
                 Text("건너뛰기")
-                    .font(.scoreDream(.regular, size: .callout))
+                    .font(.appFont(.regular, size: .callout))
                     .underline()
                     .foregroundColor(.gray)
             }

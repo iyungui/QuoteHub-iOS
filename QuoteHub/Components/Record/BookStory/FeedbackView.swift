@@ -25,7 +25,7 @@ struct FeedbackView: View {
                 .font(.body)
             
             Text(message)
-                .font(.scoreDream(.medium, size: .subheadline))
+                .font(.appFont(.medium, size: .subheadline))
                 .foregroundColor(isSuccess ? .green : .orange)
 
             Spacer()

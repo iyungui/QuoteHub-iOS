@@ -65,7 +65,7 @@ struct StoryView: View {
             Image(systemName: "sparkles")
                 .font(.system(size: isCompact ? 8 : 10, weight: .bold))
             Text("NEW")
-                .font(.scoreDream(.bold, size: isCompact ? 8 : 10))
+                .font(.appFont(.bold, size: isCompact ? 8 : 10))
         }
         .foregroundColor(.white)
         .padding(.horizontal, isCompact ? 6 : 8)
@@ -150,7 +150,7 @@ struct StoryView: View {
                         .padding(.top, 2)
                     
                     Text(story.firstQuoteText)
-                        .font(.scoreDream(.medium, size: isCompact ? .footnote : .subheadline))
+                        .font(.appFont(.medium, size: isCompact ? .footnote : .subheadline))
                         .lineLimit(isCompact ? 2 : 3)
                         .foregroundColor(.white)
                         .multilineTextAlignment(.leading)
@@ -164,7 +164,7 @@ struct StoryView: View {
                         .foregroundColor(.white.opacity(0.8))
                     
                     Text(story.bookId.title)
-                        .font(.scoreDream(.regular, size: isCompact ? .caption2 : .caption))
+                        .font(.appFont(.regular, size: isCompact ? .caption2 : .caption))
                         .lineLimit(1)
                         .foregroundColor(.white.opacity(0.9))
                         .shadow(color: .black.opacity(0.5), radius: 1, x: 0, y: 1)
@@ -197,13 +197,13 @@ struct StoryView: View {
             // 사용자 정보
             VStack(alignment: .leading, spacing: 2) {
                 Text(story.userId.nickname)
-                    .font(.scoreDream(.medium, size: .caption))
+                    .font(.appFont(.medium, size: .caption))
                     .lineLimit(1)
                     .foregroundColor(.white)
                     .shadow(color: .black.opacity(0.5), radius: 1, x: 0, y: 1)
 
                 Text(story.userId.statusMessage ?? "")
-                    .font(.scoreDream(.light, size: .footnote))
+                    .font(.appFont(.light, size: .footnote))
                     .lineLimit(1)
                     .foregroundColor(.white.opacity(0.8))
                     .shadow(color: .black.opacity(0.5), radius: 1, x: 0, y: 1)
@@ -214,7 +214,7 @@ struct StoryView: View {
             // 날짜 정보
             VStack(alignment: .trailing, spacing: 2) {
                 Text(story.createdAt.prefix(10))
-                    .font(.scoreDream(.light, size: .footnote))
+                    .font(.appFont(.light, size: .footnote))
                     .foregroundColor(.white.opacity(0.8))
                     .shadow(color: .black.opacity(0.5), radius: 1, x: 0, y: 1)
                 
@@ -228,7 +228,7 @@ struct StoryView: View {
     private var dateOnlySection: some View {
         HStack {
             Text(story.createdAt.prefix(10))
-                .font(.scoreDream(.light, size: isCompact ? .caption2 : .footnote))
+                .font(.appFont(.light, size: isCompact ? .caption2 : .footnote))
                 .foregroundColor(.white.opacity(0.8))
                 .shadow(color: .black.opacity(0.5), radius: 1, x: 0, y: 1)
             

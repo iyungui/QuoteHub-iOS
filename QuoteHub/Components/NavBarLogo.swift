@@ -13,7 +13,7 @@ public func NavBarLogo() -> some View {
             .resizable().scaledToFit().frame(height: 24)
         
         Text("문장모아")
-            .font(.custom("EF_jejudoldam", size: 17))
+            .font(.appBody)
             .foregroundStyle(Color.appAccent)
     }
 }

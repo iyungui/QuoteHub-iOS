@@ -22,11 +22,11 @@ struct KeywordTagView: View {
         }) {
             HStack(spacing: 6) {
                 Text("#\(keywordInfo.keyword)")
-                    .font(.scoreDream(.medium, size: .caption))
+                    .font(.appFont(.medium, size: .caption))
                     .foregroundColor(.brownLeather)
                 
                 Text("(\(keywordInfo.count))")
-                    .font(.scoreDream(.light, size: .caption2))
+                    .font(.appFont(.light, size: .caption2))
                     .foregroundColor(.secondaryText)
             }
             .padding(.horizontal, 12)

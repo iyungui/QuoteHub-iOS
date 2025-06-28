@@ -34,7 +34,7 @@ struct CarouselStoryQuotesDisplayView: View {
             HStack {
                 if let page = quote.page {
                     Text("p. \(page)")
-                        .font(.scoreDream(.regular, size: .caption))
+                        .font(.appFont(.regular, size: .caption))
                         .foregroundColor(.secondaryText)
                 }
                 
@@ -42,7 +42,7 @@ struct CarouselStoryQuotesDisplayView: View {
                 
                 // 현재 quotes 총 페이지 수 표시
                 Text("\(index + 1) / \(story.quotes.count)")
-                    .font(.scoreDream(.light, size: .caption))
+                    .font(.appFont(.light, size: .caption))
                     .foregroundColor(.secondaryText.opacity(0.7))
             }
             .padding(.horizontal, 16)
@@ -55,7 +55,7 @@ struct CarouselStoryQuotesDisplayView: View {
             // Quote 텍스트
             ScrollView {
                 Text(quote.quote)
-                    .font(.scoreDream(.light, size: .subheadline))
+                    .font(.appFont(.light, size: .subheadline))
                     .foregroundColor(.primaryText)
                     .lineSpacing(6)
                     .multilineTextAlignment(.leading)

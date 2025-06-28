@@ -42,7 +42,7 @@ struct LibraryTabButton: View {
     var body: some View {
         Button(action: action) {
             Text(title)
-                .font(isSelected ? .scoreDream(.bold, size: .body) : .scoreDreamBody)
+                .font(isSelected ? .appFont(.bold, size: .body) : .appBody)
                 .foregroundColor(isSelected ? .primary : .secondary)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 12)

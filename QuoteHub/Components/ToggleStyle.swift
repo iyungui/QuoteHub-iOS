@@ -48,7 +48,7 @@ struct PrivacyToggleStyle: ToggleStyle {
                     .frame(width: 20, height: 20)
                 
                 Text(configuration.isOn ? "공개" : "비공개")
-                    .font(.scoreDream(.medium, size: .caption))
+                    .font(.appFont(.medium, size: .caption))
                     .foregroundColor(configuration.isOn ? .blue : .secondaryText)
             }
             .padding(.horizontal, 12)

@@ -71,13 +71,13 @@ struct BookCard: View {
     private var bookInfo: some View {
         VStack(alignment: .center, spacing: 6) {
             Text(book.title)
-                .font(.scoreDream(.medium, size: .caption))
+                .font(.appFont(.medium, size: .caption))
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
                 .foregroundColor(.primaryText)
             
             Text(book.author.joined(separator: ", "))
-                .font(.scoreDream(.light, size: .footnote))
+                .font(.appFont(.light, size: .footnote))
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
                 .foregroundColor(.secondaryText)

@@ -23,12 +23,12 @@ struct CardHeader: View {
     var body: some View {
         VStack(alignment: .center, spacing: 2) {
             Text(title)
-                .font(.scoreDream(.bold, size: .body))
+                .font(.appFont(.bold, size: .body))
                 .foregroundColor(.primaryText)
             
             if let subtitle = subtitle {
                 Text(subtitle)
-                    .font(.scoreDream(.light, size: .caption))
+                    .font(.appFont(.light, size: .caption))
                     .foregroundColor(.secondaryText.opacity(0.8))
             }
         }

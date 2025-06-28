@@ -20,7 +20,7 @@ struct StoryCharacterCountView: View {
         HStack {
             Spacer()
             Text("\(currentInputCount)/\(maxCount)")
-                .font(.scoreDream(.light, size: .caption2))
+                .font(.appFont(.light, size: .caption2))
                 .foregroundStyle(textColor)
         }
     }

@@ -24,19 +24,19 @@ struct ReadingProgressSection: View {
                 HStack {
                     if nextLevelInfo.isMaxLevel {
                         Text("최고 레벨 달성!")
-                            .font(.scoreDream(.medium, size: .subheadline))
+                            .font(.appFont(.medium, size: .subheadline))
                             .foregroundColor(.appAccent)
                         
                         
                     } else {
                         Text("다음 레벨까지")
-                            .font(.scoreDream(.medium, size: .subheadline))
+                            .font(.appFont(.medium, size: .subheadline))
 
                     }
                     Spacer()
 
                     Text("\(storyCount)/\(nextLevelInfo.storiesNeeded)")
-                        .font(.scoreDream(.medium, size: .subheadline))
+                        .font(.appFont(.medium, size: .subheadline))
                         .foregroundColor(.primary)
                 }
                 
@@ -48,22 +48,24 @@ struct ReadingProgressSection: View {
             // 동기부여 메시지
             if nextLevelInfo.isMaxLevel {
                 Text(motivationMessage)
-                    .font(.scoreDreamCaption)
+                    .font(.appCaption)
                     .foregroundColor(.appAccent)
                     .multilineTextAlignment(.center)
             } else {
                 let parts = motivationMessage.components(separatedBy: " 레벨까지")
                 if parts.count >= 2 {
-                    (Text(parts[0])
-                        .font(.scoreDream(.medium, size: .caption))
-                        .foregroundColor(.blue) +
-                     Text(" 레벨까지\(parts[1])"))
-                        .font(.scoreDreamCaption)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
+                    (
+                        Text(parts[0])
+                            .font(.appFont(.medium, size: .caption))
+                            .foregroundColor(.blue) +
+                        Text(" 레벨까지\(parts[1])")
+                    )
+                    .font(.appCaption)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
                 } else {
                     Text(motivationMessage)
-                        .font(.scoreDreamCaption)
+                        .font(.appCaption)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
                 }

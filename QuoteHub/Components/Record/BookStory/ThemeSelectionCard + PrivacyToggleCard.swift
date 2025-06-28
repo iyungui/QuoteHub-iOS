@@ -26,11 +26,11 @@ struct ThemeSelectionCard: View {
                     
                     VStack(alignment: .leading, spacing: 4) {
                         Text("테마 선택하기")
-                            .font(.scoreDream(.medium, size: .body))
+                            .font(.appFont(.medium, size: .body))
                             .foregroundColor(.primaryText)
                         
                         Text(viewModel.themeIds.isEmpty ? "테마를 선택해주세요" : "\(viewModel.themeIds.count)개의 테마 선택됨")
-                            .font(.scoreDream(.light, size: .caption))
+                            .font(.appFont(.light, size: .caption))
                             .foregroundColor(.secondaryText)
                     }
                     
@@ -63,11 +63,11 @@ struct PrivacyToggleCard: View {
         HStack(spacing: 16) {
             VStack(alignment: .leading, spacing: 4) {
                 Text("공개 설정")
-                    .font(.scoreDream(.medium, size: .body))
+                    .font(.appFont(.medium, size: .body))
                     .foregroundColor(.primaryText)
                 
                 Text(viewModel.isPublic ? "다른 사용자들도 볼 수 있습니다" : "나만 볼 수 있습니다")
-                    .font(.scoreDream(.light, size: .caption))
+                    .font(.appFont(.light, size: .caption))
                     .foregroundColor(.secondaryText)
                     .multilineTextAlignment(.leading)
             }

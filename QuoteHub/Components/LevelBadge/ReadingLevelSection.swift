@@ -21,10 +21,10 @@ struct ReadingLevelSection: View {
                     .font(.title2)
                 
                 Text(level.title)
-                    .font(.scoreDream(.medium, size: .body))
+                    .font(.appFont(.medium, size: .body))
                 
                 Text("Lv.\(level.level)")
-                    .font(.scoreDreamCaption)
+                    .font(.appCaption)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 4)
                     .background(Color.appAccent.opacity(0.1))
@@ -57,10 +57,10 @@ struct CompactReadingLevelBadge: View {
                 .font(.caption)
             
             Text(level.title)
-                .font(.scoreDream(.medium, size: .caption2))
+                .font(.appFont(.medium, size: .caption2))
             
             Text("Lv.\(level.level)")
-                .font(.scoreDream(.bold, size: .caption2))
+                .font(.appFont(.bold, size: .caption2))
                 .padding(.horizontal, 4)
                 .padding(.vertical, 2)
                 .background(Color.appAccent.opacity(0.1))
@@ -104,7 +104,7 @@ struct LevelStatisticsView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("현재 레벨")
-                        .font(.scoreDream(.light, size: .caption))
+                        .font(.appFont(.light, size: .caption))
                         .foregroundColor(.secondary)
                     
                     HStack(spacing: 6) {
@@ -112,10 +112,10 @@ struct LevelStatisticsView: View {
                             .font(.title3)
                         
                         Text(level.title)
-                            .font(.scoreDream(.bold, size: .subheadline))
+                            .font(.appFont(.bold, size: .subheadline))
                         
                         Text("Lv.\(level.level)")
-                            .font(.scoreDream(.medium, size: .caption))
+                            .font(.appFont(.medium, size: .caption))
                             .padding(.horizontal, 6)
                             .padding(.vertical, 2)
                             .background(Color.appAccent.opacity(0.1))
@@ -129,11 +129,11 @@ struct LevelStatisticsView: View {
                 // 총 기록 수
                 VStack(alignment: .trailing, spacing: 4) {
                     Text("총 기록")
-                        .font(.scoreDream(.light, size: .caption))
+                        .font(.appFont(.light, size: .caption))
                         .foregroundColor(.secondary)
                     
                     Text("\(storyCount)권")
-                        .font(.scoreDream(.bold, size: .subheadline))
+                        .font(.appFont(.bold, size: .subheadline))
                         .foregroundColor(.primary)
                 }
             }
@@ -148,12 +148,12 @@ struct LevelStatisticsView: View {
                 VStack(spacing: 8) {
                     HStack {
                         Text("다음 레벨: \(nextLevelInfo.nextLevelTitle)")
-                            .font(.scoreDream(.medium, size: .subheadline))
+                            .font(.appFont(.medium, size: .subheadline))
                         
                         Spacer()
                         
                         Text("\(storiesLeft)권 남음")
-                            .font(.scoreDream(.light, size: .caption))
+                            .font(.appFont(.light, size: .caption))
                             .foregroundColor(.secondary)
                     }
                     
@@ -170,11 +170,11 @@ struct LevelStatisticsView: View {
                 // 최고 레벨 달성
                 VStack(spacing: 8) {
                     Text("🌟 최고 레벨 달성! 🌟")
-                        .font(.scoreDream(.bold, size: .subheadline))
+                        .font(.appFont(.bold, size: .subheadline))
                         .foregroundColor(.appAccent)
                     
                     Text("코스모스만큼 광활한 지식을 쌓으셨어요!")
-                        .font(.scoreDream(.light, size: .caption))
+                        .font(.appFont(.light, size: .caption))
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
                 }
@@ -223,21 +223,21 @@ struct StoryCardWithUserLevel: View {
         VStack(alignment: .leading, spacing: 12) {
             // 스토리 내용
             Text(story.firstQuoteText)
-                .font(.scoreDream(.medium, size: .body))
+                .font(.appFont(.medium, size: .body))
                 .lineLimit(3)
             
             
             // 작성자 정보 + 레벨
             HStack {
                 Text(story.userId.nickname)
-                    .font(.scoreDream(.medium, size: .subheadline))
+                    .font(.appFont(.medium, size: .subheadline))
                 
                 CompactReadingLevelBadge(storyCount: authorStoryCount)
                 
                 Spacer()
                 
                 Text(story.createdAt.prefix(10))
-                    .font(.scoreDreamCaption)
+                    .font(.appCaption)
                     .foregroundColor(.secondary)
             }
         }
@@ -257,7 +257,7 @@ struct UserStatsView: View {
     var body: some View {
         VStack(spacing: 20) {
             Text("독서 통계")
-                .font(.scoreDream(.bold, size: .title2))
+                .font(.appFont(.bold, size: .title2))
             
             LevelStatisticsView(storyCount: storyCount)
             
@@ -270,26 +270,26 @@ struct UserStatsView: View {
     private var monthlyProgress: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("이번 달 진행 상황")
-                .font(.scoreDream(.bold, size: .subheadline))
+                .font(.appFont(.bold, size: .subheadline))
             
             // 이번 달 목표 vs 실제
             HStack {
                 VStack(alignment: .leading) {
                     Text("목표")
-                        .font(.scoreDreamCaption)
+                        .font(.appCaption)
                         .foregroundColor(.secondary)
                     Text("5권")
-                        .font(.scoreDream(.bold, size: .body))
+                        .font(.appFont(.bold, size: .body))
                 }
                 
                 Spacer()
                 
                 VStack(alignment: .trailing) {
                     Text("달성")
-                        .font(.scoreDreamCaption)
+                        .font(.appCaption)
                         .foregroundColor(.secondary)
                     Text("3권")
-                        .font(.scoreDream(.bold, size: .body))
+                        .font(.appFont(.bold, size: .body))
                         .foregroundColor(.appAccent)
                 }
             }
@@ -353,7 +353,7 @@ struct ReadingLevelExamplesView: View {
     private var storyCountSlider: some View {
         VStack(spacing: 12) {
             Text("스토리 개수: \(selectedStoryCount)")
-                .font(.scoreDream(.bold, size: .subheadline))
+                .font(.appFont(.bold, size: .subheadline))
             
             Slider(value: Binding(
                 get: { Double(selectedStoryCount) },
@@ -371,7 +371,7 @@ struct ReadingLevelExamplesView: View {
     private func sectionTitle(_ title: String) -> some View {
         HStack {
             Text(title)
-                .font(.scoreDream(.bold, size: .body))
+                .font(.appFont(.bold, size: .body))
                 .foregroundColor(.primary)
             Spacer()
         }

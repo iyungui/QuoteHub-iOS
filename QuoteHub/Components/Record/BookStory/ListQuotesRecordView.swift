@@ -69,7 +69,7 @@ struct ListQuotesRecordView: View {
             HStack {
                 if let page = quote.page {
                     Text("p. \(page)")
-                        .font(.scoreDream(.light, size: .caption))
+                        .font(.appFont(.light, size: .caption))
                         .foregroundColor(.secondaryText)
                 }
                 Spacer()
@@ -95,7 +95,7 @@ struct ListQuotesRecordView: View {
             // Quote 텍스트
             VStack(alignment: .leading, spacing: 8) {
                 Text(quote.quote)
-                    .font(.scoreDream(.light, size: .callout))
+                    .font(.appFont(.light, size: .callout))
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
@@ -119,11 +119,11 @@ struct ListQuotesRecordView: View {
                 TextField(
                     text: $formViewModel.currentQuotePage,
                     prompt: Text("p. (선택)")
-                        .font(.scoreDream(.extraLight, size: .subheadline))
+                        .font(.appFont(.extraLight, size: .subheadline))
                         .foregroundStyle(Color.secondaryText.opacity(0.7))
                 ) { }
                 .focused(quotePageAndTextFocused, equals: .quotePage)
-                .font(.scoreDream(.regular, size: .callout))
+                .font(.appFont(.regular, size: .callout))
                 .keyboardType(.numberPad)
                 .submitLabel(.next)
                 .onSubmit {
@@ -142,7 +142,7 @@ struct ListQuotesRecordView: View {
                     formViewModel.addCurrentQuote()
                 } label: {
                     Text("추가")
-                        .font(.scoreDream(.medium, size: .caption))
+                        .font(.appFont(.medium, size: .caption))
                         .foregroundColor(formViewModel.currentQuoteText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? .secondary.opacity(0.5) : .blue)
                 }
                 .disabled(formViewModel.currentQuoteText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)

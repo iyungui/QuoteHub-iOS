@@ -100,7 +100,7 @@ struct UpdateProfileView: View {
                 photoLibrary: .shared()
             ) {
                 Text("사진 변경")
-                    .font(.scoreDream(.medium, size: .subheadline))
+                    .font(.appFont(.medium, size: .subheadline))
                     .foregroundColor(.blue)
             }
             .disabled(userViewModel.isLoadingProfile)
@@ -115,11 +115,11 @@ struct UpdateProfileView: View {
             // 닉네임 입력
             VStack(alignment: .leading, spacing: 8) {
                 Text("닉네임")
-                    .font(.scoreDream(.medium, size: .subheadline))
+                    .font(.appFont(.medium, size: .subheadline))
                     .foregroundColor(.primary)
                 
                 TextField("닉네임을 입력하세요", text: $nickname)
-                    .font(.scoreDream(.regular, size: .body))
+                    .font(.appFont(.regular, size: .body))
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .disabled(userViewModel.isLoadingProfile)
             }
@@ -127,11 +127,11 @@ struct UpdateProfileView: View {
             // 상태메시지 입력
             VStack(alignment: .leading, spacing: 8) {
                 Text("상태메시지")
-                    .font(.scoreDream(.medium, size: .subheadline))
+                    .font(.appFont(.medium, size: .subheadline))
                     .foregroundColor(.primary)
                 
                 TextField("상태메시지를 입력하세요", text: $statusMessage, axis: .vertical)
-                    .font(.scoreDream(.regular, size: .body))
+                    .font(.appFont(.regular, size: .body))
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .lineLimit(2...4)
                     .disabled(userViewModel.isLoadingProfile)
@@ -144,7 +144,7 @@ struct UpdateProfileView: View {
                         .scaleEffect(0.8)
                     
                     Text(userViewModel.loadingMessage ?? "저장 중...")
-                        .font(.scoreDream(.regular, size: .subheadline))
+                        .font(.appFont(.regular, size: .subheadline))
                         .foregroundColor(.secondary)
                 }
                 .padding(.top, 10)

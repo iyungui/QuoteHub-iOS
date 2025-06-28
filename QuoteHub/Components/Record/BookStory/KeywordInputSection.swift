@@ -17,7 +17,7 @@ struct KeywordInputSection: View {
             HStack {
                 TextField("#키워드 입력", text: $formViewModel.inlineKeywordInput)
                     .focused(keywordFocused, equals: .keyword)
-                    .font(.scoreDream(.medium, size: .callout))
+                    .font(.appFont(.medium, size: .callout))
                     .submitLabel(.continue)
                     .onChange(of: formViewModel.inlineKeywordInput) { _, newValue in
                         formViewModel.processInlineKeywordInput(newValue)
@@ -36,7 +36,7 @@ struct KeywordInputSection: View {
             if let feedback = formViewModel.inlineKeywordFeedback {
                 HStack {
                     Text(feedback)
-                        .font(.scoreDream(.medium, size: .caption2))
+                        .font(.appFont(.medium, size: .caption2))
                         .foregroundColor(.orange)
                     Spacer()
                 }
@@ -68,7 +68,7 @@ struct KeywordInputSection: View {
     private func keywordChip(keyword: String) -> some View {
         HStack(spacing: 4) {
             Text("#\(keyword)")
-                .font(.scoreDream(.medium, size: .caption))
+                .font(.appFont(.medium, size: .caption))
                 .foregroundColor(.secondary)
             
             Button(action: {

@@ -97,7 +97,7 @@ struct ThemeView: View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
                     Text(theme.name)
-                        .font(.scoreDream(.bold, size: isCompact ? .subheadline : .body))
+                        .font(.appFont(.bold, size: isCompact ? .subheadline : .body))
                         .foregroundColor(.white)
                         .lineLimit(1)
                         .shadow(color: .black.opacity(0.5), radius: 3, x: 0, y: 2)
@@ -112,7 +112,7 @@ struct ThemeView: View {
                 }
                 if let description = theme.description {
                     Text(description)
-                        .font(.scoreDream(.light, size: isCompact ? .footnote : .caption))
+                        .font(.appFont(.light, size: isCompact ? .footnote : .caption))
                         .foregroundColor(.white.opacity(0.95))
                         .lineLimit(2)
                         .shadow(color: .black.opacity(0.5), radius: 2, x: 0, y: 1)
@@ -121,7 +121,7 @@ struct ThemeView: View {
                     Spacer()
                     
                     Text(theme.createdAt.prefix(10))
-                        .font(.scoreDream(.light, size: isCompact ? .caption2 : .footnote))
+                        .font(.appFont(.light, size: isCompact ? .caption2 : .footnote))
                         .foregroundColor(.white.opacity(0.8))
                         .shadow(color: .black.opacity(0.4), radius: 1, x: 0, y: 1)
                 }
@@ -136,7 +136,7 @@ struct ThemeView: View {
             ProfileImage(profileImageURL: theme.userId.profileImage, size: 24)
 
             Text(theme.userId.nickname)
-                .font(.scoreDream(.medium, size: .caption))
+                .font(.appFont(.medium, size: .caption))
                 .fontWeight(.medium)
                 .foregroundColor(.white)
                 .lineLimit(1)

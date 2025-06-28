@@ -53,20 +53,20 @@ struct BookSearchResultRowView: View {
     private var bookInfoView: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(book.title)
-                .font(.scoreDream(.medium, size: .subheadline))
+                .font(.appFont(.medium, size: .subheadline))
                 .foregroundColor(.primaryText)
                 .lineLimit(2)
                 .multilineTextAlignment(.leading)
             
             if !book.author.isEmpty {
                 Text(book.author.joined(separator: ", "))
-                    .font(.scoreDream(.medium, size: .caption))
+                    .font(.appFont(.medium, size: .caption))
                     .foregroundColor(.secondaryText)
                     .lineLimit(1)
             }
             
             Text("출판사: \(book.publisher)")
-                .font(.scoreDreamCaption)
+                .font(.appCaption)
                 .foregroundColor(.secondaryText.opacity(0.8))
                 .lineLimit(1)
         }

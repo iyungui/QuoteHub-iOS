@@ -57,12 +57,12 @@ struct FriendLibraryKeywordsView: View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text("친구 키워드")
-                    .font(.scoreDream(.bold, size: .title3))
+                    .font(.appFont(.bold, size: .title3))
                     .foregroundColor(.primaryText)
                 
                 if let keywordsViewModel = keywordsViewModel {
                     Text("\(keywordsViewModel.keywords.count)개의 키워드")
-                        .font(.scoreDream(.medium, size: .caption))
+                        .font(.appFont(.medium, size: .caption))
                         .foregroundColor(.secondaryText)
                 }
             }
@@ -87,7 +87,7 @@ struct FriendLibraryKeywordsView: View {
                     Image(systemName: keywordsViewModel?.sortOption.systemImage ?? "textformat.abc")
                         .font(.caption)
                     Text(keywordsViewModel?.sortOption.title ?? "정렬")
-                        .font(.scoreDream(.medium, size: .caption))
+                        .font(.appFont(.medium, size: .caption))
                 }
                 .foregroundColor(.brownLeather)
                 .padding(.horizontal, 8)
@@ -127,11 +127,11 @@ struct FriendLibraryKeywordsView: View {
             
             VStack(spacing: 8) {
                 Text("키워드가 없어요")
-                    .font(.scoreDream(.bold, size: .title3))
+                    .font(.appFont(.bold, size: .title3))
                     .foregroundColor(.primaryText)
                 
                 Text("친구가 아직 키워드를 사용한\n북스토리를 작성하지 않았어요")
-                    .font(.scoreDream(.medium, size: .subheadline))
+                    .font(.appFont(.medium, size: .subheadline))
                     .foregroundColor(.secondaryText)
                     .multilineTextAlignment(.center)
             }

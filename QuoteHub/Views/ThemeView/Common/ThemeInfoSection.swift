@@ -13,13 +13,13 @@ struct ThemeInfoSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(theme.name)
-                .font(.scoreDream(.bold, size: .title1))
+                .font(.appFont(.bold, size: .title1))
                 .foregroundColor(.white)
                 .shadow(color: .black.opacity(0.5), radius: 4, x: 0, y: 2)
             
             if let description = theme.description, !description.isEmpty {
                 Text(description)
-                    .font(.scoreDream(.medium, size: .body))
+                    .font(.appFont(.medium, size: .body))
                     .foregroundColor(.white.opacity(0.9))
                     .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
             }
@@ -30,7 +30,7 @@ struct ThemeInfoSection: View {
                 
                 // 생성일
                 Text("생성일: \(theme.createdAt.prefix(10))")
-                    .font(.scoreDream(.light, size: .caption))
+                    .font(.appFont(.light, size: .caption))
                     .foregroundColor(.white.opacity(0.7))
             }
         }

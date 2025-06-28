@@ -160,7 +160,7 @@ struct CreateThemeView: View {
                                 .foregroundColor(.brownLeather.opacity(0.6))
                             
                             Text("테마 이미지를 선택해주세요")
-                                .font(.scoreDream(.light, size: .subheadline))
+                                .font(.appFont(.light, size: .subheadline))
                                 .foregroundColor(.secondaryText)
                         }
                     )
@@ -180,7 +180,7 @@ struct CreateThemeView: View {
                     .foregroundColor(.brownLeather)
                 
                 Text(formViewModel.inputImage == nil ? "이미지 선택" : "이미지 변경")
-                    .font(.scoreDream(.medium, size: .subheadline))
+                    .font(.appFont(.medium, size: .subheadline))
                     .foregroundColor(.primaryText)
                 
                 Spacer()
@@ -221,7 +221,7 @@ struct CreateThemeView: View {
                             .onSubmit {
                                 focusField = .content
                             }
-                            .font(.scoreDream(.medium, size: .body))
+                            .font(.appFont(.medium, size: .body))
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
@@ -239,7 +239,7 @@ struct CreateThemeView: View {
                     HStack {
                         Spacer()
                         Text("\(formViewModel.titleCount)/\(formViewModel.titleMaxCount)")
-                            .font(.scoreDream(.light, size: .caption2))
+                            .font(.appFont(.light, size: .caption2))
                             .foregroundColor(formViewModel.titleCount >= formViewModel.titleMaxCount ? .orange : .secondaryText)
                     }
                 }
@@ -262,7 +262,7 @@ struct CreateThemeView: View {
                         
                         if formViewModel.content.isEmpty {
                             Text("이 테마는 어떤 내용을 담고 있나요?")
-                                .font(.scoreDream(.light, size: .body))
+                                .font(.appFont(.light, size: .body))
                                 .foregroundColor(.secondaryText.opacity(0.7))
                                 .padding(.horizontal, 16)
                                 .padding(.top, 16)
@@ -270,7 +270,7 @@ struct CreateThemeView: View {
                         }
                         
                         TextEditor(text: $formViewModel.content)
-                            .font(.scoreDream(.regular, size: .body))
+                            .font(.appFont(.regular, size: .body))
                             .padding(.horizontal, 12)
                             .padding(.vertical, 12)
                             .background(Color.clear)
@@ -285,7 +285,7 @@ struct CreateThemeView: View {
                     HStack {
                         Spacer()
                         Text("\(formViewModel.contentCount)/\(formViewModel.contentMaxCount)")
-                            .font(.scoreDream(.light, size: .caption2))
+                            .font(.appFont(.light, size: .caption2))
                             .foregroundColor(formViewModel.contentCount >= formViewModel.contentMaxCount ? .orange : .secondaryText)
                     }
                 }
@@ -304,11 +304,11 @@ struct CreateThemeView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(formViewModel.isPublic ? "공개 테마" : "비공개 테마")
-                        .font(.scoreDream(.medium, size: .body))
+                        .font(.appFont(.medium, size: .body))
                         .foregroundColor(.primaryText)
                     
                     Text(formViewModel.isPublic ? "다른 사용자들도 볼 수 있습니다" : "나만 볼 수 있습니다")
-                        .font(.scoreDream(.light, size: .caption))
+                        .font(.appFont(.light, size: .caption))
                         .foregroundColor(.secondaryText)
                 }
                 
@@ -338,7 +338,7 @@ struct CreateThemeView: View {
                 .font(.body)
             
             Text(message)
-                .font(.scoreDream(.medium, size: .subheadline))
+                .font(.appFont(.medium, size: .subheadline))
                 .foregroundColor(.orange)
 
             Spacer()
@@ -368,12 +368,12 @@ struct CreateThemeView: View {
             
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
-                    .font(.scoreDream(.bold, size: .body))
+                    .font(.appFont(.bold, size: .body))
                     .foregroundColor(.primaryText)
                 
                 if let subtitle = subtitle {
                     Text(subtitle)
-                        .font(.scoreDream(.light, size: .caption))
+                        .font(.appFont(.light, size: .caption))
                         .foregroundColor(.secondaryText.opacity(0.8))
                 }
             }

@@ -27,7 +27,7 @@ struct CommentEditView: View {
             VStack(spacing: 16) {
                 TextField("댓글을 수정하세요", text: $editedContent, axis: .vertical)
                     .focused($isTextFieldFocused)
-                    .font(.scoreDream(.regular, size: .body))
+                    .font(.appFont(.regular, size: .body))
                     .lineLimit(5...10)
                     .padding(16)
                     .background(

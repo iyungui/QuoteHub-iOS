@@ -37,7 +37,7 @@ struct LibraryProfileSection: View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(alignment: .center) {
                 Text(user?.nickname ?? "닉네임")
-                    .font(.scoreDream(.bold, size: .title3))
+                    .font(.appFont(.bold, size: .title3))
                     .lineLimit(1)
                 
                 Button {
@@ -51,7 +51,7 @@ struct LibraryProfileSection: View {
             }
             
             Text(user?.statusMessage ?? "상태메시지")
-                .font(.scoreDream(.regular, size: .subheadline))
+                .font(.appFont(.regular, size: .subheadline))
                 .lineLimit(2)
                 .foregroundColor(.secondary)
         }

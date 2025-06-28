@@ -19,11 +19,11 @@ struct ThemeEmptyStateView: View {
             
             VStack(spacing: 8) {
                 Text("아직 북스토리가 없어요")
-                    .font(.scoreDream(.bold, size: .title3))
+                    .font(.appFont(.bold, size: .title3))
                     .foregroundColor(.primaryText)
                 
                 Text(emptyMessage)
-                    .font(.scoreDream(.medium, size: .subheadline))
+                    .font(.appFont(.medium, size: .subheadline))
                     .foregroundColor(.secondaryText)
                     .multilineTextAlignment(.center)
             }

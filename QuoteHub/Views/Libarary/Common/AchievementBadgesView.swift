@@ -26,11 +26,11 @@ struct AchievementBadgesView: View {
                         .symbolEffect(.bounce, value: animateBadges)
                     
                     Text("달성한 배지")
-                        .font(.scoreDream(.bold, size: .title3))
+                        .font(.appFont(.bold, size: .title3))
                 }
                 
                 Text("독서 레벨에 따라 새로운 배지를 획득해보세요!")
-                    .font(.scoreDream(.regular, size: .caption))
+                    .font(.appFont(.regular, size: .caption))
                     .minimumScaleFactor(0.8)
                     .foregroundStyle(.secondary)
             }
@@ -135,7 +135,7 @@ struct AchievementBadge: View {
             // 배지 제목
             if isUnlocked {
                 Text(levelInfo.title)
-                    .font(.scoreDream(.medium, size: .caption))
+                    .font(.appFont(.medium, size: .caption))
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
             } else {

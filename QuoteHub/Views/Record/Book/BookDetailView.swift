@@ -180,7 +180,7 @@ struct BookDetailView: View {
                 // Book Title
                 VStack(spacing: 8) {
                     Text(book.title)
-                        .font(.scoreDream(.bold, size: book.title.count > 20 ? .body : .title2))
+                        .font(.appFont(.bold, size: book.title.count > 20 ? .body : .title2))
                         .foregroundColor(.white)
                         .multilineTextAlignment(.center)
                         .lineLimit(2)
@@ -188,7 +188,7 @@ struct BookDetailView: View {
                     
                     if !book.author.isEmpty {
                         Text(book.author.joined(separator: ", "))
-                            .font(.scoreDream(.medium, size: .body))
+                            .font(.appFont(.medium, size: .body))
                             .foregroundColor(.white.opacity(0.9))
                             .multilineTextAlignment(.center)
                             .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
@@ -214,7 +214,7 @@ struct BookDetailView: View {
                                 .foregroundColor(.brownLeather.opacity(0.7))
                             
                             Text("표지 없음")
-                                .font(.scoreDream(.light, size: .caption))
+                                .font(.appFont(.light, size: .caption))
                                 .foregroundColor(.brownLeather.opacity(0.7))
                         }
                     )
@@ -286,7 +286,7 @@ struct BookDetailView: View {
             cardHeader(title: "책 소개", icon: "text.quote")
             
             Text(book.introduction)
-                .font(.scoreDream(.regular, size: .subheadline))
+                .font(.appFont(.regular, size: .subheadline))
                 .foregroundColor(.primaryText)
                 .lineLimit(nil)
                 .lineSpacing(8)
@@ -310,7 +310,7 @@ struct BookDetailView: View {
                             .foregroundColor(.white)
                         
                         Text("도서 정보 보기")
-                            .font(.scoreDream(.medium, size: .subheadline))
+                            .font(.appFont(.medium, size: .subheadline))
                             .foregroundColor(.white)
                         
                         Spacer()
@@ -343,7 +343,7 @@ struct BookDetailView: View {
                             .foregroundColor(.white)
 
                         Text("북스토리 기록")
-                            .font(.scoreDream(.medium, size: .subheadline))
+                            .font(.appFont(.medium, size: .subheadline))
                             .foregroundColor(.white)
 
                         Spacer()
@@ -387,7 +387,7 @@ struct BookDetailView: View {
                         .foregroundColor(.secondaryText.opacity(0.7))
                     
                     Text("도서 상세 정보는 외부 링크를 통해 확인하실 수 있습니다.")
-                        .font(.scoreDream(.light, size: .footnote))
+                        .font(.appFont(.light, size: .footnote))
                         .foregroundColor(.secondaryText)
                     
                     Spacer()
@@ -400,7 +400,7 @@ struct BookDetailView: View {
                             .foregroundColor(.secondaryText.opacity(0.7))
                         
                         Text("ISBN으로 다른 서점에서도 찾아보실 수 있습니다.")
-                            .font(.scoreDream(.light, size: .footnote))
+                            .font(.appFont(.light, size: .footnote))
                             .foregroundColor(.secondaryText)
                         
                         Spacer()
@@ -429,7 +429,7 @@ struct BookDetailView: View {
                     .foregroundColor(.secondaryText.opacity(0.6))
                 
                 Text("출처: 카카오")
-                    .font(.scoreDream(.light, size: .caption2))
+                    .font(.appFont(.light, size: .caption2))
                     .foregroundColor(.secondaryText.opacity(0.8))
             }
             .padding(.horizontal, 12)
@@ -452,7 +452,7 @@ struct BookDetailView: View {
                 .frame(width: 24, height: 24)
             
             Text(title)
-                .font(.scoreDream(.bold, size: .body))
+                .font(.appFont(.bold, size: .body))
                 .foregroundColor(.primaryText)
             
             Spacer()
@@ -483,11 +483,11 @@ struct BookDetailView: View {
             
             VStack(alignment: .leading, spacing: 2) {
                 Text(label)
-                    .font(.scoreDream(.medium, size: .subheadline))
+                    .font(.appFont(.medium, size: .subheadline))
                     .foregroundColor(.secondaryText)
                 
                 Text(value)
-                    .font(.scoreDream(.regular, size: .footnote))
+                    .font(.appFont(.regular, size: .footnote))
                     .foregroundColor(.primaryText)
                     .lineLimit(nil)
             }

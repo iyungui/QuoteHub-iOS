@@ -38,11 +38,11 @@ struct CommentRowView: View {
                     // 사용자 정보와 작성 시간
                     HStack(spacing: 8) {
                         Text(comment.userId.nickname)
-                            .font(.scoreDream(.bold, size: .subheadline))
+                            .font(.appFont(.bold, size: .subheadline))
                             .foregroundColor(.primaryText)
                         
                         Text(timeAgoString(from: comment.updatedAt))
-                            .font(.scoreDream(.light, size: .caption2))
+                            .font(.appFont(.light, size: .caption2))
                             .foregroundColor(.secondaryText.opacity(0.8))
                         
                         Spacer()
@@ -63,7 +63,7 @@ struct CommentRowView: View {
                     
                     // 댓글 내용
                     Text(comment.content)
-                        .font(.scoreDream(.regular, size: .subheadline))
+                        .font(.appFont(.regular, size: .subheadline))
                         .foregroundColor(.primaryText.opacity(0.9))
                         .lineSpacing(4)
                         .multilineTextAlignment(.leading)
@@ -74,7 +74,7 @@ struct CommentRowView: View {
                             onReply(comment)
                         } label: {
                             Text("답글")
-                                .font(.scoreDream(.medium, size: .caption))
+                                .font(.appFont(.medium, size: .caption))
                                 .foregroundColor(.brownLeather.opacity(0.8))
                         }
                         .buttonStyle(.plain)

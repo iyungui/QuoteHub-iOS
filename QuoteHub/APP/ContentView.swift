@@ -10,6 +10,8 @@ import SwiftUI
 // ContentView 에서는 앱 화면 분기처리
 
 struct ContentView: View {
+    @AppStorage("selectedFontType") private var selectedFontType: String = FontType.scoreDream.rawValue
+
     @State private var versionManager = AppVersionManager()
 
     @Environment(UserViewModel.self) private var userViewModel
@@ -83,6 +85,7 @@ struct ContentView: View {
                 // 둘 다 해당되지 않는다면 OnboardingView 로 이동
                 if authManager.isUserAuthenticated || authManager.isGuestMode {
                     MainView()
+                        
                 } else {
                     OnboardingView()
                 }
@@ -96,6 +99,7 @@ struct ContentView: View {
             } message: {
                 Text("새 버전 \(versionManager.latestVersion)이 출시되었습니다.\n앱을 계속 사용하려면 업데이트해주세요.")
             }
+            .id(selectedFontType) // 폰트 변경시 전체 뷰 트리 재생성
         }
     }
 }

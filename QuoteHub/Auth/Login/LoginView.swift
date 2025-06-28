@@ -21,12 +21,12 @@ struct LoginView: View {
             Spacer()
             
             Text("지금 바로 나만의 문장을 기록해보세요.")
-                .font(.scoreDreamTitle)
+                .font(.appTitle)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 20)
             
             Text("문장을 모아 지혜를 담다, 문장모아")
-                .font(.scoreDream(.medium, size: .body))
+                .font(.appBody)
                 .padding(.horizontal, 20)
 
             Spacer().frame(height: 35)
@@ -46,7 +46,7 @@ struct LoginView: View {
                 }
             } label: {
                 Text("나중에 하기")
-                    .font(.scoreDream(.regular, size: .callout))
+                    .font(.appFont(.regular, size: .callout))
                     .underline()
                     .foregroundColor(.gray)
             }

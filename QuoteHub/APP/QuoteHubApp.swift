@@ -62,19 +62,10 @@ struct QuoteHubApp: App {
                 .environment(blockReportViewModel)
                 .environment(myBookStoriesViewModel)
                 .environment(publicBookStoriesViewModel)
-                .onAppear { loadFontsName() }
         }
 //        .modelContainer(sharedModelContainer)
     }
     
-    private func loadFontsName() {
-        for family in UIFont.familyNames {
-            print(family)
-            for names in UIFont.fontNames(forFamilyName: family) {
-                print("== \(names)")
-            }
-        }
-    }
 }
 
 

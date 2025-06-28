@@ -31,7 +31,7 @@ struct CustomTextEditor: View {
             // 플레이스 홀더
             if text.isEmpty {
                 Text(placeholder)
-                    .font(.scoreDream(.extraLight, size: .callout))
+                    .font(.appFont(.extraLight, size: .callout))
                     .foregroundStyle(Color.secondaryText.opacity(0.7))
                     .padding(.horizontal, 16)
                     .padding(.top, 20.5)
@@ -40,7 +40,7 @@ struct CustomTextEditor: View {
             }
             
             TextEditor(text: $text)
-                .font(.scoreDream(.light, size: .callout))
+                .font(.appFont(.light, size: .callout))
                 .padding(.horizontal, 12)
                 .padding(.vertical, 12)
                 .scrollContentBackground(.hidden)

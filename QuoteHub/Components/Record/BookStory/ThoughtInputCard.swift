@@ -23,7 +23,7 @@ struct ThoughtInputCard: View {
                 }
                 
                 Text("\(book.title)을(를) 읽고...")
-                    .font(.scoreDream(.medium, size: .body))
+                    .font(.appFont(.medium, size: .body))
                     .foregroundColor(.primaryText)
                 
                 if viewModel.selectedImages.isEmpty {
@@ -197,7 +197,7 @@ struct StoryImageCell: View {
                 Spacer()
                 HStack {
                     Text("\(index + 1)")
-                        .font(.scoreDream(.bold, size: .caption2))
+                        .font(.appFont(.bold, size: .caption2))
                         .foregroundColor(.white)
                         .padding(.horizontal, 4)
                         .padding(.vertical, 1)

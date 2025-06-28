@@ -15,7 +15,7 @@ struct StoryCreateGuideSection: View {
     
     var body: some View {
         Text(message)
-            .font(.scoreDream(.regular, size: .caption))
+            .font(.appFont(.regular, size: .caption))
             .foregroundStyle(Color.blue)
             .multilineTextAlignment(.center)
             .padding(.horizontal, 12)

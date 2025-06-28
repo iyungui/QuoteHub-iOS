@@ -59,12 +59,12 @@ struct FriendSearchBookStoriesView: View {
             // 키워드 정보
             VStack(alignment: .leading, spacing: 8) {
                 Text("친구의 '\(keyword)' 키워드")
-                    .font(.scoreDream(.bold, size: .title2))
+                    .font(.appFont(.bold, size: .title2))
                     .foregroundColor(.primaryText)
                 
                 if !searchViewModel.isLoading {
                     Text("\(searchViewModel.bookStories.count)개의 북스토리")
-                        .font(.scoreDream(.medium, size: .subheadline))
+                        .font(.appFont(.medium, size: .subheadline))
                         .foregroundColor(.secondaryText)
                 }
             }
@@ -144,11 +144,11 @@ struct FriendSearchGridView: View {
             
             VStack(spacing: 8) {
                 Text("검색 결과가 없어요")
-                    .font(.scoreDream(.bold, size: .title3))
+                    .font(.appFont(.bold, size: .title3))
                     .foregroundColor(.primaryText)
                 
                 Text("친구가 '\(searchViewModel.keyword)' 키워드를 사용한\n북스토리가 없습니다")
-                    .font(.scoreDream(.medium, size: .subheadline))
+                    .font(.appFont(.medium, size: .subheadline))
                     .foregroundColor(.secondaryText)
                     .multilineTextAlignment(.center)
             }
@@ -197,11 +197,11 @@ struct FriendSearchListView: View {
             
             VStack(spacing: 8) {
                 Text("검색 결과가 없어요")
-                    .font(.scoreDream(.bold, size: .title3))
+                    .font(.appFont(.bold, size: .title3))
                     .foregroundColor(.primaryText)
                 
                 Text("친구가 '\(searchViewModel.keyword)' 키워드를 사용한\n북스토리가 없습니다")
-                    .font(.scoreDream(.medium, size: .subheadline))
+                    .font(.appFont(.medium, size: .subheadline))
                     .foregroundColor(.secondaryText)
                     .multilineTextAlignment(.center)
             }

@@ -55,11 +55,11 @@ struct StorySettingRecordView: View {
             HStack(spacing: 12) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("마음에 남은 이야기 적기")
-                        .font(.scoreDream(.medium, size: .body))
+                        .font(.appFont(.medium, size: .body))
                         .foregroundColor(.primaryText)
                     
                     Text("이미지와 함께 북스토리를 풍성하게 만들 수 있어요.")
-                        .font(.scoreDream(.light, size: .caption))
+                        .font(.appFont(.light, size: .caption))
                         .foregroundColor(.secondaryText)
                 }
                 
@@ -92,7 +92,7 @@ extension StorySettingRecordView {
                     .foregroundStyle(Color.blue)
                     
                 Text("이대로 작성")
-                    .font(.scoreDream(.medium, size: .callout))
+                    .font(.appFont(.medium, size: .callout))
                     .foregroundStyle(Color.blue)
             }
         }

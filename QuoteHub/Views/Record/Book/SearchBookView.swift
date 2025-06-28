@@ -157,7 +157,7 @@ struct SearchBookView: View {
             
             VStack(spacing: 6) {
                 Text("검색결과가 없습니다")
-                    .font(.scoreDream(.medium, size: .title3))
+                    .font(.appFont(.medium, size: .title3))
                     .foregroundStyle(Color.primaryText)
                 
                 Text("다른 키워드로 검색해보세요")
@@ -179,7 +179,7 @@ struct SearchBookView: View {
                 .tint(.appAccent)
             
             Text("더 많은 책을 불러오는 중...")
-                .font(.scoreDream(.regular, size: .subheadline))
+                .font(.appFont(.regular, size: .subheadline))
                 .foregroundColor(.secondaryText)
         }
         .frame(maxWidth: .infinity)

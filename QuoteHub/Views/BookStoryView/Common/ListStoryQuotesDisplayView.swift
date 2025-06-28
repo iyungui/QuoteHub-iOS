@@ -27,7 +27,7 @@ struct ListStoryQuotesDisplayView: View {
             if let page = quote.page {
                 HStack {
                     Text("p. \(page)")
-                        .font(.scoreDream(.light, size: .caption))
+                        .font(.appFont(.light, size: .caption))
                         .foregroundColor(.secondaryText)
                     Spacer()
                 }
@@ -42,7 +42,7 @@ struct ListStoryQuotesDisplayView: View {
             // Quote 텍스트
             VStack(alignment: .leading, spacing: 8) {
                 Text(quote.quote)
-                    .font(.scoreDream(.light, size: .subheadline))
+                    .font(.appFont(.light, size: .subheadline))
                     .foregroundColor(.primaryText)
                     .lineSpacing(6)
                     .multilineTextAlignment(.leading)

@@ -141,11 +141,11 @@ struct CarouselQuotesRecordView: View {
             TextField(
                 text: formViewModel.pageBinding(for: quote.id),
                 prompt: Text("p. (선택)")
-                    .font(.scoreDream(.extraLight, size: .subheadline))
+                    .font(.appFont(.extraLight, size: .subheadline))
                     .foregroundStyle(Color.secondaryText.opacity(0.7))
             ) { }
             .focused(focusFields, equals: .quotePage)
-            .font(.scoreDream(.regular, size: .callout))
+            .font(.appFont(.regular, size: .callout))
             .keyboardType(.numberPad)
             .submitLabel(.next) // 키보드에 '다음'버튼으로 표시
             .onSubmit {

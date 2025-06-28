@@ -119,11 +119,11 @@ struct HomeView: View {
     private var heroSection: some View {
         VStack(spacing: 12) {
             Text("오늘도 좋은 문장과 함께")
-                .font(.scoreDream(.bold, size: .title3))
+                .font(.appFont(.bold, size: .title3))
                 .foregroundStyle(Color.brown)
 
             Text("사람들은 어떤 책을 읽고,\n어떤 문장을 기록했을까요?")
-                .font(.scoreDream(.regular, size: .subheadline))
+                .font(.appFont(.regular, size: .subheadline))
                 .foregroundStyle(Color.secondaryText)
                 .multilineTextAlignment(.center)
         }
@@ -152,7 +152,7 @@ struct HomeView: View {
         HStack(spacing: 15) {
             // 제목
             Text(title)
-                .font(.scoreDream(.bold, size: .title3))
+                .font(.appFont(.bold, size: .title3))
                 .foregroundColor(.primaryText)
             
             Spacer()

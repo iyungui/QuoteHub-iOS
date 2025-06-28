@@ -69,7 +69,7 @@ struct CommonStoryDisplayView: View {
                                                         .font(.system(size: 40))
                                                         .foregroundColor(.brownLeather.opacity(0.6))
                                                     Text("이미지 로딩 중...")
-                                                        .font(.scoreDream(.light, size: .caption))
+                                                        .font(.appFont(.light, size: .caption))
                                                         .foregroundColor(.secondaryText)
                                                 }
                                             )
@@ -98,12 +98,12 @@ struct CommonStoryDisplayView: View {
         VStack(alignment: .leading, spacing: 12) {
             if story.content != nil {
                 Text("나의 생각")
-                    .font(.scoreDream(.bold, size: .body))
+                    .font(.appFont(.bold, size: .body))
                     .foregroundColor(.primaryText)
             }
             
             Text(story.content ?? "")
-                .font(.scoreDream(.regular, size: .subheadline))
+                .font(.appFont(.regular, size: .subheadline))
                 .foregroundColor(.primaryText.opacity(0.8))
                 .multilineTextAlignment(.leading)
                 .lineSpacing(6)
@@ -121,13 +121,13 @@ struct CommonStoryDisplayView: View {
                 ProfileImage(profileImageURL: story.userId.profileImage, size: 60)
                 VStack(alignment: .leading, spacing: 6) {
                     Text(story.userId.nickname)
-                        .font(.scoreDream(.bold, size: .body))
+                        .font(.appFont(.bold, size: .body))
                         .foregroundColor(.primaryText)
                         .lineLimit(1)
                         .truncationMode(.tail)
                     
                     Text(story.userId.statusMessage ?? "")
-                        .font(.scoreDream(.medium, size: .subheadline))
+                        .font(.appFont(.medium, size: .subheadline))
                         .foregroundColor(.secondaryText)
                         .lineLimit(2)
                 }
@@ -170,18 +170,18 @@ struct CommonStoryDisplayView: View {
                 
                 VStack(alignment: .leading, spacing: 8) {
                     Text(story.bookId.title)
-                        .font(.scoreDream(.bold, size: .subheadline))
+                        .font(.appFont(.bold, size: .subheadline))
                         .foregroundColor(.primaryText)
                         .lineLimit(2)
                         .multilineTextAlignment(.leading)
                     
                     Text(story.bookId.author.joined(separator: ", "))
-                        .font(.scoreDream(.medium, size: .caption))
+                        .font(.appFont(.medium, size: .caption))
                         .foregroundColor(.secondaryText)
                         .lineLimit(1)
                     
                     Text(story.bookId.publisher)
-                        .font(.scoreDream(.light, size: .caption))
+                        .font(.appFont(.light, size: .caption))
                         .foregroundColor(.secondaryText.opacity(0.8))
                         .lineLimit(1)
                 }
@@ -205,7 +205,7 @@ struct CommonStoryDisplayView: View {
                 ForEach(story.keywords ?? [], id: \.self) { keyword in
                     
                     Text("#\(keyword)")
-                        .font(.scoreDream(.medium, size: .caption))
+                        .font(.appFont(.medium, size: .caption))
                         .foregroundColor(.secondary)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
@@ -228,7 +228,7 @@ struct CommonStoryDisplayView: View {
                     .foregroundColor(story.isPublic ? .brownLeather : .secondaryText)
                 
                 Text(story.isPublic ? "공개" : "비공개")
-                    .font(.scoreDream(.medium, size: .caption))
+                    .font(.appFont(.medium, size: .caption))
                     .foregroundColor(story.isPublic ? .brownLeather : .secondaryText)
             }
             .padding(.horizontal, 8)
@@ -246,7 +246,7 @@ struct CommonStoryDisplayView: View {
                     .foregroundColor(.secondaryText.opacity(0.7))
                 
                 Text("작성일: \(story.updatedAt.prefix(10))")
-                    .font(.scoreDream(.light, size: .caption))
+                    .font(.appFont(.light, size: .caption))
                     .foregroundColor(.secondaryText.opacity(0.8))
             }
         }
@@ -268,11 +268,11 @@ struct CommonStoryDisplayView: View {
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text("댓글")
-                        .font(.scoreDream(.medium, size: .callout))
+                        .font(.appFont(.medium, size: .callout))
                         .foregroundColor(.primaryText)
                     
                     Text("\(commentViewModel.commentCount)")
-                        .font(.scoreDream(.light, size: .caption))
+                        .font(.appFont(.light, size: .caption))
                         .foregroundColor(.secondaryText)
                 }
                 

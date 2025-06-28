@@ -14,7 +14,7 @@ struct KeywordTags: View {
         HStack(spacing: 4) {
             ForEach(Array(keywords.prefix(2)), id: \.self) { keyword in
                 Text("#\(keyword)")
-                    .font(.scoreDream(.medium, size: .caption2))
+                    .font(.appFont(.medium, size: .caption2))
                     .foregroundColor(.brownLeather)
                     .padding(.horizontal, 6)
                     .padding(.vertical, 2)
@@ -26,7 +26,7 @@ struct KeywordTags: View {
             
             if keywords.count > 2 {
                 Text("+\(keywords.count - 2)")
-                    .font(.scoreDream(.light, size: .caption2))
+                    .font(.appFont(.light, size: .caption2))
                     .foregroundColor(.secondaryText)
             }
         }

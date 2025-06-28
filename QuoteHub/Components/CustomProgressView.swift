@@ -39,7 +39,7 @@ struct CustomProgressView: View {
             
             if let message = message {
                 Text(message)
-                    .font(.scoreDream(.medium, size: .subheadline))
+                    .font(.appFont(.medium, size: .subheadline))
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
             }

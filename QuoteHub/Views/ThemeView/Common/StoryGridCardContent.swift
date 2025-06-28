@@ -45,13 +45,13 @@ struct StoryGridCardContent: View {
                 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(story.firstQuoteText)
-                        .font(.scoreDream(.medium, size: .caption2))
+                        .font(.appFont(.medium, size: .caption2))
                         .foregroundColor(.white)
                         .lineLimit(2)
                         .shadow(color: .black.opacity(0.5), radius: 2, x: 0, y: 1)
                     
                     Text(story.bookId.title)
-                        .font(.scoreDream(.light, size: .caption2))
+                        .font(.appFont(.light, size: .caption2))
                         .foregroundColor(.white.opacity(0.8))
                         .lineLimit(1)
                         .shadow(color: .black.opacity(0.5), radius: 1, x: 0, y: 1)

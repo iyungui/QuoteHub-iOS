@@ -94,11 +94,11 @@ struct SetThemeView: View {
                     
                     VStack(alignment: .leading, spacing: 4) {
                         Text("새 테마 만들기")
-                            .font(.scoreDream(.bold, size: .body))
+                            .font(.appFont(.bold, size: .body))
                             .foregroundColor(.primaryText)
                         
                         Text("나만의 테마를 생성해보세요")
-                            .font(.scoreDream(.light, size: .caption))
+                            .font(.appFont(.light, size: .caption))
                             .foregroundColor(.secondaryText)
                     }
                     
@@ -126,7 +126,7 @@ struct SetThemeView: View {
                 
                 if !selectedSet.isEmpty {
                     Text("\(selectedSet.count)개 선택됨")
-                        .font(.scoreDream(.medium, size: .caption))
+                        .font(.appFont(.medium, size: .caption))
                         .foregroundColor(.brownLeather)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
@@ -153,11 +153,11 @@ struct SetThemeView: View {
             
             VStack(spacing: 8) {
                 Text("아직 테마가 없어요")
-                    .font(.scoreDream(.bold, size: .body))
+                    .font(.appFont(.bold, size: .body))
                     .foregroundColor(.primaryText)
                 
                 Text("지금 바로 나만의 테마를 만들어보세요!")
-                    .font(.scoreDream(.light, size: .subheadline))
+                    .font(.appFont(.light, size: .subheadline))
                     .foregroundColor(.secondaryText)
                     .multilineTextAlignment(.center)
             }
@@ -203,7 +203,7 @@ struct SetThemeView: View {
                 .frame(width: 24, height: 24)
             
             Text(title)
-                .font(.scoreDream(.bold, size: .body))
+                .font(.appFont(.bold, size: .body))
                 .foregroundColor(.primaryText)
         }
     }
@@ -325,14 +325,14 @@ struct ThemeGridCard: View {
             
             VStack(alignment: .leading, spacing: 8) {
                 Text(theme.name)
-                    .font(.scoreDream(.bold, size: .subheadline))
+                    .font(.appFont(.bold, size: .subheadline))
                     .foregroundColor(.white)
                     .lineLimit(1)
                     .shadow(color: .black.opacity(0.5), radius: 2, x: 0, y: 1)
                 
                 if let description = theme.description, !description.isEmpty {
                     Text(description)
-                        .font(.scoreDream(.light, size: .caption))
+                        .font(.appFont(.light, size: .caption))
                         .foregroundColor(.white.opacity(0.9))
                         .lineLimit(2)
                         .shadow(color: .black.opacity(0.5), radius: 1, x: 0, y: 1)
@@ -377,7 +377,7 @@ struct GridLoadingView: View {
                 .tint(.brownLeather)
             
             Text("더 불러오는 중...")
-                .font(.scoreDream(.light, size: .caption))
+                .font(.appFont(.light, size: .caption))
                 .foregroundColor(.secondaryText)
         }
         .frame(height: 160)

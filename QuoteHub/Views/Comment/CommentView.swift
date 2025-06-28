@@ -47,11 +47,11 @@ struct CommentView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("댓글")
-                        .font(.scoreDream(.bold, size: .title3))
+                        .font(.appFont(.bold, size: .title3))
                         .foregroundColor(.primaryText)
                     
                     Text("\(commentViewModel.commentCount)개")
-                        .font(.scoreDream(.medium, size: .caption))
+                        .font(.appFont(.medium, size: .caption))
                         .foregroundColor(.secondaryText)
                 }
                 
@@ -130,11 +130,11 @@ struct CommentView: View {
                 .foregroundColor(.secondary.opacity(0.6))
             
             Text("아직 댓글이 없습니다")
-                .font(.scoreDream(.medium, size: .body))
+                .font(.appFont(.medium, size: .body))
                 .foregroundColor(.secondaryText)
             
             Text("첫 댓글을 남겨보세요!")
-                .font(.scoreDream(.regular, size: .subheadline))
+                .font(.appFont(.regular, size: .subheadline))
                 .foregroundColor(.secondaryText.opacity(0.8))
         }
         .padding(.vertical, 60)
@@ -167,7 +167,7 @@ struct CommentView: View {
                             axis: .vertical
                         )
                         .focused($isInputFocused)
-                        .font(.scoreDream(.regular, size: .subheadline))
+                        .font(.appFont(.regular, size: .subheadline))
                         .lineLimit(1...4)
                         .submitLabel(.send)
                         .onSubmit {
@@ -208,7 +208,7 @@ struct CommentView: View {
                 .foregroundColor(.brownLeather)
             
             Text("\(comment.userId.nickname)님에게 답글")
-                .font(.scoreDream(.medium, size: .caption))
+                .font(.appFont(.medium, size: .caption))
                 .foregroundColor(.brownLeather)
             
             Spacer()

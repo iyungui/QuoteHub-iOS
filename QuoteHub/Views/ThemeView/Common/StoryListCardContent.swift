@@ -20,7 +20,7 @@ struct StoryListCardContent: View {
             VStack(alignment: .leading, spacing: 8) {
                 // 인용문
                 Text(story.firstQuoteText)
-                    .font(.scoreDream(.medium, size: .footnote))
+                    .font(.appFont(.medium, size: .footnote))
                     .foregroundColor(.primaryText)
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
@@ -32,14 +32,14 @@ struct StoryListCardContent: View {
                         .foregroundColor(.brownLeather.opacity(0.7))
                     
                     Text(story.bookId.title)
-                        .font(.scoreDream(.medium, size: .caption))
+                        .font(.appFont(.medium, size: .caption))
                         .foregroundColor(.secondaryText)
                         .lineLimit(1)
                 }
                 
                 // 날짜와 키워드
                 Text(story.createdAt.prefix(10))
-                    .font(.scoreDream(.light, size: .caption2))
+                    .font(.appFont(.light, size: .caption2))
                     .foregroundColor(.secondaryText.opacity(0.8))
                 
                 if let keywords = story.keywords, !keywords.isEmpty {
