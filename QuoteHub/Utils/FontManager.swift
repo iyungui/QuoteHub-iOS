@@ -86,6 +86,14 @@ struct FontManager {
         }
     }
     
+    // 폰트 변경 (시스템 UI 업데이트 포함)
+    static func changeFontType(to fontType: FontType) {
+        currentFontType = fontType
+        Task {
+            updateSystemFonts()
+        }
+    }
+    
     // 각 폰트별 Weight 매핑
     private static func mapWeight(_ weight: FontWeight, for fontType: FontType) -> String {
         switch fontType {
@@ -127,9 +135,9 @@ struct FontManager {
     }
     
     /// 특정 폰트 타입으로 폰트 생성(설정창에서 미리보기용)
-    static func font(_ weight: FontWeight, size: CGFloat, fontType: FontType) -> Font {
+    static func font(_ weight: FontWeight, size: FontSize, fontType: FontType) -> Font {
         let fontName = mapWeight(weight, for: fontType)
-        return Font.custom(fontName, fixedSize: size)
+        return Font.custom(fontName, fixedSize: size.rawValue)
     }
     
     /// UIFont 생성 메서드 (시스템 UI용)
@@ -182,6 +190,10 @@ extension Font {
     
     static func appFont(_ weight: FontWeight, size: CGFloat) -> Font {
         FontManager.font(weight, size: size)
+    }
+    
+    static func appFont(_ weight: FontWeight, size: FontSize, font: FontType) -> Font {
+        FontManager.font(weight, size: size, fontType: font)
     }
 
     // 자주 사용하는 조합

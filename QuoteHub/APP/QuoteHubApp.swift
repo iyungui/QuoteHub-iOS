@@ -46,6 +46,11 @@ struct QuoteHubApp: App {
 //        }
 //    }()
     
+    init() {
+        // 앱 시작 시 시스템 폰트 초기화
+        FontManager.initialize()
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()

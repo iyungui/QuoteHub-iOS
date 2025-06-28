@@ -8,11 +8,77 @@
 import SwiftUI
 
 struct FontSettingsView: View {
+    @State private var selectedFont: FontType = FontManager.currentFontType
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(spacing: 20) {
+            selectedFontPreview
+                .padding()
+            selectFontSection
+        }
+        .navigationTitle("폰트 설정")
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button {
+                    FontManager.changeFontType(to: selectedFont)
+                } label: {
+                    Text("확인")
+                        .font(.appHeadline)
+                }
+
+            }
+        }
+    }
+    
+    /// 현재 선택된 폰트로 미리보기
+    private var selectedFontPreview: some View {
+        VStack(alignment: .center, spacing: 20) {
+            Text("안녕하세요! 문장모아입니다.")
+                .font(.appFont(.bold, size: .title2, font: selectedFont))
+                .multilineTextAlignment(.center)
+            
+            Text("이 텍스트는 현재 선택된 폰트로 표시됩니다.")
+                .font(.appFont(.regular, size: .body, font: selectedFont))
+                .multilineTextAlignment(.center)
+                .foregroundStyle(Color.secondary)
+            
+            Text("이 텍스트는 현재 선택된 폰트로 표시됩니다.")
+                .font(.appFont(.light, size: .caption, font: selectedFont))
+                .multilineTextAlignment(.center)
+                .foregroundStyle(Color.secondary)
+        }
+        .padding()
+        .frame(maxWidth: .infinity, maxHeight: 230)
+        .background(Color.warmBeige.opacity(0.7))
+        .cornerRadius(30, corners: [.bottomRight, .topLeft])
+    }
+    
+    /// 폰트 선택 섹션
+    private var selectFontSection: some View {
+        List {
+            Section {
+                ForEach(FontType.allCases, id: \.self) { fontType in
+                    Toggle(isOn: Binding(
+                        get: { selectedFont == fontType }, // 현재 폰트와 같으면 선택됨
+                        set: { _ in selectedFont = fontType } // 토글하면 해당 폰트로 변경
+                    )) {
+                        Text(fontType.displayName)
+                            .font(.appFont(.bold, size: .body, font: fontType))
+                            .foregroundStyle(Color.primary)
+                    }
+                    .toggleStyle(CheckboxStyle())
+                }
+            } header: {
+                Text("폰트 선택")
+            }
+
+        }
     }
 }
 
 #Preview {
-    FontSettingsView()
+    NavigationStack {
+        FontSettingsView()
+            .navigationBarTitleDisplayMode(.inline)
+    }
 }
