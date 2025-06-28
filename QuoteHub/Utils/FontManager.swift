@@ -9,18 +9,24 @@ import SwiftUI
 
 // MARK: - FONT TYPE
 enum FontType: String, CaseIterable {
+    case pretendard = "Pretendard"
     case scoreDream = "S-CoreDream"
     case gowunBatang = "GowunBatang"
     case ridiBatang = "RIDIBatang"
+    case chosunilboNM = "ChosunilboNM"
     
     var displayName: String {
         switch self {
+        case .pretendard:
+            return "프리텐다드"
         case .scoreDream:
             return "에스코어드림"
         case .gowunBatang:
             return "고운바탕"
         case .ridiBatang:
             return "리디바탕"
+        case .chosunilboNM:
+            return "조선일보명조체"
         }
     }
 }
@@ -77,7 +83,7 @@ struct FontManager {
     // UserDefaults에 저장되는 현재 폰트 설정
     static var currentFontType: FontType {
         get {
-            // 기본폰트는 scoreDream
+            // 기본폰트는 ridiBatang
             let saved = UserDefaults.standard.string(forKey: "selectedFontType") ?? FontType.ridiBatang.rawValue
             return FontType(rawValue: saved) ?? .ridiBatang
         }
@@ -89,7 +95,7 @@ struct FontManager {
     // 폰트 변경 (시스템 UI 업데이트 포함)
     static func changeFontType(to fontType: FontType) {
         currentFontType = fontType
-        Task {
+        Task { @MainActor in
             updateSystemFonts()
         }
     }
@@ -97,6 +103,19 @@ struct FontManager {
     // 각 폰트별 Weight 매핑
     private static func mapWeight(_ weight: FontWeight, for fontType: FontType) -> String {
         switch fontType {
+        case .pretendard:
+            switch weight {
+            case .thin: return "Pretendard-Thin"
+            case .extraLight: return "Pretendard-ExtraLight"
+            case .light: return "Pretendard-Light"
+            case .regular: return "Pretendard-Regular"
+            case .medium: return "Pretendard-Medium"
+            case .bold: return "Pretendard-SemiBold"    // semibold 를 bold 에 매핑
+            case .extraBold: return "Pretendard-Bold"
+            case .heavy: return "Pretendard-ExtraBold"
+            case .black: return "Pretendard-Black"
+            }
+            
         case .scoreDream:
             switch weight {
             case .thin: return "S-CoreDream-1Thin"
@@ -111,6 +130,7 @@ struct FontManager {
             }
             
         case .gowunBatang:
+            // GowunBatang은 Regular, Bold만 있으므로 매핑
             switch weight {
             case .thin, .extraLight, .light, .regular, .medium:
                 return "GowunBatang-Regular"
@@ -118,8 +138,9 @@ struct FontManager {
                 return "GowunBatang-Bold"
             }
             
-        case .ridiBatang:
-            return "RIDIBatang"
+        case .ridiBatang, .chosunilboNM:
+            // RIDIBatang과 ChosunilboNM은 하나의 weight만 있음
+            return fontType.rawValue
         }
     }
     
@@ -138,6 +159,11 @@ struct FontManager {
     static func font(_ weight: FontWeight, size: FontSize, fontType: FontType) -> Font {
         let fontName = mapWeight(weight, for: fontType)
         return Font.custom(fontName, fixedSize: size.rawValue)
+    }
+    
+    static func font(_ weight: FontWeight, size: CGFloat, fontType: FontType) -> Font {
+        let fontName = mapWeight(weight, for: fontType)
+        return Font.custom(fontName, fixedSize: size)
     }
     
     /// UIFont 생성 메서드 (시스템 UI용)
@@ -180,129 +206,3 @@ struct FontManager {
         }
     }
 }
-
-// MARK: - Extension Font
-
-extension Font {
-    static func appFont(_ weight: FontWeight, size: FontSize) -> Font {
-        FontManager.font(weight, size: size)
-    }
-    
-    static func appFont(_ weight: FontWeight, size: CGFloat) -> Font {
-        FontManager.font(weight, size: size)
-    }
-    
-    static func appFont(_ weight: FontWeight, size: FontSize, font: FontType) -> Font {
-        FontManager.font(weight, size: size, fontType: font)
-    }
-
-    // 자주 사용하는 조합
-    static var appTitle: Font {
-        FontManager.font(.bold, size: .title1)
-    }
-    static var appBody: Font {
-        FontManager.font(.regular, size: .body)
-    }
-    static var appHeadline: Font {
-        FontManager.font(.bold, size: .body)
-    }
-    static var appCaption: Font {
-        FontManager.font(.light, size: .caption)
-    }
-}
-
-
-//
-//// MARK: - S-CoreDream 폰트 매니저
-//struct ScoreDreamFont {
-//    
-//    // MARK: - 폰트 Weight 정의
-//    enum Weight: String, CaseIterable {
-//        case thin = "S-CoreDream-1Thin"
-//        case extraLight = "S-CoreDream-2ExtraLight"
-//        case light = "S-CoreDream-3Light"
-//        case regular = "S-CoreDream-4Regular"
-//        case medium = "S-CoreDream-5Medium"
-//        case bold = "S-CoreDream-6Bold"
-//        case extraBold = "S-CoreDream-7ExtraBold"
-//        case heavy = "S-CoreDream-8Heavy"
-//        case black = "S-CoreDream-9Black"
-//        
-//        var displayName: String {
-//            switch self {
-//            case .thin: return "Thin"
-//            case .extraLight: return "Extra Light"
-//            case .light: return "Light"
-//            case .regular: return "Regular"
-//            case .medium: return "Medium"
-//            case .bold: return "Bold"
-//            case .extraBold: return "Extra Bold"
-//            case .heavy: return "Heavy"
-//            case .black: return "Black"
-//            }
-//        }
-//    }
-//    
-//    // MARK: - 폰트 Size 정의
-//    enum Size: CGFloat, CaseIterable {
-//        case caption2 = 11
-//        case caption = 12
-//        case footnote = 13
-//        case subheadline = 15
-//        case callout = 16
-//        case body = 17
-////        case headline = 17
-//        case title3 = 20
-//        case title2 = 22
-//        case title1 = 28
-//        case largeTitle = 34
-//        
-//        // 커스텀 사이즈
-//        case small = 14
-//        case medium = 18
-//        case large = 24
-//        case xlarge = 30
-//        case xxlarge = 36
-//    }
-//    
-//    // MARK: - 폰트 생성 메서드
-//    static func font(_ weight: Weight, size: Size) -> Font {
-//        return Font.custom(weight.rawValue, size: size.rawValue)
-//    }
-//    
-//    static func font(_ weight: Weight, size: CGFloat) -> Font {
-//        return Font.custom(weight.rawValue, size: size)
-//    }
-//}
-//
-//// MARK: - Font Extension (편의 메서드)
-//extension Font {
-//    // 자주 사용하는 조합들
-//    static var scoreDreamTitle: Font {
-//        ScoreDreamFont.font(.bold, size: .title1)
-//    }
-//    
-////    static var scoreDreamHeadline: Font {
-////        ScoreDreamFont.font(.medium, size: .headline)
-////    }
-//    
-//    static var scoreDreamBody: Font {
-//        ScoreDreamFont.font(.regular, size: .body)
-//    }
-//    
-//    static var scoreDreamCaption: Font {
-//        ScoreDreamFont.font(.light, size: .caption)
-//    }
-//    
-//    static var scoreDreamLargeTitle: Font {
-//        ScoreDreamFont.font(.black, size: .largeTitle)
-//    }
-//    
-//    static func appFont(_ weight: ScoreDreamFont.Weight, size: ScoreDreamFont.Size) -> Font {
-//        ScoreDreamFont.font(weight, size: size)
-//    }
-//    
-//    static func scoreDream(_ weight: ScoreDreamFont.Weight, size: CGFloat) -> Font {
-//        ScoreDreamFont.font(weight, size: size)
-//    }
-//}

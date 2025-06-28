@@ -37,6 +37,15 @@
 		<string>GowunBatang-Bold.ttf</string>
 		<string>GowunBatang-Regular.ttf</string>
 		<string>RIDIBatang.otf</string>
+		<string>Pretendard-Black.ttf</string>
+		<string>Pretendard-Bold.ttf</string>
+		<string>Pretendard-ExtraBold.ttf</string>
+		<string>Pretendard-ExtraLight.ttf</string>
+		<string>Pretendard-Light.ttf</string>
+		<string>Pretendard-Medium.ttf</string>
+		<string>Pretendard-Regular.ttf</string>
+		<string>Pretendard-SemiBold.ttf</string>
+		<string>Pretendard-Thin.ttf</string>
 	</array>
 </dict>
 </plist>
