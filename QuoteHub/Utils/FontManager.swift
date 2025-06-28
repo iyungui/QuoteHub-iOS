@@ -116,35 +116,45 @@ struct FontManager {
     }
     
     // 폰트 생성 메서드
-    static func appFont(_ weight: FontWeight, size: FontSize) -> Font {
+    static func font(_ weight: FontWeight, size: FontSize) -> Font {
         let fontName = mapWeight(weight, for: currentFontType)
         return Font.custom(fontName, fixedSize: size.rawValue)
     }
     
-    static func appFont(_ weight: FontWeight, size: CGFloat) -> Font {
+    static func font(_ weight: FontWeight, size: CGFloat) -> Font {
         let fontName = mapWeight(weight, for: currentFontType)
         return Font.custom(fontName, fixedSize: size)
     }
     
     /// 특정 폰트 타입으로 폰트 생성(설정창에서 미리보기용)
-    static func appFont(_ weight: FontWeight, size: CGFloat, fontType: FontType) -> Font {
+    static func font(_ weight: FontWeight, size: CGFloat, fontType: FontType) -> Font {
         let fontName = mapWeight(weight, for: fontType)
         return Font.custom(fontName, fixedSize: size)
     }
 }
 
-extension FontManager {
+extension Font {
+    static func appFont(_ weight: FontWeight, size: FontSize) -> Font {
+        FontManager.font(weight, size: size)
+    }
+    
+    static func appFont(_ weight: FontWeight, size: CGFloat) -> Font {
+        FontManager.font(weight, size: size)
+    }
+
     // 자주 사용하는 조합
     static var appTitle: Font {
-        FontManager.appFont(.bold, size: .title1)
+        FontManager.font(.bold, size: .title1)
     }
     static var appBody: Font {
-        FontManager.appFont(.regular, size: .body)
+        FontManager.font(.regular, size: .body)
     }
     static var appCaption: Font {
-        FontManager.appFont(.light, size: .caption)
+        FontManager.font(.light, size: .caption)
     }
 }
+
+
 
 // MARK: - S-CoreDream 폰트 매니저
 struct ScoreDreamFont {
