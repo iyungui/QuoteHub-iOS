@@ -7,6 +7,145 @@
 
 import SwiftUI
 
+// MARK: - FONT TYPE
+enum FontType: String, CaseIterable {
+    case scoreDream = "S-CoreDream"
+    case gowunBatang = "GowunBatang"
+    case ridiBatang = "RIDIBatang"
+    
+    var displayName: String {
+        switch self {
+        case .scoreDream:
+            return "에스코어드림"
+        case .gowunBatang:
+            return "고운바탕"
+        case .ridiBatang:
+            return "리디바탕"
+        }
+    }
+}
+
+// MARK: - FONT WEIGHT
+enum FontWeight: String, CaseIterable {
+    case thin = "thin"
+    case extraLight = "extraLight"
+    case light = "light"
+    case regular = "regular"
+    case medium = "medium"
+    case bold = "bold"
+    case extraBold = "extraBold"
+    case heavy = "heavy"
+    case black = "black"
+    
+    var displayName: String {
+        switch self {
+        case .thin: return "Thin"
+        case .extraLight: return "Extra Light"
+        case .light: return "Light"
+        case .regular: return "Regular"
+        case .medium: return "Medium"
+        case .bold: return "Bold"
+        case .extraBold: return "Extra Bold"
+        case .heavy: return "Heavy"
+        case .black: return "Black"
+        }
+    }
+}
+
+// MARK: - FONT SIZE
+enum FontSize: CGFloat, CaseIterable {
+    case caption2 = 11
+    case caption = 12
+    case footnote = 13
+    case subheadline = 15
+    case callout = 16
+    case body = 17
+    case title3 = 20
+    case title2 = 22
+    case title1 = 28
+    case largeTitle = 34
+    
+    // 커스텀 사이즈
+    case small = 14
+    case medium = 18
+    case large = 24
+    case xlarge = 30
+    case xxlarge = 36
+}
+
+struct FontManager {
+    // UserDefaults에 저장되는 현재 폰트 설정
+    static var currentFontType: FontType {
+        get {
+            // 기본폰트는 scoreDream
+            let saved = UserDefaults.standard.string(forKey: "selectedFontType") ?? FontType.scoreDream.rawValue
+            return FontType(rawValue: saved) ?? .scoreDream
+        }
+        set {
+            UserDefaults.standard.set(newValue.rawValue, forKey: "selectedFontType")
+        }
+    }
+    
+    // 각 폰트별 Weight 매핑
+    private static func mapWeight(_ weight: FontWeight, for fontType: FontType) -> String {
+        switch fontType {
+        case .scoreDream:
+            switch weight {
+            case .thin: return "S-CoreDream-1Thin"
+            case .extraLight: return "S-CoreDream-2ExtraLight"
+            case .light: return "S-CoreDream-3Light"
+            case .regular: return "S-CoreDream-4Regular"
+            case .medium: return "S-CoreDream-5Medium"
+            case .bold: return "S-CoreDream-6Bold"
+            case .extraBold: return "S-CoreDream-7ExtraBold"
+            case .heavy: return "S-CoreDream-8Heavy"
+            case .black: return "S-CoreDream-9Black"
+            }
+            
+        case .gowunBatang:
+            switch weight {
+            case .thin, .extraLight, .light, .regular, .medium:
+                return "GowunBatang-Regular"
+            case .bold, .extraBold, .heavy, .black:
+                return "GowunBatang-Bold"
+            }
+            
+        case .ridiBatang:
+            return "RIDIBatang"
+        }
+    }
+    
+    // 폰트 생성 메서드
+    static func appFont(_ weight: FontWeight, size: FontSize) -> Font {
+        let fontName = mapWeight(weight, for: currentFontType)
+        return Font.custom(fontName, fixedSize: size.rawValue)
+    }
+    
+    static func appFont(_ weight: FontWeight, size: CGFloat) -> Font {
+        let fontName = mapWeight(weight, for: currentFontType)
+        return Font.custom(fontName, fixedSize: size)
+    }
+    
+    /// 특정 폰트 타입으로 폰트 생성(설정창에서 미리보기용)
+    static func appFont(_ weight: FontWeight, size: CGFloat, fontType: FontType) -> Font {
+        let fontName = mapWeight(weight, for: fontType)
+        return Font.custom(fontName, fixedSize: size)
+    }
+}
+
+extension FontManager {
+    // 자주 사용하는 조합
+    static var appTitle: Font {
+        FontManager.appFont(.bold, size: .title1)
+    }
+    static var appBody: Font {
+        FontManager.appFont(.regular, size: .body)
+    }
+    static var appCaption: Font {
+        FontManager.appFont(.light, size: .caption)
+    }
+}
+
 // MARK: - S-CoreDream 폰트 매니저
 struct ScoreDreamFont {
     

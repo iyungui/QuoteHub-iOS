@@ -54,6 +54,29 @@
 		CE1FCB7B2E0F011400C02C75 /* FriendSearchBookStoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1FCB7A2E0F011400C02C75 /* FriendSearchBookStoriesView.swift */; };
 		CE1FCB7F2E0F060B00C02C75 /* FriendLibraryKeywordsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1FCB7C2E0F060B00C02C75 /* FriendLibraryKeywordsViewModel.swift */; };
 		CE1FCB802E0F060B00C02C75 /* MyLibraryKeywordsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1FCB7D2E0F060B00C02C75 /* MyLibraryKeywordsViewModel.swift */; };
+		CE1FCB8F2E0F257A00C02C75 /* SCDream1.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCB822E0F257A00C02C75 /* SCDream1.otf */; };
+		CE1FCB902E0F257A00C02C75 /* SCDream2.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCB832E0F257A00C02C75 /* SCDream2.otf */; };
+		CE1FCB912E0F257A00C02C75 /* SCDream3.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCB842E0F257A00C02C75 /* SCDream3.otf */; };
+		CE1FCB922E0F257A00C02C75 /* SCDream4.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCB852E0F257A00C02C75 /* SCDream4.otf */; };
+		CE1FCB932E0F257A00C02C75 /* SCDream5.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCB862E0F257A00C02C75 /* SCDream5.otf */; };
+		CE1FCB942E0F257A00C02C75 /* SCDream6.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCB872E0F257A00C02C75 /* SCDream6.otf */; };
+		CE1FCB952E0F257A00C02C75 /* SCDream7.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCB882E0F257A00C02C75 /* SCDream7.otf */; };
+		CE1FCB962E0F257A00C02C75 /* SCDream8.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCB892E0F257A00C02C75 /* SCDream8.otf */; };
+		CE1FCB972E0F257A00C02C75 /* SCDream9.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCB8A2E0F257A00C02C75 /* SCDream9.otf */; };
+		CE1FCB982E0F257A00C02C75 /* ChosunNm.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCB8C2E0F257A00C02C75 /* ChosunNm.ttf */; };
+		CE1FCB992E0F257A00C02C75 /* EF_jejudoldam(OTF).otf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCB8D2E0F257A00C02C75 /* EF_jejudoldam(OTF).otf */; };
+		CE1FCBB02E0F263600C02C75 /* RIDIBatang.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCBAF2E0F263600C02C75 /* RIDIBatang.otf */; };
+		CE1FCBB12E0F263600C02C75 /* GowunBatang-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCBAD2E0F263600C02C75 /* GowunBatang-Bold.ttf */; };
+		CE1FCBB22E0F263600C02C75 /* GowunBatang-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCBAE2E0F263600C02C75 /* GowunBatang-Regular.ttf */; };
+		CE1FCBBD2E0F263900C02C75 /* Pretendard-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCBB32E0F263900C02C75 /* Pretendard-Black.otf */; };
+		CE1FCBBE2E0F263900C02C75 /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCBB42E0F263900C02C75 /* Pretendard-Bold.otf */; };
+		CE1FCBBF2E0F263900C02C75 /* Pretendard-ExtraBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCBB52E0F263900C02C75 /* Pretendard-ExtraBold.otf */; };
+		CE1FCBC02E0F263900C02C75 /* Pretendard-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCBB62E0F263900C02C75 /* Pretendard-ExtraLight.otf */; };
+		CE1FCBC12E0F263900C02C75 /* Pretendard-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCBB72E0F263900C02C75 /* Pretendard-Light.otf */; };
+		CE1FCBC22E0F263900C02C75 /* Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCBB82E0F263900C02C75 /* Pretendard-Medium.otf */; };
+		CE1FCBC32E0F263900C02C75 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCBB92E0F263900C02C75 /* Pretendard-Regular.otf */; };
+		CE1FCBC42E0F263900C02C75 /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCBBA2E0F263900C02C75 /* Pretendard-SemiBold.otf */; };
+		CE1FCBC52E0F263900C02C75 /* Pretendard-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = CE1FCBBB2E0F263900C02C75 /* Pretendard-Thin.otf */; };
 		CE4FEF5B2DF925EE0072E8B9 /* RoundedCorner.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */; };
 		CE4FEF5D2DF93F260072E8B9 /* HiddenModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF5C2DF93F260072E8B9 /* HiddenModifier.swift */; };
 		CE4FEF812DFA90D80072E8B9 /* AchievementBadgesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */; };
@@ -259,6 +282,29 @@
 		CE1FCB7A2E0F011400C02C75 /* FriendSearchBookStoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSearchBookStoriesView.swift; sourceTree = "<group>"; };
 		CE1FCB7C2E0F060B00C02C75 /* FriendLibraryKeywordsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendLibraryKeywordsViewModel.swift; sourceTree = "<group>"; };
 		CE1FCB7D2E0F060B00C02C75 /* MyLibraryKeywordsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyLibraryKeywordsViewModel.swift; sourceTree = "<group>"; };
+		CE1FCB822E0F257A00C02C75 /* SCDream1.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SCDream1.otf; sourceTree = "<group>"; };
+		CE1FCB832E0F257A00C02C75 /* SCDream2.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SCDream2.otf; sourceTree = "<group>"; };
+		CE1FCB842E0F257A00C02C75 /* SCDream3.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SCDream3.otf; sourceTree = "<group>"; };
+		CE1FCB852E0F257A00C02C75 /* SCDream4.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SCDream4.otf; sourceTree = "<group>"; };
+		CE1FCB862E0F257A00C02C75 /* SCDream5.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SCDream5.otf; sourceTree = "<group>"; };
+		CE1FCB872E0F257A00C02C75 /* SCDream6.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SCDream6.otf; sourceTree = "<group>"; };
+		CE1FCB882E0F257A00C02C75 /* SCDream7.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SCDream7.otf; sourceTree = "<group>"; };
+		CE1FCB892E0F257A00C02C75 /* SCDream8.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SCDream8.otf; sourceTree = "<group>"; };
+		CE1FCB8A2E0F257A00C02C75 /* SCDream9.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SCDream9.otf; sourceTree = "<group>"; };
+		CE1FCB8C2E0F257A00C02C75 /* ChosunNm.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = ChosunNm.ttf; sourceTree = "<group>"; };
+		CE1FCB8D2E0F257A00C02C75 /* EF_jejudoldam(OTF).otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "EF_jejudoldam(OTF).otf"; sourceTree = "<group>"; };
+		CE1FCBAD2E0F263600C02C75 /* GowunBatang-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GowunBatang-Bold.ttf"; sourceTree = "<group>"; };
+		CE1FCBAE2E0F263600C02C75 /* GowunBatang-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "GowunBatang-Regular.ttf"; sourceTree = "<group>"; };
+		CE1FCBAF2E0F263600C02C75 /* RIDIBatang.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = RIDIBatang.otf; sourceTree = "<group>"; };
+		CE1FCBB32E0F263900C02C75 /* Pretendard-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Black.otf"; sourceTree = "<group>"; };
+		CE1FCBB42E0F263900C02C75 /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
+		CE1FCBB52E0F263900C02C75 /* Pretendard-ExtraBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraBold.otf"; sourceTree = "<group>"; };
+		CE1FCBB62E0F263900C02C75 /* Pretendard-ExtraLight.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraLight.otf"; sourceTree = "<group>"; };
+		CE1FCBB72E0F263900C02C75 /* Pretendard-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Light.otf"; sourceTree = "<group>"; };
+		CE1FCBB82E0F263900C02C75 /* Pretendard-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Medium.otf"; sourceTree = "<group>"; };
+		CE1FCBB92E0F263900C02C75 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
+		CE1FCBBA2E0F263900C02C75 /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
+		CE1FCBBB2E0F263900C02C75 /* Pretendard-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Thin.otf"; sourceTree = "<group>"; };
 		CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCorner.swift; sourceTree = "<group>"; };
 		CE4FEF5C2DF93F260072E8B9 /* HiddenModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenModifier.swift; sourceTree = "<group>"; };
 		CE4FEF802DFA90D80072E8B9 /* AchievementBadgesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementBadgesView.swift; sourceTree = "<group>"; };
@@ -414,7 +460,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		CE8C48472DEADAAC003188ED /* Font */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Font; sourceTree = "<group>"; };
 		CE8C48E92DF05884003188ED /* Lottie */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Lottie; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -577,6 +622,52 @@
 				CE1FCB7D2E0F060B00C02C75 /* MyLibraryKeywordsViewModel.swift */,
 			);
 			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		CE1FCB8B2E0F257A00C02C75 /* S-Dream_Font */ = {
+			isa = PBXGroup;
+			children = (
+				CE1FCB822E0F257A00C02C75 /* SCDream1.otf */,
+				CE1FCB832E0F257A00C02C75 /* SCDream2.otf */,
+				CE1FCB842E0F257A00C02C75 /* SCDream3.otf */,
+				CE1FCB852E0F257A00C02C75 /* SCDream4.otf */,
+				CE1FCB862E0F257A00C02C75 /* SCDream5.otf */,
+				CE1FCB872E0F257A00C02C75 /* SCDream6.otf */,
+				CE1FCB882E0F257A00C02C75 /* SCDream7.otf */,
+				CE1FCB892E0F257A00C02C75 /* SCDream8.otf */,
+				CE1FCB8A2E0F257A00C02C75 /* SCDream9.otf */,
+			);
+			path = "S-Dream_Font";
+			sourceTree = "<group>";
+		};
+		CE1FCB8E2E0F257A00C02C75 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				CE1FCBAD2E0F263600C02C75 /* GowunBatang-Bold.ttf */,
+				CE1FCBAE2E0F263600C02C75 /* GowunBatang-Regular.ttf */,
+				CE1FCBAF2E0F263600C02C75 /* RIDIBatang.otf */,
+				CE1FCBBC2E0F263900C02C75 /* Pretendart_Font */,
+				CE1FCB8B2E0F257A00C02C75 /* S-Dream_Font */,
+				CE1FCB8C2E0F257A00C02C75 /* ChosunNm.ttf */,
+				CE1FCB8D2E0F257A00C02C75 /* EF_jejudoldam(OTF).otf */,
+			);
+			path = Font;
+			sourceTree = "<group>";
+		};
+		CE1FCBBC2E0F263900C02C75 /* Pretendart_Font */ = {
+			isa = PBXGroup;
+			children = (
+				CE1FCBB32E0F263900C02C75 /* Pretendard-Black.otf */,
+				CE1FCBB42E0F263900C02C75 /* Pretendard-Bold.otf */,
+				CE1FCBB52E0F263900C02C75 /* Pretendard-ExtraBold.otf */,
+				CE1FCBB62E0F263900C02C75 /* Pretendard-ExtraLight.otf */,
+				CE1FCBB72E0F263900C02C75 /* Pretendard-Light.otf */,
+				CE1FCBB82E0F263900C02C75 /* Pretendard-Medium.otf */,
+				CE1FCBB92E0F263900C02C75 /* Pretendard-Regular.otf */,
+				CE1FCBBA2E0F263900C02C75 /* Pretendard-SemiBold.otf */,
+				CE1FCBBB2E0F263900C02C75 /* Pretendard-Thin.otf */,
+			);
+			path = Pretendart_Font;
 			sourceTree = "<group>";
 		};
 		CE7416D22E0D863A00CB2594 /* Friend */ = {
@@ -837,7 +928,7 @@
 			children = (
 				C6B56FE02AA8B60D003905C3 /* Assets.xcassets */,
 				CE8C48E92DF05884003188ED /* Lottie */,
-				CE8C48472DEADAAC003188ED /* Font */,
+				CE1FCB8E2E0F257A00C02C75 /* Font */,
 				CECBB5302E095A77004C7856 /* SampleData.json */,
 			);
 			path = Resources;
@@ -1096,7 +1187,6 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				CE8C48472DEADAAC003188ED /* Font */,
 				CE8C48E92DF05884003188ED /* Lottie */,
 			);
 			name = QuoteHub;
@@ -1152,6 +1242,29 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE1FCB8F2E0F257A00C02C75 /* SCDream1.otf in Resources */,
+				CE1FCB902E0F257A00C02C75 /* SCDream2.otf in Resources */,
+				CE1FCB912E0F257A00C02C75 /* SCDream3.otf in Resources */,
+				CE1FCB922E0F257A00C02C75 /* SCDream4.otf in Resources */,
+				CE1FCB932E0F257A00C02C75 /* SCDream5.otf in Resources */,
+				CE1FCB942E0F257A00C02C75 /* SCDream6.otf in Resources */,
+				CE1FCB952E0F257A00C02C75 /* SCDream7.otf in Resources */,
+				CE1FCB962E0F257A00C02C75 /* SCDream8.otf in Resources */,
+				CE1FCBB02E0F263600C02C75 /* RIDIBatang.otf in Resources */,
+				CE1FCBB12E0F263600C02C75 /* GowunBatang-Bold.ttf in Resources */,
+				CE1FCBBD2E0F263900C02C75 /* Pretendard-Black.otf in Resources */,
+				CE1FCBBE2E0F263900C02C75 /* Pretendard-Bold.otf in Resources */,
+				CE1FCBBF2E0F263900C02C75 /* Pretendard-ExtraBold.otf in Resources */,
+				CE1FCBC02E0F263900C02C75 /* Pretendard-ExtraLight.otf in Resources */,
+				CE1FCBC12E0F263900C02C75 /* Pretendard-Light.otf in Resources */,
+				CE1FCBC22E0F263900C02C75 /* Pretendard-Medium.otf in Resources */,
+				CE1FCBC32E0F263900C02C75 /* Pretendard-Regular.otf in Resources */,
+				CE1FCBC42E0F263900C02C75 /* Pretendard-SemiBold.otf in Resources */,
+				CE1FCBC52E0F263900C02C75 /* Pretendard-Thin.otf in Resources */,
+				CE1FCBB22E0F263600C02C75 /* GowunBatang-Regular.ttf in Resources */,
+				CE1FCB972E0F257A00C02C75 /* SCDream9.otf in Resources */,
+				CE1FCB982E0F257A00C02C75 /* ChosunNm.ttf in Resources */,
+				CE1FCB992E0F257A00C02C75 /* EF_jejudoldam(OTF).otf in Resources */,
 				C6B56FE42AA8B60D003905C3 /* Preview Assets.xcassets in Resources */,
 				CECBB5312E095A77004C7856 /* SampleData.json in Resources */,
 				C6B56FE12AA8B60D003905C3 /* Assets.xcassets in Resources */,
