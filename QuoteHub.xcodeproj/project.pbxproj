@@ -514,6 +514,7 @@
 			isa = PBXGroup;
 			children = (
 				C6B56FDB2AA8B60B003905C3 /* QuoteHub */,
+				CEA554D12E018AF50029A8A9 /* Legacy */,
 				C6B56FDA2AA8B60B003905C3 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -538,7 +539,6 @@
 				C676F5252AAC02CB00EC7241 /* ViewModel */,
 				C6336CF12AAF1A91007355EC /* Extension */,
 				CE8C483E2DEAB3EA003188ED /* Components */,
-				CEA554D12E018AF50029A8A9 /* Legacy */,
 				CEA554CE2E018AF30029A8A9 /* Utils */,
 				CE8C48E82DF0586A003188ED /* Resources */,
 				C6B56FE22AA8B60D003905C3 /* Preview Content */,

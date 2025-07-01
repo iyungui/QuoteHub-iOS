@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class StoryFormViewModel: ObservableObject {
+final class StoryFormViewModel: ObservableObject {
     // 모든 페이지에서 입력 가능
     /// 키워드 입력
     @Published var keywords: [String] = []

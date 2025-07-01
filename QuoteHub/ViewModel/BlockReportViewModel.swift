@@ -9,7 +9,7 @@ import Foundation
 
 @MainActor
 @Observable
-class BlockReportViewModel: LoadingViewModel {
+final class BlockReportViewModel: LoadingViewModel {
     
     // MARK: - LoadingViewModel 프로토콜 구현
     var isLoading = false

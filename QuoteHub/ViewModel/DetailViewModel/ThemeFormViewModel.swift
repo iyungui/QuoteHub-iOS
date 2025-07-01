@@ -9,7 +9,7 @@ import SwiftUI
 
 @MainActor
 @Observable
-class ThemeFormViewModel {
+final class ThemeFormViewModel {
     // Alert Properties
     var showAlert: Bool = false
     var alertMessage: String = ""

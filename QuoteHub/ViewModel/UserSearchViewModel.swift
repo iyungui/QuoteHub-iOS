@@ -9,7 +9,7 @@ import Foundation
 
 @MainActor
 @Observable
-class UserSearchViewModel: LoadingViewModel {
+final class UserSearchViewModel: LoadingViewModel {
     
     var users: [User]?
     

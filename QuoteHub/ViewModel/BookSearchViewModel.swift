@@ -9,7 +9,7 @@ import SwiftUI
 
 @MainActor
 @Observable
-class BookSearchViewModel: LoadingViewModel {
+final class BookSearchViewModel: LoadingViewModel {
     var books: [Book] = []
     
     // TODO: - isLoading 필요없는 것 같다
