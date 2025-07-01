@@ -94,25 +94,228 @@ Backend Server: Node.js
 "문장모아"는 iOS 개발자로서 저의 성장 가능성을 보여주는 첫걸음이라고 생각합니다. 
 이 프로젝트를 통해 Swift, SwiftUI, iOS 개발 프로세스 전반에 대한 깊은 이해를 얻었으며, 앞으로 더 발전된 앱을 개발할 수 있다는 자신감을 얻었습니다. 앞으로도 사용자 중심의 혁신적인 앱을 개발하고, iOS 개발 커뮤니티에 기여하는 개발자로 성장해 나가겠습니다.
 
+### Version 2.0 (2025.05 ~ 2025.06) - 60일간 전면 리팩토링
 
-### Version 2.0 (2025.05 ~ 2025.06)-60일
+기존 문장모아 앱을 새롭게 리뉴얼했습니다.
 
-이전에 만든 문장모아 앱을 새롭게 리뉴얼 했습니다.
+---
 
-- [중요하지 않은 기능 삭제]: 팔로우 기능이나 유저 검색 기능은 필요하지 않은 기능이라 생각되어 삭제했습니다. 대신 이미 구현된 기능을 제대로 다시 설계하는 데 집중했습니다.
-- [필요하지 않는 외부 라이브러리 삭제]: Alamofire 라이브러리를 굳이 사용할 이유가 없었습니다. URLSession으로도 네트워크 호출을 하기에 충분했기에 변경했습니다.
-- [화면을 아예 새롭게 디자인을 했습니다.]: 이 과정에서 모든 코드를 하나씩 고쳐갔습니다. 유지보수성을 높이기 위해서 여러가지 시도를 했는데, 이 중 뷰 화면을 작은 단위로 나누는 것이 가장 큰 도움이 되었습니다. 수정할 부분이 생기면 그 부분만 빠르게 캐치하여 수정이 가능하기 때문입니다.
-- LoadingView나 ProfileView 처럼 여러 화면에서 공통으로 사용하는 UI를 하나로 하기 위해 여러가지 시도를 했고, 그 과정에서 시행착오도 있었습니다.
+## 🔧 **핵심 개선사항**
 
-- 또한 ViewBuilder 뿐만 아니라, modifier를 extension 하여 모든 뷰에서 같은 컴포넌트를 사용하는 방법을 체득했습니다. 이 과정을 통해 코드의 재사용성을 크게 높이고 개발 속도도 크게 향상시킬 수 있었습니다.
-- 어떻게 해야 사용자 입장에서 좀 더 편한 UI를 느끼게 할 수 있을까를 끊임없이 고민했습니다. 화면을 완성하고 여러번 처음부터 다시 작성하는 과정도 있어서, 시간이 꽤 오래걸렸습니다. 그러나 그 과정에서 화면을 짜는 저만의 방법(대표적으로 입력화면을 설계할 때, 뷰모델에 입력 프로퍼티를 먼저 정의하고 입력값 제한이나 alert 등을 하나씩 뷰와 함께 설계해나가는 방법) 부터, AI를 사용하여 빠르고 정확하게 구체적으로 원하는 화면을 구현하는 능력도 향상시킬 수 있었습니다.
-- 대표적으로 인스타그램에서 자주 볼 수 있는 UI(Sticky Header)를 구현하는 데에는 AI의 도움을 많이 받았습니다. 이미 어느정도 구조화된 틀이 있었고, 각각의 코드가 무엇을 의미하는지 이해하고 있었기에 디버깅을 하는 시간도 크게 단축시킬 수 있었습니다.
+### **불필요한 기능 제거 및 핵심 기능 강화**
+- **[중요하지 않은 기능 삭제]**: 팔로우 기능이나 유저 검색 기능은 필요하지 않은 기능이라 생각되어 삭제했습니다. 대신 이미 구현된 기능을 제대로 다시 설계하는 데 집중했습니다.
 
-- 가장 큰 고민을 했던 부분은 바로 Race Condition 이 발생하지 않도록 어떻게 설계해야할까?
-- 문장모아는 1.0 버전을 설계했을 당시 북스토리를 fetch를 할 때, 모든 사용자의 공개된 북스토리 불러오기, 특정 사용자의 북스토리 불러오기, 그리고 자신(인증된 사용자)의 북스토리 불러오기로 나누어서 설계했습니다. 이 때 뷰코드도, 네트워크 요청 코드도 모두 중복이 되는 코드가 많았기에, enum으로 LoadType을 설계하고 `var bookStories: [LoadType: [BookStory]]` 이렇게 설계했습니다. 즉 public bookstories viewmodel, my bookstories viewmodel, friend book stories viewmodel' 을 따로따로 만들지 않고, 하나의 북스토리 뷰모델로 만드려는 시도를 했습니다. 그러나 화면을 왔다갔다 하는 과정에서, 여러번 LoadType에 따라 북스토리를 로드하는 과정이 있었고, 이 때 레이스 컨디션이 발생했습니다. 저는 이렇게 나눈 방식이 잘못되었다는 것을 깨닫고, 다시 역할과 책임 분리를 시도했습니다. 그 과정에서 protocol을 사용하여, 코드의 유지보수성을 높이고 실수를 최대한 줄이기 위해 노력했습니다.
-- 또 하나 이번 프로젝트를 하면서 가장 저 자신에게 칭찬하고 싶은 부분은 바로 동시성 프로그래밍 활용입니다. 이번 리팩토링은 Swift Concurrency (async, await, Task) 를 최대한 활용하는 것이 목표였습니다. 기존 1.0 코드는 completion Handler 와 Result 타입으로 네트워크를 호출하는 코드가 각각 뷰모델에 작성되어 있었습니다. 이 동시성 프로그래밍을 적용하기 전에 여러 과제가 있었는데, 먼저 각 서비스 파일에서도 AF.request를 호출하는 코드가 중복되어 있었는데, '코드의 중복성을 줄이고 async await 패턴으로 보다 간결하고 가독성 좋은 코드를 만들자'가 이번 리팩토링 목표 중 하나였습니다.
-  - 이 네트워크 요청 메서드를 APIClient.swift 파일 하나로 작성하고, JSON을 파싱하는 코드와 네트워크 요청 제네릭 메서드를 만들어서, 각 서비스 파일에서 URLSession을 호출하는 코드를 작성했습니다. 이 과정을 통해 이전보다 매우 효율적으로 네트워크 호출 부분을 리팩토링했다고 확신하고 있습니다.
-  - 이제 나아가 서비스 레이어와 뷰모델 레이어를 리팩토링 했으나, 이 메서드를 호출할 때에는 단순히 await로 각 화면에서 호출하는 로직이었습니다. 예를 들어 라이브러리뷰로 가면 프로필 로드를 하고, 북스토리를 불러오는 로직을 실행하는 로직이 있었습니다. 그러나 앱을 처음 실행할 때 LaunchScreen 이 잠깐 나타날 때. 그 때 taskgroup 으로 메서드를 병렬로 호출하여 여러 데이터를 동시에 불러올 수 있었습니다. (이는 각 메서드가 매우 독립적인 데이터일 때. 즉 데이터 레이스가 발생하지 않을 때 호출하였습니다.)
-  
+### **외부 의존성 최적화**
+- **[필요하지 않는 외부 라이브러리 삭제]**: Alamofire 라이브러리를 굳이 사용할 이유가 없었습니다. URLSession으로도 네트워크 호출을 하기에 충분했기에 변경했습니다.
 
-- 문장모아 2.0은 현재 아래 링크를 통해 앱스토어에서도 만나볼 수 있습니다. 혼자서 애정을 가지고 다듬고 있는 프로젝트입니다. 그러나 잘못된 부분이 있다면, 개선의 여지가 있다면 어김없이 제 코드를 바꾸고 개선해나갈 마음가짐이 있습니다. 피드백 주시면 감사하겠습니다!
+### **UI/UX 전면 재설계**
+- **[화면을 아예 새롭게 디자인]**: 이 과정에서 모든 코드를 하나씩 고쳐갔습니다. 유지보수성을 높이기 위해서 여러가지 시도를 했는데, 이 중 **뷰 화면을 작은 단위로 나누는 것**이 가장 큰 도움이 되었습니다. 수정할 부분이 생기면 그 부분만 빠르게 캐치하여 수정이 가능하기 때문입니다.
+
+- LoadingView나 ProfileView 처럼 **여러 화면에서 공통으로 사용하는 UI를 하나로 하기 위해** 여러가지 시도를 했고, 그 과정에서 시행착오도 있었습니다.
+
+```swift
+// ViewModifier로 재사용성 극대화 (CustomProgressView.swift)
+struct ProgressOverlay<VM: LoadingViewModel>: ViewModifier {
+    @ObservedObject var viewModel: VM
+    
+    func body(content: Content) -> some View {
+        content
+            .overlay {
+                if viewModel.isLoading {
+                    CustomProgressView(message: viewModel.loadingMessage)
+                        .transition(.opacity)
+                }
+            }
+    }
+}
+
+extension View {
+    func progressOverlay<VM: LoadingViewModel>(viewModel: VM) -> some View {
+        self.modifier(ProgressOverlay(viewModel: viewModel))
+    }
+}
+```
+
+### **컴포넌트 기반 개발 체득**
+- **ViewBuilder 뿐만 아니라, modifier를 extension 하여** 모든 뷰에서 같은 컴포넌트를 사용하는 방법을 체득했습니다. 이 과정을 통해 **코드의 재사용성을 크게 높이고 개발 속도도 크게 향상**시킬 수 있었습니다.
+
+### **사용자 경험 중심의 반복 개선**
+- **어떻게 해야 사용자 입장에서 좀 더 편한 UI를 느끼게 할 수 있을까**를 끊임없이 고민했습니다. 화면을 완성하고 여러번 처음부터 다시 작성하는 과정도 있어서, 시간이 꽤 오래걸렸습니다. 
+
+- 그러나 그 과정에서 **화면을 짜는 저만의 방법**(대표적으로 입력화면을 설계할 때, 뷰모델에 입력 프로퍼티를 먼저 정의하고 입력값 제한이나 alert 등을 하나씩 뷰와 함께 설계해나가는 방법)부터, **AI를 사용하여 빠르고 정확하게 구체적으로 원하는 화면을 구현하는 능력**도 향상시킬 수 있었습니다.
+
+```swift
+// 실시간 키워드 입력 처리 (StoryFormViewModel.swift)
+func processInlineKeywordInput(_ newValue: String) {
+    if newValue.contains(" ") || newValue.contains("\n") {
+        addInlineKeyword(from: newValue)
+    }
+}
+
+private func isValidInlineKeyword(_ keyword: String) -> Bool {
+    return keyword.count <= keywordMaxLength &&
+           !keywords.contains(keyword) &&
+           keywords.count < 10
+}
+```
+
+- 대표적으로 **인스타그램에서 자주 볼 수 있는 UI(Sticky Header)를 구현**하는 데에는 AI의 도움을 많이 받았습니다. 이미 어느정도 구조화된 틀이 있었고, 각각의 코드가 무엇을 의미하는지 이해하고 있었기에 **디버깅을 하는 시간도 크게 단축**시킬 수 있었습니다.
+
+```swift
+// Sticky Header 핵심 로직 (LibraryBaseView.swift)
+private func updateStickyState(currentY: CGFloat) {
+    let safeAreaTop = getSafeAreaTop()
+    let shouldShowSticky = currentY <= safeAreaTop + 44
+    
+    if shouldShowSticky != stickyTabVisible {
+        withAnimation(.none) {
+            stickyTabVisible = shouldShowSticky
+        }
+    }
+}
+```
+
+---
+
+## **핵심 기술 도전과 해결**
+
+### **Race Condition 해결 과정**
+**가장 큰 고민을 했던 부분은 바로 Race Condition이 발생하지 않도록 어떻게 설계해야할까?**
+
+#### **문제 발견**
+문장모아는 1.0 버전을 설계했을 당시 북스토리를 fetch를 할 때, 모든 사용자의 공개된 북스토리 불러오기, 특정 사용자의 북스토리 불러오기, 그리고 자신(인증된 사용자)의 북스토리 불러오기로 나누어서 설계했습니다. 
+
+이 때 뷰코드도, 네트워크 요청 코드도 모두 중복이 되는 코드가 많았기에, **enum으로 LoadType을 설계하고 `var bookStories: [LoadType: [BookStory]]` 이렇게 설계**했습니다. 즉 public bookstories viewmodel, my bookstories viewmodel, friend book stories viewmodel을 따로따로 만들지 않고, **하나의 북스토리 뷰모델로 만드려는 시도**를 했습니다.
+
+#### **문제 발생**
+그러나 화면을 왔다갔다 하는 과정에서, 여러번 LoadType에 따라 북스토리를 로드하는 과정이 있었고, **이 때 레이스 컨디션이 발생**했습니다.
+
+#### **해결 과정**
+저는 이렇게 나눈 방식이 잘못되었다는 것을 깨닫고, **다시 역할과 책임 분리를 시도**했습니다. 그 과정에서 **protocol을 사용하여, 코드의 유지보수성을 높이고 실수를 최대한 줄이기 위해** 노력했습니다.
+
+```swift
+// 프로토콜 기반 역할과 책임 분리 (BookStoriesViewModelProtocols.swift)
+
+// 기본 읽기 전용 프로토콜
+protocol BookStoriesViewModelProtocol: LoadingViewModel {
+    var bookStories: [BookStory] { get }
+    func loadBookStories() async
+    func refreshBookStories() async
+}
+
+// CRUD 확장 프로토콜 (내 뷰모델만)
+protocol EditableBookStoriesViewModelProtocol: BookStoriesViewModelProtocol {
+    func createBookStory(...) async -> BookStory?
+    func updateBookStory(...) async -> BookStory?
+    func deleteBookStory(storyId: String) async -> Bool
+}
+
+// 명확한 구분을 위한 Typealias
+typealias ReadOnlyBookStoriesViewModel = BookStoriesViewModelProtocol
+typealias EditableBookStoriesViewModel = EditableBookStoriesViewModelProtocol
+```
+
+### **Swift Concurrency 전면 도입**
+**또 하나 이번 프로젝트를 하면서 가장 저 자신에게 칭찬하고 싶은 부분은 바로 동시성 프로그래밍 활용입니다.**
+
+#### **목표 설정**
+이번 리팩토링은 **Swift Concurrency (async, await, Task)를 최대한 활용하는 것**이 목표였습니다. 기존 1.0 코드는 completion Handler와 Result 타입으로 네트워크를 호출하는 코드가 각각 뷰모델에 작성되어 있었습니다.
+
+#### **네트워크 레이어 통합**
+이 동시성 프로그래밍을 적용하기 전에 여러 과제가 있었는데, 먼저 각 서비스 파일에서도 AF.request를 호출하는 코드가 중복되어 있었습니다. **'코드의 중복성을 줄이고 async await 패턴으로 보다 간결하고 가독성 좋은 코드를 만들자'**가 이번 리팩토링 목표 중 하나였습니다.
+
+- 이 **네트워크 요청 메서드를 APIClient.swift 파일 하나로 작성**하고, JSON을 파싱하는 코드와 네트워크 요청 제네릭 메서드를 만들어서, 각 서비스 파일에서 URLSession을 호출하는 코드를 작성했습니다. 이 과정을 통해 **이전보다 매우 효율적으로 네트워크 호출 부분을 리팩토링**했다고 확신하고 있습니다.
+
+#### **병렬 처리 최적화**
+- 이제 나아가 서비스 레이어와 뷰모델 레이어를 리팩토링 했으나, 이 메서드를 호출할 때에는 단순히 await로 각 화면에서 호출하는 로직이었습니다. 예를 들어 라이브러리뷰로 가면 프로필 로드를 하고, 북스토리를 불러오는 로직을 실행하는 로직이 있었습니다.
+
+- 그러나 **앱을 처음 실행할 때 LaunchScreen이 잠깐 나타날 때, 그 때 taskgroup으로 메서드를 병렬로 호출하여 여러 데이터를 동시에 불러올 수 있었습니다.** (이는 각 메서드가 매우 독립적인 데이터일 때. 즉 데이터 레이스가 발생하지 않을 때 호출하였습니다.)
+
+```swift
+// TaskGroup을 활용한 병렬 데이터 로딩 (ContentView.swift)
+struct ContentView: View {
+    @State private var isSplashView = true  // 런치스크린 표시
+    
+    var body: some View {
+        if isSplashView {
+            LaunchScreenView()
+                .task {
+                    // 각 작업이 독립적이므로 병렬 실행
+                    await withTaskGroup(of: Void.self) { group in
+                        // 현재 앱스토어 버전 확인
+                        group.addTask {
+                            await versionManager.checkVersionFromAppStore()
+                        }
+                        // 인증 확인
+                        group.addTask {
+                            await authManager.validateAndRenewTokenNeeded()
+                        }
+                    }
+                    
+                    // 인증된 사용자는 프로필, 내 북스토리와 내 테마 불러오기
+                    if authManager.isUserAuthenticated {
+                        await withTaskGroup(of: Void.self) { group in
+                            // 현재 사용자 정보 가져오기 (유저모델의 currentUser 업데이트)
+                            group.addTask {
+                                await userViewModel.loadUserProfile(userId: nil)
+                            }
+                            // 현재 사용자 정보의 북스토리 카운트도 동시에 가져오기
+                            group.addTask {
+                                await userViewModel.loadStoryCount(userId: nil)
+                            }
+                            group.addTask {
+                                await myBookStoriesViewModel.loadBookStories()
+                            }
+                            group.addTask {
+                                await myThemesViewModel.loadThemes()
+                            }
+                        }
+                    }
+                    
+                    // 모든 사용자가 공통으로 보는 공개 북스토리와 테마 불러오기
+                    await withTaskGroup(of: Void.self) { group in
+                        group.addTask {
+                            await publicBookStoriesViewModel.loadBookStories()
+                        }
+                        group.addTask {
+                            await publicThemesViewModel.loadThemes()
+                        }
+                    }
+                    
+                    // 데이터 로딩 완료 후 스플래시 화면 종료
+                    try? await Task.sleep(nanoseconds: 1_000_000_000)
+                    withAnimation {
+                        isSplashView = false
+                    }
+                }
+        } else {
+            // 메인 앱 화면
+            MainView()
+        }
+    }
+}
+```
+
+
+#### **Task.detached 활용**
+UserAuthenticationManager에서는 **Task.detached를 사용해서 토큰 관련 로직을 백그라운드 스레드에서 실행**되도록 보장했습니다. Task.detached는 독립적인 컨텍스트에서 실행되도록 하는데, **@MainActor에서 컨텍스트가 상속되기 때문에, 토큰 관련 로직을 백그라운드에서 실행시키고 싶다면 Task.detached를 사용해야** 했습니다.
+
+토큰 관리가 시간이 오래 걸리는 작업은 아니지만 **UI 관련된 로직이 아니기에 분리를 해야한다고 생각**해서 설계했습니다. 이 부분에 부족한 점이나 틀린 점이 있다면 피드백 부탁드립니다.
+
+```swift
+                // 새 토큰 Keychain에 업데이트
+                Task.detached { // 토큰 저장 완료되면 Task는 자동으로 메모리에서 해제
+                    try? await self.authService.updateBothTokens(
+                        newAccessToken: newAccessToken,
+                        newRefreshToken: newRefreshToken
+                    )
+                }
+```
+
+---
+
+## 📱 **현재 상태**
+
+문장모아 2.0은 현재 아래 링크를 통해 **앱스토어에서도 만나볼 수 있습니다**. 혼자서 애정을 가지고 다듬고 있는 프로젝트입니다. 
+
+그러나 **잘못된 부분이 있다면, 개선의 여지가 있다면 어김없이 제 코드를 바꾸고 개선해나갈 마음가짐**이 있습니다. 피드백 주시면 감사하겠습니다!
