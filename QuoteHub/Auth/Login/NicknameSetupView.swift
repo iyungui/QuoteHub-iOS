@@ -284,20 +284,13 @@ struct NicknameSetupView: View {
     // MARK: - 샘플 데이터 생성
     
     private func createSampleData() async {
-        print("🎯 샘플 데이터 생성 시작...")
-        
         // 1. 샘플 테마 생성
         guard let sampleTheme = await createSampleTheme() else {
-            print("❌ 샘플 데이터 생성 건너뛰기 (JSON 파일 없음 또는 테마 생성 실패)")
             return
         }
         
-        print("✅ 샘플 테마 생성 완료: \(sampleTheme.name)")
-        
         // 2. 샘플 북스토리들 생성
         await createSampleBookStories(themeId: sampleTheme.id)
-        
-        print("✅ 모든 샘플 데이터 생성 완료")
     }
     
     private func createSampleTheme() async -> Theme? {
@@ -353,8 +346,6 @@ struct NicknameSetupView: View {
             // 서버 부하 방지를 위한 딜레이
             try? await Task.sleep(nanoseconds: 300_000_000) // 0.3초
         }
-        
-        print("📊 샘플 북스토리 생성 결과: \(successCount)/\(bookStoriesData.count)개 성공")
     }
     
     private func loadImageFromBundle(_ imageName: String?) -> UIImage? {
@@ -382,6 +373,7 @@ struct NicknameSetupView: View {
         }
     }
 }
+
 #Preview {
     NicknameSetupView(initialNickname: "")
         .environment(UserAuthenticationManager())

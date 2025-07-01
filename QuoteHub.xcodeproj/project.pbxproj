@@ -530,10 +530,10 @@
 			isa = PBXGroup;
 			children = (
 				C6B56FFD2AA8CC1B003905C3 /* QuoteHub.entitlements */,
-				CE8C478C2DEA8D93003188ED /* Models */,
 				CE8C47772DEA8D01003188ED /* APP */,
 				CE8C477E2DEA8D84003188ED /* Auth */,
 				CE8C479C2DEA8D97003188ED /* Network */,
+				CE8C478C2DEA8D93003188ED /* Models */,
 				CE8C481A2DEA8DAE003188ED /* Views */,
 				C676F5252AAC02CB00EC7241 /* ViewModel */,
 				C6336CF12AAF1A91007355EC /* Extension */,
@@ -836,13 +836,12 @@
 		CE8C480D2DEA8DAE003188ED /* Setting */ = {
 			isa = PBXGroup;
 			children = (
-				CE8C48072DEA8DAE003188ED /* BlockedListView.swift */,
 				CE8C48082DEA8DAE003188ED /* DeveloperInfoView.swift */,
-				CE8C48092DEA8DAE003188ED /* ReportListView.swift */,
 				CE8C480A2DEA8DAE003188ED /* SettingView.swift */,
 				CE1FCBC62E0F819C00C02C75 /* FontSettingsView.swift */,
 				CE8C480B2DEA8DAE003188ED /* UpdateProfileView.swift */,
 				CE8C480C2DEA8DAE003188ED /* VersionInfoView.swift */,
+				CE8C48192DEA8DAE003188ED /* WebView.swift */,
 			);
 			path = Setting;
 			sourceTree = "<group>";
@@ -883,7 +882,6 @@
 				CECBB5052E082A99004C7856 /* Comment */,
 				CE8C48172DEA8DAE003188ED /* ThemeView */,
 				CE8C48182DEA8DAE003188ED /* ReportSheetView.swift */,
-				CE8C48192DEA8DAE003188ED /* WebView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -984,6 +982,8 @@
 				CE8C47FE2DEA8DAE003188ED /* LibraryView.swift */,
 				C667E97D2AC9DE7F006EE7A9 /* BookStoriesViewModel.swift */,
 				C60700CE2AFE14F1009D202A /* ThemesViewModel.swift */,
+				CE8C48072DEA8DAE003188ED /* BlockedListView.swift */,
+				CE8C48092DEA8DAE003188ED /* ReportListView.swift */,
 			);
 			path = Legacy;
 			sourceTree = "<group>";
@@ -1621,7 +1621,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEPLOYMENT_POSTPROCESSING = NO;
 				DEVELOPMENT_ASSET_PATHS = "\"QuoteHub/Preview Content\"";
@@ -1646,7 +1646,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yungui.QuoteHub;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1668,7 +1668,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEPLOYMENT_POSTPROCESSING = NO;
 				DEVELOPMENT_ASSET_PATHS = "\"QuoteHub/Preview Content\"";
@@ -1693,7 +1693,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yungui.QuoteHub;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

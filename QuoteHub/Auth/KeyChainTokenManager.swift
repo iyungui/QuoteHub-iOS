@@ -26,7 +26,7 @@ final class KeyChainTokenManager {
     
     /// 로그인 응답 데이터를 keychain에 저장
     func saveTokenData(_ response: SignInWithAppleResponse) throws {
-        // 서버에서 주는 토큰 만료시간(1일)- TODO: - 보안 위해서 JWT 토큰 만료시간 좀 더 짧게 조정
+        // 서버에서 주는 토큰 만료시간(1일)
         let expiryDate = Date().addingTimeInterval(24 * 60 * 60)
         
         // JWT 액세스 토큰 저장

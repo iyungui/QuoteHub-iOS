@@ -27,7 +27,7 @@ struct ContentView: View {
         if isSplashView {
             LaunchScreenView()
             // LaunchScreenView 나타날 때 토큰 검증 및 앱 버전 체크
-            // TODO: - 여기서 .task 로 (유저, 북스토리, 테마) 데이터 모델을 미리 "로드한 다음" splashView를 false로 변경
+            // 여기서 .task 로 (유저, 북스토리, 테마) 데이터 모델을 미리 "로드한 다음" splashView를 false로 변경
                 .task {
                     // 각 작업이 독립적이므로 병렬 실행
                     await withTaskGroup(of: Void.self) { group in
