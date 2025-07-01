@@ -881,7 +881,6 @@
 				CE8C48122DEA8DAE003188ED /* BookStoryView */,
 				CECBB5052E082A99004C7856 /* Comment */,
 				CE8C48172DEA8DAE003188ED /* ThemeView */,
-				CE8C48182DEA8DAE003188ED /* ReportSheetView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -905,6 +904,7 @@
 				CE8C48682DEB1972003188ED /* ThemeToggleButton.swift */,
 				CE4FEF5A2DF925EE0072E8B9 /* RoundedCorner.swift */,
 				CEA554DC2E01931F0029A8A9 /* ProfileImage.swift */,
+				CE8C48182DEA8DAE003188ED /* ReportSheetView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
