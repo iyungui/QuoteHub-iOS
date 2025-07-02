@@ -30,11 +30,15 @@ struct MyLibraryStoriesView: View {
     
     var body: some View {
         if myBookStoriesViewModel.bookStories.isEmpty {
-            ContentUnavailableView(
-                            "아직 기록이 없어요",
-                            systemImage: "tray",
-                            description: Text("지금 바로 나만의 문장을 기록해보세요")
-                        )
+            ContentUnavailableView {
+                VStack {
+                    Text("아직 기록이 없어요").font(.appHeadline)
+                    Image(systemName: "tray")
+                }
+            } description: {
+                Text("지금 바로 나만의 문장을 기록해보세요").font(.appBody)
+            }
+
         } else {
             
             LazyVGrid(columns: columns, spacing: spacing) {

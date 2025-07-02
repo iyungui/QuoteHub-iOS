@@ -28,9 +28,9 @@ struct FriendLibraryThemesView: View {
     var body: some View {
         if friendThemesViewModel.themes.isEmpty {
             ContentUnavailableView(
-                "아직 테마가 없어요",
+                "",
                 systemImage: "tray",
-                description: Text("공개된 테마가 없습니다")
+                description: Text("공개된 테마가 없습니다").font(.appBody)
             )
         } else {
             LazyVGrid(columns: columns, spacing: spacing) {

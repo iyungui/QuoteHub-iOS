@@ -28,11 +28,14 @@ struct MyLibraryThemesView: View {
     
     var body: some View {
         if myThemesViewModel.themes.isEmpty {
-            ContentUnavailableView(
-                "아직 테마가 없어요",
-                systemImage: "tray",
-                description: Text("지금 바로 나만의 테마를 만들어보세요")
-            )
+            ContentUnavailableView {
+                VStack {
+                    Text("아직 테마가 없어요").font(.appHeadline)
+                    Image(systemName: "tray")
+                }
+            } description: {
+                Text("지금 바로 나만의 테마를 만들어보세요").font(.appBody)
+            }
         } else {
             LazyVGrid(columns: columns, spacing: spacing) {
                 ForEach(Array(myThemesViewModel.themes.enumerated()), id: \.element.id) { index, theme in

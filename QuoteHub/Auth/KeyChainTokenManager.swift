@@ -27,7 +27,7 @@ final class KeyChainTokenManager {
     /// 로그인 응답 데이터를 keychain에 저장
     func saveTokenData(_ response: SignInWithAppleResponse) throws {
         // 서버에서 주는 토큰 만료시간(1일)
-        let expiryDate = Date().addingTimeInterval(24 * 60 * 60)
+        let expiryDate = Date().addingTimeInterval(7 * 24 * 60 * 60)
         
         // JWT 액세스 토큰 저장
         try keychain.set(response.accessToken, key: Keys.accessToken)
@@ -97,7 +97,7 @@ final class KeyChainTokenManager {
     /// 액세스 토큰 업데이트 (토큰 리프레시 후 사용)
     func updateAccessToken(_ newToken: String) throws {
         // 새로운 액세스 토큰도 1일 만료로 설정
-        let newExpiryDate = Date().addingTimeInterval(24 * 60 * 60)
+        let newExpiryDate = Date().addingTimeInterval(7 * 24 * 60 * 60)
         
         // 액세스토큰, 만료시간 업데이트
         try keychain.set(newToken, key: Keys.accessToken)
@@ -105,7 +105,7 @@ final class KeyChainTokenManager {
     }
     
     func updateBothTokens(newAccessToken: String, newRefreshToken: String) throws {
-        let newExpiryDate = Date().addingTimeInterval(24 * 60 * 60)
+        let newExpiryDate = Date().addingTimeInterval(7 * 24 * 60 * 60)
         
         try keychain.set(newAccessToken, key: Keys.accessToken)
         try keychain.set(newRefreshToken, key: Keys.refreshToken)
