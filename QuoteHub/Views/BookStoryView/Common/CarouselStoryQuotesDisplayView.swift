@@ -57,7 +57,7 @@ struct CarouselStoryQuotesDisplayView: View {
                 Text(quote.quote)
                     .font(.appFont(.light, size: .subheadline))
                     .foregroundColor(.primaryText)
-                    .lineSpacing(6)
+                    .lineSpacing(12)
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(16)

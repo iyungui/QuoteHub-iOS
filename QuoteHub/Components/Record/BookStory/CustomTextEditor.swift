@@ -44,6 +44,7 @@ struct CustomTextEditor: View {
                 .padding(.horizontal, 12)
                 .padding(.vertical, 12)
                 .scrollContentBackground(.hidden)
+                .lineSpacing(10)
             // 최대 글자수 제한
                 .onChange(of: text) { _, newValue in
                     if newValue.count > maxLength {

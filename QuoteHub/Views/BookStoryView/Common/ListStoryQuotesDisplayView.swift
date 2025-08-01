@@ -44,7 +44,7 @@ struct ListStoryQuotesDisplayView: View {
                 Text(quote.quote)
                     .font(.appFont(.light, size: .subheadline))
                     .foregroundColor(.primaryText)
-                    .lineSpacing(6)
+                    .lineSpacing(12)
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
