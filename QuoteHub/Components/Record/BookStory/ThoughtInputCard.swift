@@ -92,19 +92,16 @@ struct ThoughtInputCard: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button {
-                        viewModel.content = ""
-                        viewModel.selectedImages = []
                         dismiss()
                     } label: {
-                        Text("취소")
+                        Text("취소").font(.appBody)
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button {
-                        
                         dismiss()
                     } label: {
-                        Text("완료")
+                        Text("완료").font(.appBody).foregroundStyle(Color.blue)
                     }
                 }
                 
