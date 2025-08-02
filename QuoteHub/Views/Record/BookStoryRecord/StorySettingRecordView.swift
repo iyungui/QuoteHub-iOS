@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import StoreKit
 
 struct StorySettingRecordView: View {
     let book: Book
@@ -16,6 +17,13 @@ struct StorySettingRecordView: View {
     
     @Environment(MyBookStoriesViewModel.self) private var myBookStoriesViewModel
     @EnvironmentObject var tabController: TabController
+    @Environment(\.requestReview) private var requestReview
+    
+    /// 스토리 완성 횟수 추적 (리뷰 요청 조건)
+    @AppStorage("storyCompletedCount") private var storyCompletedCount = 0
+    
+    /// 마지막으로 리뷰를 요청한 앱 버전
+    @AppStorage("lastVersionPromptedForReview") private var lastVersionPromptedForReview = ""
     
     var body: some View {
         VStack(spacing: 20) {
@@ -168,6 +176,8 @@ extension StorySettingRecordView {
     
     private func handleSubmissionResult(story: BookStory?, isEdit: Bool) {
         if let story = story {
+            // 스토리 작성 성공한 경우, 리뷰 요청 고려
+            requestReviewIfNeeded()
             tabController.navigateToStory(story)
         } else {
             formViewModel.alertType = .make
@@ -175,6 +185,39 @@ extension StorySettingRecordView {
                 "북스토리 수정 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요." :
                 "북스토리 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
             formViewModel.showAlert = true
+        }
+    }
+    
+    // 리뷰 요청 조건 확인 후 요청
+    private func requestReviewIfNeeded() {
+        // 수정 모드에서는 리뷰 요청x
+        guard !isEditMode else { return }
+        
+        // 스토리 완성 횟수 증가
+        storyCompletedCount += 1
+        
+        guard let currentAppVersion = Bundle.currentAppVersion else {
+            print("Unable to get current app version for review request")
+            return
+        }
+        
+        // 리뷰 요청 조건:
+        // 1. 2번 이상 스토리 완성
+        // 2. 현재 버전에서 아직 리뷰 요청하지 않았을 때
+        let shouldRequestReview: Bool = storyCompletedCount >= 2 && currentAppVersion != lastVersionPromptedForReview
+        
+        guard shouldRequestReview else { return }
+        
+        presentReview()
+        
+        // store current version
+        lastVersionPromptedForReview = currentAppVersion
+    }
+    
+    private func presentReview() {
+        Task {
+            try await Task.sleep(for: .seconds(2))
+            requestReview()
         }
     }
 }
