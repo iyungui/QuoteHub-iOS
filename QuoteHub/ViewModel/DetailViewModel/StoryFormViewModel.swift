@@ -62,7 +62,7 @@ final class StoryFormViewModel: ObservableObject {
     /// 모든 입력 필드가 비어있는지 확인
     var isEmpty: Bool {
         keywords.isEmpty &&
-        quotes.isEmpty &&
+        quotes.allSatisfy { $0.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty } &&
         content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
         selectedImages.isEmpty
     }
@@ -70,6 +70,11 @@ final class StoryFormViewModel: ObservableObject {
     /// 북스토리 생성 요건 충족 확인
     var isQuotesFilled: Bool {
         quotes.contains { !$0.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+    }
+    
+    /// 최종 저장을 위한 데이터 검증
+    var isReadyForFinalSave: Bool {
+        return quotes.contains { !$0.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
     }
     
     // MARK: - Image Methods
@@ -276,7 +281,7 @@ final class StoryFormViewModel: ObservableObject {
     
     func resetForm() {
         keywords = []
-        quotes = [Quote(quote: "", page: nil)]
+        quotes = [Quote(id: UUID(), quote: "", page: nil)]
         content = ""
         selectedImages = []
         isPublic = true
@@ -289,7 +294,7 @@ final class StoryFormViewModel: ObservableObject {
     
     func loadFromBookStory(_ story: BookStory) {
         keywords = story.keywords ?? []
-        quotes = story.quotes.isEmpty ? [Quote(quote: "", page: nil)] : story.quotes
+        quotes = story.quotes.isEmpty ? [Quote(id: UUID(), quote: "", page: nil)] : story.quotes
         content = story.content ?? ""
         isPublic = story.isPublic
         themeIds = story.themeIds ?? []
@@ -341,5 +346,16 @@ final class StoryFormViewModel: ObservableObject {
         group.notify(queue: .main) {
             self.selectedImages = loadedImages
         }
+    }
+}
+
+// MARK: - StoryFormViewModel Extension
+extension StoryFormViewModel {
+    /// 현재 폼 데이터가 임시저장할 가치가 있는지 확인
+    var hasValueForDraft: Bool {
+        return !keywords.isEmpty ||
+               quotes.contains { !$0.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty } ||
+               !content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
+               !selectedImages.isEmpty
     }
 }

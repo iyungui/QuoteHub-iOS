@@ -16,6 +16,7 @@ struct StorySettingRecordView: View {
     @EnvironmentObject private var formViewModel: StoryFormViewModel
     
     @Environment(MyBookStoriesViewModel.self) private var myBookStoriesViewModel
+    @Environment(\.modelContext) private var modelContext
     @EnvironmentObject var tabController: TabController
     @Environment(\.requestReview) private var requestReview
     
@@ -24,6 +25,10 @@ struct StorySettingRecordView: View {
     
     /// 마지막으로 리뷰를 요청한 앱 버전
     @AppStorage("lastVersionPromptedForReview") private var lastVersionPromptedForReview = ""
+    
+    private var draftManager: DraftManager {
+        DraftManager(modelContext: modelContext)
+    }
     
     var body: some View {
         VStack(spacing: 20) {
@@ -114,22 +119,40 @@ extension StorySettingRecordView {
         }
         
         Task {
-            await performSubmitStory(validQuotes)
+            await performSubmitStoryWithDraftHandling(validQuotes)
         }
     }
     
-    private func performSubmitStory(_ validQuotes: [Quote]) async {
+    private func performSubmitStoryWithDraftHandling(_ validQuotes: [Quote]) async {
+        do {
+            // DraftManager의 finalizeAndClearDraft 사용
+            try await draftManager.finalizeAndClearDraft(for: book.id) {
+                let resultStory = await performSubmitStory(validQuotes)
+                
+                // 저장 실패 시 에러 던지기
+                guard resultStory != nil else {
+                    throw SubmissionError.saveFailed
+                }
+            }
+            
+            // 성공 시 처리
+            await handleSuccessfulSubmission()
+            
+        } catch {
+            await handleSubmissionError(error, isEdit: isEditMode)
+        }
+    }
+    
+    private func performSubmitStory(_ validQuotes: [Quote]) async -> BookStory? {
         // 옵셔널 처리
         let retContent = formViewModel.content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : formViewModel.content
         let retImages = formViewModel.selectedImages.isEmpty ? nil : formViewModel.selectedImages
         let retKeywords = formViewModel.keywords.isEmpty ? nil : formViewModel.keywords
         let retThemeIds = formViewModel.themeIds.isEmpty ? nil : formViewModel.themeIds
         
-        let resultStory: BookStory?
-        
-        // 모드에 따라 resultStory에 담기. nil이면 fail
+        // 모드에 따라 결과 반환
         if isEditMode, let storyId = storyId {
-            resultStory = await myBookStoriesViewModel.updateBookStory(
+            return await myBookStoriesViewModel.updateBookStory(
                 storyId: storyId,
                 quotes: validQuotes,
                 images: retImages,
@@ -139,7 +162,7 @@ extension StorySettingRecordView {
                 themeIds: retThemeIds
             )
         } else {
-            resultStory = await myBookStoriesViewModel.createBookStory(
+            return await myBookStoriesViewModel.createBookStory(
                 bookId: book.id,
                 quotes: validQuotes,
                 images: retImages,
@@ -149,8 +172,39 @@ extension StorySettingRecordView {
                 themeIds: retThemeIds
             )
         }
-        
-        handleSubmissionResult(story: resultStory, isEdit: isEditMode)
+    }
+    
+    private func handleSuccessfulSubmission() async {
+        await MainActor.run {
+            // 리뷰 요청 (새 작성 시에만)
+            if !isEditMode {
+                requestReviewIfNeeded()
+            }
+            
+            // 성공 메시지 표시 후 이전 화면으로 돌아가기
+            formViewModel.alertMessage = isEditMode ? "북스토리가 성공적으로 수정되었습니다." : "북스토리가 성공적으로 등록되었습니다."
+            formViewModel.showAlert = true
+            
+            // 탭 네비게이션 (필요한 경우)
+            // tabController.navigateToMyStories()
+        }
+    }
+    
+    private func handleSubmissionError(_ error: Error, isEdit: Bool) async {
+        await MainActor.run {
+            formViewModel.alertType = .make
+            
+            if error is SubmissionError {
+                formViewModel.alertMessage = isEdit ?
+                    "북스토리 수정 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요." :
+                    "북스토리 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
+            } else {
+                formViewModel.alertMessage = "예상치 못한 오류가 발생했습니다: \(error.localizedDescription)"
+            }
+            
+            formViewModel.showAlert = true
+            print("❌ 북스토리 저장 실패: \(error)")
+        }
     }
     
     private func validateQuotes() -> [Quote]? {
@@ -172,20 +226,6 @@ extension StorySettingRecordView {
         }
         
         return validQuotes
-    }
-    
-    private func handleSubmissionResult(story: BookStory?, isEdit: Bool) {
-        if let story = story {
-            // 스토리 작성 성공한 경우, 리뷰 요청 고려
-            requestReviewIfNeeded()
-            tabController.navigateToStory(story)
-        } else {
-            formViewModel.alertType = .make
-            formViewModel.alertMessage = isEdit ?
-                "북스토리 수정 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요." :
-                "북스토리 등록 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
-            formViewModel.showAlert = true
-        }
     }
     
     // 리뷰 요청 조건 확인 후 요청
@@ -222,10 +262,25 @@ extension StorySettingRecordView {
     }
 }
 
+// MARK: - Custom Error Types
+enum SubmissionError: Error {
+    case saveFailed
+    case validationFailed
+    
+    var localizedDescription: String {
+        switch self {
+        case .saveFailed:
+            return "저장에 실패했습니다."
+        case .validationFailed:
+            return "입력 데이터 검증에 실패했습니다."
+        }
+    }
+}
+
 #Preview {
     NavigationStack {
         StorySettingRecordView(book: Book.previewBook, storyId: nil)
         .environmentObject(StoryFormViewModel())
-        .environmentObject(MyBookStoriesViewModel())
+        .environment(MyBookStoriesViewModel())
     }
 }

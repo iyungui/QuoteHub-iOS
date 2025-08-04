@@ -28,7 +28,7 @@ final class DraftManager {
     
     // MARK: - Public Methods
     
-    /// 현재 임시저장이 있는지 확인
+    /// bookId에 대해 현재 임시저장이 있는지 확인
     @MainActor
     func hasDraft(for bookId: String) async -> Bool {
         let descriptor = FetchDescriptor<DraftStory>(
@@ -44,7 +44,7 @@ final class DraftManager {
         }
     }
     
-    /// 임시저장 데이터 불러오기 (추가된 메서드)
+    /// 임시저장 데이터 불러오기
     @MainActor
     func loadDraft(for bookId: String) async -> DraftStory? {
         let descriptor = FetchDescriptor<DraftStory>(
@@ -65,13 +65,41 @@ final class DraftManager {
     @MainActor
     func applyDraftToViewModel(_ draft: DraftStory, viewModel: StoryFormViewModel) {
         viewModel.keywords = draft.keywords
-        viewModel.quotes = draft.quotes.isEmpty ? [Quote(quote: "", page: nil)] : draft.quotes
+        viewModel.quotes = draft.quotes.isEmpty ? [Quote(id: UUID(), quote: "", page: nil)] : draft.quotes
         viewModel.content = draft.content
         viewModel.isPublic = draft.isPublic
         viewModel.themeIds = draft.themeIds
         
         // 이미지 데이터를 UIImage로 변환
         viewModel.selectedImages = convertDataToImages(draft.imageData)
+        
+        print("임시저장 데이터 적용 완료 - 키워드: \(draft.keywords.count), 인용구: \(draft.quotes.count), 이미지: \(draft.imageData.count)")
+    }
+    
+    /// StoryFormViewModel로부터 임시저장
+    @MainActor
+    func saveDraftFromViewModel(
+        book: Book,
+        viewModel: StoryFormViewModel
+    ) async {
+        // 빈 데이터는 저장하지 않음
+        guard viewModel.hasValueForDraft else {
+            print("임시저장할 데이터가 없습니다.")
+            return
+        }
+        
+        await performSave(
+            bookId: book.id,
+            bookTitle: book.title,
+            bookAuthor: book.author.joined(separator: ", "),
+            bookImageURL: book.bookImageURL,
+            keywords: viewModel.keywords,
+            quotes: viewModel.quotes.filter { !$0.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty },
+            content: viewModel.content,
+            isPublic: viewModel.isPublic,
+            themeIds: viewModel.themeIds,
+            images: viewModel.selectedImages
+        )
     }
     
     /// 임시저장 저장/업데이트 (기존 것이 있으면 덮어쓰기)
@@ -103,58 +131,13 @@ final class DraftManager {
         }
     }
     
-    /// StoryFormViewModel로부터 임시저장
-    @MainActor
-    func saveDraftFromViewModel(
-        book: Book,
-        viewModel: StoryFormViewModel
-    ) async {
-        await performSave(
-            bookId: book.id,
-            bookTitle: book.title,
-            bookAuthor: book.author.joined(separator: ", "),
-            bookImageURL: book.bookImageURL,
-            keywords: viewModel.keywords,
-            quotes: viewModel.quotes.filter { !$0.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty },
-            content: viewModel.content,
-            isPublic: viewModel.isPublic,
-            themeIds: viewModel.themeIds,
-            images: viewModel.selectedImages
-        )
-    }
-    
-    /// Book 객체로부터 새 임시저장 생성
-    func createDraftFromBook(_ book: Book) -> DraftStory {
-        // 기존 임시저장 삭제
-        clearDraft(for: book.id)
-        
-        let draft = DraftStory(from: book)
-        modelContext.insert(draft)
-        
-        do {
-            try modelContext.save()
-            print("새 임시저장 생성 성공")
-        } catch {
-            print("새 임시저장 생성 실패: \(error)")
-            lastError = error
-        }
-        
-        return draft
-    }
-    
     /// 특정 책의 임시저장 삭제
-    func clearDraft(for bookId: String? = nil) {
+    @MainActor
+    func clearDraft(for bookId: String) {
         do {
-            let descriptor: FetchDescriptor<DraftStory>
-            
-            if let bookId = bookId {
-                descriptor = FetchDescriptor<DraftStory>(
-                    predicate: #Predicate { $0.bookId == bookId }
-                )
-            } else {
-                descriptor = FetchDescriptor<DraftStory>()
-            }
-            
+            let descriptor = FetchDescriptor<DraftStory>(
+                predicate: #Predicate { $0.bookId == bookId }
+            )
             let drafts = try modelContext.fetch(descriptor)
             
             for draft in drafts {
@@ -162,16 +145,30 @@ final class DraftManager {
             }
             
             try modelContext.save()
-            print("임시저장 삭제 성공")
+            print("✅ 임시저장 삭제 성공 (bookId: \(bookId))")
         } catch {
-            print("임시저장 삭제 실패: \(error)")
+            print("❌ 임시저장 삭제 실패: \(error)")
             lastError = error
         }
     }
     
     /// 모든 임시저장 삭제
+    @MainActor
     func clearAllDrafts() {
-        clearDraft()
+        do {
+            let descriptor = FetchDescriptor<DraftStory>()
+            let drafts = try modelContext.fetch(descriptor)
+            
+            for draft in drafts {
+                modelContext.delete(draft)
+            }
+            
+            try modelContext.save()
+            print("✅ 모든 임시저장 삭제 성공")
+        } catch {
+            print("❌ 임시저장 삭제 실패: \(error)")
+            lastError = error
+        }
     }
     
     /// 최종 저장 후 임시저장 삭제
@@ -183,46 +180,15 @@ final class DraftManager {
         do {
             try await onSave()
             clearDraft(for: bookId)
-            print("최종 저장 완료 및 임시저장 삭제")
+            print("✅ 최종 저장 완료 및 임시저장 삭제")
         } catch {
-            print("최종 저장 실패: \(error)")
+            print("❌ 최종 저장 실패: \(error)")
             lastError = error
             throw error
         }
     }
     
     // MARK: - Auto Save
-    
-    /// 자동저장 시작
-    func startAutoSave(
-        bookId: String,
-        bookTitle: String,
-        bookAuthor: String = "",
-        bookImageURL: String = "",
-        keywords: [String],
-        quotes: [Quote],
-        content: String,
-        isPublic: Bool,
-        themeIds: [String],
-        images: [UIImage]
-    ) {
-        stopAutoSave()
-        
-        autoSaveTimer = Timer.scheduledTimer(withTimeInterval: autoSaveDelay, repeats: false) { [weak self] _ in
-            self?.saveDraft(
-                bookId: bookId,
-                bookTitle: bookTitle,
-                bookAuthor: bookAuthor,
-                bookImageURL: bookImageURL,
-                keywords: keywords,
-                quotes: quotes,
-                content: content,
-                isPublic: isPublic,
-                themeIds: themeIds,
-                images: images
-            )
-        }
-    }
     
     /// ViewModel을 이용한 자동저장 시작
     func startAutoSaveFromViewModel(
@@ -286,10 +252,10 @@ final class DraftManager {
             modelContext.insert(draft)
             try modelContext.save()
             
-            print("임시저장 성공 - 키워드: \(keywords.count), 이미지: \(images.count)")
+            print("✅ 임시저장 성공 - 키워드: \(keywords.count), 인용구: \(quotes.count), 이미지: \(images.count)")
             
         } catch {
-            print("임시저장 실패: \(error)")
+            print("❌ 임시저장 실패: \(error)")
             lastError = error
         }
     }

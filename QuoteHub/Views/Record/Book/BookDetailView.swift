@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-//import SwiftData
 import SDWebImageSwiftUI
 
 /// 북스토리 기록 2: 책 상세 뷰
@@ -14,11 +13,18 @@ struct BookDetailView: View {
     let book: Book
     @State private var showAlert: Bool = false
     @State private var isImageLoaded: Bool = false
+    @State private var hasDraft: Bool = false
+    @State private var showDraftAlert: Bool = false
+    @State private var navigateToStoryView: Bool = false
+    @State private var shouldLoadDraft: Bool = false
+    
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) private var modelContext
-    
     @Environment(UserAuthenticationManager.self) private var userAuthManager
-    @State private var hasDraft: Bool = false
+    
+    private var draftManager: DraftManager {
+        DraftManager(modelContext: modelContext)
+    }
 
     // MARK: - BODY
     
@@ -52,19 +58,30 @@ struct BookDetailView: View {
         }
         .backgroundGradient()
         .task {
-            let manager = DraftManager(modelContext: modelContext)
-            hasDraft = await manager.hasDraft(for: book.id)
+            hasDraft = await draftManager.hasDraft(for: book.id)
+            if hasDraft {
+                showDraftAlert = true
+            }
         }
         .ignoresSafeArea(.container, edges: .top)
         .navigationBarHidden(true)
-        .alert("알림", isPresented: $hasDraft) {
-            NavigationLink {
-                StoryQuotesRecordView(book: book, showDraft: true)
-            } label: {
-                Text("이어서 작성하기")
+        .alert("알림", isPresented: $showDraftAlert) {
+            Button("이어서 작성하기") {
+                shouldLoadDraft = true
+                navigateToStoryView = true
             }
-            
-            Button("취소", role: .cancel) { }
+            Button("새로 작성하기") {
+                shouldLoadDraft = false
+                Task {
+                    await MainActor.run {
+                        draftManager.clearDraft(for: book.id)
+                    }
+                }
+                navigateToStoryView = true
+            }
+            Button("취소", role: .cancel) {
+                showDraftAlert = false
+            }
         } message: {
             Text("이 책에 대한 임시저장된 글이 있습니다.")
         }
@@ -77,6 +94,9 @@ struct BookDetailView: View {
             Button("취소", role: .cancel) { }
         } message: {
             Text("이 책에 대한 추가 정보를 외부 사이트에서 제공합니다. 외부 링크를 통해 해당 정보를 보시겠습니까?")
+        }
+        .navigationDestination(isPresented: $navigateToStoryView) {
+            StoryQuotesRecordView(book: book, storyId: nil, shouldLoadDraft: shouldLoadDraft)
         }
         .overlay(
             // Custom Navigation
@@ -104,7 +124,9 @@ struct BookDetailView: View {
             Spacer()
             
             if userAuthManager.isUserAuthenticated {
-                NavigationLink(destination: StoryQuotesRecordView(book: book)) {
+                Button {
+                    checkDraftAndNavigate()
+                } label: {
                     Image(systemName: "highlighter")
                         .font(.title2.weight(.medium))
                         .foregroundColor(.white)
@@ -115,6 +137,20 @@ struct BookDetailView: View {
         }
         .padding(.horizontal, 20)
         .padding(.top, 60)
+    }
+    
+    private func checkDraftAndNavigate() {
+        Task {
+            let hasDraft = await draftManager.hasDraft(for: book.id)
+            await MainActor.run {
+                if hasDraft {
+                    showDraftAlert = true
+                } else {
+                    shouldLoadDraft = false
+                    navigateToStoryView = true
+                }
+            }
+        }
     }
     
     // MARK: - BOOK IMAGE & TITLE
@@ -270,8 +306,6 @@ struct BookDetailView: View {
     
     private var actionButtonsCard: some View {
         VStack(spacing: 12) {
-//            cardHeader(title: "액션", icon: "hand.tap.fill")
-            
             VStack(spacing: 10) {
                 // External Link Button
                 Button(action: { showAlert = true }) {
@@ -307,7 +341,9 @@ struct BookDetailView: View {
                 .buttonStyle(CardButtonStyle())
                 
                 // Record Button
-                NavigationLink(destination: StoryQuotesRecordView(book: book)) {
+                Button {
+                    checkDraftAndNavigate()
+                } label: {
                     HStack(spacing: 10) {
                         Image(systemName: "highlighter")
                             .font(.body.weight(.medium))
