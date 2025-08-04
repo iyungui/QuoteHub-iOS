@@ -15,16 +15,10 @@ struct BookDetailView: View {
     @State private var showAlert: Bool = false
     @State private var isImageLoaded: Bool = false
     @Environment(\.dismiss) var dismiss
-//    @Environment(\.modelContext) private var modelContext
+    @Environment(\.modelContext) private var modelContext
     
     @Environment(UserAuthenticationManager.self) private var userAuthManager
-
-    // 임시저장 관련
-//    @State private var draftManager: DraftManager?
-//    @State private var showDraftAlert: Bool = false
-//    @State private var currentDraft: DraftStory?
-//    @State private var shouldNavigateToRecord: Bool = false
-//    @State private var shouldLoadDraft: Bool = false    // 임시저장 데이터 불러올지 말지 결정
+    @State private var hasDraft: Bool = false
 
     // MARK: - BODY
     
@@ -57,22 +51,23 @@ struct BookDetailView: View {
             }
         }
         .backgroundGradient()
+        .task {
+            let manager = DraftManager(modelContext: modelContext)
+            hasDraft = await manager.hasDraft(for: book.id)
+        }
         .ignoresSafeArea(.container, edges: .top)
         .navigationBarHidden(true)
-//        .onAppear {
-//            setupDraftManager()
-//        }
-//        .alert("알림", isPresented: $showDraftAlert) {
-//            Button("새로 작성하기") {
-//                navigateToRecord(loadDraft: false)
-//            }
-//            Button("이어서 작성하기") {
-//                navigateToRecord(loadDraft: true)
-//            }
-//            Button("취소", role: .cancel) { }
-//        } message: {
-//            Text("이 책에 대한 임시저장된 글이 있습니다.")
-//        }
+        .alert("알림", isPresented: $hasDraft) {
+            NavigationLink {
+                StoryQuotesRecordView(book: book, showDraft: true)
+            } label: {
+                Text("이어서 작성하기")
+            }
+            
+            Button("취소", role: .cancel) { }
+        } message: {
+            Text("이 책에 대한 임시저장된 글이 있습니다.")
+        }
         .alert("외부 사이트로 이동", isPresented: $showAlert) {
             Button("확인") {
                 if let url = URL(string: book.bookLink) {
@@ -89,30 +84,6 @@ struct BookDetailView: View {
             alignment: .top
         )
     }
-    
-    // MARK: - Draft Management
-//    
-//    private func setupDraftManager() {
-//        draftManager = DraftManager(modelContext: modelContext)
-//    }
-//    
-//    /// 북스토리 기록하기 버튼 누를 때 활성화됨. 임시저장된 스토리를 불러올지(alert을 띄울지) 아니면 바로 RecordView로 이동시킬지 결정
-//    private func checkForCurrentBookDraft() {
-//        guard let draftManager = draftManager else { return }
-//        
-//        if let draft = draftManager.loadDraft(), draft.bookId == book.id {
-//            currentDraft = draft
-//            showDraftAlert = true
-//        } else {
-//            // 임시저장이 없거나 다른 책이면 바로 RecordView로 이동
-//            navigateToRecord(loadDraft: false)
-//        }
-//    }
-//    
-//    private func navigateToRecord(loadDraft: Bool) {
-//        shouldLoadDraft = loadDraft
-//        shouldNavigateToRecord = true
-//    }
     
     // MARK: - UI COMPONENTS
     

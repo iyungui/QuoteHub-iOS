@@ -133,11 +133,6 @@ final class AuthService: AuthServiceProtocol {
         try tokenManager.updateBothTokens(newAccessToken: newAccessToken, newRefreshToken: newRefreshToken)
     }
     
-    /// 현재 유효한 토큰이 있는지 확인
-    var hasValidToken: Bool {
-        return tokenManager.hasValidToken()
-    }
-    
     /// 현재 유효한 액세스 토큰 반환
     var validAccessToken: String? {
         return tokenManager.getAccessToken()

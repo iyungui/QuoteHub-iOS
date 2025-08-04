@@ -21,10 +21,12 @@ struct StoryQuotesRecordView: View {
     let book: Book
     let storyId: String?    // 북스토리 수정 시 사용
     var isEditMode: Bool { storyId != nil }
+    let showDraft: Bool?
     
-    init(book: Book, storyId: String? = nil) {
+    init(book: Book, storyId: String? = nil, showDraft: Bool? = false) {
         self.book = book
         self.storyId = storyId
+        self.showDraft = showDraft
     }
 
     @Environment(MyBookStoriesViewModel.self) private var myBookStoriesViewModel

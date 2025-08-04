@@ -63,7 +63,6 @@ extension View {
 }
 
 // MARK: - HIDE KEYBOARD
-// TODO: - 이거 필요한지 확인
 
 #if canImport(UIKit)
 extension View {

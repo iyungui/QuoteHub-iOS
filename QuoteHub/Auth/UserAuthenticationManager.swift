@@ -7,8 +7,6 @@
 
 import Foundation
 
-// TODO: - refac
-
 @Observable
 final class UserAuthenticationManager: LoadingViewModel {
     var isUserAuthenticated: Bool = false
@@ -120,12 +118,10 @@ final class UserAuthenticationManager: LoadingViewModel {
             } else if let newAccessToken = validationData.accessToken,
                     let newRefreshToken = validationData.refreshToken {
                 // 새 토큰 Keychain에 업데이트
-                Task.detached { // 토큰 저장 완료되면 Task는 자동으로 메모리에서 해제
-                    try? await self.authService.updateBothTokens(
-                        newAccessToken: newAccessToken,
-                        newRefreshToken: newRefreshToken
-                    )
-                }
+                try self.authService.updateBothTokens(
+                    newAccessToken: newAccessToken,
+                    newRefreshToken: newRefreshToken
+                )
                 
                 goToLibraryView()
                 print("새 토큰 발급 - 자동 로그인 성공")

@@ -87,7 +87,6 @@ struct MyLibraryView: View {
                 await myBookStoriesViewModel.refreshBookStories()
             }
             group.addTask {
-                // TODO: - refac
                 await myThemesViewModel.refreshThemes()
             }
         }

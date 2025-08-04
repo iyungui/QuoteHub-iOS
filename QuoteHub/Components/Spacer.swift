@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// TODO: - 필요한지 확인
 public func spacer(height: CGFloat) -> some View {
     Spacer().frame(height: height)
 }

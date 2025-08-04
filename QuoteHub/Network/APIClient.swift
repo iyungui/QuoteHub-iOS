@@ -93,11 +93,6 @@ final class APIClient {
         return tokenManager.getAccessToken()
     }
     
-    /// 토큰 존재 여부 확인
-    func hasValidToken() -> Bool {
-        return tokenManager.hasValidToken()
-    }
-    
     // MARK: - Private Methods
     
     /// 네트워크 요청 실행 및 응답 처리

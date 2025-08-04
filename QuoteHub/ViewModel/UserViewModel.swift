@@ -159,8 +159,6 @@ extension UserViewModel {
     
 }
 
-// MARK: - Helper Methods (TODO: - 다른 뷰모델에서 범용적으로 사용 가능한지)
-
 extension UserViewModel {
     
     /// 메시지 초기화

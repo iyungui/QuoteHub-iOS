@@ -48,7 +48,6 @@ struct MyLibraryStoriesView: View {
                         .task {
                             await myBookStoriesViewModel.loadMoreIfNeeded(currentItem: story)
                         }
-                    // TODO: 다시 로딩 인디케이터나 로딩 뷰 적용하기
                 }
             }
             .padding(.horizontal, horizontalPadding)

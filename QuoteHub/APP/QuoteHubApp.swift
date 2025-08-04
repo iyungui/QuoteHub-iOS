@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct QuoteHubApp: App {
@@ -23,28 +24,26 @@ struct QuoteHubApp: App {
     @State private var blockReportViewModel = BlockReportViewModel()
     @StateObject private var tabController = TabController()
 
-    // TODO: - SwiftData -> CoreData
-    
     // SwiftData ModelContainer 설정
-//    var sharedModelContainer: ModelContainer = {
-//        let schema = Schema([
-//            DraftStory.self
-//        ])
-//        
-//        let modelConfiguration = ModelConfiguration(
-//            schema: schema,
-//            isStoredInMemoryOnly: false
-//        )
-//        
-//        do {
-//            return try ModelContainer(
-//                for: schema,
-//                configurations: [modelConfiguration]
-//            )
-//        } catch {
-//            fatalError("Could not create ModelContainer: \(error)")
-//        }
-//    }()
+    var sharedModelContainer: ModelContainer = {
+        let schema = Schema([
+            DraftStory.self
+        ])
+        
+        let modelConfiguration = ModelConfiguration(
+            schema: schema,
+            isStoredInMemoryOnly: false
+        )
+        
+        do {
+            return try ModelContainer(
+                for: schema,
+                configurations: [modelConfiguration]
+            )
+        } catch {
+            fatalError("Could not create ModelContainer: \(error)")
+        }
+    }()
     
     init() {
         // 앱 시작 시 시스템 폰트 초기화
@@ -63,7 +62,7 @@ struct QuoteHubApp: App {
                 .environment(myBookStoriesViewModel)
                 .environment(publicBookStoriesViewModel)
         }
-//        .modelContainer(sharedModelContainer)
+        .modelContainer(sharedModelContainer)
     }
 }
 

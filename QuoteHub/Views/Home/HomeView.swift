@@ -33,7 +33,6 @@ struct HomeView: View {
                             title: "북스토리 모아보기",
                             gradient: [.brownLeather, .antiqueGold]
                         )
-                        // TODO: - 로딩 중 상태 표시
                         PublicStoriesListView()
                             .frame(height: 350)
                     }
@@ -47,7 +46,6 @@ struct HomeView: View {
                             gradient: [.antiqueGold, .brownLeather]
                         )
                         
-                        // TODO: - 로딩 중 상태 표시
                         PublicThemesListView()
                             .frame(height: 220)
                     }
@@ -91,7 +89,6 @@ struct HomeView: View {
         }
         .task {
             // randombooks 병렬로 호출
-            // TODO: 여기서 호출 한번 더??
             await withTaskGroup(of: Void.self) { group in
                 group.addTask {
                     await booksViewModel.fetchRandomBooks()
