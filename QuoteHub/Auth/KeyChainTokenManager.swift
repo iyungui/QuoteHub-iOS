@@ -41,18 +41,7 @@ final class KeyChainTokenManager {
     /// 유효한 액세스 토큰을 반환
     func getAccessToken() -> String? {
         do {
-            // keychain에 저장된 액세스토큰 가져오기
-            guard let accessToken = try keychain.get(Keys.accessToken) else {
-                // 토큰이 없으면 nil 반환
-                return nil
-            }
-            
-            // 토큰이 만료되었는지 확인
-            if isAccessTokenExpired() {
-                return nil  // 만료된 토큰은 nil 반환
-            }
-            
-            return accessToken
+            return try keychain.get(Keys.accessToken)
         } catch {
             return nil
         }

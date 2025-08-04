@@ -103,6 +103,7 @@ final class UserAuthenticationManager: LoadingViewModel {
         do {
             // 네트워크 요청(백그라운드 스레드에서 실행)
             let response = try await authService.validateAndRenewToken()
+            print("validateAndRenewToken log: \(response.message)")
             
             guard response.success, let validationData = response.data else {
                 // 토큰 검증 실패 (액세스, 리프레시 토큰 모두 만료된 경우)
