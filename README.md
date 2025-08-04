@@ -299,19 +299,25 @@ struct ContentView: View {
 
 
 #### **Task.detached 활용**
-UserAuthenticationManager에서는 **Task.detached를 사용해서 토큰 관련 로직을 백그라운드 스레드에서 실행**되도록 보장했습니다. Task.detached는 독립적인 컨텍스트에서 실행되도록 하는데, **@MainActor에서 컨텍스트가 상속되기 때문에, 토큰 관련 로직을 백그라운드에서 실행시키고 싶다면 Task.detached를 사용해야** 했습니다.
+UserAuthenticationManager에서는 Task.detached를 사용해서 토큰 관련 로직을 백그라운드 스레드에서 실행되도록 설계했습니다. Task.detached는 독립적인 컨텍스트에서 실행되도록 하는데, @MainActor에서 컨텍스트가 상속되기 때문에, 토큰 관련 로직을 백그라운드에서 실행시키고 싶다면 Task.detached를 사용해야 한다고 판단했습니다.
+토큰 관리가 시간이 오래 걸리는 작업은 아니지만 UI 관련된 로직이 아니기에 분리를 해야한다고 생각해서 설계했습니다.
 
-토큰 관리가 시간이 오래 걸리는 작업은 아니지만 **UI 관련된 로직이 아니기에 분리를 해야한다고 생각**해서 설계했습니다. 이 부분에 부족한 점이나 틀린 점이 있다면 피드백 부탁드립니다.
 
 ```swift
-                // 새 토큰 Keychain에 업데이트
-                Task.detached { // 토큰 저장 완료되면 Task는 자동으로 메모리에서 해제
-                    try? await self.authService.updateBothTokens(
-                        newAccessToken: newAccessToken,
-                        newRefreshToken: newRefreshToken
-                    )
-                }
+// 초기 구현
+Task.detached { // 토큰 저장 완료되면 Task는 자동으로 메모리에서 해제
+    try? await self.authService.updateBothTokens(
+        newAccessToken: newAccessToken,
+        newRefreshToken: newRefreshToken
+    )
+}
+goToLibraryView() // 즉시 다음 화면으로 이동
 ```
+
+그러나 이러한 제 설계로 인해, race condition 문제가 발생했다는 것을 파악했습니다.
+Task.detached로 비동기 저장을 하게 되면, 토큰 저장이 완료되지 않아 기존의 만료된 토큰으로 API요청을 할 가능성이 존재하게 된다는 것을 파악했습니다.
+
+이 경험을 통해 개발 환경에서 발견하기 어려운 타이밍 이슈를 해결할 수 있었습니다.
 
 ---
 
