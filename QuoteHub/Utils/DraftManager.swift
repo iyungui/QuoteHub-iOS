@@ -28,7 +28,7 @@ final class DraftManager {
     
     // MARK: - Public Methods
     
-    /// bookId에 대해 현재 임시저장이 있는지 확인
+    /// 현재 임시저장이 있는지 확인
     @MainActor
     func hasDraft(for bookId: String) async -> Bool {
         let descriptor = FetchDescriptor<DraftStory>(
@@ -168,23 +168,6 @@ final class DraftManager {
         } catch {
             print("❌ 임시저장 삭제 실패: \(error)")
             lastError = error
-        }
-    }
-    
-    /// 최종 저장 후 임시저장 삭제
-    @MainActor
-    func finalizeAndClearDraft(
-        for bookId: String,
-        onSave: @escaping () async throws -> Void
-    ) async throws {
-        do {
-            try await onSave()
-            clearDraft(for: bookId)
-            print("✅ 최종 저장 완료 및 임시저장 삭제")
-        } catch {
-            print("❌ 최종 저장 실패: \(error)")
-            lastError = error
-            throw error
         }
     }
     
