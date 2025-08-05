@@ -22,7 +22,7 @@
 
 ## 버전 히스토리
 
-### [Version 2.0 (2025.05.25 ~ 2025.07.01)](./docs/v1.0-release-notes.md)
+### [Version 2.0 (2025.05.25 ~ 2025.07.01)](./docs/v2.0-release-notes.md)
 - 37일간 전면 리팩토링
 - Swift Concurrency (async/await) 전면 도입
 - MVVM 아키텍처 개선 및 Protocol 기반 설계
