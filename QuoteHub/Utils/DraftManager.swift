@@ -102,35 +102,6 @@ final class DraftManager {
         )
     }
     
-    /// 임시저장 저장/업데이트 (기존 것이 있으면 덮어쓰기)
-    func saveDraft(
-        bookId: String,
-        bookTitle: String,
-        bookAuthor: String = "",
-        bookImageURL: String = "",
-        keywords: [String],
-        quotes: [Quote],
-        content: String,
-        isPublic: Bool,
-        themeIds: [String],
-        images: [UIImage]
-    ) {
-        Task { @MainActor in
-            await performSave(
-                bookId: bookId,
-                bookTitle: bookTitle,
-                bookAuthor: bookAuthor,
-                bookImageURL: bookImageURL,
-                keywords: keywords,
-                quotes: quotes,
-                content: content,
-                isPublic: isPublic,
-                themeIds: themeIds,
-                images: images
-            )
-        }
-    }
-    
     /// 특정 책의 임시저장 삭제
     @MainActor
     func clearDraft(for bookId: String) {
