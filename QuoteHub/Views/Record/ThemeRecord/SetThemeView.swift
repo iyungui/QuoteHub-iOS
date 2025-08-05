@@ -189,7 +189,6 @@ struct SetThemeView: View {
                     await myThemesViewModel.loadMoreIfNeeded(currentItem: theme)
                 }
             }
-            // TODO: Loading Indicator
         }
     }
     

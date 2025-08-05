@@ -150,8 +150,6 @@ final class UserAuthenticationManager: LoadingViewModel {
         }
         // 상태 초기화 (온보딩뷰로 이동)
         goToOnboardingView()
-        
-        print("로그아웃 성공")
     }
     
     /// 계정 탈퇴
@@ -194,7 +192,6 @@ final class UserAuthenticationManager: LoadingViewModel {
         isGuestMode = false
         showingLoginView = false
         showingNicknameSetup = false  // 닉네임 설정 상태도 초기화
-        print("온보딩뷰로 이동!")
     }
     
     @MainActor
@@ -205,7 +202,5 @@ final class UserAuthenticationManager: LoadingViewModel {
         showingLoginView = false
         showingNicknameSetup = false  // 닉네임 설정 상태도 초기화
         showingFontSetup = false
-        
-        print("라이브러리뷰로 이동!")
     }
 }
