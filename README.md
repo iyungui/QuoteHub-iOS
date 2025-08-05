@@ -12,7 +12,6 @@ Backend Server: Node.js
 
 개발 과정, 사용된 기술, 그리고 향후 발전 방향을 제시하여 저의 성장 과정을 보여드리고자 합니다. 
 
-자세한 내용은 [노션](https://silicon-distance-ef3.notion.site/1ebf678b2fe28144b7c1ed561be284d7?pvs=4)에서 pdf 문서 파일을 통해 확인할 수 있습니다.
 
 ## **프로젝트 목표 및 개요**
 
