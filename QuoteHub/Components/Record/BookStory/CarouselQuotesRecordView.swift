@@ -41,7 +41,7 @@ struct CarouselQuotesRecordView: View {
                     }
                     .onChange(of: formViewModel.quotes.count) { oldCount, newCount in
                         // quote가 추가되었을 때 새로 추가된 페이지로 이동
-                        print(oldCount, newCount)
+                        print("CarouselQuotesRecordView - quotes count changed: \(oldCount) → \(newCount)")
                         if newCount > oldCount {
                             let newIndex = min(currentQuoteIndex + 1, newCount - 1)
                             currentQuoteIndex = newIndex
@@ -79,9 +79,11 @@ struct CarouselQuotesRecordView: View {
                     .environmentObject(formViewModel)
                     .offset(y: -10)
             }
+            
+            // 하단 컨트롤 버튼들
             HStack(spacing: 10) {
+                // Quote 삭제 버튼
                 Button {
-                    // quote 입력 페이지 삭제 (현재 index)
                     focusFields.wrappedValue = nil
                     formViewModel.removeQuote(at: currentQuoteIndex)
                 } label: {
@@ -96,8 +98,27 @@ struct CarouselQuotesRecordView: View {
                 
                 Divider().background(Color.white)
                 
+                // OCR 버튼 (새로 추가)
                 Button {
-                    // quote 입력 페이지 추가 (현재 index 바로 앞에)
+                    focusFields.wrappedValue = nil
+                    
+                    if formViewModel.canUseOCR() {
+                        formViewModel.showingOCRActionSheet = true
+                    } else {
+                        formViewModel.showOCRLimitAlert()
+                    }
+                } label: {
+                    Image(systemName: "text.viewfinder")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: width * 0.2/2)
+                        .foregroundColor(.white)
+                }
+                
+                Divider().background(Color.white)
+                
+                // Quote 추가 버튼
+                Button {
                     focusFields.wrappedValue = nil
                     formViewModel.addQuote(at: currentQuoteIndex)
                 } label: {
@@ -117,7 +138,35 @@ struct CarouselQuotesRecordView: View {
         .contentMargins(32)
         .scrollTargetBehavior(.paging)
         .frame(height: width <= 375 ? width * 0.8 : width)
+        // OCR 액션 시트
+        .confirmationDialog("사진에서 텍스트 추출", isPresented: $formViewModel.showingOCRActionSheet) {
+            Button("카메라로 촬영") {
+                checkCameraPermissionForOCR()
+            }
+            
+            Button("사진 라이브러리에서 선택") {
+                checkGalleryPermissionForOCR()
+            }
+            
+            Button("취소", role: .cancel) { }
+        } message: {
+            Text("텍스트가 포함된 이미지를 선택해주세요.\n오늘 남은 무료 사용: \(formViewModel.ocrUsageManager.getRemainingFreeUsage())회")
+        }
+        // OCR용 카메라 시트
+        .sheet(isPresented: $formViewModel.showingOCRCamera) {
+            OCRCameraPicker { selectedImage in
+                formViewModel.startOCRProcess(with: selectedImage, targetIndex: currentQuoteIndex)
+            }
+        }
+        // OCR용 갤러리 시트
+        .sheet(isPresented: $formViewModel.showingOCRGallery) {
+            OCRGalleryPicker { selectedImage in
+                formViewModel.startOCRProcess(with: selectedImage, targetIndex: currentQuoteIndex)
+            }
+        }
     }
+    
+    // MARK: - View Components
     
     private func quoteInputCard(quote: Quote, index: Int) -> some View {
         VStack(spacing: 0) {
@@ -167,4 +216,43 @@ struct CarouselQuotesRecordView: View {
                 )
         )
     }
+    
+    // MARK: - OCR Permission Methods
+    
+    private func checkCameraPermissionForOCR() {
+        PermissionsManager.shared.checkCameraAuthorization { granted in
+            DispatchQueue.main.async {
+                if granted {
+                    formViewModel.showingOCRCamera = true
+                } else {
+                    showOCRPermissionAlert(for: .camera)
+                }
+            }
+        }
+    }
+    
+    private func checkGalleryPermissionForOCR() {
+        PermissionsManager.shared.checkPhotosAuthorization { granted in
+            DispatchQueue.main.async {
+                if granted {
+                    formViewModel.showingOCRGallery = true
+                } else {
+                    showOCRPermissionAlert(for: .photoLibrary)
+                }
+            }
+        }
+    }
+    
+    private func showOCRPermissionAlert(for sourceType: UIImagePickerController.SourceType) {
+        formViewModel.alertMessage = sourceType == .camera ?
+            "OCR 기능을 사용하려면 카메라 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요." :
+            "OCR 기능을 사용하려면 사진 라이브러리 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요."
+        formViewModel.alertType = .authorized
+        formViewModel.showAlert = true
+    }
 }
+
+//#Preview {
+//    CarouselQuotesRecordView(focusFields: .constant(.quoteText))
+//        .environmentObject(StoryFormViewModel())
+//}

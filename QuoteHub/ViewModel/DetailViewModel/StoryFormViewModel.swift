@@ -7,8 +7,13 @@
 
 import SwiftUI
 
-final class StoryFormViewModel: ObservableObject {
-    // 모든 페이지에서 입력 가능
+final class StoryFormViewModel: ObservableObject, LoadingViewModel {
+    
+    // MARK: - LoadingViewModel Protocol
+    @Published var isLoading: Bool = false
+    @Published var loadingMessage: String?
+    
+    // MARK: - 모든 페이지에서 입력 가능
     /// 키워드 입력
     @Published var keywords: [String] = []
     @Published var inlineKeywordInput: String = ""
@@ -18,7 +23,7 @@ final class StoryFormViewModel: ObservableObject {
     @Published var isShowingDuplicateWarning = false
     @Published var feedbackMessage: String? = nil
     
-    // PAGE 1에서 입력 가능
+    // MARK: - PAGE 1에서 입력 가능
     /// 문장 입력
     @Published var quotes = [Quote(id: UUID(), quote: "", page: nil)]
     
@@ -28,8 +33,7 @@ final class StoryFormViewModel: ObservableObject {
     @Published var currentQuoteText: String = ""
     @Published var currentQuotePage: String = ""
     
-    
-    // PAGE 2에서 입력 가능 (페이지 2는 선택 필드)
+    // MARK: - PAGE 2에서 입력 가능 (페이지 2는 선택 필드)
     /// 느낀점 입력
     @Published var showingContentSheet = false
     @Published var content: String = ""
@@ -48,6 +52,19 @@ final class StoryFormViewModel: ObservableObject {
     @Published var alertMessage: String = ""
     @Published var alertType: PhotoPickerAlertType = .authorized
     
+    // MARK: - OCR 관련 상태
+    @Published var showingOCRActionSheet = false
+    @Published var extractedOCRText = ""
+    @Published var showingOCRPreview = false
+    @Published var selectedOCRImage: UIImage?
+    @Published var ocrTargetQuoteIndex: Int = 0  // OCR 텍스트를 적용할 Quote 인덱스
+    
+    // OCR 전용 시트 상태 (기존 이미지 피커와 분리)
+    @Published var showingOCRCamera = false
+    @Published var showingOCRGallery = false
+    
+    @State var ocrUsageManager = OCRUsageManager()
+
     // 글자수 제한 상수
     let keywordMaxLength = 8
     let quoteMaxLength = 500
@@ -59,63 +76,244 @@ final class StoryFormViewModel: ObservableObject {
     
     // MARK: - Computed Properties
     
-    /// 모든 입력 필드가 비어있는지 확인
-    var isEmpty: Bool {
-        keywords.isEmpty &&
-        quotes.allSatisfy { $0.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty } &&
-        content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
-        selectedImages.isEmpty
-    }
-    
-    /// 북스토리 생성 요건 충족 확인
     var isQuotesFilled: Bool {
-        quotes.contains { !$0.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
-    }
-    
-    /// 최종 저장을 위한 데이터 검증
-    var isReadyForFinalSave: Bool {
         return quotes.contains { !$0.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
     }
     
-    // MARK: - Image Methods
+    // MARK: - OCR Methods
     
-    func removeImage(at index: Int) {
-        guard index >= 0 && index < selectedImages.count else { return }
-        selectedImages.remove(at: index)
+    /// OCR 사용 가능 여부 확인
+    func canUseOCR() -> Bool {
+        return ocrUsageManager.canUseOCR(isPremiumUser: checkPremiumStatus())
     }
     
-    func openPhotoLibrary() {
-        sourceType = .photoLibrary
-        PermissionsManager.shared.checkPhotosAuthorization { [weak self] authorized in
+    /// OCR 프로세스 시작
+    func startOCRProcess(with image: UIImage, targetIndex: Int) {
+        // 사용 횟수 체크
+        guard canUseOCR() else {
+            showOCRLimitAlert()
+            return
+        }
+        
+        // 타겟 인덱스 저장
+        ocrTargetQuoteIndex = targetIndex
+        selectedOCRImage = image
+        
+        // 로딩 시작
+        isLoading = true
+        loadingMessage = "텍스트를 추출하고 있습니다..."
+        
+        // OCR 처리
+        image.extractText { [weak self] result in
             DispatchQueue.main.async {
-                if authorized {
-                    self?.showingGallery = true
-                } else {
-                    self?.showPermissionAlert(for: .photoLibrary)
-                }
+                self?.handleOCRResult(result)
             }
         }
     }
     
+    /// OCR 결과 처리
+    private func handleOCRResult(_ result: String?) {
+        // 로딩 종료
+        isLoading = false
+        loadingMessage = nil
+        
+        guard let extractedText = result, !extractedText.isEmpty else {
+            showOCRErrorAlert()
+            return
+        }
+        
+        // 사용 횟수 증가
+        ocrUsageManager.incrementUsage()
+        
+        // 추출된 텍스트 저장 및 미리보기 표시
+        extractedOCRText = extractedText
+        showingOCRPreview = true
+        
+        print("✅ OCR 성공 - 추출된 텍스트: \(extractedText.prefix(50))...")
+    }
+    
+    /// OCR 텍스트를 현재 Quote에 적용
+    func applyOCRTextToQuote(_ text: String) {
+        guard ocrTargetQuoteIndex < quotes.count else {
+            print("❌ OCR 적용 실패: 잘못된 인덱스 \(ocrTargetQuoteIndex)")
+            return
+        }
+        
+        let cleanedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        let truncatedText = String(cleanedText.prefix(quoteMaxLength))
+        
+        // 기존 텍스트와 합치기 또는 교체
+        if quotes[ocrTargetQuoteIndex].quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            // 빈 Quote면 교체
+            quotes[ocrTargetQuoteIndex].quote = truncatedText
+        } else {
+            // 기존 텍스트가 있으면 뒤에 추가
+            let currentText = quotes[ocrTargetQuoteIndex].quote
+            let combinedText = "\(currentText)\n\(truncatedText)"
+            quotes[ocrTargetQuoteIndex].quote = String(combinedText.prefix(quoteMaxLength))
+        }
+        
+        print("✅ OCR 텍스트 적용 완료 - 인덱스: \(ocrTargetQuoteIndex)")
+        
+        // 상태 초기화
+        resetOCRState()
+    }
+    
+    /// OCR 취소
+    func cancelOCR() {
+        resetOCRState()
+    }
+    
+    /// OCR 상태 초기화
+    private func resetOCRState() {
+        extractedOCRText = ""
+        selectedOCRImage = nil
+        showingOCRPreview = false
+        showingOCRCamera = false
+        showingOCRGallery = false
+        ocrTargetQuoteIndex = 0
+    }
+    
+    /// OCR 사용 제한 알림
+    func showOCRLimitAlert() {
+        let remainingCount = ocrUsageManager.getRemainingFreeUsage()
+        let maxCount = ocrUsageManager.getMaxFreeUsage()
+        
+        if remainingCount > 0 {
+            alertMessage = "오늘 OCR 무료 사용 횟수: \(maxCount - remainingCount)/\(maxCount)회"
+        } else {
+            alertMessage = """
+            오늘 OCR 무료 사용 횟수(\(maxCount)회)를 모두 사용했습니다.
+            
+            프리미엄으로 업그레이드하면 무제한으로 사용할 수 있습니다.
+            """
+        }
+        
+        showAlert = true
+    }
+    
+    /// OCR 에러 알림
+    private func showOCRErrorAlert() {
+        alertMessage = """
+        텍스트를 인식할 수 없습니다.
+        
+        • 텍스트가 선명한 이미지를 사용해주세요
+        • 조명이 밝은 곳에서 촬영해주세요
+        • 텍스트가 잘 보이도록 각도를 조정해주세요
+        """
+        showAlert = true
+    }
+    
+    /// 프리미엄 상태 확인 (향후 인앱결제 연동)
+    private func checkPremiumStatus() -> Bool {
+        // TODO: 인앱결제 상태 확인 로직 구현
+        return false  // 현재는 모든 사용자가 무료
+    }
+    
+    // MARK: - 기존 Image Methods (복원)
+    
+    /// 카메라 열기
     func openCamera() {
-        sourceType = .camera
-        PermissionsManager.shared.checkCameraAuthorization { [weak self] authorized in
+        checkCameraPermission()
+    }
+    
+    /// 사진 라이브러리 열기
+    func openPhotoLibrary() {
+        checkGalleryPermission()
+    }
+    
+    func checkCameraPermission() {
+        PermissionsManager.shared.checkCameraAuthorization { [weak self] granted in
             DispatchQueue.main.async {
-                if authorized {
+                if granted {
+                    self?.sourceType = .camera
                     self?.showingCamera = true
                 } else {
-                    self?.showPermissionAlert(for: .camera)
+                    self?.alertType = .authorized
+                    self?.showCameraPermissionAlert()
                 }
             }
         }
     }
     
-    private func showPermissionAlert(for sourceType: UIImagePickerController.SourceType) {
-        alertType = .authorized
-        alertMessage = sourceType == .camera ?
-            "북스토리에 이미지를 업로드하려면 카메라 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요." :
-            "북스토리에 이미지를 업로드하려면 사진 라이브러리 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요."
+    func checkGalleryPermission() {
+        PermissionsManager.shared.checkPhotosAuthorization { [weak self] granted in
+            DispatchQueue.main.async {
+                if granted {
+                    self?.sourceType = .photoLibrary
+                    self?.showingGallery = true
+                } else {
+                    self?.alertType = .authorized
+                    self?.showGalleryPermissionAlert()
+                }
+            }
+        }
+    }
+    
+    private func showCameraPermissionAlert() {
+        alertMessage = "북스토리에 이미지를 업로드하려면 카메라 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요."
         showAlert = true
+    }
+    
+    private func showGalleryPermissionAlert() {
+        alertMessage = "북스토리에 이미지를 업로드하려면 사진 라이브러리 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요."
+        showAlert = true
+    }
+    
+    // MARK: - Quote Methods
+    
+    func pageBinding(for quoteId: UUID) -> Binding<String> {
+        Binding<String>(
+            get: {
+                self.quotes.first { $0.id == quoteId }?.page?.description ?? ""
+            },
+            set: { newValue in
+                if let index = self.quotes.firstIndex(where: { $0.id == quoteId }) {
+                    let trimmedValue = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
+                    self.quotes[index].page = trimmedValue.isEmpty ? nil : Int(trimmedValue)
+                }
+            }
+        )
+    }
+    
+    func addQuote(at index: Int? = nil) {
+        let newQuote = Quote(id: UUID(), quote: "", page: nil)
+        if let index = index {
+            quotes.insert(newQuote, at: min(index + 1, quotes.count))
+        } else {
+            quotes.append(newQuote)
+        }
+    }
+    
+    func removeQuote(at index: Int) {
+        guard quotes.count > 1, index < quotes.count else { return }
+        quotes.remove(at: index)
+    }
+    
+    func addCurrentQuote() {
+        let trimmedQuote = currentQuoteText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedQuote.isEmpty else { return }
+        
+        let page = currentQuotePage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?
+                   nil : Int(currentQuotePage.trimmingCharacters(in: .whitespacesAndNewlines))
+        
+        let newQuote = Quote(id: UUID(), quote: trimmedQuote, page: page)
+        quotes.append(newQuote)
+        
+        currentQuoteText = ""
+        currentQuotePage = ""
+    }
+    
+    func updateFeedbackMessage() {
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+            if quotes.isEmpty {
+                feedbackMessage = "문장을 최소 하나 입력해주세요."
+            } else if quotes.contains(where: { $0.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }) {
+                feedbackMessage = "빈 문장이 있습니다. 내용을 입력해주세요."
+            } else {
+                feedbackMessage = nil
+            }
+        }
     }
     
     // MARK: - Keyword Methods
@@ -191,91 +389,6 @@ final class StoryFormViewModel: ObservableObject {
     func removeInlineKeyword(_ keyword: String) {
         keywords.removeAll { $0 == keyword }
     }
-
-    // MARK: - Quote Methods
-    
-    /// quote 캐러셀 뷰에서 사용 (빈 quote 페이지 생성)
-    func addQuote(at index: Int? = nil) {
-        let newQuote = Quote(id: UUID(), quote: "", page: nil)
-        
-        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-            if let index = index {
-                // 현재 인덱스 바로 뒤에 추가
-                let insertIndex = min(index + 1, quotes.count)
-                quotes.insert(newQuote, at: insertIndex)
-            } else {
-                // 인덱스가 주어지지 않으면 맨 뒤 페이지에 quote 추가
-                quotes.append(newQuote)
-            }
-        }
-    }
-    
-    /// quote 리스트 뷰에서 사용
-    func addCurrentQuote() {
-        let trimmedText = currentQuoteText.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmedText.isEmpty else { return }
-        
-        let page = currentQuotePage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?
-        nil : Int(currentQuotePage.trimmingCharacters(in: .whitespacesAndNewlines))
-        
-        let newQuote = Quote(id: UUID(), quote: trimmedText, page: page)
-        
-        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-            // 빈 quote가 있다면 대체, 없다면 추가
-            if let emptyIndex = quotes.firstIndex(where: {
-                $0.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            }) {
-                quotes[emptyIndex] = newQuote
-            } else {
-                quotes.append(newQuote)
-            }
-        }
-        clearQuoteInputField()
-    }
-    
-    private func clearQuoteInputField() {
-        // 입력창 초기화
-        currentQuoteText = ""
-        currentQuotePage = ""
-    }
-    
-    func removeQuote(at index: Int) {
-        // 인덱스 범위 유효한지 확인
-        guard index >= 0 && index < quotes.count else { return }
-        
-        quotes.remove(at: index)
-    }
-    
-    // 페이지 번호를 String으로 바인딩하기 위한 헬퍼 메서드
-    func pageBinding(for quoteId: UUID) -> Binding<String> {
-        Binding(
-            get: {
-                guard let index = self.quotes.firstIndex(where: { $0.id == quoteId }) else {
-                    return ""
-                }
-                return self.quotes[index].page?.description ?? ""
-            },
-            set: { newValue in
-                guard let index = self.quotes.firstIndex(where: { $0.id == quoteId }) else {
-                    return
-                }
-                let trimmedValue = newValue.trimmingCharacters(in: .whitespacesAndNewlines)
-                self.quotes[index].page = trimmedValue.isEmpty ? nil : Int(trimmedValue)
-            }
-        )
-    }
-    
-    func updateFeedbackMessage() {
-        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-            if quotes.isEmpty {
-                feedbackMessage = "문장을 최소 하나 입력해주세요."
-            } else if quotes.contains(where: { $0.quote.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }) {
-                feedbackMessage = "빈 문장이 있습니다. 내용을 입력해주세요."
-            } else {
-                feedbackMessage = nil
-            }
-        }
-    }
     
     // MARK: - Form Management
     
@@ -288,6 +401,9 @@ final class StoryFormViewModel: ObservableObject {
         themeIds = []
         inlineKeywordInput = ""
         feedbackMessage = nil
+        
+        // OCR 상태도 리셋
+        resetOCRState()
     }
     
     // MARK: - Data Loading (for Update)
@@ -347,6 +463,18 @@ final class StoryFormViewModel: ObservableObject {
             self.selectedImages = loadedImages
         }
     }
+    
+    // MARK: - OCR 디버그 메서드 (개발용)
+    
+    #if DEBUG
+    func debugResetOCRUsage() {
+        ocrUsageManager.debugResetUsage()
+    }
+    
+    func debugSetOCRUsage(_ count: Int) {
+        ocrUsageManager.debugSetUsage(count)
+    }
+    #endif
 }
 
 // MARK: - StoryFormViewModel Extension

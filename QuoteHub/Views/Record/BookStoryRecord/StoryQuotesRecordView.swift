@@ -60,6 +60,18 @@ struct StoryQuotesRecordView: View {
         } message: {
             Text(formViewModel.alertMessage)
         }
+        .sheet(isPresented: $formViewModel.showingOCRPreview) {
+            OCRPreviewSheet(
+                extractedText: $formViewModel.extractedOCRText,
+                originalImage: formViewModel.selectedOCRImage,
+                onApply: { text in
+                    formViewModel.applyOCRTextToQuote(text)
+                },
+                onCancel: {
+                    formViewModel.cancelOCR()
+                }
+            )
+        }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(isEditMode ? "북스토리 수정" : "북스토리 기록")
         .toolbar {
