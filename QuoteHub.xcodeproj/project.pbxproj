@@ -150,6 +150,7 @@
 		CE93C0AD2E0FA87400CF4AB5 /* quotehub_logo.json in Resources */ = {isa = PBXBuildFile; fileRef = CE93C0AA2E0FA87400CF4AB5 /* quotehub_logo.json */; };
 		CE991FB22E532B6F004D609C /* OCRUsageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE991FB12E532B6F004D609C /* OCRUsageManager.swift */; };
 		CE991FB42E533527004D609C /* OCRManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE991FB32E533527004D609C /* OCRManager.swift */; };
+		CE991FB62E5343E5004D609C /* OCRPreviewSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE991FB52E5343E5004D609C /* OCRPreviewSheet.swift */; };
 		CEA554B82E003BFD0029A8A9 /* CarouselQuotesRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554AE2E003BFD0029A8A9 /* CarouselQuotesRecordView.swift */; };
 		CEA554BA2E003BFD0029A8A9 /* KeywordInputSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554B02E003BFD0029A8A9 /* KeywordInputSection.swift */; };
 		CEA554BB2E003BFD0029A8A9 /* ListQuotesRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554B12E003BFD0029A8A9 /* ListQuotesRecordView.swift */; };
@@ -367,6 +368,7 @@
 		CE93C0AA2E0FA87400CF4AB5 /* quotehub_logo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = quotehub_logo.json; sourceTree = "<group>"; };
 		CE991FB12E532B6F004D609C /* OCRUsageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRUsageManager.swift; sourceTree = "<group>"; };
 		CE991FB32E533527004D609C /* OCRManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRManager.swift; sourceTree = "<group>"; };
+		CE991FB52E5343E5004D609C /* OCRPreviewSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRPreviewSheet.swift; sourceTree = "<group>"; };
 		CEA554AE2E003BFD0029A8A9 /* CarouselQuotesRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselQuotesRecordView.swift; sourceTree = "<group>"; };
 		CEA554B02E003BFD0029A8A9 /* KeywordInputSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordInputSection.swift; sourceTree = "<group>"; };
 		CEA554B12E003BFD0029A8A9 /* ListQuotesRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListQuotesRecordView.swift; sourceTree = "<group>"; };
@@ -888,6 +890,7 @@
 			children = (
 				CEA554B22E003BFD0029A8A9 /* StoryQuotesRecordView.swift */,
 				CEA554B32E003BFD0029A8A9 /* StorySettingRecordView.swift */,
+				CE991FB52E5343E5004D609C /* OCRPreviewSheet.swift */,
 			);
 			path = BookStoryRecord;
 			sourceTree = "<group>";
@@ -1286,6 +1289,7 @@
 				CE8C49192DF15FF9003188ED /* DraftStory.swift in Sources */,
 				CE8C47942DEA8D93003188ED /* Report.swift in Sources */,
 				CE8C47952DEA8D93003188ED /* User.swift in Sources */,
+				CE991FB62E5343E5004D609C /* OCRPreviewSheet.swift in Sources */,
 				C67AA3CB2AE389F500490DDE /* BookSearchViewModel.swift in Sources */,
 				C694A2ED2AC5778400574D20 /* UserService.swift in Sources */,
 				CECBB4CB2E081A87004C7856 /* MyBookStoryDetailView.swift in Sources */,
