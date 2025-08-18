@@ -148,6 +148,7 @@
 		CE8C497F2DF1E874003188ED /* AppVersionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C497E2DF1E874003188ED /* AppVersionManager.swift */; };
 		CE93C0AC2E0FA87400CF4AB5 /* progressLottie.json in Resources */ = {isa = PBXBuildFile; fileRef = CE93C0A92E0FA87400CF4AB5 /* progressLottie.json */; };
 		CE93C0AD2E0FA87400CF4AB5 /* quotehub_logo.json in Resources */ = {isa = PBXBuildFile; fileRef = CE93C0AA2E0FA87400CF4AB5 /* quotehub_logo.json */; };
+		CE991FB22E532B6F004D609C /* OCRUsageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE991FB12E532B6F004D609C /* OCRUsageManager.swift */; };
 		CEA554B82E003BFD0029A8A9 /* CarouselQuotesRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554AE2E003BFD0029A8A9 /* CarouselQuotesRecordView.swift */; };
 		CEA554BA2E003BFD0029A8A9 /* KeywordInputSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554B02E003BFD0029A8A9 /* KeywordInputSection.swift */; };
 		CEA554BB2E003BFD0029A8A9 /* ListQuotesRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554B12E003BFD0029A8A9 /* ListQuotesRecordView.swift */; };
@@ -363,6 +364,7 @@
 		CE8C497E2DF1E874003188ED /* AppVersionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionManager.swift; sourceTree = "<group>"; };
 		CE93C0A92E0FA87400CF4AB5 /* progressLottie.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = progressLottie.json; sourceTree = "<group>"; };
 		CE93C0AA2E0FA87400CF4AB5 /* quotehub_logo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = quotehub_logo.json; sourceTree = "<group>"; };
+		CE991FB12E532B6F004D609C /* OCRUsageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRUsageManager.swift; sourceTree = "<group>"; };
 		CEA554AE2E003BFD0029A8A9 /* CarouselQuotesRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselQuotesRecordView.swift; sourceTree = "<group>"; };
 		CEA554B02E003BFD0029A8A9 /* KeywordInputSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordInputSection.swift; sourceTree = "<group>"; };
 		CEA554B12E003BFD0029A8A9 /* ListQuotesRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListQuotesRecordView.swift; sourceTree = "<group>"; };
@@ -931,6 +933,7 @@
 			isa = PBXGroup;
 			children = (
 				C6336CF22AAF1AA0007355EC /* ImagePicker.swift */,
+				CE991FB12E532B6F004D609C /* OCRUsageManager.swift */,
 				CE1100E52E0280C3003C592E /* LoadingViewModel.swift */,
 				CEA554CD2E018AF30029A8A9 /* DraftManager.swift */,
 				CECBB52E2E09584F004C7856 /* SampleDataManager.swift */,
@@ -1314,6 +1317,7 @@
 				CE8C48312DEA8DAE003188ED /* UpdateProfileView.swift in Sources */,
 				CE8C48322DEA8DAE003188ED /* VersionInfoView.swift in Sources */,
 				CE8C48332DEA8DAE003188ED /* CommentView.swift in Sources */,
+				CE991FB22E532B6F004D609C /* OCRUsageManager.swift in Sources */,
 				CE8C48E12DF04BD8003188ED /* CustomProgressView.swift in Sources */,
 				CECBB4D62E0825F0004C7856 /* MyThemeGalleryGridView.swift in Sources */,
 				CE4FEFAA2DFDC0350072E8B9 /* TabController.swift in Sources */,
