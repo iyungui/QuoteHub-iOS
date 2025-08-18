@@ -149,6 +149,7 @@
 		CE93C0AC2E0FA87400CF4AB5 /* progressLottie.json in Resources */ = {isa = PBXBuildFile; fileRef = CE93C0A92E0FA87400CF4AB5 /* progressLottie.json */; };
 		CE93C0AD2E0FA87400CF4AB5 /* quotehub_logo.json in Resources */ = {isa = PBXBuildFile; fileRef = CE93C0AA2E0FA87400CF4AB5 /* quotehub_logo.json */; };
 		CE991FB22E532B6F004D609C /* OCRUsageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE991FB12E532B6F004D609C /* OCRUsageManager.swift */; };
+		CE991FB42E533527004D609C /* OCRManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE991FB32E533527004D609C /* OCRManager.swift */; };
 		CEA554B82E003BFD0029A8A9 /* CarouselQuotesRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554AE2E003BFD0029A8A9 /* CarouselQuotesRecordView.swift */; };
 		CEA554BA2E003BFD0029A8A9 /* KeywordInputSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554B02E003BFD0029A8A9 /* KeywordInputSection.swift */; };
 		CEA554BB2E003BFD0029A8A9 /* ListQuotesRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554B12E003BFD0029A8A9 /* ListQuotesRecordView.swift */; };
@@ -365,6 +366,7 @@
 		CE93C0A92E0FA87400CF4AB5 /* progressLottie.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = progressLottie.json; sourceTree = "<group>"; };
 		CE93C0AA2E0FA87400CF4AB5 /* quotehub_logo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = quotehub_logo.json; sourceTree = "<group>"; };
 		CE991FB12E532B6F004D609C /* OCRUsageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRUsageManager.swift; sourceTree = "<group>"; };
+		CE991FB32E533527004D609C /* OCRManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRManager.swift; sourceTree = "<group>"; };
 		CEA554AE2E003BFD0029A8A9 /* CarouselQuotesRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselQuotesRecordView.swift; sourceTree = "<group>"; };
 		CEA554B02E003BFD0029A8A9 /* KeywordInputSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordInputSection.swift; sourceTree = "<group>"; };
 		CEA554B12E003BFD0029A8A9 /* ListQuotesRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListQuotesRecordView.swift; sourceTree = "<group>"; };
@@ -934,6 +936,7 @@
 			children = (
 				C6336CF22AAF1AA0007355EC /* ImagePicker.swift */,
 				CE991FB12E532B6F004D609C /* OCRUsageManager.swift */,
+				CE991FB32E533527004D609C /* OCRManager.swift */,
 				CE1100E52E0280C3003C592E /* LoadingViewModel.swift */,
 				CEA554CD2E018AF30029A8A9 /* DraftManager.swift */,
 				CECBB52E2E09584F004C7856 /* SampleDataManager.swift */,
@@ -1332,6 +1335,7 @@
 				CEA554DD2E01931F0029A8A9 /* ProfileImage.swift in Sources */,
 				CE8C48812DEBF39D003188ED /* SearchBookView.swift in Sources */,
 				CE1101032E03E28E003C592E /* BookStoryCommentEndpoints.swift in Sources */,
+				CE991FB42E533527004D609C /* OCRManager.swift in Sources */,
 				CECBB4B72E07B420004C7856 /* LibraryNavigationItems.swift in Sources */,
 				CECBB5272E0932CA004C7856 /* KeywordInfo.swift in Sources */,
 				CECBB4DE2E08265D004C7856 /* MyStoryGridCard.swift in Sources */,
