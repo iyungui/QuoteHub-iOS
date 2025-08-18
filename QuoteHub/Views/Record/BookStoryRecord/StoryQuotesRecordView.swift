@@ -60,18 +60,6 @@ struct StoryQuotesRecordView: View {
         } message: {
             Text(formViewModel.alertMessage)
         }
-        .sheet(isPresented: $formViewModel.showingOCRPreview) {
-            OCRPreviewSheet(
-                extractedText: $formViewModel.extractedOCRText,
-                originalImage: formViewModel.selectedOCRImage,
-                onApply: { text in
-                    formViewModel.applyOCRTextToQuote(text)
-                },
-                onCancel: {
-                    formViewModel.cancelOCR()
-                }
-            )
-        }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(isEditMode ? "북스토리 수정" : "북스토리 기록")
         .toolbar {
@@ -89,6 +77,18 @@ struct StoryQuotesRecordView: View {
         }
         .environmentObject(formViewModel)
         .progressOverlay(viewModel: myBookStoriesViewModel, opacity: false)
+        .sheet(isPresented: $formViewModel.showingOCRPreview) {
+            OCRPreviewSheet(
+                extractedText: $formViewModel.extractedOCRText,
+                originalImage: formViewModel.selectedOCRImage,
+                onApply: { text in
+                    formViewModel.applyOCRTextToQuote(text)
+                },
+                onCancel: {
+                    formViewModel.cancelOCR()
+                }
+            )
+        }
         .overlay(
             // 임시저장 완료 피드백
             VStack {

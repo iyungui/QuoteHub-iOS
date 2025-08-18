@@ -2,7 +2,7 @@
 //  UniversalImagePicker.swift
 //  QuoteHub
 //
-//  Created by iyungui on 2025/08/18.
+//  Created by iyungui on 8/18/25.
 //
 
 import SwiftUI
@@ -267,6 +267,15 @@ struct UniversalImagePicker: UIViewControllerRepresentable {
 // MARK: - View Extensions for Easy Usage
 
 extension View {
+    func singleImagePicker(
+        isPresented: Binding<Bool>,
+        selectedImage: Binding<UIImage?>,
+    ) -> some View {
+        self.sheet(isPresented: isPresented) {
+            UniversalImagePicker.single(selectedImage: selectedImage)
+        }
+    }
+    
     /// 기존 ImagePicker 호환 (카메라/갤러리)
     func legacyImagePicker(
         isPresented: Binding<Bool>,

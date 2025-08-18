@@ -13,6 +13,9 @@ final class StoryFormViewModel: ObservableObject, LoadingViewModel {
     @Published var isLoading: Bool = false
     @Published var loadingMessage: String?
     
+    // MARK: - OCR Manager 직접 생성
+    private let ocrUsageManager = OCRUsageManager()
+    
     // MARK: - 모든 페이지에서 입력 가능
     /// 키워드 입력
     @Published var keywords: [String] = []
@@ -57,14 +60,12 @@ final class StoryFormViewModel: ObservableObject, LoadingViewModel {
     @Published var extractedOCRText = ""
     @Published var showingOCRPreview = false
     @Published var selectedOCRImage: UIImage?
-    @Published var ocrTargetQuoteIndex: Int = 0  // OCR 텍스트를 적용할 Quote 인덱스
+    @Published var ocrTargetQuoteIndex: Int = 0
     
     // OCR 전용 시트 상태 (기존 이미지 피커와 분리)
     @Published var showingOCRCamera = false
     @Published var showingOCRGallery = false
     
-    @State var ocrUsageManager = OCRUsageManager()
-
     // 글자수 제한 상수
     let keywordMaxLength = 8
     let quoteMaxLength = 500
@@ -129,13 +130,13 @@ final class StoryFormViewModel: ObservableObject, LoadingViewModel {
         extractedOCRText = extractedText
         showingOCRPreview = true
         
-        print("✅ OCR 성공 - 추출된 텍스트: \(extractedText.prefix(50))...")
+        print("OCR 성공 - 추출된 텍스트: \(extractedText.prefix(50))...")
     }
     
     /// OCR 텍스트를 현재 Quote에 적용
     func applyOCRTextToQuote(_ text: String) {
         guard ocrTargetQuoteIndex < quotes.count else {
-            print("❌ OCR 적용 실패: 잘못된 인덱스 \(ocrTargetQuoteIndex)")
+            print("OCR 적용 실패: 잘못된 인덱스 \(ocrTargetQuoteIndex)")
             return
         }
         
@@ -210,7 +211,6 @@ final class StoryFormViewModel: ObservableObject, LoadingViewModel {
         return false  // 현재는 모든 사용자가 무료
     }
     
-    // MARK: - 기존 Image Methods (복원)
     
     /// 카메라 열기
     func openCamera() {

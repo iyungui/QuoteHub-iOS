@@ -151,7 +151,6 @@
 		CE991FB22E532B6F004D609C /* OCRUsageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE991FB12E532B6F004D609C /* OCRUsageManager.swift */; };
 		CE991FB42E533527004D609C /* OCRManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE991FB32E533527004D609C /* OCRManager.swift */; };
 		CE991FB62E5343E5004D609C /* OCRPreviewSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE991FB52E5343E5004D609C /* OCRPreviewSheet.swift */; };
-		CE991FB82E535094004D609C /* OCRImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE991FB72E535094004D609C /* OCRImagePicker.swift */; };
 		CE991FBA2E535D69004D609C /* UniversalImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE991FB92E535D69004D609C /* UniversalImagePicker.swift */; };
 		CEA554B82E003BFD0029A8A9 /* CarouselQuotesRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554AE2E003BFD0029A8A9 /* CarouselQuotesRecordView.swift */; };
 		CEA554BA2E003BFD0029A8A9 /* KeywordInputSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA554B02E003BFD0029A8A9 /* KeywordInputSection.swift */; };
@@ -371,7 +370,6 @@
 		CE991FB12E532B6F004D609C /* OCRUsageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRUsageManager.swift; sourceTree = "<group>"; };
 		CE991FB32E533527004D609C /* OCRManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRManager.swift; sourceTree = "<group>"; };
 		CE991FB52E5343E5004D609C /* OCRPreviewSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRPreviewSheet.swift; sourceTree = "<group>"; };
-		CE991FB72E535094004D609C /* OCRImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRImagePicker.swift; sourceTree = "<group>"; };
 		CE991FB92E535D69004D609C /* UniversalImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniversalImagePicker.swift; sourceTree = "<group>"; };
 		CEA554AE2E003BFD0029A8A9 /* CarouselQuotesRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselQuotesRecordView.swift; sourceTree = "<group>"; };
 		CEA554B02E003BFD0029A8A9 /* KeywordInputSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeywordInputSection.swift; sourceTree = "<group>"; };
@@ -950,7 +948,6 @@
 				CECBB52E2E09584F004C7856 /* SampleDataManager.swift */,
 				CE8C48642DEAE2A9003188ED /* FontManager.swift */,
 				CE4FEFA92DFDC0350072E8B9 /* TabController.swift */,
-				CE991FB72E535094004D609C /* OCRImagePicker.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1395,7 +1392,6 @@
 				CE8C479F2DEA8D97003188ED /* BookSearchEndpoints.swift in Sources */,
 				CE7416DF2E0D88D100CB2594 /* FriendLibraryKeywordsView.swift in Sources */,
 				CE11010C2E047608003C592E /* BlockReportService.swift in Sources */,
-				CE991FB82E535094004D609C /* OCRImagePicker.swift in Sources */,
 				CEA554B82E003BFD0029A8A9 /* CarouselQuotesRecordView.swift in Sources */,
 				CEA554BA2E003BFD0029A8A9 /* KeywordInputSection.swift in Sources */,
 				CECBB4DA2E082628004C7856 /* PublicThemeGalleryGridView.swift in Sources */,

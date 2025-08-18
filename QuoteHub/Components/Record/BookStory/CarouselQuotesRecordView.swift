@@ -10,7 +10,7 @@ import SwiftUI
 // MARK: - CAROUSEL QUOTES RECORD VIEW
 
 struct CarouselQuotesRecordView: View {
-    @EnvironmentObject var formViewModel: StoryFormViewModel
+    @EnvironmentObject private var formViewModel: StoryFormViewModel
     var focusFields: FocusState<BookStoryFormField?>.Binding
     
     @State private var currentQuoteIndex: Int = 0
@@ -150,19 +150,13 @@ struct CarouselQuotesRecordView: View {
             
             Button("취소", role: .cancel) { }
         } message: {
-            Text("텍스트가 포함된 이미지를 선택해주세요.\n오늘 남은 무료 사용: \(formViewModel.ocrUsageManager.getRemainingFreeUsage())회")
+            Text("텍스트가 포함된 이미지를 선택해주세요.")
         }
-        // OCR용 카메라 시트
-        .sheet(isPresented: $formViewModel.showingOCRCamera) {
-            OCRCameraPicker { selectedImage in
-                formViewModel.startOCRProcess(with: selectedImage, targetIndex: currentQuoteIndex)
-            }
+        .ocrCameraPicker(isPresented: $formViewModel.showingOCRCamera) { selectedImage in
+            formViewModel.startOCRProcess(with: selectedImage, targetIndex: currentQuoteIndex)
         }
-        // OCR용 갤러리 시트
-        .sheet(isPresented: $formViewModel.showingOCRGallery) {
-            OCRGalleryPicker { selectedImage in
-                formViewModel.startOCRProcess(with: selectedImage, targetIndex: currentQuoteIndex)
-            }
+        .ocrGalleryPicker(isPresented: $formViewModel.showingOCRGallery) { selectedImage in
+            formViewModel.startOCRProcess(with: selectedImage, targetIndex: currentQuoteIndex)
         }
     }
     
@@ -251,8 +245,3 @@ struct CarouselQuotesRecordView: View {
         formViewModel.showAlert = true
     }
 }
-
-//#Preview {
-//    CarouselQuotesRecordView(focusFields: .constant(.quoteText))
-//        .environmentObject(StoryFormViewModel())
-//}

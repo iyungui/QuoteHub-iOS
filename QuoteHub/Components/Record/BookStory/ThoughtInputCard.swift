@@ -50,19 +50,16 @@ struct ThoughtInputCard: View {
                     contentFocused = .content
                 }
             }
-//            .photoPickerSheet(viewModel: viewModel)
-            
-            .sheet(isPresented: $viewModel.showingCamera) {
-                ImagePicker(selectedImages: $viewModel.selectedImages, sourceType: .camera)
-                    .ignoresSafeArea(.all)
-            }
-            .sheet(isPresented: $viewModel.showingGallery) {
-                MultipleImagePicker(
-                    selectedImages: $viewModel.selectedImages,
-                    selectionLimit: max(0, 10 - viewModel.selectedImages.count)
-                )
-                .ignoresSafeArea(.all)
-            }
+            .legacyImagePicker(
+                isPresented: $viewModel.showingCamera,
+                selectedImages: $viewModel.selectedImages,
+                sourceType: .camera
+            )
+            .multipleImagePicker(
+                isPresented: $viewModel.showingGallery,
+                selectedImages: $viewModel.selectedImages,
+                selectionLimit: max(0, 10 - viewModel.selectedImages.count)
+            )
             .alert(isPresented: $viewModel.showAlert) {
                 switch viewModel.alertType {
                 case .authorized:

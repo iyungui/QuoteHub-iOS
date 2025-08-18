@@ -74,13 +74,12 @@ final class OCRUsageManager {
         let calendar = Calendar.current
         let now = Date()
         
-        // 마지막 리셋 날짜와 현재 날빠가 다른 날이면 리셋
+        // 마지막 리셋 날짜와 현재 날짜가 다른 날이면 리셋
         if !calendar.isDate(lastResetDate, inSameDayAs: now) {
-            print("OCR - Reset DailyUsageCount: \(dailyUsageCount)", terminator: " -> ")
+            print("OCR 일일 사용 횟수 리셋: \(dailyUsageCount) → 0")
             dailyUsageCount = 0
             lastResetDate = now
             saveToPersistentStorage()
-            print(dailyUsageCount)
         }
     }
     
@@ -102,7 +101,7 @@ final class OCRUsageManager {
             saveToPersistentStorage()
         }
         
-        print("OCR 사용정보 로드: 오늘 사용: \(dailyUsageCount)/\(maxFreeUsage), 마지막 리셋날짜: \(lastResetDate)")
+        print("OCR 사용 정보 로드 - 오늘 사용: \(dailyUsageCount)/\(maxFreeUsage), 마지막 리셋: \(lastResetDate)")
     }
     
     
