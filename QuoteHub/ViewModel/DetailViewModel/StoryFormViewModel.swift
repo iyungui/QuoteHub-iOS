@@ -133,6 +133,10 @@ final class StoryFormViewModel: ObservableObject, LoadingViewModel {
         print("OCR 성공 - 추출된 텍스트: \(extractedText.prefix(50))...")
     }
     
+    func getTodayUsageCount() {
+        ocrUsageManager.getTodayUsageCount()
+    }
+    
     /// OCR 텍스트를 현재 Quote에 적용
     func applyOCRTextToQuote(_ text: String) {
         guard ocrTargetQuoteIndex < quotes.count else {
@@ -185,8 +189,6 @@ final class StoryFormViewModel: ObservableObject, LoadingViewModel {
         } else {
             alertMessage = """
             오늘 OCR 무료 사용 횟수(\(maxCount)회)를 모두 사용했습니다.
-            
-            프리미엄으로 업그레이드하면 무제한으로 사용할 수 있습니다.
             """
         }
         
@@ -404,6 +406,13 @@ final class StoryFormViewModel: ObservableObject, LoadingViewModel {
         
         // OCR 상태도 리셋
         resetOCRState()
+    }
+    
+    // image method
+    
+    func removeImage(at index: Int) {
+        guard index >= 0 && index < selectedImages.count else { return }
+        selectedImages.remove(at: index)
     }
     
     // MARK: - Data Loading (for Update)

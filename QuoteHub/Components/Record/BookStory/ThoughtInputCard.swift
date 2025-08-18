@@ -172,7 +172,7 @@ struct StoryImageCell: View {
             
             // 삭제 버튼
             Button(action: {
-//                viewModel.removeImage(at: index)
+                viewModel.removeImage(at: index)
             }) {
                 Image(systemName: "xmark.circle.fill")
                     .font(.system(size: 16))

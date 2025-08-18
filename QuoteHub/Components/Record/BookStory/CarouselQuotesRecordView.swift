@@ -150,7 +150,7 @@ struct CarouselQuotesRecordView: View {
             
             Button("취소", role: .cancel) { }
         } message: {
-            Text("텍스트가 포함된 이미지를 선택해주세요.")
+            Text("텍스트가 포함된 이미지를 선택해주세요.\n오늘 남은 무료 사용: \(formViewModel.getTodayUsageCount())회")
         }
         .ocrCameraPicker(isPresented: $formViewModel.showingOCRCamera) { selectedImage in
             formViewModel.startOCRProcess(with: selectedImage, targetIndex: currentQuoteIndex)

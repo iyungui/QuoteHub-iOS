@@ -92,10 +92,10 @@ struct CreateThemeView: View {
         }
         .progressOverlay(viewModel: myThemesViewModel, opacity: true)
         .alert(isPresented: $formViewModel.showAlert) { alertView }
-        .sheet(isPresented: $formViewModel.showingImagePicker) {
-            SingleImagePicker(selectedImage: $formViewModel.inputImage)
-                .ignoresSafeArea(.all)
-        }
+        .singleImagePicker(
+            isPresented: $formViewModel.showingImagePicker,
+            selectedImage: $formViewModel.inputImage
+        )
         .onTapGesture {
             hideKeyboard()
         }
