@@ -61,6 +61,10 @@ struct QuoteHubApp: App {
                 .environment(blockReportViewModel)
                 .environment(myBookStoriesViewModel)
                 .environment(publicBookStoriesViewModel)
+                .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+                    // 앱이 포그라운드로 돌아올 때 구매 상태 새로고침
+                    InAppPurchaseManager.shared.refreshPurchaseStatus()
+                }
         }
         .modelContainer(sharedModelContainer)
     }
