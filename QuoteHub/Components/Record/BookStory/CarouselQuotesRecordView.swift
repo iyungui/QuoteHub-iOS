@@ -153,6 +153,9 @@ struct CarouselQuotesRecordView: View {
         } message: {
             Text("텍스트가 포함된 이미지를 선택해주세요.\n오늘 남은 무료 사용: \(formViewModel.getTodayUsageCount())회")
         }
+        .sheet(isPresented: $formViewModel.showingPremiumUpgrade) {
+            PremiumUpgradeView()
+        }
         .ocrCameraPicker(isPresented: $formViewModel.showingOCRCamera) { selectedImage in
             formViewModel.startOCRProcess(with: selectedImage, targetIndex: currentQuoteIndex)
         }

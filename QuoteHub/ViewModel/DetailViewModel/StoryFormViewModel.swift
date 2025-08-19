@@ -65,6 +65,7 @@ final class StoryFormViewModel: ObservableObject, LoadingViewModel {
     // OCR 전용 시트 상태 (기존 이미지 피커와 분리)
     @Published var showingOCRCamera = false
     @Published var showingOCRGallery = false
+    @Published var showingPremiumUpgrade = false
     
     // 글자수 제한 상수
     let keywordMaxLength = 8
@@ -85,7 +86,7 @@ final class StoryFormViewModel: ObservableObject, LoadingViewModel {
     
     /// OCR 사용 가능 여부 확인
     func canUseOCR() -> Bool {
-        return ocrUsageManager.canUseOCR(isPremiumUser: checkPremiumStatus())
+        return ocrUsageManager.canUseOCR(isPremiumUser: InAppPurchaseManager.shared.isPremiumUser)
     }
     
     /// OCR 프로세스 시작
@@ -206,13 +207,6 @@ final class StoryFormViewModel: ObservableObject, LoadingViewModel {
         """
         showAlert = true
     }
-    
-    /// 프리미엄 상태 확인 (향후 인앱결제 연동)
-    private func checkPremiumStatus() -> Bool {
-        // TODO: 인앱결제 상태 확인 로직 구현
-        return false  // 현재는 모든 사용자가 무료
-    }
-    
     
     /// 카메라 열기
     func openCamera() {

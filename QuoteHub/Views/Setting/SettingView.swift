@@ -11,7 +11,8 @@ struct SettingView: View {
     
     @State private var showLogoutActionSheet: Bool = false
     @State private var showDeleteUserActionSheet: Bool = false
-    
+    @State private var showingPremiumUpgrade = false
+
     @Environment(UserAuthenticationManager.self) private var userAuthManager
 
     private let introURL: String = "https://obtainable-postage-df4.notion.site/c4e2df8b16e643bfa05d61cadd238ba2?pvs=4"
@@ -37,8 +38,9 @@ struct SettingView: View {
     
     private var appSettingSection: some View {
         Section {
+            // TODO: - 프리미엄 사용자만 폰트 변경
             Button {
-                showFontSettingView = true
+                showFontSettingView.toggle()
             } label: {
                 HStack {
                     Image(systemName: "textformat.size.larger.ko")
@@ -56,6 +58,16 @@ struct SettingView: View {
                 HStack {
                     Image(systemName: "person.circle")
                     Text("내 프로필 수정")
+                }
+            }
+            
+            Button {
+                showingPremiumUpgrade.toggle()
+            } label: {
+                HStack {
+                    Image(systemName: "crown.fill")
+                        .foregroundStyle(Color.orange)
+                    Text(InAppPurchaseManager.shared.isPremiumUser ? "프리미엄 사용자" : "무료 사용자")
                 }
             }
 //                NavigationLink {
@@ -78,7 +90,9 @@ struct SettingView: View {
             Text("앱 설정").font(.appHeadline)
         }
         .font(.appBody)
-
+        .sheet(isPresented: $showingPremiumUpgrade) {
+            PremiumUpgradeView()
+        }
         
     }
     
@@ -86,7 +100,7 @@ struct SettingView: View {
         Section {
             
             Button(action: {
-                isPresentIntroWebView = true
+                isPresentIntroWebView.toggle()
             }) {
                 HStack {
                     Image(systemName: "info.circle")
@@ -104,7 +118,7 @@ struct SettingView: View {
             }
             
             Button(action: {
-                isPresentTermsWebView = true
+                isPresentTermsWebView.toggle()
             }) {
                 HStack {
                     Image(systemName: "doc.text")
@@ -121,7 +135,7 @@ struct SettingView: View {
             }
 
             Button(action: {
-                isPresentPrivacyWebView = true
+                isPresentPrivacyWebView.toggle()
             }) {
                 HStack {
                     Image(systemName: "shield.lefthalf.filled")
@@ -138,7 +152,7 @@ struct SettingView: View {
             }
             
             Button(action: {
-                isPresentSupportWebView = true
+                isPresentSupportWebView.toggle()
             }) {
                 HStack {
                     Image(systemName: "message")
@@ -179,7 +193,7 @@ struct SettingView: View {
         Section {
 
             Button(action: {
-                showLogoutActionSheet = true
+                showLogoutActionSheet.toggle()
             }) {
                 HStack {
                     Image(systemName: "door.left.hand.open")
@@ -198,7 +212,7 @@ struct SettingView: View {
             }
             
             Button(action: {
-                showDeleteUserActionSheet = true
+                showDeleteUserActionSheet.toggle()
             }) {
                 HStack {
                     Image(systemName: "xmark.circle")
