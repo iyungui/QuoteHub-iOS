@@ -10,7 +10,6 @@ import StoreKit
 
 struct PremiumUpgradeView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var iapManager = InAppPurchaseManager.shared
     @State private var premiumProduct: Product?
     
     var body: some View {
@@ -41,22 +40,22 @@ struct PremiumUpgradeView: View {
                     }
                 }
             }
-            .alert("오류", isPresented: .constant(iapManager.errorMessage != nil)) {
+            .alert("오류", isPresented: .constant(InAppPurchaseManager.shared.errorMessage != nil)) {
                 Button("확인") {
-                    iapManager.clearError()
+                    InAppPurchaseManager.shared.clearError()
                 }
             } message: {
-                if let errorMessage = iapManager.errorMessage {
+                if let errorMessage = InAppPurchaseManager.shared.errorMessage {
                     Text(errorMessage)
                 }
             }
             .task {
-                await iapManager.loadProducts()
+                await InAppPurchaseManager.shared.loadProducts()
                 // 프리미엄 제품 할당 (첫 번째 제품)
-                premiumProduct = iapManager.products.first
+                premiumProduct = InAppPurchaseManager.shared.products.first
             }
             .overlay {
-                if iapManager.isLoading {
+                if InAppPurchaseManager.shared.isLoading {
                     LoadingOverlay()
                 }
             }
@@ -101,26 +100,26 @@ struct PremiumUpgradeView: View {
                     isPremium: true
                 )
                 
-                FeatureRow(
-                    icon: "photo.stack",
-                    title: "고화질 이미지 저장",
-                    description: "원본 화질로 이미지 저장 및 백업",
-                    isPremium: true
-                )
+//                FeatureRow(
+//                    icon: "photo.stack",
+//                    title: "고화질 이미지 저장",
+//                    description: "원본 화질로 이미지 저장 및 백업",
+//                    isPremium: true
+//                )
                 
-                FeatureRow(
-                    icon: "icloud.and.arrow.up",
-                    title: "클라우드 동기화",
-                    description: "모든 기기에서 데이터 자동 동기화",
-                    isPremium: true
-                )
+//                FeatureRow(
+//                    icon: "icloud.and.arrow.up",
+//                    title: "클라우드 동기화",
+//                    description: "모든 기기에서 데이터 자동 동기화",
+//                    isPremium: true
+//                )
                 
-                FeatureRow(
-                    icon: "sparkles",
-                    title: "프리미엄 테마",
-                    description: "독점 테마와 커스터마이징 옵션",
-                    isPremium: true
-                )
+//                FeatureRow(
+//                    icon: "sparkles",
+//                    title: "프리미엄 테마",
+//                    description: "독점 테마와 커스터마이징 옵션",
+//                    isPremium: true
+//                )
                 
                 FeatureRow(
                     icon: "heart",
@@ -128,6 +127,9 @@ struct PremiumUpgradeView: View {
                     description: "앱 개발과 새로운 기능 추가 지원",
                     isPremium: true
                 )
+                
+                Text("프리미엄 혜택은 계속 추가됩니다.")
+                    .font(.appCaption)
             }
         }
         .padding()
@@ -152,9 +154,8 @@ struct PremiumUpgradeView: View {
             if let premiumProduct = premiumProduct {
                 Button {
                     Task {
-                        let success = await iapManager.purchasePremium(premiumProduct)
+                        let success = await InAppPurchaseManager.shared.purchasePremium(premiumProduct)
                         if success {
-//                            dismiss()
                             print("구매성공?")
                         }
                     }
@@ -180,7 +181,7 @@ struct PremiumUpgradeView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .shadow(color: .blue.opacity(0.3), radius: 8)
                 }
-                .disabled(iapManager.isLoading)
+                .disabled(InAppPurchaseManager.shared.isLoading)
             } else {
                 HStack {
                     ProgressView()
@@ -208,7 +209,7 @@ struct PremiumUpgradeView: View {
         VStack(spacing: 12) {
             Button("구매 복원") {
                 Task {
-                    await iapManager.restorePurchases()
+                    await InAppPurchaseManager.shared.restorePurchases()
                 }
             }
             .font(.appFont(.medium, size: .callout))
