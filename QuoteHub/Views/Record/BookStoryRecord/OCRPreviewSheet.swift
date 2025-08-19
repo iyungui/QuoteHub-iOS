@@ -97,24 +97,21 @@ struct OCRPreviewSheet: View {
             .padding(.horizontal, 16)
             
             // 텍스트 편집기
-            ScrollView {
-                CustomTextEditor(
-                    text: $editableText,
-                    placeholder: "추출된 텍스트가 여기에 표시됩니다.\n필요시 수정하실 수 있습니다.",
-                    minHeight: 200,
-                    maxLength: maxTextLength,
-                    isFocused: isTextEditorFocused
-                )
-                .focused($isTextEditorFocused)
-                .padding(.horizontal, 16)
-            }
+            CustomTextEditor(
+                text: $editableText,
+                placeholder: "추출된 텍스트가 여기에 표시됩니다.",
+                minHeight: 200,
+                maxLength: maxTextLength,
+                isFocused: isTextEditorFocused
+            )
+            .focused($isTextEditorFocused)
+            .padding(.horizontal, 16)
             
             // 도움말 텍스트
             Text("텍스트가 정확하지 않다면 수정하신 후 적용해주세요.")
                 .font(.appFont(.light, size: .caption))
                 .foregroundColor(.secondaryText)
-                .padding(.horizontal, 16)
-                .padding(.top, 4)
+                .padding([.horizontal, .bottom], 16)
         }
         .padding(.top, 16)
     }

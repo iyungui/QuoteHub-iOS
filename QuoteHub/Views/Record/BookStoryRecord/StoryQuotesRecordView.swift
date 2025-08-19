@@ -77,6 +77,19 @@ struct StoryQuotesRecordView: View {
         }
         .environmentObject(formViewModel)
         .progressOverlay(viewModel: myBookStoriesViewModel, opacity: false)
+        .sheet(isPresented: $formViewModel.showingOCRAreaSelection) {
+            if let originalImage = formViewModel.originalOCRImage {
+                OCRAreaSelectionView(
+                    image: originalImage,
+                    onAreaSelected: { croppedImage in
+                        formViewModel.processSelectedArea(croppedImage)
+                    },
+                    onCancel: {
+                        formViewModel.cancelAreaSelection()
+                    }
+                )
+            }
+        }
         .sheet(isPresented: $formViewModel.showingOCRPreview) {
             OCRPreviewSheet(
                 extractedText: $formViewModel.extractedOCRText,

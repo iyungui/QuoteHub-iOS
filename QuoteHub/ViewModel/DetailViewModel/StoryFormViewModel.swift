@@ -67,6 +67,10 @@ final class StoryFormViewModel: ObservableObject, LoadingViewModel {
     @Published var showingOCRGallery = false
     @Published var showingPremiumUpgrade = false
     
+    // 🆕 OCR 영역 선택 관련 상태
+    @Published var showingOCRAreaSelection = false
+    @Published var originalOCRImage: UIImage?
+    
     // 글자수 제한 상수
     let keywordMaxLength = 8
     let quoteMaxLength = 500
@@ -89,28 +93,56 @@ final class StoryFormViewModel: ObservableObject, LoadingViewModel {
         return ocrUsageManager.canUseOCR(isPremiumUser: InAppPurchaseManager.shared.isPremiumUser)
     }
     
-    /// OCR 프로세스 시작
-    func startOCRProcess(with image: UIImage, targetIndex: Int) {
+    /// 🆕 이미지 선택 후 영역 선택 단계로 이동
+    func startOCRWithAreaSelection(image: UIImage, targetIndex: Int) {
         // 사용 횟수 체크
         guard canUseOCR() else {
             showOCRLimitAlert()
             return
         }
         
-        // 타겟 인덱스 저장
+        // 타겟 인덱스와 원본 이미지 저장
         ocrTargetQuoteIndex = targetIndex
-        selectedOCRImage = image
+        originalOCRImage = image
+        
+        // 영역 선택 화면 표시
+        showingOCRAreaSelection = true
+    }
+    
+    /// 🆕 영역 선택 완료 후 OCR 처리
+    func processSelectedArea(_ croppedImage: UIImage) {
+        print("🎯 StoryFormViewModel: 크롭된 이미지 수신")
+        print("📏 크롭된 이미지 크기: \(croppedImage.size)")
+        
+        selectedOCRImage = croppedImage
         
         // 로딩 시작
         isLoading = true
-        loadingMessage = "텍스트를 추출하고 있습니다..."
+        loadingMessage = "선택한 영역에서 텍스트를 추출하고 있습니다..."
+        
+        print("🔍 OCRManager 통해 텍스트 추출 시작...")
         
         // OCR 처리
-        image.extractText { [weak self] result in
+        croppedImage.extractText { [weak self] result in
             DispatchQueue.main.async {
+                print("📨 OCR 결과 수신됨")
                 self?.handleOCRResult(result)
             }
         }
+    }
+    
+    /// 🆕 영역 선택 취소
+    func cancelAreaSelection() {
+        originalOCRImage = nil
+        showingOCRAreaSelection = false
+        resetOCRState()
+    }
+    
+    /// OCR 프로세스 시작 (기존 메서드 - 호환성 유지)
+    func startOCRProcess(with image: UIImage, targetIndex: Int) {
+        // 새로운 영역 선택 방식으로 리다이렉트
+        print("🔄 기존 startOCRProcess 호출됨 - 영역 선택 방식으로 전환")
+        startOCRWithAreaSelection(image: image, targetIndex: targetIndex)
     }
     
     /// OCR 결과 처리
@@ -120,6 +152,8 @@ final class StoryFormViewModel: ObservableObject, LoadingViewModel {
         loadingMessage = nil
         
         guard let extractedText = result, !extractedText.isEmpty else {
+            print("❌ OCR 실패 - 텍스트 인식 불가")
+            print("💡 크롭된 이미지가 너무 작거나 텍스트가 불분명할 수 있습니다")
             showOCRErrorAlert()
             return
         }
@@ -127,15 +161,19 @@ final class StoryFormViewModel: ObservableObject, LoadingViewModel {
         // 사용 횟수 증가
         ocrUsageManager.incrementUsage()
         
+        print("✅ OCR 성공!")
+        print("📝 추출된 텍스트: '\(extractedText)'")
+        print("📊 텍스트 길이: \(extractedText.count)자")
+        
         // 추출된 텍스트 저장 및 미리보기 표시
-        extractedOCRText = extractedText
+        self.extractedOCRText = extractedText
         showingOCRPreview = true
         
-        print("OCR 성공 - 추출된 텍스트: \(extractedText.prefix(50))...")
+        print("🎬 OCR 미리보기 시트 표시")
     }
     
-    func getTodayUsageCount() {
-        ocrUsageManager.getTodayUsageCount()
+    func getTodayUsageCount() -> Int {
+        return ocrUsageManager.getMaxFreeUsage() - ocrUsageManager.getTodayUsageCount()
     }
     
     /// OCR 텍스트를 현재 Quote에 적용
@@ -174,9 +212,11 @@ final class StoryFormViewModel: ObservableObject, LoadingViewModel {
     private func resetOCRState() {
         extractedOCRText = ""
         selectedOCRImage = nil
+        originalOCRImage = nil
         showingOCRPreview = false
         showingOCRCamera = false
         showingOCRGallery = false
+        showingOCRAreaSelection = false
         ocrTargetQuoteIndex = 0
     }
     
@@ -199,9 +239,9 @@ final class StoryFormViewModel: ObservableObject, LoadingViewModel {
     /// OCR 에러 알림
     private func showOCRErrorAlert() {
         alertMessage = """
-        텍스트를 인식할 수 없습니다.
+        선택한 영역에서 텍스트를 인식할 수 없습니다.
         
-        • 텍스트가 선명한 이미지를 사용해주세요
+        • 텍스트가 선명한 영역을 선택해주세요
         • 조명이 밝은 곳에서 촬영해주세요
         • 텍스트가 잘 보이도록 각도를 조정해주세요
         """

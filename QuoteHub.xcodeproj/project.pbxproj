@@ -94,6 +94,7 @@
 		CE7416DF2E0D88D100CB2594 /* FriendLibraryKeywordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7416DE2E0D88D100CB2594 /* FriendLibraryKeywordsView.swift */; };
 		CE802C082E540E04005380FA /* InAppPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE802C072E540E04005380FA /* InAppPurchaseManager.swift */; };
 		CE802C0A2E542A70005380FA /* PremiumUpgradeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE802C092E542A70005380FA /* PremiumUpgradeView.swift */; };
+		CE802C0C2E54BF36005380FA /* OCRAreaSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE802C0B2E54BF36005380FA /* OCRAreaSelectionView.swift */; };
 		CE8C477F2DEA8D84003188ED /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47782DEA8D84003188ED /* LoginView.swift */; };
 		CE8C47802DEA8D84003188ED /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47792DEA8D84003188ED /* OnboardingView.swift */; };
 		CE8C47822DEA8D84003188ED /* KeyChainTokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C477C2DEA8D84003188ED /* KeyChainTokenManager.swift */; };
@@ -316,6 +317,7 @@
 		CE7416DE2E0D88D100CB2594 /* FriendLibraryKeywordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendLibraryKeywordsView.swift; sourceTree = "<group>"; };
 		CE802C072E540E04005380FA /* InAppPurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchaseManager.swift; sourceTree = "<group>"; };
 		CE802C092E542A70005380FA /* PremiumUpgradeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumUpgradeView.swift; sourceTree = "<group>"; };
+		CE802C0B2E54BF36005380FA /* OCRAreaSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCRAreaSelectionView.swift; sourceTree = "<group>"; };
 		CE8C47782DEA8D84003188ED /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		CE8C47792DEA8D84003188ED /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		CE8C477C2DEA8D84003188ED /* KeyChainTokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainTokenManager.swift; sourceTree = "<group>"; };
@@ -898,6 +900,7 @@
 				CEA554B22E003BFD0029A8A9 /* StoryQuotesRecordView.swift */,
 				CEA554B32E003BFD0029A8A9 /* StorySettingRecordView.swift */,
 				CE991FB52E5343E5004D609C /* OCRPreviewSheet.swift */,
+				CE802C0B2E54BF36005380FA /* OCRAreaSelectionView.swift */,
 			);
 			path = BookStoryRecord;
 			sourceTree = "<group>";
@@ -1375,6 +1378,7 @@
 				CE7416DD2E0D863A00CB2594 /* PublicThemesViewModel.swift in Sources */,
 				CE8C497F2DF1E874003188ED /* AppVersionManager.swift in Sources */,
 				CE7416CC2E0CE33200CB2594 /* KakaoBookAPIResponse.swift in Sources */,
+				CE802C0C2E54BF36005380FA /* OCRAreaSelectionView.swift in Sources */,
 				CE4FEF812DFA90D80072E8B9 /* AchievementBadgesView.swift in Sources */,
 				CE8C488E2DEC46E9003188ED /* TabIndicator.swift in Sources */,
 				C6691C5A2B0619C10083C678 /* UserSearchViewModel.swift in Sources */,
