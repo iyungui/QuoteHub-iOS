@@ -92,6 +92,7 @@
 		CE7416DC2E0D863A00CB2594 /* ThemesViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7416D52E0D863A00CB2594 /* ThemesViewModelProtocol.swift */; };
 		CE7416DD2E0D863A00CB2594 /* PublicThemesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7416D72E0D863A00CB2594 /* PublicThemesViewModel.swift */; };
 		CE7416DF2E0D88D100CB2594 /* FriendLibraryKeywordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7416DE2E0D88D100CB2594 /* FriendLibraryKeywordsView.swift */; };
+		CE802C082E540E04005380FA /* InAppPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE802C072E540E04005380FA /* InAppPurchaseManager.swift */; };
 		CE8C477F2DEA8D84003188ED /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47782DEA8D84003188ED /* LoginView.swift */; };
 		CE8C47802DEA8D84003188ED /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C47792DEA8D84003188ED /* OnboardingView.swift */; };
 		CE8C47822DEA8D84003188ED /* KeyChainTokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C477C2DEA8D84003188ED /* KeyChainTokenManager.swift */; };
@@ -312,6 +313,7 @@
 		CE7416D52E0D863A00CB2594 /* ThemesViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemesViewModelProtocol.swift; sourceTree = "<group>"; };
 		CE7416D72E0D863A00CB2594 /* PublicThemesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicThemesViewModel.swift; sourceTree = "<group>"; };
 		CE7416DE2E0D88D100CB2594 /* FriendLibraryKeywordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendLibraryKeywordsView.swift; sourceTree = "<group>"; };
+		CE802C072E540E04005380FA /* InAppPurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchaseManager.swift; sourceTree = "<group>"; };
 		CE8C47782DEA8D84003188ED /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		CE8C47792DEA8D84003188ED /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		CE8C477C2DEA8D84003188ED /* KeyChainTokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChainTokenManager.swift; sourceTree = "<group>"; };
@@ -942,6 +944,7 @@
 				C6336CF22AAF1AA0007355EC /* PermissionsManager.swift */,
 				CE991FB92E535D69004D609C /* UniversalImagePicker.swift */,
 				CE991FB12E532B6F004D609C /* OCRUsageManager.swift */,
+				CE802C072E540E04005380FA /* InAppPurchaseManager.swift */,
 				CE991FB32E533527004D609C /* OCRManager.swift */,
 				CE1100E52E0280C3003C592E /* LoadingViewModel.swift */,
 				CEA554CD2E018AF30029A8A9 /* DraftManager.swift */,
@@ -1243,6 +1246,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE802C082E540E04005380FA /* InAppPurchaseManager.swift in Sources */,
 				CECBB4B32E07B3AF004C7856 /* LibraryTabSection.swift in Sources */,
 				CECBB5292E0932EB004C7856 /* KeywordTagView.swift in Sources */,
 				CECBB52B2E0932F9004C7856 /* MyLibraryKeywordsView.swift in Sources */,

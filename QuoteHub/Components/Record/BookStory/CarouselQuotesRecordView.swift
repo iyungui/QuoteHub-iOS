@@ -10,6 +10,7 @@ import SwiftUI
 // MARK: - CAROUSEL QUOTES RECORD VIEW
 
 struct CarouselQuotesRecordView: View {
+    
     @EnvironmentObject private var formViewModel: StoryFormViewModel
     var focusFields: FocusState<BookStoryFormField?>.Binding
     
