@@ -516,7 +516,6 @@
 			children = (
 				C6B56FFD2AA8CC1B003905C3 /* QuoteHub.entitlements */,
 				CE8C47772DEA8D01003188ED /* APP */,
-				CE8C477E2DEA8D84003188ED /* Auth */,
 				CE8C479C2DEA8D97003188ED /* Network */,
 				CE8C478C2DEA8D93003188ED /* Models */,
 				CE8C481A2DEA8DAE003188ED /* Views */,
@@ -708,7 +707,6 @@
 				C6B56FDC2AA8B60B003905C3 /* QuoteHubApp.swift */,
 				C6B56FDE2AA8B60B003905C3 /* ContentView.swift */,
 				CE8C486C2DEB2A62003188ED /* LaunchScreenView.swift */,
-				CE8C497E2DF1E874003188ED /* AppVersionManager.swift */,
 			);
 			path = APP;
 			sourceTree = "<group>";
@@ -834,6 +832,7 @@
 			isa = PBXGroup;
 			children = (
 				CECBB5042E082A73004C7856 /* Common */,
+				CECBB5052E082A99004C7856 /* Comment */,
 				CECBB4CA2E081A87004C7856 /* MyBookStoryDetailView.swift */,
 				CECBB4CC2E081CD6004C7856 /* PublicBookStoryDetailView.swift */,
 				CE8C49762DF1D132003188ED /* StoryView.swift */,
@@ -865,7 +864,6 @@
 				CE8C48062DEA8DAE003188ED /* Record */,
 				CE8C480D2DEA8DAE003188ED /* Setting */,
 				CE8C48122DEA8DAE003188ED /* BookStoryView */,
-				CECBB5052E082A99004C7856 /* Comment */,
 				CE8C48172DEA8DAE003188ED /* ThemeView */,
 			);
 			path = Views;
@@ -948,6 +946,8 @@
 		CEA554CE2E018AF30029A8A9 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				CE8C477E2DEA8D84003188ED /* Auth */,
+				CE8C497E2DF1E874003188ED /* AppVersionManager.swift */,
 				C6336CF22AAF1AA0007355EC /* PermissionsManager.swift */,
 				CE991FB92E535D69004D609C /* UniversalImagePicker.swift */,
 				CE991FB12E532B6F004D609C /* OCRUsageManager.swift */,
