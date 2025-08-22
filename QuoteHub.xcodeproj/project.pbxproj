@@ -726,7 +726,6 @@
 		CE8C477E2DEA8D84003188ED /* Auth */ = {
 			isa = PBXGroup;
 			children = (
-				CE8C477B2DEA8D84003188ED /* Login */,
 				CE8C477C2DEA8D84003188ED /* KeyChainTokenManager.swift */,
 				CE8C477D2DEA8D84003188ED /* UserAuthenticationManager.swift */,
 			);
@@ -857,6 +856,8 @@
 		CE8C481A2DEA8DAE003188ED /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				CEB50F602E5858D400584424 /* Common */,
+				CE8C477B2DEA8D84003188ED /* Login */,
 				CE8C47FA2DEA8DAE003188ED /* Main */,
 				CE8C47FF2DEA8DAE003188ED /* Libarary */,
 				CE8C47F42DEA8DAE003188ED /* Home */,
@@ -988,6 +989,13 @@
 				CE1100FD2E03D022003C592E /* ThemeEndpoints.swift */,
 			);
 			path = Endpoints;
+			sourceTree = "<group>";
+		};
+		CEB50F602E5858D400584424 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Common;
 			sourceTree = "<group>";
 		};
 		CECBB49B2E079EA6004C7856 /* MyBookStory */ = {
