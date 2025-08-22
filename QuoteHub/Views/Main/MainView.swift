@@ -11,7 +11,7 @@ import SwiftUI
 // MARK: - Main View
 
 struct MainView: View {
-    @EnvironmentObject private var tabController: TabController
+    @EnvironmentObject private var tabController: TabManager
     @Environment(UserAuthenticationManager.self) private var authManager
 
     @State private var showAlert: Bool = false

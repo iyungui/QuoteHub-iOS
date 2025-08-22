@@ -82,7 +82,7 @@
 		CE4FEF872DFB39080072E8B9 /* CarouselStoryQuotesDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF862DFB39080072E8B9 /* CarouselStoryQuotesDisplayView.swift */; };
 		CE4FEF892DFB391F0072E8B9 /* ListStoryQuotesDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF882DFB391F0072E8B9 /* ListStoryQuotesDisplayView.swift */; };
 		CE4FEF8B2DFB3EFC0072E8B9 /* CommonStoryDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEF8A2DFB3EFC0072E8B9 /* CommonStoryDisplayView.swift */; };
-		CE4FEFAA2DFDC0350072E8B9 /* TabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEFA92DFDC0350072E8B9 /* TabController.swift */; };
+		CE4FEFAA2DFDC0350072E8B9 /* TabManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4FEFA92DFDC0350072E8B9 /* TabManager.swift */; };
 		CE4FEFAD2DFEABA20072E8B9 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = CE4FEFAC2DFEABA20072E8B9 /* KeychainAccess */; };
 		CE7416CC2E0CE33200CB2594 /* KakaoBookAPIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7416CB2E0CE33200CB2594 /* KakaoBookAPIResponse.swift */; };
 		CE7416CE2E0CEDB200CB2594 /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7416CD2E0CEDB200CB2594 /* Data+Extension.swift */; };
@@ -306,7 +306,7 @@
 		CE4FEF862DFB39080072E8B9 /* CarouselStoryQuotesDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselStoryQuotesDisplayView.swift; sourceTree = "<group>"; };
 		CE4FEF882DFB391F0072E8B9 /* ListStoryQuotesDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListStoryQuotesDisplayView.swift; sourceTree = "<group>"; };
 		CE4FEF8A2DFB3EFC0072E8B9 /* CommonStoryDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonStoryDisplayView.swift; sourceTree = "<group>"; };
-		CE4FEFA92DFDC0350072E8B9 /* TabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabController.swift; sourceTree = "<group>"; };
+		CE4FEFA92DFDC0350072E8B9 /* TabManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabManager.swift; sourceTree = "<group>"; };
 		CE7416CB2E0CE33200CB2594 /* KakaoBookAPIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoBookAPIResponse.swift; sourceTree = "<group>"; };
 		CE7416CD2E0CEDB200CB2594 /* Data+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
 		CE7416CF2E0CEDF100CB2594 /* AuthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResponse.swift; sourceTree = "<group>"; };
@@ -950,13 +950,13 @@
 				C6336CF22AAF1AA0007355EC /* PermissionsManager.swift */,
 				CE991FB92E535D69004D609C /* UniversalImagePicker.swift */,
 				CE991FB12E532B6F004D609C /* OCRUsageManager.swift */,
-				CE802C072E540E04005380FA /* InAppPurchaseManager.swift */,
 				CE991FB32E533527004D609C /* OCRManager.swift */,
+				CE802C072E540E04005380FA /* InAppPurchaseManager.swift */,
 				CE1100E52E0280C3003C592E /* LoadingViewModelProtocol.swift */,
 				CEA554CD2E018AF30029A8A9 /* DraftManager.swift */,
 				CECBB52E2E09584F004C7856 /* SampleDataManager.swift */,
 				CE8C48642DEAE2A9003188ED /* FontManager.swift */,
-				CE4FEFA92DFDC0350072E8B9 /* TabController.swift */,
+				CE4FEFA92DFDC0350072E8B9 /* TabManager.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1340,7 +1340,7 @@
 				CE991FB22E532B6F004D609C /* OCRUsageManager.swift in Sources */,
 				CE8C48E12DF04BD8003188ED /* CustomProgressView.swift in Sources */,
 				CECBB4D62E0825F0004C7856 /* MyThemeGalleryGridView.swift in Sources */,
-				CE4FEFAA2DFDC0350072E8B9 /* TabController.swift in Sources */,
+				CE4FEFAA2DFDC0350072E8B9 /* TabManager.swift in Sources */,
 				CE4FEF8B2DFB3EFC0072E8B9 /* CommonStoryDisplayView.swift in Sources */,
 				CECBB4BD2E07BBFD004C7856 /* ThemeDetailBaseView.swift in Sources */,
 				CECBB4C32E07BC2F004C7856 /* ThemeVisibilityTag.swift in Sources */,

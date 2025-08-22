@@ -22,7 +22,7 @@ struct QuoteHubApp: App {
     @State private var publicThemesViewModel = PublicThemesViewModel()
     
     @State private var blockReportViewModel = BlockReportViewModel()
-    @StateObject private var tabController = TabController()
+    @StateObject private var tabController = TabManager()
 
     // SwiftData ModelContainer 설정
     var sharedModelContainer: ModelContainer = {

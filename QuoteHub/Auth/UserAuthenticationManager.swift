@@ -27,10 +27,10 @@ final class UserAuthenticationManager: LoadingViewModelProtocol {
     var initialNickname: String = ""
     
     private let authService: AuthService
-    private let tabController: TabController
+    private let tabController: TabManager
     
     init(authService: AuthService = AuthService.shared,
-         tabController: TabController = TabController()
+         tabController: TabManager = TabManager()
     ) {
         self.authService = authService
         self.tabController = tabController

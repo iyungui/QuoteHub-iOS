@@ -17,7 +17,7 @@ struct StorySettingRecordView: View {
     
     @Environment(MyBookStoriesViewModel.self) private var myBookStoriesViewModel
     @Environment(\.modelContext) private var modelContext
-    @EnvironmentObject var tabController: TabController
+    @EnvironmentObject var tabController: TabManager
     @Environment(\.requestReview) private var requestReview
     
     /// 스토리 완성 횟수 추적 (리뷰 요청 조건)

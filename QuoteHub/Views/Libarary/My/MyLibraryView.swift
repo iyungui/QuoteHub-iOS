@@ -15,7 +15,7 @@ struct MyLibraryView: View {
     @Environment(MyThemesViewModel.self) private var myThemesViewModel
     @Environment(UserViewModel.self) private var userViewModel
     @Environment(UserAuthenticationManager.self) private var userAuthManager
-    @EnvironmentObject private var tabController: TabController
+    @EnvironmentObject private var tabController: TabManager
     
     // MARK: - State
     @State private var selectedTab: LibraryTab = .stories
