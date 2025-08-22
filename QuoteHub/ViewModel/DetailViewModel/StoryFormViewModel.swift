@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-final class StoryFormViewModel: ObservableObject, LoadingViewModel {
+final class StoryFormViewModel: ObservableObject, LoadingViewModelProtocol {
     
     // MARK: - LoadingViewModel Protocol
     @Published var isLoading: Bool = false

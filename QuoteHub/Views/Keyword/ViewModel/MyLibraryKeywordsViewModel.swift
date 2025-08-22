@@ -9,7 +9,7 @@ import SwiftUI
 
 @MainActor
 @Observable
-final class MyLibraryKeywordsViewModel: LoadingViewModel {
+final class MyLibraryKeywordsViewModel: LoadingViewModelProtocol {
     
     // MARK: - LoadingViewModel Protocol
     var isLoading = false

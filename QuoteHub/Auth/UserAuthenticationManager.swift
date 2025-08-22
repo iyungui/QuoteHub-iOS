@@ -8,7 +8,7 @@
 import Foundation
 
 @Observable
-final class UserAuthenticationManager: LoadingViewModel {
+final class UserAuthenticationManager: LoadingViewModelProtocol {
     var isUserAuthenticated: Bool = false
     var isGuestMode: Bool = false
     var showingLoginView: Bool = false  // 게스트모드 상태에서 바로 로그인 창으로 네비게이션하기 위한 프로퍼티

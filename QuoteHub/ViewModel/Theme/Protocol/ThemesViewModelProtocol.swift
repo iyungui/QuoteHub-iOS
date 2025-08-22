@@ -9,7 +9,7 @@ import SwiftUI
 
 // MARK: - 기본 읽기 전용 프로토콜
 @MainActor
-protocol ThemesViewModelProtocol: LoadingViewModel {
+protocol ThemesViewModelProtocol: LoadingViewModelProtocol {
     
     // MARK: - Published Properties
     var themes: [Theme] { get }

@@ -9,7 +9,7 @@ import SwiftUI
 
 @MainActor
 @Observable
-final class BookStoryDetailViewModel: LoadingViewModel {
+final class BookStoryDetailViewModel: LoadingViewModelProtocol {
     // MARK: - Init && Properties
     
     // LoadingViewModel Protocol

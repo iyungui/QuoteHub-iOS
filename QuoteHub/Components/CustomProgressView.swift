@@ -50,7 +50,7 @@ struct CustomProgressView: View {
 // MARK: - VIEW MODIFIER
 
 /// 하나의 뷰모델 사용하는 로딩뷰 모디파이어
-struct ProgressOverlay<VM: LoadingViewModel>: ViewModifier {
+struct ProgressOverlay<VM: LoadingViewModelProtocol>: ViewModifier {
     @ObservedObject var viewModel: VM
     let animationName: String
     let opacity: Bool
@@ -85,7 +85,7 @@ struct ProgressOverlay<VM: LoadingViewModel>: ViewModifier {
 
 /// 여러 뷰모델을 사용하는 로딩뷰 모디파이어
 struct MultipleProgressOverlay: ViewModifier {
-    let loadingViewModels: [any LoadingViewModel]
+    let loadingViewModels: [any LoadingViewModelProtocol]
     let animationName: String
     let opacity: Bool
     
@@ -128,7 +128,7 @@ struct MultipleProgressOverlay: ViewModifier {
 
 extension View {
     /// 단일 ViewModel 에서의 로딩뷰
-    func progressOverlay<VM: LoadingViewModel>(
+    func progressOverlay<VM: LoadingViewModelProtocol>(
         viewModel: VM,
         animationName: String = "progressLottie",
         opacity: Bool
@@ -138,7 +138,7 @@ extension View {
     
     /// 여러 ViewModel 에서의 로딩뷰
     func progressOverlay(
-        viewModels: any LoadingViewModel...,
+        viewModels: any LoadingViewModelProtocol...,
         animationName: String = "progressLottie",
         opacity: Bool
     ) -> some View {

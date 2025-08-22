@@ -9,7 +9,7 @@ import SwiftUI
 
 @MainActor
 @Observable
-final class BookSearchViewModel: LoadingViewModel {
+final class BookSearchViewModel: LoadingViewModelProtocol {
     var books: [Book] = []
     
     var isLoading: Bool = false

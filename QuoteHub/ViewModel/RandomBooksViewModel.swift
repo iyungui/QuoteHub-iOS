@@ -9,7 +9,7 @@ import Foundation
 
 @MainActor
 @Observable
-final class RandomBooksViewModel: LoadingViewModel {
+final class RandomBooksViewModel: LoadingViewModelProtocol {
     var loadingMessage: String?
     
     var books = [Book]()

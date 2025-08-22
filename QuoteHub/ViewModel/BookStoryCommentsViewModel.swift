@@ -9,7 +9,7 @@ import Foundation
 
 @MainActor
 @Observable
-final class BookStoryCommentsViewModel: LoadingViewModel {
+final class BookStoryCommentsViewModel: LoadingViewModelProtocol {
     
     // MARK: - LoadingViewModel 프로토콜 구현
     var isLoading = false
