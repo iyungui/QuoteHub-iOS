@@ -10,7 +10,7 @@ import StoreKit
 
 @MainActor
 @Observable
-final class InAppPurchaseManager {
+final class InAppPurchaseManager: LoadingViewModelProtocol {
     
     // MARK: - SINGLETON
     static let shared = InAppPurchaseManager()
@@ -37,7 +37,8 @@ final class InAppPurchaseManager {
     
     /// 로딩 상태
     private(set) var isLoading = false
-    
+    private(set) var loadingMessage: String?
+
     /// 에러 메시지
     private(set) var errorMessage: String?
     
@@ -50,34 +51,68 @@ final class InAppPurchaseManager {
     
     /// 앱스토어 커넥트에서 설정할 제품 ID (일회성 구매)
     private let productIds: Set<String> = [
-        "com.quotehub.premium.lifetime"  // 영구 프리미엄 (한번 구매)
+        "com.quotehub.premium.lifetime"
     ]
     
     // MARK: - PUBLIC METHODS
     
     /// 제품 정보 로드
     func loadProducts() async {
+        loadingMessage = "로딩 중..."
         isLoading = true
         errorMessage = nil
         
         do {
-            products = try await Product.products(for: productIds)
-            print("✅ 제품 로드 성공: \(products.count)개")
+            // 타임아웃 추가
+            let products = try await withTimeout(seconds: 10) {
+                try await Product.products(for: self.productIds)
+            }
+            
+            await MainActor.run {
+                self.products = products
+                self.isLoading = false
+                self.loadingMessage = ""
+                if products.isEmpty {
+                    self.errorMessage = "사용 가능한 제품이 없습니다. 잠시 후 다시 시도해주세요."
+                    print("로드된 제품이 없음")
+                }
+            }
+            
         } catch {
-            print("❌ 제품 로드 실패: \(error)")
-            errorMessage = "제품 정보를 불러올 수 없습니다."
+            await MainActor.run {
+                self.isLoading = false
+                self.loadingMessage = ""
+                print("제품 로드 실패: \(error)")
+                
+                if error is TimeoutError {
+                    self.errorMessage = "네트워크 연결이 느립니다. 잠시 후 다시 시도해주세요."
+                } else {
+                    self.errorMessage = "제품 정보를 불러올 수 없습니다: \(error.localizedDescription)"
+                }
+            }
         }
-        
-        isLoading = false
+    }
+    
+    /// 제품 로드 재시도
+    func retryLoadProducts() {
+        Task {
+            await loadProducts()
+        }
     }
     
     /// 프리미엄 구매 시작
     func purchasePremium(_ product: Product) async -> Bool {
         isLoading = true
+        loadingMessage = "구매 중..."
         errorMessage = nil
         
         do {
             let result = try await product.purchase()
+            
+            await MainActor.run {
+                self.isLoading = false
+                self.loadingMessage = ""
+            }
             
             switch result {
             case .success(let verification):
@@ -87,50 +122,61 @@ final class InAppPurchaseManager {
                 // 구매 상태 업데이트
                 await updateCustomerInfo()
                 
-                print("✅ 구매 성공: \(product.displayName)")
-                isLoading = false
                 return true
                 
             case .userCancelled:
-                print("⚠️ 사용자가 구매를 취소했습니다")
-                isLoading = false
+                print("사용자가 구매를 취소했습니다")
                 return false
                 
             case .pending:
-                print("⏳ 구매가 대기 중입니다")
-                isLoading = false
+                print("구매가 대기 중입니다")
+                await MainActor.run {
+                    self.errorMessage = "구매가 승인 대기 중입니다."
+                }
                 return false
                 
             @unknown default:
-                print("❌ 알 수 없는 구매 결과")
-                errorMessage = "구매 처리 중 오류가 발생했습니다."
-                isLoading = false
+                print("알 수 없는 구매 결과")
+                await MainActor.run {
+                    self.errorMessage = "구매 처리 중 오류가 발생했습니다."
+                }
                 return false
             }
             
         } catch {
-            print("❌ 구매 실패: \(error)")
-            errorMessage = handlePurchaseError(error)
-            isLoading = false
+            await MainActor.run {
+                self.isLoading = false
+                print("구매 실패: \(error)")
+                self.errorMessage = handlePurchaseError(error)
+            }
             return false
         }
     }
     
     /// 구매 복원
     func restorePurchases() async {
+        loadingMessage = "구매 복원 중..."
         isLoading = true
         errorMessage = nil
         
         do {
             try await AppStore.sync()
             await updateCustomerInfo()
-            print("✅ 구매 복원 완료")
+            
+            await MainActor.run {
+                self.isLoading = false
+                self.loadingMessage = ""
+                if !self.isPremiumUser { self.errorMessage = "복원할 구매 내역이 없습니다." }
+            }
         } catch {
-            print("❌ 구매 복원 실패: \(error)")
-            errorMessage = "구매 복원에 실패했습니다."
+            await MainActor.run {
+                self.isLoading = false
+                self.loadingMessage = ""
+
+                print("구매 복원 실패: \(error)")
+                self.errorMessage = "구매 복원에 실패했습니다: \(error.localizedDescription)"
+            }
         }
-        
-        isLoading = false
     }
     
     /// 앱이 포그라운드로 돌아올 때 구매 상태 새로고침
@@ -151,35 +197,45 @@ final class InAppPurchaseManager {
     private func loadCachedSubscriptionStatus() {
         let cachedStatus = UserDefaults.standard.bool(forKey: "is_premium_purchased_cached")
         purchaseStatus = cachedStatus ? .purchased : .notPurchased
-        print("📱 캐시된 구매 상태 로드: \(purchaseStatus.displayText)")
+        print("캐시된 구매 상태 로드: \(purchaseStatus.displayText)")
     }
     
     /// 구매 상태 캐시에 저장
     private func saveCachedSubscriptionStatus() {
         UserDefaults.standard.set(isPremiumUser, forKey: "is_premium_purchased_cached")
-        print("💾 구매 상태 캐시 저장: \(purchaseStatus.displayText)")
+        print("구매 상태 캐시 저장: \(purchaseStatus.displayText)")
     }
     
     /// 고객 정보 및 구독 상태 업데이트
     private func updateCustomerInfo() async {
+        print("고객 정보 업데이트 시작...")
+        
+        var hasActivePurchase = false
+        
         for await result in Transaction.currentEntitlements {
             do {
                 let transaction = try checkVerified(result)
                 
                 // 구독 제품인지 확인
                 if productIds.contains(transaction.productID) {
-                    purchaseStatus = .purchased
-                    print("✅ 활성 구독 발견: \(transaction.productID)")
-                    return
+                    hasActivePurchase = true
+                    print("활성 구매 발견: \(transaction.productID)")
+                    break
                 }
             } catch {
-                print("❌ 트랜잭션 검증 실패: \(error)")
+                print("트랜잭션 검증 실패: \(error)")
             }
         }
         
-        // 활성 구독이 없음
-        purchaseStatus = .notPurchased
-        print("⚠️ 활성 구독 없음")
+        await MainActor.run {
+            let previousStatus = self.purchaseStatus
+            self.purchaseStatus = hasActivePurchase ? .purchased : .notPurchased
+            
+            if previousStatus != self.purchaseStatus {
+                print("구매 상태 변경: \(previousStatus.displayText) → \(self.purchaseStatus.displayText)")
+                self.saveCachedSubscriptionStatus()
+            }
+        }
     }
     
     /// 트랜잭션 변경 사항 모니터링
@@ -190,8 +246,9 @@ final class InAppPurchaseManager {
                     let transaction = try checkVerified(result)
                     await transaction.finish()
                     await updateCustomerInfo()
+                    print("트랜잭션 업데이트 처리 완료: \(transaction.productID)")
                 } catch {
-                    print("❌ 트랜잭션 업데이트 처리 실패: \(error)")
+                    print("트랜잭션 업데이트 처리 실패: \(error)")
                 }
             }
         }
@@ -220,16 +277,39 @@ final class InAppPurchaseManager {
             case .notEntitled:
                 return "구매 권한이 없습니다."
             default:
-                return "구매 중 오류가 발생했습니다."
+                return "구매 중 오류가 발생했습니다: \(storeKitError.localizedDescription)"
             }
         }
-        return "알 수 없는 오류가 발생했습니다."
+        return "알 수 없는 오류가 발생했습니다: \(error.localizedDescription)"
+    }
+}
+
+// MARK: - TIMEOUT UTILITY
+
+struct TimeoutError: Error {
+    let message = "Operation timed out"
+}
+
+func withTimeout<T>(seconds: Double, operation: @escaping () async throws -> T) async throws -> T {
+    return try await withThrowingTaskGroup(of: T.self) { group in
+        group.addTask {
+            try await operation()
+        }
+        
+        group.addTask {
+            try await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000))
+            throw TimeoutError()
+        }
+        
+        let result = try await group.next()!
+        group.cancelAll()
+        return result
     }
 }
 
 // MARK: - PURCHASE STATUS
 
-enum PurchaseStatus {
+enum PurchaseStatus: Equatable {
     case notPurchased
     case purchased
     

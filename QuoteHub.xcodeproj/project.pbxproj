@@ -790,7 +790,6 @@
 				CE8C47F92DEA8DAE003188ED /* MainView.swift */,
 				CE8C48452DEAD67D003188ED /* FloatingActionOverlay.swift */,
 				CE8C48432DEAD467003188ED /* CustomTabbar.swift */,
-				CE802C092E542A70005380FA /* PremiumUpgradeView.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -994,6 +993,7 @@
 		CEB50F602E5858D400584424 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				CE802C092E542A70005380FA /* PremiumUpgradeView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
