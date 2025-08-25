@@ -19,8 +19,8 @@ struct SettingView: View {
     private let termsURL: String = "https://obtainable-postage-df4.notion.site/31236e89fe8942858a7b5a06f458e2ba?pvs=4"
     private let privacyURL: String = "https://obtainable-postage-df4.notion.site/6f8d432d3e5e417b9fa72d1121ec4011?pvs=4"
     private let supportURL: String = "https://docs.google.com/forms/d/e/1FAIpQLSd8Ljo-F7h92bBBy1z_gqHkWQaLWd3yqKogf60mnev7CnrIuw/viewform"
+    
     @State private var showFontSettingView: Bool = false
-
     @State private var isPresentIntroWebView = false
     @State private var isPresentTermsWebView = false
     @State private var isPresentPrivacyWebView = false
@@ -38,18 +38,19 @@ struct SettingView: View {
     
     private var appSettingSection: some View {
         Section {
-            // TODO: - 프리미엄 사용자만 폰트 변경
-            Button {
-                showFontSettingView.toggle()
-            } label: {
-                HStack {
-                    Image(systemName: "textformat.size.larger.ko")
-                    Text("폰트 변경")
-                        .fontWeight(.semibold)
+            if InAppPurchaseManager.shared.isPremiumUser {
+                Button {
+                    showFontSettingView.toggle()
+                } label: {
+                    HStack {
+                        Image(systemName: "textformat.size.larger.ko")
+                        Text("폰트 변경")
+                            .fontWeight(.semibold)
+                    }
                 }
-            }
-            .fullScreenCover(isPresented: $showFontSettingView) {
-                FontSettingsView()
+                .fullScreenCover(isPresented: $showFontSettingView) {
+                    FontSettingsView()
+                }
             }
             
             NavigationLink {
@@ -69,6 +70,9 @@ struct SettingView: View {
                         .foregroundStyle(Color.orange)
                     Text(InAppPurchaseManager.shared.isPremiumUser ? "프리미엄 사용자" : "무료 사용자")
                 }
+            }
+            .fullScreenCover(isPresented: $showingPremiumUpgrade) {
+                PremiumUpgradeView()
             }
 //                NavigationLink {
 //                    BlockedListView()
@@ -90,10 +94,6 @@ struct SettingView: View {
             Text("앱 설정").font(.appHeadline)
         }
         .font(.appBody)
-        .sheet(isPresented: $showingPremiumUpgrade) {
-            PremiumUpgradeView()
-        }
-        
     }
     
     private var supportSection: some View {

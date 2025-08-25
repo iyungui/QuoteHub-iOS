@@ -79,10 +79,6 @@ struct ContentView: View {
                 }
         } else if authManager.showingNicknameSetup {
             NicknameSetupView(initialNickname: authManager.initialNickname)
-        } else if authManager.showingFontSetup {
-            FontSettingsView(isOnboarding: true) {
-                authManager.goToLibraryView()
-            }
         } else {
             Group {
                 // 앱을 시작할 때, 인증된 사용자라면 또는 게스트로그인 사용자라면 MainView로 가고,

@@ -11,14 +11,6 @@ struct FontSettingsView: View {
     @State private var selectedFont: FontType = FontManager.currentFontType
     @Environment(\.dismiss) private var dismiss
     
-    let isOnboarding: Bool
-    let onComplete: (() -> Void)?
-    
-    init(isOnboarding: Bool = false, onComplete: (() -> Void)? = nil) {
-        self.isOnboarding = isOnboarding
-        self.onComplete = onComplete
-    }
-    
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -27,23 +19,16 @@ struct FontSettingsView: View {
                     .padding(.bottom, 5)
                 selectFontSection
             }
-            .navigationTitle(isOnboarding ? "폰트 선택" : "폰트 설정")
+            .navigationTitle("폰트 설정")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                if isOnboarding {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button("건너뛰기") { onComplete?() }
-                    }
-                } else {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("취소") { dismiss() }
-                    }
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("취소") { dismiss() }
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {
                     Button {
                         FontManager.changeFontType(to: selectedFont)
-                        if isOnboarding { onComplete?() }
                     } label: {
                         Text("확인")
                             .font(.appHeadline)

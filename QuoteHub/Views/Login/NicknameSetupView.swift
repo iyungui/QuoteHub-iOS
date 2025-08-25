@@ -248,7 +248,7 @@ struct NicknameSetupView: View {
                 await loadLoginUserData()
                 
                 await MainActor.run {
-                    authManager.goToFontSettingView()
+                    authManager.completeLoginProcess()
                 }
             } catch {
                 await MainActor.run {

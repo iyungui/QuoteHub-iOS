@@ -65,11 +65,7 @@ struct PremiumUpgradeView: View {
                     await loadProductsWithRetry()
                 }
             }
-            .overlay {
-                if InAppPurchaseManager.shared.isLoading {
-                    LoadingOverlay()
-                }
-            }
+            .progressOverlay(viewModels: InAppPurchaseManager.shared, opacity: true)
             .refreshable {
                 await loadProductsWithRetry()
             }
@@ -217,6 +213,7 @@ struct PremiumUpgradeView: View {
                 Text("• 한번 구매로 영구 사용")
                 Text("• 모든 기기에서 사용 가능")
                 Text("• 환불 시 기간 내 가능")
+                Text("• 폰트는 설정 창에서 변경 가능합니다.")
             }
             .font(.appFont(.regular, size: .caption))
             .foregroundColor(.secondary)
