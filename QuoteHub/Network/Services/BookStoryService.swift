@@ -104,9 +104,9 @@ protocol BookStoryServiceProtocol {
 }
 
 final class BookStoryService: BookStoryServiceProtocol {
-    private let apiClient: APIClient
-    
-    init(apiClient: APIClient = APIClient.shared) {
+    private let apiClient: APIClientProtocol
+
+    init(apiClient: APIClientProtocol = APIClient.shared) {
         self.apiClient = apiClient
     }
     

@@ -7,7 +7,42 @@
 
 import SwiftUI
 
-final class APIClient {
+// MARK: - APIClient Protocol
+
+protocol APIClientProtocol {
+    func request<T: APIResponseProtocol & Codable>(
+        endpoint: EndpointProtocol,
+        body: RequestBody,
+        responseType: T.Type,
+        customHeaders: [String: String]?,
+        isRetry: Bool
+    ) async throws -> T
+}
+
+// MARK: - Protocol Extension (기본값 제공)
+
+extension APIClientProtocol {
+    /// customHeaders와 isRetry에 기본값을 제공하는 편의 메서드
+    func request<T: APIResponseProtocol & Codable>(
+        endpoint: EndpointProtocol,
+        body: RequestBody = .empty,
+        responseType: T.Type,
+        customHeaders: [String: String]? = nil,
+        isRetry: Bool = false
+    ) async throws -> T {
+        return try await request(
+            endpoint: endpoint,
+            body: body,
+            responseType: responseType,
+            customHeaders: customHeaders,
+            isRetry: isRetry
+        )
+    }
+}
+
+// MARK: - APIClient Implementation
+
+final class APIClient: APIClientProtocol {
     // MARK: - Properties
     static let shared = APIClient()
     
