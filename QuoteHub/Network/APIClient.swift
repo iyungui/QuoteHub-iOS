@@ -7,7 +7,17 @@
 
 import SwiftUI
 
-final class APIClient {
+protocol APIClientProtocol {
+    func request<T: APIResponseProtocol & Codable>(
+        endpoint: EndpointProtocol,
+        body: RequestBody,
+        responseType: T.Type,
+        customHeaders: [String: String]?,
+        isRetry: Bool
+    ) async throws -> T
+}
+
+final class APIClient: APIClientProtocol {
     // MARK: - Properties
     static let shared = APIClient()
     
