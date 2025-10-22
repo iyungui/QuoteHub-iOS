@@ -10,32 +10,27 @@ import Foundation
 
 /// 테스트용 Mock APIClient
 /// 실제 네트워크 호출 없이 미리 설정된 응답을 반환합니다.
-final class MockAPIClient: APIClient {
-
-    // MARK: - Properties
-
-    /// 테스트에서 설정할 Mock 응답
+final class MockAPIClient: APIClientProtocol {
     var mockResponse: Any?
-
-    /// 테스트에서 설정할 Mock 에러
     var mockError: Error?
 
-    /// request 메서드가 호출되었는지 확인
-    var requestCalled: Bool = false
+    func request<T: APIResponseProtocol & Codable>(
+        endpoint: EndpointProtocol,
+        body: RequestBody,
+        responseType: T.Type,
+        customHeaders: [String: String]?,
+        isRetry: Bool
+    ) async throws -> T {
+        // Mock 에러가 설정되어 있으면 에러 던지기
+        if let error = mockError {
+            throw error
+        }
 
-    /// 마지막으로 호출된 endpoint
-    var lastEndpoint: EndpointProtocol?
-
-    /// 마지막으로 호출된 body
-    var lastBody: RequestBody?
-
-    // MARK: - Initialization
-
-    override init() {
-        // 참고: APIClient는 private init()이므로,
-        // 실제로는 APIClient를 protocol로 만들어야 합니다.
-        // 여기서는 테스트 학습 목적으로 간단히 구현합니다.
-        fatalError("MockAPIClient는 protocol 기반 설계가 필요합니다. 현재는 validation 테스트만 지원됩니다.")
+        // Mock 응답 반환
+        guard let response = mockResponse as? T else {
+            fatalError("Mock response type mismatch")
+        }
+        return response
     }
 }
 
