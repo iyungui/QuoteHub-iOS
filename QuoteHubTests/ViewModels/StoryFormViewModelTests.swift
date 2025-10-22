@@ -49,8 +49,8 @@ final class StoryFormViewModelTests: XCTestCase {
         // Given: 빈 키워드 배열
         XCTAssertEqual(viewModel.keywords.count, 0)
 
-        // When: 9자 키워드 입력 시도
-        viewModel.inlineKeywordInput = "#아주긴키워드네요 "
+        // When: 9자 키워드 입력 시도 (아주긴키워드네요임 = 9자)
+        viewModel.inlineKeywordInput = "#아주긴키워드네요임 "
         viewModel.processInlineKeywordInput(viewModel.inlineKeywordInput)
 
         // Then: 키워드가 추가되지 않음
@@ -148,20 +148,14 @@ final class StoryFormViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.keywords.count, 0)
 
         // When: 정확히 8자 키워드 입력
-        let eightCharKeyword = "여덟글자임"  // 5자
-        // "테스트키워드" = 6자
-        let exactEightChar = "여덟글자키워드"  // 7자... 한글은 1글자당 1자
-        // 정확히 8자를 만들기 위해: "여덟글자완성됨" = 7자
-        // "키워드여덟글자" = 7자
-        let keyword8 = "독서성장여행책" // 7자
-        let realEight = "독서성장여행책임" // 8자
+        let eightCharKeyword = "독서성장여행책임"  // 독/서/성/장/여/행/책/임 = 8자
 
-        viewModel.inlineKeywordInput = "#\(realEight) "
+        viewModel.inlineKeywordInput = "#\(eightCharKeyword) "
         viewModel.processInlineKeywordInput(viewModel.inlineKeywordInput)
 
         // Then: 키워드가 정상 추가됨
         XCTAssertEqual(viewModel.keywords.count, 1, "8자 키워드는 정상 추가되어야 함")
-        XCTAssertTrue(viewModel.keywords.contains(realEight), "8자 키워드가 배열에 있어야 함")
+        XCTAssertTrue(viewModel.keywords.contains(eightCharKeyword), "8자 키워드가 배열에 있어야 함")
     }
 
     /// 테스트 9: 여러 키워드 연속 추가
