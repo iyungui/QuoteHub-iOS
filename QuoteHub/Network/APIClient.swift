@@ -16,10 +16,25 @@ protocol APIClientProtocol {
         isRetry: Bool
     ) async throws -> T
 }
-//
-//extension APIClientProtocol {
-//    func request
-//}
+
+extension APIClientProtocol {
+    /// customHeaders와 isRetry에 기본값을 제공하는 편의 메서드
+    func request<T: APIResponseProtocol & Codable>(
+        endpoint: EndpointProtocol,
+        body: RequestBody = .empty,
+        responseType: T.Type,
+        customHeaders: [String: String]? = nil,
+        isRetry: Bool = false
+    ) async throws -> T {
+        return try await request(
+            endpoint: endpoint,
+            body: body,
+            responseType: responseType,
+            customHeaders: customHeaders,
+            isRetry: isRetry
+        )
+    }
+}
 
 final class APIClient: APIClientProtocol {
     // MARK: - Properties

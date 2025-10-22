@@ -256,4 +256,82 @@ final class BookStoryServiceTests: XCTestCase {
             XCTFail("NetworkError가 발생해야 함")
         }
     }
+
+    // MARK: - Integration Tests with Mock (예시)
+
+    /// 테스트 8: MockAPIClient를 사용한 통합 테스트 예시
+    /// 참고: 실제로 실행하려면 User, Book 모델이 필요하므로 주석 처리됨
+    /*
+    func testCreateBookStory_WithMockClient_Success() async throws {
+        // Given: MockAPIClient 설정
+        let mockClient = MockAPIClient()
+        let mockService = BookStoryService(apiClient: mockClient)
+
+        // Mock User 생성
+        let mockUser = User(
+            _id: "user123",
+            name: "테스트유저",
+            email: "test@example.com",
+            profileImage: nil,
+            createdAt: "2023-01-01",
+            isPremium: false,
+            premiumExpiresAt: nil
+        )
+
+        // Mock Book 생성
+        let mockBook = Book(
+            _id: "book123",
+            title: "테스트 책",
+            author: "저자",
+            bookImageURL: nil,
+            createdAt: "2023-01-01"
+        )
+
+        // Mock BookStory 생성
+        let mockQuotes = [Quote(id: UUID(), quote: "테스트 문장", page: 1)]
+        let mockBookStory = BookStory(
+            _id: "story123",
+            userId: mockUser,
+            bookId: mockBook,
+            quotes: mockQuotes,
+            content: "테스트 내용",
+            storyImageURLs: nil,
+            isPublic: true,
+            createdAt: "2023-01-01",
+            updatedAt: "2023-01-01",
+            keywords: ["테스트"],
+            themeIds: ["theme1"]
+        )
+
+        // Mock 응답 설정
+        let mockResponse = APIResponse<BookStory>(
+            success: true,
+            message: "북스토리가 생성되었습니다",
+            data: mockBookStory
+        )
+        mockClient.mockResponse = mockResponse
+
+        // When: createBookStory 호출
+        let result = try await mockService.createBookStory(
+            images: nil,
+            bookId: "book123",
+            quotes: mockQuotes,
+            content: "테스트 내용",
+            isPublic: true,
+            keywords: ["테스트"],
+            themeIds: ["theme1"]
+        )
+
+        // Then: 결과 검증
+        XCTAssertTrue(result.success, "응답의 success는 true여야 함")
+        XCTAssertEqual(result.message, "북스토리가 생성되었습니다")
+        XCTAssertNotNil(result.data, "BookStory 데이터가 반환되어야 함")
+        XCTAssertEqual(result.data?._id, "story123", "생성된 BookStory의 ID가 일치해야 함")
+
+        // Mock 호출 검증
+        XCTAssertTrue(mockClient.requestCalled, "APIClient의 request 메서드가 호출되어야 함")
+        XCTAssertNotNil(mockClient.lastEndpoint, "endpoint가 기록되어야 함")
+    }
+    */
 }
+

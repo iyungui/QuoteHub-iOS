@@ -514,12 +514,10 @@ final class StoryFormViewModelTests: XCTestCase {
         // Given: BookStory 객체 생성 (Mock 데이터)
         let mockUser = User(
             _id: "user123",
-            name: "테스트유저",
-            email: "test@example.com",
-            profileImage: nil,
-            createdAt: "2023-01-01",
-            isPremium: false,
-            premiumExpiresAt: nil
+            nickname: "테스트유저",
+            profileImage: "",
+            statusMessage: "테스트메시지",
+            blockedUsers: nil
         )
 
         let mockBook = Book(
