@@ -523,11 +523,16 @@ final class StoryFormViewModelTests: XCTestCase {
         )
 
         let mockBook = Book(
-            _id: "book123",
             title: "테스트 책",
-            author: "저자",
-            bookImageURL: nil,
-            createdAt: "2023-01-01"
+            author: ["저자"],
+            translator: ["번역자"],
+            introduction: "소개",
+            publisher: "출판사",
+            publicationDate: "2023-01-01",
+            bookImageURL: "",
+            bookLink: "",
+            ISBN: ["123456"],
+            _id: "book123"
         )
 
         let mockQuotes = [
@@ -569,20 +574,23 @@ final class StoryFormViewModelTests: XCTestCase {
         // Given: quotes가 비어있는 BookStory
         let mockUser = User(
             _id: "user123",
-            name: "테스트유저",
-            email: "test@example.com",
-            profileImage: nil,
-            createdAt: "2023-01-01",
-            isPremium: false,
-            premiumExpiresAt: nil
+            nickname: "테스트유저",
+            profileImage: "",
+            statusMessage: nil,
+            blockedUsers: nil
         )
 
         let mockBook = Book(
-            _id: "book123",
             title: "테스트 책",
-            author: "저자",
-            bookImageURL: nil,
-            createdAt: "2023-01-01"
+            author: ["저자"],
+            translator: ["번역자"],
+            introduction: "소개",
+            publisher: "출판사",
+            publicationDate: "2023-01-01",
+            bookImageURL: "",
+            bookLink: "",
+            ISBN: ["123456"],
+            _id: "book123"
         )
 
         let mockBookStory = BookStory(
