@@ -16,6 +16,10 @@ protocol APIClientProtocol {
         isRetry: Bool
     ) async throws -> T
 }
+//
+//extension APIClientProtocol {
+//    func request
+//}
 
 final class APIClient: APIClientProtocol {
     // MARK: - Properties
