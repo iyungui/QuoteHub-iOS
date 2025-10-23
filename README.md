@@ -22,14 +22,14 @@
 
 ## 버전 히스토리
 
-### [Version 2.0 (2025.05.25 ~ 2025.07.01)](./docs/v2.0-release-notes.md) [링크]
+### [Version 2.0 (2025.05.25 ~ 2025.07.01) [링크]](./docs/v2.0-release-notes.md)
 - 37일간 전면 리팩토링
 - Swift Concurrency (async/await) 전면 도입
 - MVVM 아키텍처 개선 및 Protocol 기반 설계
 - UI/UX 전면 재설계
 - Race Condition 해결
 
-### [Version 1.0 (2023.10)](./docs/v1.0-release-notes.md) [링크]
+### [Version 1.0 (2023.10)] [링크](./docs/v1.0-release-notes.md)
 - 첫 번째 iOS 앱 개발 프로젝트
 - SwiftUI 기반 UI 개발
 - Node.js 백엔드 서버 구축
