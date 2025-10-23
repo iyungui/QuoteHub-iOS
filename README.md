@@ -29,7 +29,7 @@
 - UI/UX 전면 재설계
 - Race Condition 해결
 
-### [Version 1.0 (2023.10)] [링크](./docs/v1.0-release-notes.md)
+### [Version 1.0 (2023.10) [링크]](./docs/v1.0-release-notes.md)
 - 첫 번째 iOS 앱 개발 프로젝트
 - SwiftUI 기반 UI 개발
 - Node.js 백엔드 서버 구축
