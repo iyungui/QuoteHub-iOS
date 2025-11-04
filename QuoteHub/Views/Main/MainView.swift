@@ -11,13 +11,15 @@ import SwiftUI
 // MARK: - Main View
 
 struct MainView: View {
-    @EnvironmentObject private var tabController: TabManager
+    @Environment(TabManager.self) private var tabController
     @Environment(UserAuthenticationManager.self) private var authManager
 
     @State private var showAlert: Bool = false
     @State private var showActionButtons: Bool = false
     
     var body: some View {
+        @Bindable var tabController = tabController
+        
         NavigationStack {
             ZStack {
                 // 메인 콘텐츠
