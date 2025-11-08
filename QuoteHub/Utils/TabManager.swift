@@ -19,12 +19,13 @@ enum ActiveSheet: Identifiable {
     }
 }
 
-class TabManager: ObservableObject {
-    @Published var selectedTab: Int = 0
-    @Published var shouldNavigateToStoryDetail: Bool = false
-    @Published var activeSheet: ActiveSheet?
+@Observable
+class TabManager {
+    var selectedTab: Int = 0
+    var shouldNavigateToStoryDetail: Bool = false
+    var activeSheet: ActiveSheet?
 
-    @Published var selectedStory: BookStory?
+    var selectedStory: BookStory?
     
     /// 시트가 있으면 dismiss 후 tab and navigate
     /// 없으면 바로 tab and navigate

@@ -15,7 +15,7 @@ struct MyLibraryView: View {
     @Environment(MyThemesViewModel.self) private var myThemesViewModel
     @Environment(UserViewModel.self) private var userViewModel
     @Environment(UserAuthenticationManager.self) private var userAuthManager
-    @EnvironmentObject private var tabController: TabManager
+    @Environment(TabManager.self) private var tabController
     
     // MARK: - State
     @State private var selectedTab: LibraryTab = .stories
@@ -25,6 +25,8 @@ struct MyLibraryView: View {
     // MARK: - Body
     
     var body: some View {
+        @Bindable var tabController = tabController
+        
         LibraryBaseView(
             selectedTab: $selectedTab,
             profileSection: {

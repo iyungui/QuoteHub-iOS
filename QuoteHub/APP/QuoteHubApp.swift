@@ -12,20 +12,14 @@ import SwiftData
 struct QuoteHubApp: App {
     @State private var authManager = UserAuthenticationManager()
     @State private var userViewModel = UserViewModel()
-    
-    // 북스토리
     @State private var myBookStoriesViewModel = MyBookStoriesViewModel()
     @State private var publicBookStoriesViewModel = PublicBookStoriesViewModel()
-    
-    // 테마
     @State private var myThemesViewModel = MyThemesViewModel()
     @State private var publicThemesViewModel = PublicThemesViewModel()
-    
     @State private var blockReportViewModel = BlockReportViewModel()
-    @StateObject private var tabController = TabManager()
+    @State private var tabController = TabManager()
 
-    // SwiftData ModelContainer 설정
-    var sharedModelContainer: ModelContainer = {
+    private var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             DraftStory.self
         ])
@@ -46,7 +40,6 @@ struct QuoteHubApp: App {
     }()
     
     init() {
-        // 앱 시작 시 시스템 폰트 초기화
         FontManager.initialize()
     }
     
@@ -57,12 +50,11 @@ struct QuoteHubApp: App {
                 .environment(userViewModel)
                 .environment(myThemesViewModel)
                 .environment(publicThemesViewModel)
-                .environmentObject(tabController)
                 .environment(blockReportViewModel)
                 .environment(myBookStoriesViewModel)
                 .environment(publicBookStoriesViewModel)
+                .environment(tabController)
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
-                    // 앱이 포그라운드로 돌아올 때 구매 상태 새로고침
                     InAppPurchaseManager.shared.refreshPurchaseStatus()
                 }
         }
