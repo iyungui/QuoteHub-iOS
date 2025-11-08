@@ -7,9 +7,6 @@
 
 import SwiftUI
 
-
-// MARK: - Main View
-
 struct MainView: View {
     @Environment(TabManager.self) private var tabController
     @Environment(UserAuthenticationManager.self) private var authManager
@@ -97,6 +94,7 @@ struct MainView: View {
             }
         }
     }
+    
     private func showLoginAlert() {
         showAlert = true
     }
