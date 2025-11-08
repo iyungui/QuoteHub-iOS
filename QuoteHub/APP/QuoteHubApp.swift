@@ -10,6 +10,8 @@ import SwiftData
 
 @main
 struct QuoteHubApp: App {
+    @AppStorage("selectedFontType") private var selectedFontType: String = FontType.scoreDream.rawValue
+
     @State private var authManager = UserAuthenticationManager()
     @State private var userViewModel = UserViewModel()
     @State private var myBookStoriesViewModel = MyBookStoriesViewModel()
@@ -57,6 +59,7 @@ struct QuoteHubApp: App {
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
                     InAppPurchaseManager.shared.refreshPurchaseStatus()
                 }
+                .id(selectedFontType) // 폰트 변경시 전체 뷰 트리 재생성
         }
         .modelContainer(sharedModelContainer)
     }
