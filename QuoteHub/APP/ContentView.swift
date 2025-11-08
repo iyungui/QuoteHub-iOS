@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-// ContentView 에서는 앱 화면 분기처리
-
 struct ContentView: View {
     @State private var versionManager = AppVersionManager()
     @Environment(UserAuthenticationManager.self) private var authManager
