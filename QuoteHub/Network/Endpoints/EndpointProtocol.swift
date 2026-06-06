@@ -25,7 +25,7 @@ protocol EndpointProtocol {
 
 extension EndpointProtocol {
     var baseURL: String {
-        "https://port-0-quotehub-server-m015aiy374b6cd11.sel4.cloudtype.app"
+        "https://quotehub-server.onrender.com"
     }
     
     var fullURL: String {
