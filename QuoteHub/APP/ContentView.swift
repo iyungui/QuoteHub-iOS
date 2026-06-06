@@ -31,7 +31,7 @@ struct ContentView: View {
             }
         }
         .task {
-            await versionManager.checkVersionFromAppStore()
+//            await versionManager.checkVersionFromAppStore()
         }
         .alert("업데이트 필요", isPresented: $versionManager.showUpdateAlert) {
             Button("확인") {
