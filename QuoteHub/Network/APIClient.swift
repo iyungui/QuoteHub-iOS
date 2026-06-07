@@ -42,6 +42,7 @@ final class APIClient: APIClientProtocol {
     
     private let session: URLSession
     private let tokenManager: KeyChainTokenManager
+    private let refreshCoordinator = RefreshCoordinator()
     
     // MARK: - Initialization
     private init() {
@@ -115,6 +116,7 @@ final class APIClient: APIClientProtocol {
         }
         
         return try await executeRequest(urlRequest, endpoint: endpoint, responseType: responseType, isRetry: isRetry)
+        
     }
     
     /// 현재 유효한 액세스 토큰 반환
@@ -146,6 +148,7 @@ final class APIClient: APIClientProtocol {
             switch httpResponse.statusCode {
             case 200...299:
                 if apiResponse.success {
+                    
                     return apiResponse
                 } else {
                     throw NetworkError.serverError(httpResponse.statusCode, apiResponse.message)
@@ -153,7 +156,10 @@ final class APIClient: APIClientProtocol {
                 
             case 401:
                 if endpoint.requiresAuth && !isRetry {
-                    let refreshSuccess = try await refreshTokenIfNeeded()
+                    let refreshSuccess = await refreshCoordinator.refresh { [weak self] in
+                        guard let self else { return false }
+                        return await self.performTokenRefresh()
+                    }
                     
                     if refreshSuccess {
                         // 토큰 갱신 성공 시 재시도
@@ -312,7 +318,7 @@ final class APIClient: APIClientProtocol {
     }
 
     /// 토큰 리프레시
-    private func refreshTokenIfNeeded() async throws -> Bool {
+    private func performTokenRefresh() async -> Bool {
         guard let refreshToken = tokenManager.getRefreshToken() else {
             return false
         }
@@ -337,5 +343,24 @@ final class APIClient: APIClientProtocol {
             print("토큰 리프레시 실패: \(error)")
             return false
         }
+    }
+}
+
+/// 토큰 갱신을 single-flight로 보장하는 actor
+/// 동시에 여러 요청이 401을 만나도 실제 refresh는 1번만 실행하고, 나머지는 그 결과를 공유한다.
+actor RefreshCoordinator {
+    private var inFlight: Task<Bool, Never>?
+
+    func refresh(using operation: @Sendable @escaping () async -> Bool) async -> Bool {
+        // 이미 진행 중인 갱신이 있으면 → 그 Task의 결과를 기다려 공유 (새로 시작 안 함)
+        if let inFlight {
+            return await inFlight.value
+        }
+        // 첫 호출자만 실제 갱신을 트리거 (inFlight 세팅은 await 이전에 = reentrancy 차단)
+        let task = Task { await operation() }
+        inFlight = task
+        let result = await task.value
+        inFlight = nil
+        return result
     }
 }
