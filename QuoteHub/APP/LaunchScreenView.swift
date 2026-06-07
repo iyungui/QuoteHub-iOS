@@ -33,10 +33,15 @@ struct LaunchScreenView: View {
         await authManager.validateAndRenewTokenNeeded()
         
         if authManager.isUserAuthenticated {
-            await loadPrivateUserData()
+            async let privateData: Void = loadPrivateUserData()
+            async let publicData: Void = loadPublicData()
+            await privateData
+            await publicData
+        }
+        else {
+            await loadPublicData()
         }
         
-        await loadPublicData()
         withAnimation { isSplashView = false }
     }
     
