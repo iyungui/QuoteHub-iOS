@@ -15,10 +15,13 @@
 
 ## **기술 스택**
 - SwiftUI
-- Swift Concurrency (async/await)
+- Swift Concurrency (async/await, TaskGroup)
 - MVVM Architecture
-- URLSession
+- URLSession (제네릭 네트워크 레이어)
 - SwiftData
+- Sign in with Apple (AuthenticationServices)
+- JWT 인증 (Access / Refresh Token)
+- Keychain (토큰 보안 저장)
 
 ## 버전 히스토리
 
