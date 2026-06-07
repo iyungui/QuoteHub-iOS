@@ -40,3 +40,5 @@ fastlane/test_output
 *.swo
 *~
 
+docs/learning/
+

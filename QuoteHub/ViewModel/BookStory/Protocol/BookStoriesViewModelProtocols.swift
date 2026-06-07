@@ -92,14 +92,21 @@ protocol EditableBookStoriesViewModelProtocol: BookStoriesViewModelProtocol {
 
 // MARK: - 프로토콜 기본 구현 (공통 로직)
 extension BookStoriesViewModelProtocol {
-    
+
+    /// 초기 로드(멱등): 데이터가 비어 있을 때만 첫 페이지를 로드한다.
+    /// 여러 화면이 "데이터 보장" 목적으로 호출해도 중복 페이지네이션이 일어나지 않는다.
+    @MainActor
+    func loadInitialIfNeeded() async {
+        guard bookStories.isEmpty else { return }
+        await loadBookStories()
+    }
+
     /// 페이지네이션 체크를 위한 헬퍼 메서드
     /// - Parameter item: 현재 아이템
     /// - Returns: 추가 로드가 필요한지 여부
     @MainActor
     func shouldLoadMore(for item: BookStory?) -> Bool {
         guard let item = item else { return false }
-        guard !isLoading else { return false }
         guard !isLoading else { return false }
         
         // 현재 아이템이 마지막에서 3번째 이내면 추가 로드

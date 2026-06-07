@@ -134,9 +134,10 @@ final class UserAuthenticationManager: LoadingViewModelProtocol {
         defer {
             isLoading = false
         }
-        
-        Task.detached {
-            try? await self.authService.clearAllTokens()
+        do {
+            try authService.clearAllTokens()
+        } catch {
+            print("토큰 삭제 실패: \(error)")
         }
         // 상태 초기화 (온보딩뷰로 이동)
         goToOnboardingView()
@@ -161,8 +162,10 @@ final class UserAuthenticationManager: LoadingViewModelProtocol {
             }
             
             // keychain에 저장된 토큰도 삭제
-            Task.detached {
-                try? await self.authService.clearAllTokens()
+            do {
+                try authService.clearAllTokens()
+            } catch {
+                print("토큰 삭제 실패: \(error)")
             }
             
             // 상태 초기화 (온보딩뷰로 이동)

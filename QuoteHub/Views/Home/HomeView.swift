@@ -94,7 +94,7 @@ struct HomeView: View {
                     await booksViewModel.fetchRandomBooks()
                 }
                 group.addTask {
-                    await publicBookStoriesViewModel.loadBookStories()
+                    await publicBookStoriesViewModel.loadInitialIfNeeded()
                 }
                 group.addTask {
                     await publicThemesViewModel.loadThemes()

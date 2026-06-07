@@ -45,11 +45,13 @@ final class FriendBookStoriesViewModel: BookStoriesViewModelProtocol {
         guard loadingTask == nil else { return }
         guard !isLastPage else { return }
         
-        loadingTask = Task { @MainActor in
+        let task = Task { @MainActor in
             await performLoadBookStories()
         }
+        loadingTask = task
+        await task.value   // 로드 완료까지 실제로 대기 (취소 핸들은 loadingTask로 유지)
     }
-    
+
     func refreshBookStories() async {
         cancelLoadingTask()
         currentPage = 1

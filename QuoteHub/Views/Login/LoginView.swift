@@ -126,10 +126,10 @@ struct AppleLoginButton: View {
                 await userViewModel.loadStoryCount(userId: nil)
             }
             group.addTask {
-                await myBookStoriesViewModel.loadBookStories()
+                await myBookStoriesViewModel.loadInitialIfNeeded()
             }
             group.addTask {
-                await publicBookStoriesViewModel.loadBookStories()
+                await publicBookStoriesViewModel.loadInitialIfNeeded()
             }
             group.addTask {
                 await myThemesViewModel.loadThemes()
