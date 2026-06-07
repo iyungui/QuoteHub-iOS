@@ -33,10 +33,9 @@ struct LaunchScreenView: View {
         await authManager.validateAndRenewTokenNeeded()
         
         if authManager.isUserAuthenticated {
-            async let privateData: Void = loadPrivateUserData()
+            async let privateData: Void = loadPrivateData()
             async let publicData: Void = loadPublicData()
-            await privateData
-            await publicData
+            _ = await (privateData, publicData)
         }
         else {
             await loadPublicData()
@@ -45,32 +44,18 @@ struct LaunchScreenView: View {
         withAnimation { isSplashView = false }
     }
     
-    private func loadPrivateUserData() async {
-        await withTaskGroup(of: Void.self) { group in
-            group.addTask {
-                await userViewModel.loadUserProfile(userId: nil)
-            }
-            group.addTask {
-                await userViewModel.loadStoryCount(userId: nil)
-            }
-            group.addTask {
-                await myBookStoriesViewModel.loadInitialIfNeeded()
-            }
-            group.addTask {
-                await myThemesViewModel.loadThemes()
-            }
-        }
+    private func loadPrivateData() async {
+        async let profile: Void = userViewModel.loadUserProfile(userId: nil)
+        async let count:   Void = userViewModel.loadStoryCount(userId: nil)
+        async let stories: Void = myBookStoriesViewModel.loadInitialIfNeeded()
+        async let themes:  Void = myThemesViewModel.loadThemes()
+        _ = await (profile, count, stories, themes)
     }
-    
+
     private func loadPublicData() async {
-        await withTaskGroup(of: Void.self) { group in
-            group.addTask {
-                await publicBookStoriesViewModel.loadInitialIfNeeded()
-            }
-            group.addTask {
-                await publicThemesViewModel.loadThemes()
-            }
-        }
+        async let stories: Void = publicBookStoriesViewModel.loadInitialIfNeeded()
+        async let themes:  Void = publicThemesViewModel.loadThemes()
+        _ = await (stories, themes)
     }
 }
 
