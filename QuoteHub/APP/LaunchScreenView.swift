@@ -49,7 +49,7 @@ struct LaunchScreenView: View {
                 await userViewModel.loadStoryCount(userId: nil)
             }
             group.addTask {
-                await myBookStoriesViewModel.loadBookStories()
+                await myBookStoriesViewModel.loadInitialIfNeeded()
             }
             group.addTask {
                 await myThemesViewModel.loadThemes()
@@ -60,7 +60,7 @@ struct LaunchScreenView: View {
     private func loadPublicData() async {
         await withTaskGroup(of: Void.self) { group in
             group.addTask {
-                await publicBookStoriesViewModel.loadBookStories()
+                await publicBookStoriesViewModel.loadInitialIfNeeded()
             }
             group.addTask {
                 await publicThemesViewModel.loadThemes()
