@@ -66,7 +66,27 @@ struct NicknameSetupView: View {
                 // 닉네임 입력 영역
                 VStack(spacing: 10) {
                     // 텍스트필드와 버튼들
-                    HStack(spacing: 10) {
+                    HStack(spacing: 8) {
+                        // 랜덤 생성 버튼
+                        Button(action: generateRandomNickname) {
+                            Group {
+                                if isGeneratingNickname {
+                                    ProgressView()
+                                        .tint(.white)
+                                } else {
+                                    Image(systemName: "sparkles")
+                                        .font(.appFont(.regular, size: .subheadline))
+                                }
+                            }
+                            .frame(width: 24, height: 20)
+                        }
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 10)
+                        .background(Color.appAccent)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                        .disabled(isGeneratingNickname)
+
                         TextField("닉네임을 입력하세요", text: $nickname)
                             .font(.appFont(.regular, size: .subheadline))
                             .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -75,7 +95,7 @@ struct NicknameSetupView: View {
                                 isNicknameChecked = false
                                 feedbackMessage = ""
                             }
-                        
+
                         // 중복확인 버튼
                         Button(action: checkNicknameDuplicate) {
                             Text("중복확인")
