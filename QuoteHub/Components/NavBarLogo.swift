@@ -8,12 +8,6 @@
 import SwiftUI
 
 public func NavBarLogo() -> some View {
-    HStack(spacing: 8) {
-        Image("logo")
-            .resizable().scaledToFit().frame(height: 24)
-        
-        Text("문장모아")
-            .font(.appHeadline)
-            .foregroundStyle(Color.appAccent)
-    }
+    Image("logo")
+        .resizable().scaledToFit().frame(height: 24)
 }
