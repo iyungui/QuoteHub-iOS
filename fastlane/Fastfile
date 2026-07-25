@@ -1,0 +1,99 @@
+# QuoteHub(문장모아) iOS 배포 자동화
+#
+# 인증은 App Store Connect API 키를 사용한다 (2FA·비밀번호 불필요, 가장 안정적).
+# 최초 1회 설정은 fastlane/README.md 참고.
+#
+# 사용:
+#   bundle exec fastlane beta              # TestFlight 업로드
+#   bundle exec fastlane release           # App Store 심사용 빌드 업로드 (자동 제출 안 함)
+#   bundle exec fastlane release version:2.15   # 마케팅 버전까지 올려서 업로드
+
+default_platform(:ios)
+
+APP_IDENTIFIER = "com.yungui.QuoteHub"
+SCHEME         = "QuoteHub"
+PROJECT        = "QuoteHub.xcodeproj"
+OUTPUT_DIR     = "build"
+
+platform :ios do
+  # --- App Store Connect API 키 로드 ---
+  # 필요한 환경변수: ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_PATH (AuthKey_XXXX.p8 경로)
+  private_lane :asc_key do
+    app_store_connect_api_key(
+      key_id: ENV.fetch("ASC_KEY_ID"),
+      issuer_id: ENV.fetch("ASC_ISSUER_ID"),
+      key_filepath: ENV.fetch("ASC_KEY_PATH"),
+      duration: 1200,
+      in_house: false
+    )
+  end
+
+  # 다음 빌드 번호 = TestFlight의 최신 빌드 번호 + 1
+  # (프로젝트 파일을 건드리지 않고 빌드 시점에 xcargs로 주입한다)
+  def next_build_number(key)
+    latest = latest_testflight_build_number(
+      api_key: key,
+      app_identifier: APP_IDENTIFIER
+    ) rescue 0
+    latest.to_i + 1
+  end
+
+  desc "TestFlight에 업로드 (내부 테스트용)"
+  lane :beta do
+    key   = asc_key
+    build = next_build_number(key)
+    UI.message("빌드 번호 #{build}(으)로 아카이브합니다.")
+
+    build_app(
+      project: PROJECT,
+      scheme: SCHEME,
+      configuration: "Release",
+      export_method: "app-store",
+      output_directory: OUTPUT_DIR,
+      clean: true,
+      xcargs: "-allowProvisioningUpdates CURRENT_PROJECT_VERSION=#{build}"
+    )
+
+    upload_to_testflight(
+      api_key: key,
+      app_identifier: APP_IDENTIFIER,
+      skip_waiting_for_build_processing: true
+    )
+
+    UI.success("TestFlight 업로드 완료 (build #{build}).")
+  end
+
+  desc "App Store 심사용 빌드 업로드. 기본은 자동 제출하지 않음(수동 검토 후 제출)."
+  lane :release do |options|
+    key     = asc_key
+    build   = next_build_number(key)
+    version = options[:version] # 예: "2.15". 생략 시 프로젝트의 MARKETING_VERSION 사용.
+
+    xcargs = "-allowProvisioningUpdates CURRENT_PROJECT_VERSION=#{build}"
+    xcargs += " MARKETING_VERSION=#{version}" if version
+    UI.message("아카이브: build #{build}#{version ? ", version #{version}" : ''}")
+
+    build_app(
+      project: PROJECT,
+      scheme: SCHEME,
+      configuration: "Release",
+      export_method: "app-store",
+      output_directory: OUTPUT_DIR,
+      clean: true,
+      xcargs: xcargs
+    )
+
+    upload_to_app_store(
+      api_key: key,
+      app_identifier: APP_IDENTIFIER,
+      submit_for_review: false,   # 안전: 업로드만 하고 실제 심사 제출은 App Store Connect에서 수동으로.
+      automatic_release: false,
+      force: true,                # HTML 미리보기 생략
+      skip_screenshots: true,     # 스크린샷/메타데이터는 손대지 않음
+      skip_metadata: true,
+      precheck_include_in_app_purchases: false
+    )
+
+    UI.success("App Store 업로드 완료 (build #{build}). App Store Connect에서 '심사 제출'을 눌러 마무리하세요.")
+  end
+end
