@@ -1,0 +1,8 @@
+app_identifier("com.yungui.QuoteHub")
+
+# Apple Developer 팀 ID (프로젝트 설정에서 확인됨)
+team_id("285ZKW5MPR")
+
+# App Store Connect 로그인 이메일.
+# API 키(권장)를 쓰면 필요 없지만, 비밀번호 로그인 fallback을 위해 env로 받는다.
+apple_id(ENV["FASTLANE_APPLE_ID"])

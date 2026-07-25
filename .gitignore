@@ -31,6 +31,11 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
+fastlane/.env
+*.p8
+AuthKey_*.p8
+*.ipa
+*.dSYM.zip
 
 # 맥OS 파일 시스템
 .DS_Store
